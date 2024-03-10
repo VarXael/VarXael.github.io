@@ -1,0 +1,1018 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+	padding: 0;
+	margin: 0;
+    letter-spacing: 2px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 585;
+}
+
+p, a, ul, li {
+    font-weight: 500;
+}
+
+/* GO UP BUTTON */
+#go-up-button {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    background: #ff5080;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    z-index: 20;
+    transition: .3s;
+}
+
+#go-up-button:hover {
+    scale: 1.2;
+}
+
+#go-up-button:active {
+    background: #ff505c;
+}
+
+/* BEGINNING */
+.beginning {
+    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url("/images/background-beginning2.jpg");
+    background-size: cover;
+    background-position: center center;
+    height: 100vh;
+}
+
+.beginning-header {
+    background-color: rgba(0, 0, 0, .8);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    top: 0;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px 30px;
+}
+
+#links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.links-a{
+    text-decoration: none;
+    color: #fff;
+    margin: 0 12px;
+    transition: .3s;
+}
+
+.links-a:hover {
+    color: #ff5080;
+}
+
+.idioms-container {
+    display: flex;
+}
+
+.idiom-a {
+    padding: 5px;
+    margin-left: 15px;
+    text-decoration: none;
+    color: #fff;
+    transition: .3s;
+}
+
+.idiom-a:hover {
+    background-color: #ff5080;
+}
+
+a.active {
+    background-color: #ff505c;
+}
+
+.social-networks-a {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    margin-left: 10px;
+    transition: .3s;
+    font-size: 20px;
+}
+
+.social-networks-a:hover {
+    color: #ff5080;
+}
+
+.presentation {
+    max-width: 1100px;
+    height: 100vh;  
+    margin: auto;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.presentation-welcome {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+.presentation-title {
+    font-size: 45px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.presentation-span, .nav-icon:hover {
+    color: #ff5080;
+}
+
+.presentation-description {
+    max-width: 700px;
+    margin: 25px auto;
+    font-size: 18px;
+    text-align: center;
+}
+
+.presentation-a {
+    text-decoration: none;
+    display: inline-block;
+    margin: 25px;
+    padding: 20px 25px;
+    border: 2px solid #fff;
+    border-radius: 50px;
+    color: #fff;
+    text-transform: uppercase;
+    transition: .3s;
+}
+
+.presentation-a:hover {
+    background-color: #ff5080;
+}
+
+.nav-icon {
+    color: #fff;
+    display: none;
+}
+
+/* ABOUT ME */
+#about-me {
+    max-width: 1300px;
+    margin: auto;
+    padding: 35px;
+    display: flex;   
+}
+
+.photo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+}
+  
+.photo-container-img {
+    padding: 8px;
+    border-radius: 13px;
+    width: 80%;
+    background-color: #f3f3f3;
+}  
+
+.about-me {
+    margin: auto 40px;
+}
+
+.about-me-title {
+    font-size: 35px;  
+    margin-bottom: 7px; 
+    color: #111135;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: #d3d3d3;
+    text-decoration-thickness: 3px;
+}
+
+.about-me-name-span {
+    color: #ff5080;
+}
+
+.about-me-developer-paragraph {
+    font-size: 17px;
+    line-height: 25px;
+    color: #565656;
+    max-width: 1200px;
+}
+
+.about-me-download-cv {
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
+    padding: 12px 22px;
+    border: 2px solid #000;
+    border-radius: 50px;
+    transition: .3s;
+    margin-top: 10px;
+}
+
+.about-me-download-cv:hover {
+    color: #fff;
+    background-color: #ff5080;
+}
+
+/* PROFESSIONAL EXPERIENCE */
+.professional-experience {
+    padding: 35px;
+    background-color: #f3f3f3;
+}
+
+.professional-experience-title {
+    font-size: 35px;  
+    margin-bottom: 25px; 
+    color: #111135;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: #d3d3d3;
+    text-decoration-thickness: 3px;
+    text-align: center;
+}
+
+.professional-experience-row {
+    max-width: 1500px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    gap: 50px;
+}
+
+.professional-experience-element {
+    width: 400px;
+    height: 100%;
+    transition: .3s;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 8px 14px -4px, rgba(0, 0, 0, 0.3) 2px 5px 9px -5px;
+    background-color: #ffffff;
+}
+
+.professional-experience-element:hover {
+    scale: 1.075;
+}
+
+.professional-experience-a {
+    text-decoration: none;
+    color: #000;
+}
+
+.professional-experience-image {
+    width: 100%;
+    height: 150px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.professional-experience-image-voodoo {
+    background-image: url(images/work-7.jpg);
+}
+
+.professional-experience-image-youtube {
+    background-image: url(/images/professional_experience/YouTube.png);
+}
+
+.professional-experience-image-aoni {
+    background-image: url(/images/professional_experience/Aoni.png);
+}
+
+.professional-experience-image-juicestutors {
+    background-image: url(/images/professional_experience/JuicesTutors.png);
+}
+
+.professional-experience-image-fiverr {
+    background-image: url(/images/professional_experience/Fiverr.png);
+}
+
+.professional-experience-name {
+    font-size: 17px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.aoni-experience-name {
+    font-size: 19px;
+}
+
+.professional-experience-description {
+    font-size: 13px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 6.5px;
+}
+
+.professional-experience-date {
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 12px;  
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+/* TESTIMONIALS */
+.testimonials {
+    background: linear-gradient(#3b3b3bd8, rgba(0, 0, 0, 0.918)), url("/images/background-testimonials.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+    background-position: center center;
+    padding: 35px 0;
+    text-align: center;
+}
+
+.testimonials-text {
+    font-size: 18px;
+    line-height: 30px;
+    margin: auto;
+    text-align: center;
+    max-width: 1000px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 210px;
+    display: flex;
+    align-items: center;
+}
+
+.testimonials-person {
+    font-size: 15.5px;
+    font-weight: lighter;
+    margin: auto;
+    text-align: center;
+    height: 23.2px;
+}
+
+.slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.arrow {
+    cursor: pointer;
+}
+
+.arrow-left {
+    transition: .3s;
+    margin-right: 70px;
+}
+
+.arrow-right {
+    transition: .3s;
+    margin-left: 70px;
+}
+
+.arrow-left:hover, .arrow-right:hover {
+    scale: 1.4;
+}
+
+.arrow-left:active, .arrow-right:active {
+    scale: 1;
+}
+
+/* CERTIFICATES */
+.certificates {
+    padding: 35px;
+    background-color: #fff;
+}
+
+.certificates-title {
+    font-size: 35px;  
+    margin-bottom: 5px; 
+    color: #111135;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: #d3d3d3;
+    text-decoration-thickness: 3px;
+    text-align: center;
+}
+
+.certificates-subtitle {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.certificates-section-title {
+    text-align: center;
+    padding-bottom: 20px;
+    font-size: 27px;
+    letter-spacing: 5px;
+}
+
+.certificates-section-title2 {
+    padding: 20px;
+}
+
+.certificates-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 35px;
+}
+
+.certificates-row2 {
+    margin-top: 35px;
+}
+
+.certificates-element {
+    width: 350px;
+    height: 100%;
+    transition: .3s;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 8px 14px -4px, rgba(0, 0, 0, 0.3) 2px 5px 9px -5px;
+    transition: .3;
+}
+
+.certificates-element:hover {
+    scale: 1.075;
+}
+
+.certificate-image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.certificate-image1 {
+    background-image: url(/images/certificates/pixel-art-basic.png);
+}
+
+.certificate-image2 {
+    background-image: url(/images/certificates/pixel-art-advanced.png);
+}
+
+.certificate-image3 {
+    background-image: url(/images/certificates/essential-courses.png);
+}
+
+.certificate-image4 {
+    background-image: url(/images/certificates/unity.png);
+}
+
+.certificate-image5 {
+    background-image: url(/images/certificates/advanced-courses.png);
+}
+
+.certificate-image6 {
+    background-image: url(/images/certificates/Fiverr.jpg);
+}
+
+.certificates-name {
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 14.5px;
+}
+
+.certificates-date {
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    font-size: 13.5px;  
+}
+
+/* SKILLS */
+.skills {
+    background: linear-gradient(#3b3b3bcc, rgba(0, 0, 0, 0.8)), url("/images/background-skills.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+    background-position: center center;
+    padding: 35px 0;
+    text-align: center;
+}
+
+.skills-main-title {
+    font-size: 35px;   
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: #d3d3d3;
+    text-decoration-thickness: 3px;
+    margin-bottom: 30px;
+}
+
+.skill-li {
+    font-size: 25px;
+    margin-bottom: 16px;
+}
+
+/* PROJECTS */
+.projects {
+    padding: 35px 5px;
+    margin: auto;
+}
+
+.projects-main-title {
+    text-align: center;
+    font-size: 35px;   
+    color: #111135;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: #d3d3d3;
+    text-decoration-thickness: 3px;
+    padding-bottom: 25px;
+}
+
+.projects-voodoo-title {
+    text-align: center;
+    padding-bottom: 30px;
+    font-size: 27px;
+    letter-spacing: 5px;
+}
+
+.freelance-projects-title {
+    text-align: center;
+    padding-bottom: 5px;
+    font-size: 27px;
+    letter-spacing: 5px;
+    padding-top: 30px;
+}
+
+.freelance-projects-subtitle {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.project-circle-combat {
+    margin-bottom: 30px;
+}
+
+.match-3-pass-gameplay {
+    background-image: url(/images/relevant_projects/GameplayGifs/Match3PassGameplay.gif);
+    background-size: cover;   
+}
+
+.shake-it-and-find-it-gameplay {
+    background-image: url(/images/relevant_projects/GameplayGifs/ShakeItAndFindItGameplay.gif);
+    background-size: cover;   
+}
+
+.circle-combat-gameplay {
+    background-image: url(/images/relevant_projects/GameplayGifs/CircleCombatGameplay.gif);
+    background-size: cover;
+}
+
+.world-cup-collector-gameplay {
+    background-image: url(/images/relevant_projects/GameplayGifs/WorldCupCollectorGameplay.gif);
+    background-size: cover;   
+}
+
+.protect-the-ufo-gameplay {
+    background-image: url(/images/relevant_projects/GameplayGifs/ProtectTheUFOGameplay.gif);
+    background-size: cover;   
+}
+
+.swipe-never-stop-gameplay {
+    background-image: url(/images/relevant_projects/GameplayGifs/SwipeNeverStopGameplay.gif);
+    background-size: cover;   
+}
+
+.barrel-blitz-gameplay {
+    background-image: url(/images/relevant_projects/GameplayGifs/BarrelBlitz.gif);
+    background-size: cover;   
+}
+
+.projects-indie-games-title {
+    text-align: center;
+    padding-bottom: 20px;
+    font-size: 27px;
+    letter-spacing: 5px;
+}
+
+.project-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 50px;
+}
+
+.project {
+    width: 330px;
+    height: 500px;
+    transition: .3s;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 8px 14px -4px, rgba(0, 0, 0, 0.3) 2px 5px 9px -5px;
+    transition: .3;
+}
+
+.project:hover {
+    scale: 1.075;
+}
+
+.project-image {
+    background-color: #565656;
+    width: 100%;
+    height: 300px;
+}
+
+.project-icon {
+    background-color: #565656;
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 95px;
+    height: 95px;
+    border-radius: 8px;
+}
+
+.project-name {
+    text-align: center;
+    position: absolute;
+    width: 150px;
+    height: 95px;
+    right: 27.5px;
+    top: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px;
+}
+
+.match-3-pass-icon {
+    background-image: url(/images/relevant_projects/Icons/Match3PassIcon.jpg);
+    background-size: cover;     
+}
+
+.shake-it-and-find-it-icon {
+    background-image: url(/images/relevant_projects/Icons/ShakeItAndFindItIcon.png);
+    background-size: cover;    
+}
+
+.circle-combat-icon {
+    background-image: url(/images/relevant_projects/Icons/CircleCombatIcon.png);
+    background-size: cover;
+}
+
+.world-cup-collector-icon {
+    background-image: url(/images/relevant_projects/Icons/WorldCupCollectorIcon.jpg);
+    background-size: cover;
+}
+
+.protect-the-ufo-icon {
+    background-image: url(/images/relevant_projects/Icons/ProtectTheUFOIcon.jpg);
+    background-size: cover;
+}
+
+.swipe-never-stop-icon {
+    background-image: url(/images/relevant_projects/Icons/SwipeNeverStopIcon.png);
+    background-size: cover;
+}
+
+.barrel-blitz-icon {
+    background-image: url(/images/relevant_projects/Icons/BarrelBlitz.jpg);
+    background-size: cover;
+}
+
+.project-button {
+    text-decoration: none;
+    display: inline-block;
+    margin: 20px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    color: #000;
+    transition: .3s;
+    text-align: center;
+    width: 290px;
+    text-align: center;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+}
+
+.project-button:hover {
+    color: #fff;
+    background-color: #ff5080;
+}
+
+/* CONTACT */
+.contact {
+    padding: 35px;
+    background-color: #f3f3f3;
+}
+
+.contact-main-title {
+    text-align: center;
+    font-size: 35px;   
+    color: #111135;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: #d3d3d3;
+    text-decoration-thickness: 3px;
+    padding-bottom: 25px;
+}
+
+.social-networks-contact {
+    text-align: center;
+    margin-bottom: 25px;
+    margin-left: 50px;
+}
+
+.social-network-contact {
+    color: #000 !important;
+    margin-right: 50px !important;
+    text-align: center !important;
+    scale: 1.65;
+}
+
+.social-network-contact:hover {
+    color: #ff5080 !important;
+}
+
+.contact-submit-button {
+    margin-top: 10px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.contact-submit-button:hover {
+    background-color: #ff5080;
+}
+
+.contact-input-field {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #c1c1c1;
+    font-size: 17px;
+    resize: none;
+}
+
+.contact-label {
+    line-height: 2.7em;
+}
+
+.contact-textarea {
+    min-height: 100px;
+    font-size: 14px;
+}
+
+.contact-form {
+    display: block;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #c1c1c1;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #eaeaea;
+}
+
+.social-networks-end {
+    color: #000;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 13px;
+}
+
+/* FOOTER */
+.footer {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 30px 0;
+}
+
+.social-networks-a-footer {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    margin: 5px;
+    font-size: 26px;
+}
+
+/* RESPONSIVE */
+@media screen and (max-width:1210px) {
+    .arrow-left {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .arrow-right {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    .testimonials-text {
+        max-width: 1070px;
+        font-size: 15.5px;
+        line-height: 28px;
+    }
+}
+
+@media screen and (max-width:1150px) {
+    #links {
+        display: none;
+    }
+
+    nav {
+        display: none;
+    }
+
+    nav.responsive {
+        display: block;
+        background-color: rgba(0, 0, 0, .8);
+        width: 100%;
+        position: absolute;
+        top: 44px;
+        left: 0;
+        padding: 10px 0;
+    }
+
+    nav.responsive ul {
+        display: block !important;
+        text-align: center;
+    }
+
+    nav.responsive ul li {
+        margin: 5px 0;
+    }
+
+    .nav-icon {
+        display: block;
+    }
+}
+
+@media screen and (max-width:1083px) {
+    .presentation-title {
+        font-size: 40px;
+    }
+
+    #about-me {
+        padding: 35px 0;
+        display: block;
+    }
+
+    .photo-container {
+        max-width: 300px;
+        margin: auto;
+        margin-bottom: 35px;
+    }
+
+    .about-me-title {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .about-me-name-subtitle {
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .about-me-download-cv {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width:900px) {
+    .match-3-pass-gameplay {
+        background-image: url(/images/relevant_projects/GameplayPngs/Match3PassGameplay.png);
+    }
+    .shake-it-and-find-it-gameplay {
+        background-image: url(/images/relevant_projects/GameplayPngs/ShakeItAndFIndItGameplay.png);
+    }
+
+    .circle-combat-gameplay {
+        background-image: url(/images/relevant_projects/GameplayPngs/CircleCombatGameplay.png);
+    }
+
+    .world-cup-collector-gameplay {
+        background-image: url(/images/relevant_projects/GameplayPngs/WorldCupCollectorGameplay.png);
+    }
+
+    .protect-the-ufo-gameplay {
+        background-image: url(/images/relevant_projects/GameplayPngs/ProtectTheUFOGameplay.png);
+    }
+
+    .swipe-never-stop-gameplay {
+        background-image: url(/images/relevant_projects/GameplayPngs/SwipeNeverStopGameplay.png);
+    }
+}
+
+@media screen and (max-width:445px) {
+    .testimonials-person.brent {
+        margin-bottom: 35px;
+    }
+}
+
+@media screen and (max-width:414px) {
+    .long-certificates-name {
+        font-size: 12.5px;
+    }
+}
+
+@media screen and (max-width:408px) {
+    .social-networks:first-child {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    nav.responsive {
+        top: 55px;
+    }
+}
+
+@media screen and (max-width:400px) {
+    .project-source-code-a {
+        padding: 14px 18px;
+        font-size: 13px;
+    }
+    .project-name {
+        font-size: 23px;
+    }
+    .project-description {
+        font-size: 16px;
+    }  
+    .project-source-code-container {
+        margin-top: 7px;
+    } 
+}
+
+@media screen and (max-width:400px) {
+    .project-source-code-a {
+        padding: 14px 18px;
+        font-size: 13px;
+    }
+    .project-name {
+        font-size: 23px;
+    }
+    .project-description {
+        font-size: 16px;
+    }  
+    .project-source-code-container {
+        margin-top: 7px;
+    } 
+}
+
+@media screen and (max-width:300px) {
+    .project-source-code-a {
+        padding: 7px 10px;
+        font-size: 13px;
+    }
+
+    .project-name {
+        font-size: 16px;
+    }
+
+    .project-description {
+        font-size: 13px;
+    }  
+    
+    .project-source-code-container {
+        margin-top: 7px;
+    }
+}
