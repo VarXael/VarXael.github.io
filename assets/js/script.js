@@ -1,4 +1,7 @@
-'use strict';
+﻿'use strict';
+
+
+
 
 
 
@@ -157,3 +160,86 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+
+
+// ── PROJECT MODAL ──
+
+
+
+
+
+const projectLinks = document.querySelectorAll('.open-modal');
+const projectModal = document.getElementById('projectModal');
+const modalBody = document.getElementById('modalBody');
+const modalClose = document.getElementById('modalClose');
+
+
+
+
+const projectDetails = {
+    "UEFN: Battleship": {
+        title: "UEFN: Battleship",
+        role: "Game Creator - Untold Games",
+        video: "https://www.youtube.com/watch?v=CzMTSNYmdYI",
+        short: "Fast-paced team strategy game built in UEFN. Inspired by the classic Battleship board game.",
+        long: "This project was developed using Unreal Editor for Fortnite, with extensive use of Verse scripting for match logic and grid system management. Designed for replayability and rapid iteration in a live environment."
+    },
+    "PulseParty": {
+        title: "PulseParty",
+        role: "Technical Game Designer - Untold Games",
+        video: "https://www.youtube.com/watch?v=CzMTSNYmdYI",
+        short: "A rhythm-based multiplayer game using custom Verse logic and dynamic lighting.",
+        long: "My responsibilities included game mechanics prototyping, optimization of network performance and dynamic tempo sync with music tracks."
+    }
+    // aggiungi altri progetti qui
+};
+
+projectLinks.forEach(link => {
+    link.addEventListener('click', e => {
+        e.preventDefault();
+
+        const title = link.dataset.project;
+        const data = projectDetails[title];
+        if (!data) return;
+
+        modalBody.innerHTML = `
+      <div class="modal-grid">
+        <div class="modal-media">
+          <iframe
+            src="${data.video}"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="modal-description">
+          <h3>${data.title}</h3>
+          <p><strong>${data.role}</strong></p>
+          <p>${data.short}</p>
+        </div>
+      </div>
+      <div class="modal-fulltext">
+        <p>${data.long}</p>
+      </div>
+    `;
+
+        projectModal.classList.add('active');
+    });
+});
+
+modalClose.addEventListener('click', () => {
+    projectModal.classList.remove('active');
+    modalBody.innerHTML = '';
+});
+
+projectModal.addEventListener('click', e => {
+    if (e.target === projectModal) {
+        projectModal.classList.remove('active');
+        modalBody.innerHTML = '';
+    }
+});
+
+
+
+
+
