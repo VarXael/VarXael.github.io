@@ -23,10 +23,10 @@
 
     --bg-gradient-onyx: linear-gradient( to bottom right, hsl(240, 1%, 25%) 3%, hsl(0, 0%, 19%) 97% );
     --bg-gradient-jet: linear-gradient( to bottom right, hsla(240, 1%, 18%, 0.251) 0%, hsla(240, 2%, 11%, 0) 100% ), hsl(240, 2%, 13%);
-    --bg-gradient-yellow-1: linear-gradient( to bottom right, hsl(45, 100%, 71%) 0%, hsla(36, 100%, 69%, 0) 50% );
-    --bg-gradient-yellow-2: linear-gradient( 135deg, hsla(45, 100%, 71%, 0.251) 0%, hsla(35, 100%, 68%, 0) 59.86% ), hsl(240, 2%, 13%);
+    --bg-gradient-green-1: linear-gradient( to bottom right, hsl(160, 100%, 40%) 0%, hsla(160, 100%, 40%, 0) 50% );
+    --bg-gradient-green-2: linear-gradient( 135deg, hsla(160, 100%, 40%, 0.251) 0%, hsla(160, 100%, 40%, 0) 59.86% ), hsl(240, 2%, 13%);
     --border-gradient-onyx: linear-gradient( to bottom right, hsl(0, 0%, 25%) 0%, hsla(0, 0%, 25%, 0) 50% );
-    --text-gradient-yellow: linear-gradient( to right, hsl(45, 100%, 72%), hsl(35, 100%, 68%) );
+    --text-gradient-green: linear-gradient( to right, hsl(160, 100%, 40%), hsl(160, 70%, 60%) );
     /* solid */
 
     --jet: hsl(0, 0%, 22%);
@@ -36,10 +36,10 @@
     --smoky-black: hsl(0, 0%, 7%);
     --white-1: hsl(0, 0%, 100%);
     --white-2: hsl(0, 0%, 98%);
-    --orange-yellow-crayola: hsl(45, 100%, 72%);
-    --vegas-gold: hsl(45, 54%, 58%);
-    --light-gray: hsl(0, 0%, 84%);
-    --light-gray-70: hsla(0, 0%, 84%, 0.7);
+    --emerald-green-primary: hsl(160, 100%, 40%); /* Main emerald green */
+    --emerald-green-light: hsl(160, 70%, 60%); /* Lighter emerald green for accents */
+    --light-gray: hsl(0, 0%, 65%); /* Toned down grey color */
+    --light-gray-70: hsla(0, 0%, 65%, 0.7); /* Adjusted opacity for toned down grey */
     --bittersweet-shimmer: hsl(0, 43%, 51%);
     /**
    * typography
@@ -76,8 +76,6 @@
     --transition-1: 0.25s ease;
     --transition-2: 0.5s ease-in-out;
 }
-
-
 
 
 
@@ -119,12 +117,12 @@ input, textarea {
 }
 
 ::selection {
-    background: var(--orange-yellow-crayola);
+    background: var(--emerald-green-primary);
     color: var(--smoky-black);
 }
 
 :focus {
-    outline-color: var(--orange-yellow-crayola);
+    outline-color: var(--emerald-green-primary);
 }
 
 html {
@@ -135,8 +133,10 @@ body {
     background: var(--smoky-black);
 }
 
-
-
+/* Prevent scrolling on body when modal is active */
+body.no-scroll {
+    overflow: hidden;
+}
 
 
 /*-----------------------------------*\
@@ -170,7 +170,7 @@ article {
     justify-content: center;
     align-items: center;
     font-size: 16px;
-    color: var(--orange-yellow-crayola);
+    color: var(--emerald-green-primary);
     box-shadow: var(--shadow-1);
     z-index: 1;
 }
@@ -244,7 +244,7 @@ article {
         left: 0;
         width: 30px;
         height: 3px;
-        background: var(--text-gradient-yellow);
+        background: var(--text-gradient-green);
         border-radius: 3px;
     }
 
@@ -259,7 +259,7 @@ article {
 }
 
 .has-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--orange-yellow-crayola);
+    background: var(--emerald-green-primary);
     border-radius: 5px;
 }
 
@@ -289,8 +289,6 @@ article {
 
 
 
-
-
 /*-----------------------------------*\
   #MAIN
 \*-----------------------------------*/
@@ -300,8 +298,6 @@ main {
     margin-bottom: 75px;
     min-width: 259px;
 }
-
-
 
 
 
@@ -357,7 +353,7 @@ main {
     right: -15px;
     border-radius: 0 15px;
     font-size: 13px;
-    color: var(--orange-yellow-crayola);
+    color: var(--emerald-green-primary);
     background: var(--border-gradient-onyx);
     padding: 10px;
     box-shadow: var(--shadow-2);
@@ -377,12 +373,12 @@ main {
 
     .info_more-btn:hover,
     .info_more-btn:focus {
-        background: var(--bg-gradient-yellow-1);
+        background: var(--bg-gradient-green-1);
     }
 
         .info_more-btn:hover::before,
         .info_more-btn:focus::before {
-            background: var(--bg-gradient-yellow-2);
+            background: var(--bg-gradient-green-2);
         }
 
     .info_more-btn span {
@@ -455,8 +451,6 @@ main {
 
 
 
-
-
 /*-----------------------------------*\
   #NAVBAR
 \*-----------------------------------*/
@@ -495,10 +489,8 @@ main {
     }
 
     .navbar-link.active {
-        color: var(--orange-yellow-crayola);
+        color: var(--emerald-green-primary);
     }
-
-
 
 
 
@@ -524,7 +516,7 @@ main {
 
 
 /**
- * #service 
+ * #service
  */
 
 .service {
@@ -583,8 +575,41 @@ main {
 }
 
 
+/*-----------------------------------*\
+  #HIGHLIGHTS SECTION
+\*-----------------------------------*/
+
+.highlight-projects-container {
+    position: relative;
+}
+
+.highlight-list {
+    display: flex; /* Use Flexbox */
+    flex-wrap: wrap; /* Allow items to wrap to the next row */
+    gap: 20px; /* Maintain the gap between items */
+    margin-bottom: 10px;
+    justify-content: flex-start; /* Align items to the start */
+}
+
+.highlight-list .highlight-item {
+    min-width: 20px; /* Control the minimum width */
+    flex: 1 1 auto; /* Allow items to grow and shrink */
+    border: 3px solid var(--emerald-green-primary);
+    box-shadow: 0 0 20px hsla(160, 100%, 40%, 0.5), 0 0 40px hsla(160, 100%, 40%, 0.2);
+    transform: scale(1.03);
+    transition: all 0.4s ease-in-out;
+    border-radius: 20px;
+}
+
+.highlight-list .highlight-item:hover {
+    transform: scale(1.07) translateY(-10px);
+    box-shadow: 0 0 30px hsla(160, 100%, 40%, 0.7), 0 0 60px hsla(160, 100%, 40%, 0.4);
+}
+
+
+
 /**
- * #testimonials 
+ * #testimonials
  */
 
 .testimonials {
@@ -642,7 +667,7 @@ main {
 
 
 /**
- * #testimonials-modal
+ * #testimonials-modal (This was the old modal, now replaced by .project-modal)
  */
 
 .modal-container {
@@ -668,26 +693,6 @@ main {
     .modal-container.active {
         pointer-events: all;
         visibility: visible;
-    }
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: hsl(0, 0%, 5%);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    z-index: 1;
-    transition: var(--transition-1);
-}
-
-    .overlay.active {
-        opacity: 0.8;
-        visibility: visible;
-        pointer-events: all;
     }
 
 .testimonials-modal {
@@ -766,7 +771,7 @@ main {
 
 
 /**
- * #clients 
+ * #clients
  */
 
 .clients {
@@ -805,8 +810,6 @@ main {
 
 
 
-
-
 /*-----------------------------------*\
   #RESUME
 \*-----------------------------------*/
@@ -817,7 +820,7 @@ main {
 
 
 /**
- * education and experience 
+ * education and experience
  */
 
 .timeline {
@@ -851,7 +854,7 @@ main {
 }
 
 .timeline-list span {
-    color: var(--vegas-gold);
+    color: var(--emerald-green-primary);
     font-weight: var(--fw-400);
     line-height: 1.6;
 }
@@ -873,7 +876,7 @@ main {
     left: -33px;
     height: 6px;
     width: 6px;
-    background: var(--text-gradient-yellow);
+    background: var(--text-gradient-green);
     border-radius: 50%;
     box-shadow: 0 0 0 4px var(--jet);
 }
@@ -886,7 +889,7 @@ main {
 
 
 /**
- * skills 
+ * skills
  */
 
 .skills-title {
@@ -923,12 +926,10 @@ main {
 }
 
 .skill-progress-fill {
-    background: var(--text-gradient-yellow);
+    background: var(--text-gradient-green);
     height: 100%;
     border-radius: inherit;
 }
-
-
 
 
 
@@ -1001,8 +1002,8 @@ main {
 
 .project-list {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid for all project lists */
+    gap: 20px; /* Adjusted gap for consistency */
     margin-bottom: 10px;
 }
 
@@ -1011,7 +1012,7 @@ main {
 }
 
     .project-item.active {
-        display: block;
+        display: block; /* Changed from 'block' to allow grid to manage layout */
         animation: scaleUp 0.25s ease forwards;
     }
 
@@ -1057,7 +1058,7 @@ main {
 .project-item-icon-box {
     --scale: 0.8;
     background: var(--jet);
-    color: var(--orange-yellow-crayola);
+    color: var(--emerald-green-primary);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1108,8 +1109,6 @@ main {
     font-size: var(--fs-6);
     font-weight: var(--fw-300);
 }
-
-
 
 
 
@@ -1195,7 +1194,7 @@ main {
 }
 
 .blog-post-item > a:hover .blog-item-title {
-    color: var(--orange-yellow-crayola);
+    color: var(--emerald-green-primary);
 }
 
 .blog-text {
@@ -1204,8 +1203,6 @@ main {
     font-weight: var(--fw-300);
     line-height: 1.6;
 }
-
-
 
 
 
@@ -1264,7 +1261,7 @@ main {
     }
 
     .form-input:focus {
-        border-color: var(--orange-yellow-crayola);
+        border-color: var(--emerald-green-primary);
     }
 
 textarea.form-input {
@@ -1287,7 +1284,7 @@ textarea.form-input {
     position: relative;
     width: 100%;
     background: var(--border-gradient-onyx);
-    color: var(--orange-yellow-crayola);
+    color: var(--emerald-green-primary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1316,11 +1313,11 @@ textarea.form-input {
     }
 
     .form-btn:hover {
-        background: var(--bg-gradient-yellow-1);
+        background: var(--bg-gradient-green-1);
     }
 
         .form-btn:hover::before {
-            background: var(--bg-gradient-yellow-2);
+            background: var(--bg-gradient-green-2);
         }
 
     .form-btn:disabled {
@@ -1335,8 +1332,6 @@ textarea.form-input {
             .form-btn:disabled:hover::before {
                 background: var(--bg-gradient-jet);
             }
-
-
 
 
 
@@ -1361,7 +1356,7 @@ textarea.form-input {
 
 
     /**
-   * #PORTFOLIO, BLOG 
+   * #PORTFOLIO, BLOG
    */
 
     .project-img,
@@ -1369,8 +1364,6 @@ textarea.form-input {
         height: auto;
     }
 }
-
-
 
 
 
@@ -1438,20 +1431,16 @@ textarea.form-input {
         margin-bottom: 100px;
     }
 
-
-
-    /**
-   * #SIDEBAR
-   */
-
+    /* Adjusted sidebar max-height for 580px to prevent scrollbar issues */
     .sidebar {
-        max-height: 180px;
+        max-height: 180px; /* Reduced to fit content without scrollbar */
         margin-bottom: 30px;
     }
 
-        .sidebar.active {
-            max-height: 584px;
-        }
+    .sidebar.active {
+        max-height: 584px; /* Adjusted to show all content when active */
+    }
+
 
     .sidebar-info {
         gap: 25px;
@@ -1716,8 +1705,6 @@ textarea.form-input {
 
 
 
-
-
 /**
  * responsive larger than 768px screen
  */
@@ -1808,7 +1795,7 @@ textarea.form-input {
         }
 
         .filter-item button.active {
-            color: var(--orange-yellow-crayola);
+            color: var(--emerald-green-primary);
         }
 
     /* portfolio and blog grid */
@@ -1832,8 +1819,6 @@ textarea.form-input {
         margin-left: auto;
     }
 }
-
-
 
 
 
@@ -1871,7 +1856,7 @@ textarea.form-input {
 
 
     /**
-   * MAIN 
+   * MAIN
    */
 
     main {
@@ -1946,18 +1931,12 @@ textarea.form-input {
         grid-template-columns: repeat(3, 1fr);
     }
 
-
-
-    /**
-   * BLOG
-   */
+    /* BLOG */
 
     .blog-banner-box {
         height: 230px;
     }
 }
-
-
 
 
 
@@ -2115,101 +2094,17 @@ textarea.form-input {
     left: 0;
     width: 100%;
     height: 100%;
-    display: none;
+    display: flex; /* Always flex, hide with opacity/visibility */
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(8px);
-    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px); /* Reduced blur for performance */
+    background: rgba(0, 0, 0, 0.7);
     z-index: 1000;
-}
-
-    .project-modal .modal-content {
-        background: var(--eerie-black-2);
-        width: 90vw;
-        max-width: 800px;
-        height: 80vh;
-        max-height: 1200px;
-        padding: 2rem;
-        border-radius: 14px;
-        position: relative;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
-
-
-
-
-    .project-modal .modal-close {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-
-.modal-grid {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.modal-media {
-    flex: 1;
-    max-width: 50%;
-}
-
-    .modal-media iframe {
-        width: 100%;
-        height: 300px;
-        border-radius: 8px;
-    }
-
-.modal-description {
-    flex: 1;
-    color: var(--light-gray);
-    font-size: var(--fs-6);
-    line-height: 1.6;
-}
-
-    .modal-description h3 {
-        margin-bottom: 0.5rem;
-        font-size: var(--fs-2);
-        color: var(--orange-yellow-crayola);
-    }
-
-    .modal-description p {
-        margin-bottom: 0.75rem;
-    }
-
-.modal-fulltext {
-    flex: none;
-    color: var(--light-gray);
-    font-size: var(--fs-6);
-    line-height: 1.6;
-    padding-top: 1rem;
-    border-top: 1px solid var(--jet);
-}
-
-.project-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex; /* Always flex */
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(8px);
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-    visibility: hidden;
-    opacity: 0;
+    visibility: hidden; /* Controls visibility for transition */
+    opacity: 0; /* Controls opacity for transition */
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    will-change: opacity, visibility; /* Hint for browser optimization */
 }
 
     .project-modal.active {
@@ -2219,22 +2114,243 @@ textarea.form-input {
     }
 
     .project-modal .modal-content {
-        transform: scale(0.8) translateZ(0);
-        opacity: 0;
-        will-change: transform, opacity;
+        background: var(--eerie-black-2); /* Main modal background */
+        width: 90vw;
+        max-width: 1000px; /* Increased max-width for a larger modal */
+        height: 90vh; /* Increased height for a larger modal */
+        max-height: 95vh; /* Max height to prevent overflow on very tall content */
+        padding: 2rem;
+        border-radius: 14px;
+        position: relative;
+        overflow-y: auto; /* Enable scrolling for content if needed */
+        display: flex;
+        flex-direction: column;
+        transform: scale(0.8); /* Initial scale for pop-in effect */
+        opacity: 0; /* Initial opacity for pop-in effect */
+        will-change: transform, opacity; /* Hint for browser optimization */
         transition: transform 0.3s ease-out, opacity 0.3s ease-out;
     }
 
 
     .project-modal.active .modal-content {
-        transform: scale(1);
-        opacity: 1;
-    }
-    .project-modal.animating .modal-media iframe {
-        display: none;
+        transform: scale(1); /* Final scale for pop-in effect */
+        opacity: 1; /* Final opacity for pop-in effect */
     }
 
+    .project-modal .modal-close {
+        position: absolute;
+        top: 15px; /* Adjusted for better spacing */
+        right: 15px; /* Adjusted for better spacing */
+        background: none;
+        border: none;
+        font-size: 28px; /* Larger close button */
+        color: #f1f1f1; /* White color for visibility */
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.2s ease-in-out;
+    }
+
+    .project-modal .modal-close:hover,
+    .project-modal .modal-close:focus {
+        color: var(--emerald-green-primary); /* Highlight on hover */
+    }
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h3 {
+    font-size: var(--fs-1); /* Larger font size for the main title */
+    color: var(--emerald-green-primary); /* Green color for the main title */
+    margin-bottom: 0.5rem;
+}
+
+.modal-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.modal-media {
+    flex: 0 0 400px; /* Increased fixed width for media section */
+    max-width: 400px; /* Ensure it doesn't grow beyond this */
+    display: flex; /* Use flex to center the image if it's smaller */
+    justify-content: center;
+    align-items: center;
+    padding: 1rem; /* Added padding for better spacing around media */
+    background: var(--jet); /* Changed background to var(--jet) for visibility */
+    border-radius: 14px; /* Rounded corners for the media section */
+    box-shadow: var(--shadow-1); /* Added subtle shadow for depth */
+    border: 1px solid hsla(0, 0%, 22%, 0.08); /* Even more subtle grey border */
+}
+
+    .modal-media iframe {
+        width: 100%;
+        height: 225px; /* Adjusted height for a more rectangular shape (16:9 aspect ratio for video) */
+        border-radius: 8px;
+    }
+
+    /* Style for images within modal-media */
+    .modal-media img {
+        width: 350px; /* Increased width for the image */
+        height: 200px; /* Reduced height for the image to make it rectangular */
+        object-fit: cover; /* Ensures the image fills the rectangular area, cropping if necessary */
+        border-radius: 14px; /* Kept rounded corners */
+        border: 2px solid hsla(0, 0%, 22%, 0.03); /* Extremely subtle grey border for image */
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition for hover effect */
+    }
+
+    .modal-media img:hover {
+        transform: scale(1.03); /* Slightly enlarge on hover */
+        box-shadow: 0 0 15px hsla(160, 100%, 40%, 0.3), 0 0 30px hsla(160, 100%, 40%, 0.1); /* Subtle green shadow on hover */
+    }
 
 
+.modal-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Spacing between detail sections */
+    padding: 1.5rem; /* Increased padding for better spacing */
+    background: var(--jet); /* Changed background to var(--jet) for visibility */
+    border-radius: 14px;
+    box-shadow: var(--shadow-1);
+    border: 1px solid hsla(0, 0%, 22%, 0.08); /* Even more subtle grey border */
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* Smaller gap between label and value */
+    padding-bottom: 1rem; /* Increased padding to bottom of each detail item */
+    border-bottom: 2px solid hsla(0, 0%, 65%, 0.08); /* Thicker, solid, very faint grey separator */
+}
+
+    .detail-item:last-child {
+        border-bottom: none; /* No border for the last item */
+        padding-bottom: 0;
+    }
+
+    .detail-item h4 {
+        color: var(--emerald-green-primary); /* Green color for detail titles */
+        font-size: var(--fs-5); /* Slightly larger font for detail titles */
+        margin-bottom: 0.25rem; /* Added margin to separate title from content */
+    }
+
+    .detail-item p {
+        color: var(--light-gray);
+        font-size: var(--fs-6);
+        line-height: 1.4;
+        margin-bottom: 0; /* Remove default margin */
+    }
+
+.tools-section {
+    margin-top: 0.5rem; /* Adjusted margin */
+    padding-bottom: 1rem; /* Increased padding */
+    border-bottom: 2px solid hsla(0, 0%, 65%, 0.08); /* Thicker, solid, very faint grey separator */
+}
+
+    .tools-section:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .tools-section h4 {
+        color: var(--emerald-green-primary);
+        font-size: var(--fs-5);
+        margin-bottom: 0.5rem;
+    }
+
+.tool-icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap; /* Allow tools to wrap if many */
+}
+
+.tool-icon {
+    font-size: 1.2rem; /* Reduced icon size further */
+    color: var(--light-gray); /* Default color for icons */
+    transition: color 0.2s ease;
+    width: 1.2rem; /* Fixed width for SVG icons */
+    height: 1.2rem; /* Fixed height for SVG icons */
+}
+
+    .tool-icon.fortnite svg {
+        fill: #72f238; /* Specific color for Fortnite, adjust as needed */
+    }
+
+    .tool-icon.verse svg {
+        fill: #007bff; /* Specific color for Verse, adjust as needed */
+    }
+
+    .tool-icon:hover {
+        color: var(--emerald-green-primary);
+    }
 
 
+.modal-fulltext {
+    flex: none;
+    color: var(--light-gray);
+    font-size: var(--fs-6);
+    line-height: 1.6;
+    padding: 1.5rem; /* Increased padding for the fulltext section */
+    background: var(--jet); /* Changed background to var(--jet) for visibility */
+    border-radius: 14px; /* Rounded corners for the fulltext section */
+    margin-top: 1rem; /* Added margin to separate from the grid above */
+    box-shadow: var(--shadow-1); /* Added subtle shadow for depth */
+    border: 1px solid hsla(0, 0%, 22%, 0.08); /* Even more subtle grey border */
+}
+
+    .modal-fulltext h4 {
+        margin-bottom: 0.25rem; /* Reduced margin to align with other detail items */
+        font-size: var(--fs-5); /* Consistent font size with other detail titles */
+        color: var(--emerald-green-primary); /* Applied green color to titles */
+        margin-top: 0.75rem; /* Added margin to push title down from separator */
+    }
+
+    /* Apply detail-item styling to the children of modal-fulltext */
+    .modal-fulltext .detail-item {
+        display: flex; /* Ensure flex for correct spacing */
+        flex-direction: column; /* Stack content */
+        gap: 0.25rem; /* Match gap of other detail items */
+        padding-bottom: 1rem; /* Match padding-bottom of other detail-items */
+        border-bottom: 2px solid hsla(0, 0%, 65%, 0.08); /* Match separator style */
+    }
+
+    .modal-fulltext .detail-item:first-child {
+        padding-top: 0; /* Remove top padding for the very first item */
+    }
+
+    .modal-fulltext .detail-item:first-child h4 {
+        margin-top: 0; /* Remove top margin for the very first title in this section */
+    }
+
+    .modal-fulltext .detail-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+
+/* Responsive adjustments for modal grid */
+@media (max-width: 768px) {
+    .modal-grid {
+        flex-direction: column; /* Stack media and description vertically on small screens */
+    }
+    .modal-media {
+        max-width: 100%; /* Full width for media on small screens */
+        flex: none; /* Remove fixed width on small screens */
+        height: auto; /* Allow height to adjust dynamically */
+    }
+    .modal-media img {
+        width: 100%; /* Make image fill container width on small screens */
+        height: auto; /* Allow height to adjust dynamically to maintain aspect ratio */
+        object-fit: contain; /* Ensure image is fully visible within the container */
+        border-radius: 8px; /* Revert to rounded corners for small screens if circular isn't desired */
+    }
+    .modal-media iframe {
+        height: 200px; /* Adjust iframe height for small screens */
+    }
+}

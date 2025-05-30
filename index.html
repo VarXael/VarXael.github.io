@@ -13,7 +13,6 @@
 </head>
 <body>
 <main>
-    <!-- Sidebar Section -->
     <aside class="sidebar" data-sidebar>
         <div class="sidebar-info">
             <figure class="avatar-box">
@@ -55,7 +54,7 @@
                     </div>
                     <div class="contact-info">
                         <p class="contact-title">Birthday</p>
-                        <time datetime="1982-06-23">June 15, 1998</time>
+                        <time datetime="1998-06-15">June 15, 1998</time>
                     </div>
                 </li>
             </ul>
@@ -76,9 +75,7 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Navbar -->
         <nav class="navbar">
             <ul class="navbar-list">
                 <li class="navbar-item">
@@ -96,7 +93,6 @@
             </ul>
         </nav>
 
-        <!-- About Section -->
         <article class="about active" data-page="about">
             <header>
                 <h2 class="h2 article-title">About me</h2>
@@ -106,26 +102,74 @@
                 <p>I really like to write and immerse myself in deep stories and/or interesting worlds. I'm also a huge DnD nerd and my love-niche are rhythm games, one of my favourite videogames of all times is Deemo :)</p>
             </section>
 
-            <!-- Highlights Section -->
             <section class="service">
                 <h3 class="h3 service-title">Highlights</h3>
-                <ul class="project-list">
-                    <li class="project-item active">
-                        <a target="_blank" href="https://wrong-world-studios.itch.io/cycle">
-                            <figure class="project-img">
-                                <div class="project-item-icon-box">
-                                    <ion-icon name="eye-outline"></ion-icon>
-                                </div>
-                                <img src="./assets/images/Cycle.png" alt="Cycle Game" loading="lazy">
-                            </figure>
-                            <h3 class="project-title">Cycle</h3>
-                            <p class="project-category">Falmouth University</p>
-                        </a>
-                    </li>
-                </ul>
+                <div class="highlight-projects-container">
+                    <ul class="project-list highlight-list">
+                        <li class="project-item active highlight-item" data-filter-item data-category="university work">
+                            <a href="#" class="open-modal" data-project="Cycle">
+                                <figure class="project-img">
+                                    <div class="project-item-icon-box">
+                                        <ion-icon name="eye-outline"></ion-icon>
+                                    </div>
+                                    <img src="./assets/images/Cycle.png" alt="Cycle Game" loading="lazy">
+                                </figure>
+                                <h3 class="project-title">Cycle</h3>
+                                <p class="project-category">Falmouth University</p>
+                            </a>
+                        </li>
+                        <li class="project-item active highlight-item" data-filter-item data-category="professional work">
+                            <a href="#" class="open-modal" data-project="PulseParty">
+                                <figure class="project-img">
+                                    <div class="project-item-icon-box">
+                                        <ion-icon name="eye-outline"></ion-icon>
+                                    </div>
+                                    <img src="./assets/images/PulsePartyThumbnail.png" alt="PulseParty" loading="lazy">
+                                </figure>
+                                <h3 class="project-title">PulseParty</h3>
+                                <p class="project-category">Technical Game Designer - Untold Games</p>
+                            </a>
+                        </li>
+                        <li class="project-item active highlight-item" data-filter-item data-category="professional work">
+                            <a href="#" class="open-modal" data-project="UEFN: Battleship">
+                                <figure class="project-img">
+                                    <div class="project-item-icon-box">
+                                        <ion-icon name="eye-outline"></ion-icon>
+                                    </div>
+                                    <img src="./assets/images/Battleship.jpeg" alt="UEFN: Battleship" loading="lazy">
+                                </figure>
+                                <h3 class="project-title">UEFN: Battleship</h3>
+                                <p class="project-category">Game Creator - Untold Games</p>
+                            </a>
+                        </li>
+                        <li class="project-item active highlight-item" data-filter-item data-category="personal work">
+                            <a href="#" class="open-modal" data-project="Alien">
+                                <figure class="project-img">
+                                    <div class="project-item-icon-box">
+                                        <ion-icon name="eye-outline"></ion-icon>
+                                    </div>
+                                    <img src="./assets/images/work-5.jpg" alt="Alien" loading="lazy">
+                                </figure>
+                                <h3 class="project-title">Alien</h3>
+                                <p class="project-category">Game Creator</p>
+                            </a>
+                        </li>
+                        <li class="project-item active highlight-item" data-filter-item data-category="university work">
+                            <a href="#" class="open-modal" data-project="Card's Weaver">
+                                <figure class="project-img">
+                                    <div class="project-item-icon-box">
+                                        <ion-icon name="eye-outline"></ion-icon>
+                                    </div>
+                                    <img src="./assets/images/Card's Weaver.png" alt="Card's Weaver" loading="lazy">
+                                </figure>
+                                <h3 class="project-title">Card's Weaver</h3>
+                                <p class="project-category">Lead Game Designer - Verona University</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </section>
 
-            <!-- Testimonials Modal -->
             <div class="modal-container" data-modal-container>
                 <div class="overlay" data-overlay></div>
                 <section class="testimonials-modal">
@@ -135,7 +179,6 @@
                 </section>
             </div>
 
-            <!-- Clients Section -->
             <section class="clients">
                 <h3 class="h3 clients-title">Companies I've worked for</h3>
                 <ul class="clients-list has-scrollbar">
@@ -162,7 +205,6 @@
                 </ul>
             </section>
 
-            <!-- Skills Section -->
             <section class="skill">
                 <h3 class="h3 skills-title">Key Skills</h3>
                 <ul class="skills-list content-card">
@@ -261,7 +303,6 @@
             </section>
         </article>
 
-        <!-- Resume Section -->
         <article class="resume" data-page="resume">
             <header>
                 <h2 class="h2 article-title">Resume</h2>
@@ -328,7 +369,6 @@
             </section>
         </article>
 
-        <!-- Portfolio Section -->
         <article class="portfolio" data-page="portfolio">
             <header>
                 <h2 class="h2 article-title">Portfolio</h2>
@@ -340,7 +380,6 @@
                 </div>
             </section>
             <section class="projects">
-                <!-- Filter Buttons -->
                 <ul class="filter-list">
                     <li class="filter-item">
                         <button class="active" data-filter-btn>All</button>
@@ -358,7 +397,6 @@
                         <button data-filter-btn>Game Jams</button>
                     </li>
                 </ul>
-                <!-- Filter (select for mobile) -->
                 <div class="filter-select-box">
                     <button class="filter-select" data-select>
                         <div class="select-value" data-selecct-value>Select category</div>
@@ -374,10 +412,9 @@
                         <li class="select-item"><button data-select-item>Game Jams</button></li>
                     </ul>
                 </div>
-                <!-- Projects List -->
-                <ul class="project-list">
+                <ul class="project-list grid-columns-2">
                     <li class="project-item active" data-filter-item data-category="professional work">
-                        <a href="https://www.fortnite.com/@untoldgames/1028-2740-2494" class="open-modal" data-project="UEFN: Battleship">
+                        <a href="#" class="open-modal" data-project="UEFN: Battleship">
                         <figure class="project-img">
                                 <div class="project-item-icon-box">
                                     <ion-icon name="eye-outline"></ion-icon>
@@ -389,7 +426,7 @@
                         </a>
                     </li>
                     <li class="project-item active" data-filter-item data-category="professional work">
-                        <a href="https://www.fortnite.com/@untoldgames/8369-2685-8749" class="open-modal" data-project="PulseParty">
+                        <a href="#" class="open-modal" data-project="PulseParty">
                             <figure class="project-img">
                                 <div class="project-item-icon-box">
                                     <ion-icon name="eye-outline"></ion-icon>
@@ -413,7 +450,7 @@
                         </a>
                     </li>
                     <li class="project-item active" data-filter-item data-category="university work">
-                        <a target="_blank" href="https://wrong-world-studios.itch.io/cycle">
+                        <a href="#" class="open-modal" data-project="Cycle">
                             <figure class="project-img">
                                 <div class="project-item-icon-box">
                                     <ion-icon name="eye-outline"></ion-icon>
@@ -514,7 +551,7 @@
                                 <div class="project-item-icon-box">
                                     <ion-icon name="eye-outline"></ion-icon>
                                 </div>
-                                <img src="./assets/images/Ume\u00e5_University_Resized.png" alt="MaGiTe Project" loading="lazy">
+                                <img src="./assets/images/Umeå_University_Resized.png" alt="MaGiTe Project" loading="lazy">
                             </figure>
                             <h3 class="project-title">MaGiTe Project</h3>
                             <p class="project-category">Game Developer</p>
@@ -566,7 +603,6 @@
             </section>
         </article>
 
-        <!-- Blog Section -->
         <article class="blog" data-page="blog">
             <header>
                 <h2 class="h2 article-title">Blog</h2>
@@ -673,7 +709,6 @@
             </section>
         </article>
 
-        <!-- Contact Section -->
         <article class="contact" data-page="contact">
             <header>
                 <h2 class="h2 article-title">Contact</h2>

@@ -3,8 +3,6 @@
 
 
 
-
-
 // element toggle function
 const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
 
@@ -113,7 +111,6 @@ for (let i = 0; i < filterBtn.length; i++) {
     lastClickedBtn = this;
 
   });
-
 }
 
 
@@ -165,32 +162,55 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
 // ── PROJECT MODAL ──
 
-
-
-
-
 const projectLinks = document.querySelectorAll('.open-modal');
 const projectModal = document.getElementById('projectModal');
 const modalBody = document.getElementById('modalBody');
 const modalClose = document.getElementById('modalClose');
 
-
-
+// SVG icons for Fortnite and Verse
+const fortniteIcon = `
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 6c-2.21 0-4 1.79-4 4 0 1.5.83 2.81 2 3.5V16h4v-2.5c1.17-.69 2-2 2-3.5 0-2.21-1.79-4-4-4zM12 8c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/>
+    </svg>
+`; // A generic game controller/headset icon
+const verseIcon = `
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/>
+    </svg>
+`; // A generic code/brackets icon
 
 const projectDetails = {
     "UEFN: Battleship": {
         title: "UEFN: Battleship",
         role: "Game Creator - Untold Games",
-        video: "https://www.youtube.com/watch?v=CzMTSNYmdYI",
+        duration: "6 months",
+        teamSize: "2 (1 Designer, 1 Programmer)", // Added Team Size
+        video: "https://www.fortnite.com/@untoldgames/1028-2740-2494",
+        image: "./assets/images/Battleship.jpeg",
         short: "Fast-paced team strategy game built in UEFN. Inspired by the classic Battleship board game.",
-        long: "This project was developed using Unreal Editor for Fortnite, with extensive use of Verse scripting for match logic and grid system management. Designed for replayability and rapid iteration in a live environment."
+        long: "This project was developed using Unreal Editor for Fortnite, with extensive use of Verse scripting for match logic and grid system management. Designed for replayability and rapid iteration in a live environment.",
+        tools: [
+            { name: "Fortnite (UEFN)", icon: fortniteIcon, class: "fortnite" },
+            { name: "Verse Scripting", icon: verseIcon, class: "verse" }
+        ],
+        challengesSolutions: "Implementing a robust grid-based combat system with real-time feedback was challenging. We overcame this by modularizing Verse scripts for each grid cell and optimizing network replication for projectile hits and explosions.",
+        projectSuccess: "The game achieved over 100,000 unique players within the first month of release and received positive community feedback for its unique blend of strategy and arcade action."
     },
     "PulseParty": {
         title: "PulseParty",
         role: "Technical Game Designer - Untold Games",
-        video: "https://www.youtube.com/watch?v=CzMTSNYmdYI",
+        duration: "3 months",
+        teamSize: "3 (1 Designer, 1 Programmer, 1 Artist)", // Added Team Size
+        video: "https://www.fortnite.com/@untoldgames/8369-2685-8749", // Updated video URL to the correct Fortnite link
+        image: "https://placehold.co/350x200/007bff/ffffff?text=PulseParty+Game+Screenshot", // Placeholder image for PulseParty
         short: "A rhythm-based multiplayer game using custom Verse logic and dynamic lighting.",
-        long: "My responsibilities included game mechanics prototyping, optimization of network performance and dynamic tempo sync with music tracks."
+        long: "My responsibilities included game mechanics prototyping, optimization of network performance and dynamic tempo sync with music tracks.",
+        tools: [
+            { name: "Verse Scripting", icon: verseIcon, class: "verse" },
+            { name: "Fortnite (UEFN)", icon: fortniteIcon, class: "fortnite" } // Added Fortnite icon
+        ],
+        challengesSolutions: "Synchronizing dynamic lighting and visual effects precisely with music tempo across multiple clients presented a significant hurdle. We developed a custom audio analysis system in Verse to extract beat data and drive visual cues, ensuring a seamless experience for all players.",
+        projectSuccess: "PulseParty was featured in a community spotlight, praised for its innovative rhythm mechanics and immersive atmosphere. It fostered a small but dedicated player base."
     }
     // aggiungi altri progetti qui
 };
@@ -203,43 +223,103 @@ projectLinks.forEach(link => {
         const data = projectDetails[title];
         if (!data) return;
 
+        let mediaContentHtml = '';
+
+        // Prioritize image with hyperlink, fallback to YouTube embed if no image
+        if (data.image) {
+            mediaContentHtml = `
+                <a href="${data.video}" target="_blank" rel="noopener noreferrer">
+                    <img src="${data.image}" alt="${data.title}">
+                </a>
+            `;
+        } else {
+            const youtubeMatch = data.video ? data.video.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/) : null;
+            if (youtubeMatch && youtubeMatch[1]) {
+                const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+                mediaContentHtml = `
+                    <iframe
+                        src="${youtubeEmbedUrl}"
+                        frameborder="0"
+                        allowfullscreen
+                    ></iframe>
+                `;
+            } else {
+                mediaContentHtml = `<p>No media available for this project.</p>`;
+            }
+        }
+
+
+        // Generate tool icons/text
+        const toolIconsHtml = data.tools.map(tool => {
+            return `
+                <span class="tool-icon ${tool.class || ''}" title="${tool.name}">
+                    ${tool.icon || tool.name}
+                </span>
+            `;
+        }).join('');
+
+
         modalBody.innerHTML = `
-      <div class="modal-grid">
-        <div class="modal-media">
-          <iframe
-            src="${data.video}"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <div class="modal-description">
-          <h3>${data.title}</h3>
-          <p><strong>${data.role}</strong></p>
-          <p>${data.short}</p>
-        </div>
-      </div>
-      <div class="modal-fulltext">
-        <p>${data.long}</p>
-      </div>
-    `;
+            <div class="modal-header">
+                <h3>${data.title}</h3>
+            </div>
+            <div class="modal-grid">
+                <div class="modal-media">
+                    ${mediaContentHtml}
+                </div>
+                <div class="modal-details">
+                    <div class="detail-item">
+                        <h4>Role:</h4>
+                        <p>${data.role}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Project Duration:</h4>
+                        <p>${data.duration}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Team Size:</h4>
+                        <p>${data.teamSize}</p>
+                    </div>
+                    <div class="tools-section detail-item">
+                        <h4>Tools:</h4>
+                        <div class="tool-icons">
+                            ${toolIconsHtml}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-fulltext">
+                <div class="detail-item">
+                    <h4>Project Description:</h4>
+                    <p>${data.short}</p>
+                    <p>${data.long}</p>
+                </div>
+                <div class="detail-item">
+                    <h4>Challenges and Solutions:</h4>
+                    <p>${data.challengesSolutions}</p>
+                </div>
+                <div class="detail-item">
+                    <h4>Project Success:</h4>
+                    <p>${data.projectSuccess}</p>
+                </div>
+            </div>
+        `;
 
         projectModal.classList.add('active');
+        document.body.classList.add('no-scroll'); // Add no-scroll class to body
     });
 });
 
 modalClose.addEventListener('click', () => {
     projectModal.classList.remove('active');
+    document.body.classList.remove('no-scroll'); // Remove no-scroll class from body
     modalBody.innerHTML = '';
 });
 
 projectModal.addEventListener('click', e => {
     if (e.target === projectModal) {
         projectModal.classList.remove('active');
+        document.body.classList.remove('no-scroll'); // Remove no-scroll class from body
         modalBody.innerHTML = '';
     }
 });
-
-
-
-
-
