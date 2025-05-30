@@ -75,6 +75,9 @@
 
     --transition-1: 0.25s ease;
     --transition-2: 0.5s ease-in-out;
+
+    /* Define scrollbar width for compensation */
+    --scrollbar-width: 17px; /* Common scrollbar width */
 }
 
 
@@ -133,9 +136,10 @@ body {
     background: var(--smoky-black);
 }
 
-/* Prevent scrolling on body when modal is active */
+/* Prevent scrolling on body when modal is active and compensate for scrollbar */
 body.no-scroll {
     overflow: hidden;
+    padding-right: var(--scrollbar-width); /* Compensate for scrollbar width */
 }
 
 
@@ -457,13 +461,13 @@ main {
 
 .navbar {
     position: fixed;
-    bottom: 0;
+    top: 0; /* Changed from bottom: 0; */
     left: 0;
     width: 100%;
     background: hsla(240, 1%, 17%, 0.75);
     backdrop-filter: blur(10px);
     border: 1px solid var(--jet);
-    border-radius: 12px 12px 0 0;
+    border-radius: 0 0 12px 12px; /* Adjusted border-radius for top position */
     box-shadow: var(--shadow-2);
     z-index: 5;
 }
@@ -630,7 +634,7 @@ main {
     padding-bottom: 35px;
     overflow-x: auto;
     scroll-behavior: smooth;
-    overscroll-behavior-inline: contain;
+    overscroll-behavior: contain;
     scroll-snap-type: inline mandatory;
 }
 
@@ -1005,6 +1009,7 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid for all project lists */
     gap: 20px; /* Adjusted gap for consistency */
     margin-bottom: 10px;
+    justify-content: flex-start; /* Align items to the start */
 }
 
 .project-item {
@@ -1018,11 +1023,11 @@ main {
 
 @keyframes scaleUp {
     0% {
-        transform: scale(0.5);
+        opacity: 0; /* Changed from transform: scale(0.5); */
     }
 
     100% {
-        transform: scale(1);
+        opacity: 1; /* Changed from transform: scale(1); */
     }
 }
 
@@ -1074,10 +1079,6 @@ main {
 .project-item > a:hover .project-item-icon-box {
     --scale: 1;
     opacity: 1;
-}
-
-.project-item-icon-box ion-icon {
-    --ionicon-stroke-width: 50px;
 }
 
 .project-img img {
@@ -1306,10 +1307,6 @@ textarea.form-input {
         border-radius: inherit;
         z-index: -1;
         transition: var(--transition-1);
-    }
-
-    .form-btn ion-icon {
-        font-size: 16px;
     }
 
     .form-btn:hover {
@@ -1552,6 +1549,10 @@ textarea.form-input {
         margin: 0 -30px;
         padding: 30px;
         padding-bottom: 35px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        overscroll-behavior: contain;
+        scroll-snap-type: inline mandatory;
     }
 
     .content-card {
@@ -1682,6 +1683,7 @@ textarea.form-input {
 
     .input-wrapper {
         gap: 30px;
+        grid-template-columns: 1fr 1fr; /* Changed to 2 columns for larger screens */
         margin-bottom: 30px;
     }
 
@@ -1701,123 +1703,6 @@ textarea.form-input {
         .form-btn ion-icon {
             font-size: 18px;
         }
-}
-
-
-
-/**
- * responsive larger than 768px screen
- */
-
-@media (min-width: 768px) {
-
-    /**
-   * REUSED STYLE
-   */
-
-    .sidebar, article {
-        width: 700px;
-    }
-
-    .has-scrollbar::-webkit-scrollbar-button {
-        width: 100px;
-    }
-
-
-
-    /**
-   * SIDEBAR
-   */
-
-    .contacts-list {
-        grid-template-columns: 1fr 1fr;
-        gap: 30px 15px;
-    }
-
-
-
-    /**
-   * NAVBAR
-   */
-
-    .navbar-link {
-        --fs-8: 15px;
-    }
-
-
-
-    /**
-   * ABOUT
-   */
-
-    /* testimonials modal */
-
-    .testimonials-modal {
-        gap: 35px;
-        max-width: 680px;
-    }
-
-    .modal-avatar-box img {
-        width: 80px;
-    }
-
-
-
-    /**
-   * PORTFOLIO
-   */
-
-    .article-title {
-        padding-bottom: 20px;
-    }
-
-    .filter-select-box {
-        display: none;
-    }
-
-    .filter-list {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 25px;
-        padding-left: 5px;
-        margin-bottom: 30px;
-    }
-
-    .filter-item button {
-        color: var(--light-gray);
-        font-size: var(--fs-5);
-        transition: var(--transition-1);
-    }
-
-        .filter-item button:hover {
-            color: var(--light-gray-70);
-        }
-
-        .filter-item button.active {
-            color: var(--emerald-green-primary);
-        }
-
-    /* portfolio and blog grid */
-
-    .project-list, .blog-posts-list {
-        grid-template-columns: 1fr 1fr;
-    }
-
-
-
-    /**
-   * CONTACT
-   */
-
-    .input-wrapper {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .form-btn {
-        width: max-content;
-        margin-left: auto;
-    }
 }
 
 
@@ -1849,8 +1734,12 @@ textarea.form-input {
    */
 
     .sidebar, article {
-        width: 950px;
+        width: auto;
         box-shadow: var(--shadow-5);
+    }
+
+    article {
+        min-height: 100%;
     }
 
 
@@ -1860,81 +1749,94 @@ textarea.form-input {
    */
 
     main {
-        margin-bottom: 60px;
+        max-width: 1200px;
+        margin-inline: auto;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        gap: 25px;
     }
 
     .main-content {
-        position: relative;
-        width: max-content;
+        min-width: 75%;
+        width: 75%;
+        margin: 0;
+    }
+
+
+
+    /**
+   * SIDEBAR
+   */
+
+    .sidebar {
+        position: sticky;
+        top: 60px;
+        max-height: max-content;
+        height: 100%;
+        margin-bottom: 0;
+        padding-top: 60px;
+        z-index: 1;
+    }
+
+    .sidebar-info {
+        flex-direction: column;
+    }
+
+    .avatar-box img {
+        width: 150px;
+    }
+
+    .info-content .name {
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    .info-content .title {
         margin: auto;
     }
 
-
-
-    /**
-   * NAVBAR
-   */
-
-    .navbar {
-        position: absolute;
-        bottom: auto;
-        top: 0;
-        left: auto;
-        right: 0;
-        width: max-content;
-        border-radius: 0 20px;
-        padding: 0 20px;
-        box-shadow: none;
+    .info_more-btn {
+        display: none;
     }
 
-    .navbar-list {
-        gap: 30px;
-        padding: 0 20px;
+    .sidebar-info_more {
+        opacity: 1;
+        visibility: visible;
     }
 
-    .navbar-link {
-        font-weight: var(--fw-500);
+    .contacts-list {
+        grid-template-columns: 1fr;
     }
 
-
-
-    /**
-   * ABOUT
-   */
-
-    /* service */
-
-    .service-list {
-        grid-template-columns: 1fr 1fr;
-        gap: 20px 25px;
+    .contact-info :is(.contact-link) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    /* testimonials */
-
-    .testimonials-item {
-        min-width: calc(50% - 15px);
+    .contact-info :is(.contact-link, time, address) {
+        --fs-7: 14px;
+        font-weight: var(--fw-300);
     }
 
-    /* clients */
+    .separator:last-of-type {
+        margin: 15px 0;
+        opacity: 0;
+    }
 
-    .clients-item {
-        min-width: calc(25% - 38px);
+    .social-list {
+        justify-content: center;
     }
 
 
 
     /**
-   * PORTFOLIO
-   */
+	 * RESUME
+	 */
 
-    .project-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    /* BLOG */
-
-    .blog-banner-box {
-        height: 230px;
+    .timeline-text {
+        max-width: 700px;
     }
 }
 
@@ -2103,8 +2005,7 @@ textarea.form-input {
     visibility: hidden; /* Controls visibility for transition */
     opacity: 0; /* Controls opacity for transition */
     pointer-events: none;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    will-change: opacity, visibility; /* Hint for browser optimization */
+    /* Removed transition and will-change to eliminate fade-in animation */
 }
 
     .project-modal.active {
@@ -2125,16 +2026,15 @@ textarea.form-input {
         overflow-y: auto; /* Enable scrolling for content if needed */
         display: flex;
         flex-direction: column;
-        transform: scale(0.8); /* Initial scale for pop-in effect */
-        opacity: 0; /* Initial opacity for pop-in effect */
-        will-change: transform, opacity; /* Hint for browser optimization */
-        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        /* Removed transform and opacity for initial state to remove animation */
+        /* Removed will-change for transform and opacity */
+        /* Removed transition for transform and opacity */
     }
 
 
     .project-modal.active .modal-content {
-        transform: scale(1); /* Final scale for pop-in effect */
-        opacity: 1; /* Final opacity for pop-in effect */
+        /* Removed transform and opacity for active state to remove animation */
+        /* Removed transition for transform and opacity */
     }
 
     .project-modal .modal-close {
@@ -2325,32 +2225,4 @@ textarea.form-input {
     }
 
     .modal-fulltext .detail-item:first-child h4 {
-        margin-top: 0; /* Remove top margin for the very first title in this section */
-    }
-
-    .modal-fulltext .detail-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-
-
-/* Responsive adjustments for modal grid */
-@media (max-width: 768px) {
-    .modal-grid {
-        flex-direction: column; /* Stack media and description vertically on small screens */
-    }
-    .modal-media {
-        max-width: 100%; /* Full width for media on small screens */
-        flex: none; /* Remove fixed width on small screens */
-        height: auto; /* Allow height to adjust dynamically */
-    }
-    .modal-media img {
-        width: 100%; /* Make image fill container width on small screens */
-        height: auto; /* Allow height to adjust dynamically to maintain aspect ratio */
-        object-fit: contain; /* Ensure image is fully visible within the container */
-        border-radius: 8px; /* Revert to rounded corners for small screens if circular isn't desired */
-    }
-    .modal-media iframe {
-        height: 200px; /* Adjust iframe height for small screens */
-    }
-}
+        margin-top: 0; /* Remove top margin for the very first title in this sect
