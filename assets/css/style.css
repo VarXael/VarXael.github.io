@@ -230,12 +230,12 @@ article.active {
     font-weight: var(--fw-500);
 }
 
-.article-title {
+.article-title { /* This style is no longer used in the "About" page header */
     position: relative;
     padding-bottom: 7px;
 }
 
-.article-title::after {
+.article-title::after { /* This style is no longer used in the "About" page header */
     content: "";
     position: absolute;
     bottom: 0;
@@ -293,155 +293,185 @@ main {
     margin: 15px 12px;
     margin-bottom: 75px;
     min-width: 259px;
+    padding-top: 70px; 
 }
 
 /*-----------------------------------*\
-  #SIDEBAR
+  #PROFILE WIDGET (ENHANCED)
+\*-----------------------------------*/
+
+.profile-widget {
+    position: fixed;
+    top: 15px; 
+    right: 15px;
+    background: var(--eerie-black-1);
+    border: 1px solid var(--jet);
+    border-radius: 16px; 
+    padding: 12px 18px; 
+    box-shadow: var(--shadow-3);
+    z-index: 10; 
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    max-width: 320px; 
+}
+
+.widget-avatar-box {
+    background: var(--bg-gradient-onyx); 
+    border-radius: 50%;
+    padding: 3px; 
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; 
+}
+
+.widget-avatar-box img {
+    border-radius: 50%;
+    width: 50px; 
+    height: 50px;
+    object-fit: cover;
+    display: block; 
+}
+
+.widget-info-content {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 8px; 
+    overflow: hidden; 
+}
+
+.widget-name {
+    color: var(--white-2);
+    font-size: var(--fs-5); 
+    font-weight: var(--fw-500);
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2; 
+}
+
+.widget-cv-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--emerald-green-primary);
+    color: var(--eerie-black-2); 
+    font-size: var(--fs-7);
+    font-weight: var(--fw-500);
+    padding: 6px 12px; 
+    border-radius: 8px;
+    transition: background-color var(--transition-1), transform var(--transition-1);
+    white-space: nowrap;
+}
+
+.widget-cv-btn ion-icon {
+    font-size: 16px; 
+}
+
+.widget-cv-btn:hover {
+    background: var(--emerald-green-light);
+    transform: translateY(-1px);
+}
+
+/* MODIFICATION: Style for summarized about me in widget */
+.widget-about-me-summary {
+    font-size: var(--fs-8);
+    color: var(--light-gray);
+    line-height: 1.4;
+    /* Restrict to a few lines if it gets too long */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Show max 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 4px; /* Add some space above it */
+}
+
+
+/*-----------------------------------*\
+  #SIDEBAR (Skills Only Version)
 \*-----------------------------------*/
 
 .sidebar {
     margin-bottom: 15px;
-    max-height: 112px;
-    overflow: hidden;
-    transition: var(--transition-2);
+    padding: 20px; 
+    transition: var(--transition-2); 
 }
 
-.sidebar.active {
-    /* Increased max-height to accommodate new skills section */
-    max-height: 800px; /* Adjust as needed based on content */
+/*-----------------------------------*\
+  #SKILLS STYLES (Now primary content of sidebar)
+\*-----------------------------------*/
+
+.skills-container-sidebar {
+    /* Container for skills within the sidebar */
 }
 
-.sidebar-info {
-    position: relative;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 15px;
-}
-
-.avatar-box {
-    background: var(--bg-gradient-onyx);
-    border-radius: 20px;
-}
-
-.info-content .name {
-    color: var(--white-2);
-    font-size: var(--fs-3);
-    font-weight: var(--fw-500);
-    letter-spacing: -0.25px;
-    margin-bottom: 10px;
-}
-
-.info-content .title {
+.skills-sidebar-title {
     color: var(--white-1);
-    background: var(--onyx);
-    font-size: var(--fs-8);
-    font-weight: var(--fw-300);
-    width: max-content;
-    padding: 3px 12px;
-    border-radius: 8px;
+    font-size: var(--fs-3); 
+    margin-bottom: 20px; 
+    padding-bottom: 10px; 
+    border-bottom: 1px solid var(--emerald-green-primary);
+    text-align: left;
 }
 
-.info_more-btn {
-    position: absolute;
-    top: -15px;
-    right: -15px;
-    border-radius: 0 15px;
-    font-size: 13px;
-    color: var(--emerald-green-primary);
-    background: var(--border-gradient-onyx);
-    padding: 10px;
-    box-shadow: var(--shadow-2);
-    transition: var(--transition-1);
-    z-index: 1;
-}
-
-.info_more-btn::before {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    border-radius: inherit;
-    background: var(--bg-gradient-jet);
-    transition: var(--transition-1);
-    z-index: -1;
-}
-
-.info_more-btn:hover,
-.info_more-btn:focus {
-    background: var(--bg-gradient-green-1);
-}
-
-.info_more-btn:hover::before,
-.info_more-btn:focus::before {
-    background: var(--bg-gradient-green-2);
-}
-
-.info_more-btn span {
-    display: none;
-}
-
-.sidebar-info_more {
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition-2);
-}
-
-.sidebar.active .sidebar-info_more {
-    opacity: 1;
-    visibility: visible;
-}
-
-.contacts-list {
+.skills-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr; 
+    gap: 15px; 
 }
 
-.contact-item {
-    min-width: 100%;
+.skill-card {
+    background: var(--eerie-black-1);
+    border-radius: 10px;
+    padding: 15px; 
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 15px; 
+    border: 1px solid transparent;
+    transition: var(--transition-1);
 }
 
-.contact-info {
-    max-width: calc(100% - 46px);
-    width: calc(100% - 46px);
+.skill-card:hover {
+    border-color: var(--emerald-green-primary);
 }
 
-.contact-title {
-    color: var(--light-gray-70);
-    font-size: var(--fs-8);
-    text-transform: uppercase;
-    margin-bottom: 2px;
+.skill-icon {
+    font-size: 1.6rem; 
+    color: var(--emerald-green-primary);
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.skill-icon svg {
+    width: 28px; 
+    height: 28px;
 }
 
-.contact-info :is(.contact-link, time, address) {
+.skill-card .skill-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.skill-card h5 {
     color: var(--white-2);
-    font-size: var(--fs-7);
+    font-size: var(--fs-5); 
+    font-weight: var(--fw-500);
+    margin-bottom: 3px;
 }
 
-.contact-info address {
-    font-style: normal;
-}
-
-.social-list {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 15px;
-    padding-bottom: 4px;
-    padding-left: 7px;
-}
-
-.social-item .social-link {
-    color: var(--light-gray-70);
-    font-size: 18px;
-}
-
-.social-item .social-link:hover {
+.skill-card p {
     color: var(--light-gray);
+    font-size: var(--fs-7); 
+    line-height: 1.4;
 }
+
 
 /*-----------------------------------*\
   #NAVBAR
@@ -449,15 +479,15 @@ main {
 
 .navbar {
     position: fixed;
-    top: 0; /* Changed from bottom: 0; */
+    top: 0; 
     left: 0;
     width: 100%;
     background: hsla(240, 1%, 17%, 0.75);
     backdrop-filter: blur(10px);
     border: 1px solid var(--jet);
-    border-radius: 0 0 12px 12px; /* Adjusted border-radius for top position */
+    border-radius: 0 0 12px 12px; 
     box-shadow: var(--shadow-2);
-    z-index: 5;
+    z-index: 5; 
 }
 
 .navbar-list {
@@ -488,107 +518,37 @@ main {
   #ABOUT
 \*-----------------------------------*/
 
-.about .article-title {
-    margin-bottom: 15px;
-}
+/* MODIFICATION: .about .article-title is removed from HTML, so style is not needed here */
 
-.about-text {
-    color: var(--light-gray);
-    font-size: var(--fs-6);
-    font-weight: var(--fw-300);
-    line-height: 1.6;
-}
+/* MODIFICATION: .about-text is removed from HTML, so style is not needed here */
 
-.about-text p {
-    margin-bottom: 15px;
-}
 
 /**
- * #service
+ * #service (This is now the main content for "About" page, containing highlights)
  */
 
 .service {
     margin-bottom: 35px;
 }
 
-.service-title {
+.service-title { /* This is the "Highlights" title */
     margin-bottom: 20px;
 }
 
-.service-list {
+/* MODIFICATION: Styles for two-column highlight list */
+.highlight-list-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 25px; /* Gap between items */
 }
 
-.service-item {
-    position: relative;
-    background: var(--border-gradient-onyx);
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: var(--shadow-2);
-    z-index: 1;
+/* Default to 1 column */
+.highlight-list-grid .highlight-item {
+    width: 100%;
 }
 
-.service-item::before {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    background: var(--bg-gradient-jet);
-    border-radius: inherit;
-    z-index: -1;
-}
-
-.service-icon-box {
-    margin-bottom: 10px;
-}
-
-.service-icon-box img {
-    margin: auto;
-}
-
-.service-content-box {
-    text-align: center;
-}
-
-.service-item-title {
-    margin-bottom: 7px;
-}
-
-.service-item-text {
-    color: var(--light-gray);
-    font-size: var(--fs-6);
-    font-weight: var(--fw-3);
-    line-height: 1.6;
-}
-
-/*-----------------------------------*\
-  #HIGHLIGHTS SECTION
-\*-----------------------------------*/
-
-.highlight-projects-container {
-    position: relative;
-}
-
-.highlight-list {
-    display: grid;
-    grid-template-columns: 1fr; /* Each item takes a full row */
-    gap: 30px; 
-    margin-bottom: 10px;
-}
-
-.highlight-list .highlight-item {
-    border: 3px solid transparent; 
-    box-shadow: none; 
-    transform: scale(1); 
-    transition: all 0.3s ease-in-out; 
-    border-radius: 20px;
-    background: var(--eerie-black-1); 
-    padding: 15px; /* Add some padding inside items */
-}
 
 .highlight-list .highlight-item .project-img {
-    height: 250px; /* Default height for smaller screens */
+    height: 250px; 
 }
 
 
@@ -801,9 +761,8 @@ main {
   #RESUME
 \*-----------------------------------*/
 
-.article-title {
-    margin-bottom: 30px;
-}
+/* .article-title for resume page remains */
+
 
 /**
  * education and experience
@@ -872,80 +831,6 @@ main {
     font-weight: var(--fw-300);
     line-height: 1.6;
 }
-
-/**
- * skills - These styles are now for the skills section inside the left sidebar
- */
-
-.skills-container-sidebar { /* Renamed to avoid conflict if .skills-container is used elsewhere */
-    padding: 10px 0; /* Add some padding */
-}
-
-.skills-sidebar-title {
-    color: var(--white-1);
-    font-size: var(--fs-4); /* Adjusted for sidebar */
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--emerald-green-primary);
-    text-align: left; /* Align with other sidebar content */
-}
-
-.skills-grid {
-    display: grid;
-    grid-template-columns: 1fr; 
-    gap: 10px; 
-}
-
-.skill-card {
-    background: var(--eerie-black-1); 
-    border-radius: 10px; /* Slightly smaller radius */
-    padding: 10px; 
-    display: flex;
-    align-items: center;
-    gap: 10px; 
-    border: 1px solid transparent; /* Transparent border by default */
-    transition: var(--transition-1);
-}
-
-.skill-card:hover {
-    border-color: var(--emerald-green-primary);
-    /* box-shadow: var(--shadow-1); Optional: add subtle shadow on hover */
-}
-
-.skill-icon {
-    font-size: 1.4rem; /* Adjusted icon size for sidebar */
-    color: var(--emerald-green-primary);
-    width: 30px; 
-    min-width: 30px; 
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.skill-icon svg { 
-    width: 24px; 
-    height: 24px;
-}
-
-.skill-card .skill-info { 
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Allow text to take remaining space */
-}
-
-.skill-card h5 {
-    color: var(--white-2);
-    font-size: var(--fs-6); /* Slightly smaller for sidebar */
-    font-weight: var(--fw-500);
-    margin-bottom: 2px;
-}
-
-.skill-card p {
-    color: var(--light-gray);
-    font-size: var(--fs-8); /* Smaller description text */
-    line-height: 1.3;
-}
-
 
 /*-----------------------------------*\
   #PORTFOLIO
@@ -1394,20 +1279,16 @@ textarea.form-input::-webkit-resizer {
         margin-inline: auto;
         padding: 30px;
     }
-    .article-title {
+    /* .article-title for main content pages */
+    .main-content .article-title { 
         font-weight: var(--fw-600);
         padding-bottom: 15px;
     }
-    .article-title::after {
+    .main-content .article-title::after {
         width: 40px;
         height: 5px;
     }
-    .icon-box {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        font-size: 18px;
-    }
+
 
     /**
    * #MAIN
@@ -1415,80 +1296,35 @@ textarea.form-input::-webkit-resizer {
     main {
         margin-top: 60px;
         margin-bottom: 100px;
+        padding-top: 80px; 
     }
-    /* Adjusted sidebar max-height for 580px to prevent scrollbar issues */
+    
     .sidebar {
-        max-height: 180px; /* Reduced to fit content without scrollbar */
         margin-bottom: 30px;
-    }
-    .sidebar.active {
-        max-height: 750px; /* Increased to accommodate skills */
-    }
-
-    .sidebar-info {
-        gap: 25px;
-    }
-    .avatar-box {
-        border-radius: 30px;
-    }
-    .avatar-box img {
-        width: 120px;
-    }
-    .info-content .name {
-        margin-bottom: 15px;
-    }
-    .info-content .title {
-        padding: 5px 18px;
-    }
-    .info_more-btn {
-        top: -30px;
-        right: -30px;
-        padding: 10px 15px;
-    }
-    .info_more-btn span {
-        display: block;
-        font-size: var(--fs-8);
-    }
-    .info_more-btn ion-icon {
-        display: none;
-    }
-    .separator {
-        margin: 32px 0;
-    }
-    .contacts-list {
-        gap: 20px;
-    }
-    .contact-info {
-        max-width: calc(100% - 64px);
-        width: calc(100% - 64px);
+        padding: 30px; 
     }
 
     /**
    * #NAVBAR
    */
     .navbar {
-        border-radius: 20px 20px 0 0; /* This was incorrect for top navbar, should be 0 0 20px 20px */
-        border-radius: 0 0 20px 20px; /* Corrected for top navbar */
+        border-radius: 0 0 20px 20px; 
     }
     .navbar-list {
         gap: 20px;
     }
     .navbar-link {
-        --fs-8: 14px; /* This custom property assignment here might not be intended, usually in :root */
-        font-size: 14px; /* Direct assignment if var(--fs-8) was meant to be overridden locally */
+        font-size: 14px; 
     }
 
     /**
    * #ABOUT
    */
-    .about .article-title {
-        margin-bottom: 20px;
-    }
-    .about-text {
-        margin-bottom: 40px;
-    }
-    /* service */
-    .service-item {
+    /* .about .article-title is removed */
+    /* .about-text is removed */
+
+    /* service / highlights section */
+    .service-item { /* This style might be for a different service list, check if it conflicts with highlight items */
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
@@ -1504,13 +1340,12 @@ textarea.form-input::-webkit-resizer {
     }
 
     /* Highlight section for 580px+ */
-    .highlight-list {
-      /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* This would allow multiple columns if space permits */
-      grid-template-columns: 1fr; /* Ensures one column */
+    .highlight-list-grid {
+      grid-template-columns: repeat(2, 1fr); /* Two columns */
       gap: 25px;
     }
-    .highlight-list .highlight-item .project-img {
-        height: 300px; /* Image height for 1-column layout on medium screens */
+    .highlight-list-grid .highlight-item .project-img {
+        height: 200px; /* Adjust height for two-column layout */
     }
 
 
@@ -1526,7 +1361,7 @@ textarea.form-input::-webkit-resizer {
     }
     .content-card {
         padding: 30px;
-        padding-top: 25px; /* This was 45px, changed to 25px for consistency */
+        padding-top: 25px; 
     }
     .testimonials-avatar-box {
         transform: translate(30px, -30px);
@@ -1537,7 +1372,7 @@ textarea.form-input::-webkit-resizer {
     }
     .testimonials-item-title {
         margin-bottom: 10px;
-        margin-left: 95px; /* This creates a large left margin, assuming for avatar */
+        margin-left: 95px; 
     }
     .testimonials-text {
         line-clamp: 2;
@@ -1545,9 +1380,9 @@ textarea.form-input::-webkit-resizer {
     }
     /* testimonials modal */
     .modal-container {
-        padding: 20px; /* Added padding around the modal container itself */
+        padding: 20px; 
     }
-    .testimonials-modal { /* This is the old modal, styles might conflict or be unused */
+    .testimonials-modal { 
         display: flex;
         justify-content: flex-start;
         align-items: stretch;
@@ -1555,19 +1390,19 @@ textarea.form-input::-webkit-resizer {
         padding: 30px;
         border-radius: 20px;
     }
-    .modal-img-wrapper { /* Part of old modal */
+    .modal-img-wrapper { 
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    .modal-avatar-box { /* Part of old modal */
+    .modal-avatar-box { 
         border-radius: 18px;
         margin-bottom: 0;
     }
-    .modal-avatar-box img { /* Part of old modal */
+    .modal-avatar-box img { 
         width: 65px;
     }
-    .modal-img-wrapper > img { /* Part of old modal */
+    .modal-img-wrapper > img { 
         display: block;
         flex-grow: 1;
         width: 35px;
@@ -1580,7 +1415,7 @@ textarea.form-input::-webkit-resizer {
         scroll-padding-inline: 45px;
     }
     .clients-item {
-        min-width: calc(33.33% - 35px); /* Adjusted for 3 items with gap */
+        min-width: calc(33.33% - 35px); 
     }
 
     /**
@@ -1595,7 +1430,7 @@ textarea.form-input::-webkit-resizer {
     .timeline-item::after {
         height: 8px;
         width: 8px;
-        left: -43px; /* Ensure this aligns with the line */
+        left: -43px; 
     }
    
     /**
@@ -1621,7 +1456,7 @@ textarea.form-input::-webkit-resizer {
     }
     .input-wrapper {
         gap: 30px;
-        grid-template-columns: 1fr 1fr; /* Changed to 2 columns for larger screens */
+        grid-template-columns: 1fr 1fr; 
         margin-bottom: 30px;
     }
     .form-input {
@@ -1631,63 +1466,89 @@ textarea.form-input::-webkit-resizer {
         margin-bottom: 30px;
     }
     .form-btn {
-        /* --fs-6: 16px; */ /* Already defined in :root or locally */
-        font-size: 16px; /* Direct assignment */
+        font-size: 16px; 
         padding: 16px 20px;
     }
     .form-btn ion-icon {
         font-size: 18px;
     }
+
+    /* Profile Widget adjustments for larger screens */
+    .profile-widget {
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px; 
+    }
+    .widget-avatar-box img {
+        width: 50px; 
+        height: 50px;
+    }
+    .widget-name {
+        font-size: var(--fs-5); 
+    }
+    .widget-cv-btn {
+        padding: 8px 14px; 
+        font-size: var(--fs-6);
+    }
+    .widget-cv-btn ion-icon {
+        font-size: 18px;
+    }
+    .widget-about-me-summary {
+        font-size: var(--fs-7); /* Adjust size for this breakpoint */
+         -webkit-line-clamp: 3; /* Allow more lines if space permits */
+    }
+
 }
 
 /**
- * responsive larger than 768px screen (Added for better modal control)
+ * responsive larger than 768px screen
  */
 @media (min-width: 768px) {
     .project-modal .modal-content {
-        width: 70vw; /* Adjust width for tablets */
+        width: 70vw; 
         max-width: 800px;
-         height: auto; /* Allow height to adjust based on content */
-        max-height: 85vh; /* Slightly less vh for tablets */
+         height: auto; 
+        max-height: 85vh; 
     }
 
     .modal-grid {
-        flex-direction: row; /* Ensure it's row for larger screens */
+        flex-direction: row; 
     }
 
     .modal-media {
-        flex: 0 0 300px; /* Adjust media width */
+        flex: 0 0 300px; 
         max-width: 300px;
     }
 
      .modal-media iframe {
-        height: 169px; /* 16:9 for 300px width */
+        height: 169px; 
     }
 
     .modal-media img {
         width: 100%;
         height: auto;
-        max-height: 250px; /* Max height for image in details view */
+        max-height: 250px; 
         object-fit: cover;
     }
 
     /* Highlight section for 768px+ */
-    .highlight-list {
-      grid-template-columns: 1fr; /* Force 1 column */
-      gap: 30px; 
+    .highlight-list-grid .highlight-item .project-img {
+        height: 220px; /* Adjust height for two-column layout on tablets */
     }
-    .highlight-list .highlight-item {
-        padding: 15px; 
+    .highlight-list-grid .highlight-item .project-title {
+        font-size: var(--fs-5); 
     }
-    .highlight-list .highlight-item .project-img {
-        height: 320px; /* Increase image height for single column */
+    .highlight-list-grid .highlight-item .project-category {
+        font-size: var(--fs-7); 
     }
-    .highlight-list .highlight-item .project-title {
-        font-size: var(--fs-4); /* Larger title for single column items */
+
+    /* Skills grid in sidebar remains single column by default */
+    /* If you wanted skills in 2 columns *within the sidebar* at this breakpoint:
+    .sidebar .skills-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px; 
     }
-    .highlight-list .highlight-item .project-category {
-        font-size: var(--fs-6); 
-    }
+    */
 }
 
 
@@ -1713,7 +1574,7 @@ textarea.form-input::-webkit-resizer {
    */
     .sidebar,
     article {
-        width: auto; /* Overrides previous fixed widths */
+        width: auto; 
         box-shadow: var(--shadow-5);
     }
     article {
@@ -1724,81 +1585,37 @@ textarea.form-input::-webkit-resizer {
    * #MAIN
    */
     main {
-        max-width: 1200px; /* Increased from 1024px for better layout */
+        max-width: 1200px; 
         margin-inline: auto;
         display: flex;
         justify-content: center;
         align-items: stretch;
         gap: 25px;
+        padding-top: 25px; 
     }
     .main-content {
         min-width: 75%;
         width: 75%;
-        margin: 0; /* Reset margin from smaller screens */
+        margin: 0; 
     }
 
     /**
-   * SIDEBAR
+   * SIDEBAR (Skills Only Version)
    */
     .sidebar {
         position: sticky;
-        top: 60px; /* Distance from top when sticky */
-        /* max-height: calc(100vh - 120px); Original, adjust if skills make it too long */
-        max-height: calc(100vh - 80px); /* Adjusted for more content */
-        height: auto; /* Changed from 100% to auto to respect content size */
+        top: 25px; 
+        max-height: calc(100vh - 50px); 
+        height: auto; 
         margin-bottom: 0;
-        padding-top: 60px; /* Consistent with top value */
+        padding-top: 25px; 
+        padding-bottom: 25px;
         z-index: 1; 
         width: 25%; 
         min-width: 280px; 
-        overflow-y: auto; /* Add scroll if content exceeds max-height */
+        overflow-y: auto; 
     }
-    .sidebar.active { /* Ensure active state allows full scrollable height */
-        max-height: calc(100vh - 80px); 
-    }
-
-    .sidebar-info {
-        flex-direction: column;
-        align-items: center; /* Center items in column flex */
-    }
-    .avatar-box img {
-        width: 150px;
-    }
-    .info-content .name {
-        white-space: normal; /* Allow name to wrap */
-        text-align: center;
-    }
-    .info-content .title {
-        margin: auto; /* Center title */
-    }
-    .info_more-btn {
-        display: none; /* Hidden on larger screens */
-    }
-    .sidebar-info_more {
-        opacity: 1;
-        visibility: visible;
-        width: 100%; /* Ensure it takes full width of sidebar */
-    }
-    .contacts-list {
-        grid-template-columns: 1fr;
-    }
-    .contact-info :is(.contact-link) {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .contact-info :is(.contact-link, time, address) {
-        font-size: 14px;
-        font-weight: var(--fw-300);
-    }
-    .separator:last-of-type { 
-        margin: 15px 0;
-        /* opacity: 0; -- Re-enable if needed, but skills are below it now */
-    }
-    .social-list {
-        justify-content: center;
-    }
-
+    
     /**
 	 * RESUME
 	 */
@@ -1807,36 +1624,63 @@ textarea.form-input::-webkit-resizer {
     }
 
     /* Highlight section for 1024px+ */
-    .highlight-list {
-        grid-template-columns: 1fr; /* Still one column */
-        gap: 35px; 
-    }
-     .highlight-list .highlight-item .project-img {
-        height: 400px; /* Even larger image height for desktop single column */
+    .highlight-list-grid .highlight-item .project-img {
+        height: 250px; /* Adjust height for two-column on desktop */
     }
 
 
     /* Project Modal adjustments for desktop */
     .project-modal .modal-content {
-        width: 60vw; /* Wider modal on desktop */
-        max-width: 1000px; /* Max width from original */
-        height: auto; /* Auto height based on content */
-        max-height: 90vh; /* Max height from original */
+        width: 60vw; 
+        max-width: 1000px; 
+        height: auto; 
+        max-height: 90vh; 
     }
 
      .modal-media {
-        flex: 0 0 400px; /* Fixed width for media as per original design for large screens */
+        flex: 0 0 400px; 
         max-width: 400px;
     }
 
     .modal-media iframe {
-        height: 225px; /* 16:9 for 400px width */
+        height: 225px; 
     }
 
      .modal-media img {
         width: 350px;
         height: 200px;
         object-fit: cover;
+    }
+
+    /* Profile widget position on desktop */
+    .profile-widget {
+        top: 25px; 
+        right: 25px;
+        padding: 15px 25px; 
+    }
+    .widget-avatar-box img {
+        width: 60px; 
+        height: 60px;
+    }
+    .widget-name {
+        font-size: var(--fs-4); 
+    }
+     .widget-cv-btn {
+        padding: 10px 18px; 
+        font-size: var(--fs-6);
+    }
+    .widget-cv-btn ion-icon {
+        font-size: 20px;
+    }
+    .widget-about-me-summary {
+        font-size: var(--fs-7); /* Keep it small and concise */
+        -webkit-line-clamp: 2; /* Max 2 lines for summary */
+    }
+
+    /* Skills grid in sidebar remains single column */
+    .skills-grid {
+        grid-template-columns: 1fr; 
+        gap: 15px; 
     }
 }
 
@@ -1876,8 +1720,8 @@ textarea.form-input::-webkit-resizer {
         width: 25%; 
     }
 
-    .highlight-list .highlight-item .project-img {
-        height: 450px; /* Max height for very large screens */
+    .highlight-list-grid .highlight-item .project-img {
+        height: 280px; /* Adjust for very large screens if needed */
     }
 }
 

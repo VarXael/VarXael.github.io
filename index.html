@@ -13,165 +13,67 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
+    <div class="profile-widget">
+        <figure class="widget-avatar-box">
+            <img src="./assets/images/about.png" alt="Giuseppe Luigi Alfieri" width="60"> 
+        </figure>
+        <div class="widget-info-content">
+            <h4 class="widget-name" title="Giuseppe Luigi Alfieri">Giuseppe L. Alfieri</h4>
+            <p class="widget-about-me-summary">
+                Technical Game Designer
+            </p>
+            <a href="https://drive.google.com/file/d/1bnt3IPMcQA-6fPf9LLDp4k8lXR0IzCUf/view?usp=sharing" target="_blank" class="widget-cv-btn">
+                <ion-icon name="download-outline"></ion-icon>
+                <span>Download CV</span>
+            </a>
+        </div>
+    </div>
+
 <main>
     <aside class="sidebar" data-sidebar>
-        <div class="sidebar-info">
-            <figure class="avatar-box">
-                <img src="./assets/images/about.png" alt="Giuseppe Luigi Alfieri" width="80">
-            </figure>
-            <div class="info-content">
-                <h2 class="name" title="Giuseppe Luigi Alfieri">Giuseppe Luigi Alfieri</h2>
-                <p class="title">Technical Game Designer</p>
-            </div>
-            <button class="info_more-btn" data-sidebar-btn>
-                <span>Show Contacts & Skills</span> <ion-icon name="chevron-down"></ion-icon>
-            </button>
+        <div class="skills-container-sidebar">
+            <h3 class="h3 skills-sidebar-title">Technical Skills</h3>
+            <ul class="skills-grid">
+                <li class="skill-card">
+                    <div class="skill-icon"><i class="fab fa-unrealengine"></i></div>
+                    <div class="skill-info">
+                        <h5 class="h5">Unreal Engine</h5>
+                        <p>Blueprints & C++</p>
+                    </div>
+                </li>
+                <li class="skill-card">
+                    <div class="skill-icon"><i class="fab fa-unity"></i></div>
+                    <div class="skill-info">
+                        <h5 class="h5">Unity</h5>
+                        <p>C# Scripting</p>
+                    </div>
+                </li>
+                 <li class="skill-card">
+                    <div class="skill-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.86 6.71l-1.72 1.72c-.19-.25-.43-.46-.72-.62l.98-2.35c.13-.32.02-.69-.27-.84s-.69-.02-.84.27l-.98 2.35c-.3-.09-.61-.13-.93-.13s-.63.04-.93.13l-.98-2.35c-.13-.32-.51-.45-.84-.27s-.45.51-.27.84l.98 2.35c-.29.16-.53.37-.72.62l-1.72-1.72c-.26-.26-.71-.23-.94.03s-.23.71.03.94l1.72 1.72c-.16.29-.27.6-.31.93H5.5c-.39 0-.7.31-.7.7s.31.7.7.7h2.35c.04.33.15.64.31.93l-1.72 1.72c-.26.26-.29.71-.03.94s.71.29.94.03l1.72-1.72c.25.19.54.33.85.42V17.5c0 .39.31.7.7.7s.7-.31.7-.7v-2.35c.3-.09.59-.23.85-.42l1.72 1.72c.26.26.71.23.94-.03s-.23-.71-.03-.94l-1.72-1.72c.16-.29.27.6.31-.93h2.35c.39 0 .7-.31.7-.7s-.31-.7-.7-.7H14.8c-.04-.33-.15-.64-.31-.93l1.72-1.72c.26-.26.29-.71.03-.94s-.71-.29-.94-.03zM12 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    </div>
+                    <div class="skill-info">
+                        <h5 class="h5">UEFN (Fortnite)</h5>
+                        <p>Verse & Devices</p>
+                    </div>
+                </li>
+                <li class="skill-card">
+                    <div class="skill-icon"><i class="fab fa-git-alt"></i></div>
+                    <div class="skill-info">
+                        <h5 class="h5">Version Control</h5>
+                        <p>Git (GitHub, GitLab), Plastic SCM, Perforce</p>
+                    </div>
+                </li>
+                <li class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="skill-info">
+                        <h5 class="h5">Documentation</h5>
+                        <p>Notion, Obsidian, Confluence</p>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <div class="sidebar-info_more">
-            <div class="separator"></div>
-            <ul class="contacts-list">
-                <li class="contact-item">
-                    <div class="icon-box">
-                        <ion-icon name="mail-outline"></ion-icon>
-                    </div>
-                    <div class="contact-info">
-                        <p class="contact-title">Email</p>
-                        <a target="_blank" href="mailto:giuseppeluigi.alfieri@gmail.com" class="contact-link">giuseppeluigi.alfieri@gmail.com</a>
-                    </div>
-                </li>
-                <li class="contact-item">
-                    <div class="icon-box">
-                        <ion-icon name="phone-portrait-outline"></ion-icon>
-                    </div>
-                    <div class="contact-info">
-                        <p class="contact-title">Phone</p>
-                        <a href="tel:+393927207595" class="contact-link">+39 392 720 7595</a>
-                    </div>
-                </li>
-                <li class="contact-item">
-                    <div class="icon-box">
-                        <ion-icon name="calendar-outline"></ion-icon>
-                    </div>
-                    <div class="contact-info">
-                        <p class="contact-title">Birthday</p>
-                        <time datetime="1998-06-15">June 15, 1998</time>
-                    </div>
-                </li>
-            </ul>
-            <div class="separator"></div>
-            <ul class="social-list">
-                <li class="social-item">
-                    <a target="_blank" class="form-btn" href="https://drive.google.com/file/d/1bnt3IPMcQA-6fPf9LLDp4k8lXR0IzCUf/view?usp=sharing">Download CV</a>
-                </li>
-            </ul>
-            <div class="separator"></div>
-            <ul class="social-list">
-                <li class="social-item">
-                    <a target="_blank" href="https://www.linkedin.com/in/giuseppe-luigi-alfieri/" class="social-link">
-                        <ion-icon name="logo-linkedin"></ion-icon>
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="separator"></div>
-            <div class="skills-container-sidebar">
-                <h3 class="h3 skills-sidebar-title">Technical Proficiencies</h3>
-                <ul class="skills-grid">
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fab fa-unrealengine"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Unreal Engine</h5>
-                            <p>Blueprints & C++</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fab fa-unity"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Unity</h5>
-                            <p>C# Scripting</p>
-                        </div>
-                    </li>
-                     <li class="skill-card">
-                        <div class="skill-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.86 6.71l-1.72 1.72c-.19-.25-.43-.46-.72-.62l.98-2.35c.13-.32.02-.69-.27-.84s-.69-.02-.84.27l-.98 2.35c-.3-.09-.61-.13-.93-.13s-.63.04-.93.13l-.98-2.35c-.13-.32-.51-.45-.84-.27s-.45.51-.27.84l.98 2.35c-.29.16-.53.37-.72.62l-1.72-1.72c-.26-.26-.71-.23-.94.03s-.23.71.03.94l1.72 1.72c-.16.29-.27.6-.31.93H5.5c-.39 0-.7.31-.7.7s.31.7.7.7h2.35c.04.33.15.64.31.93l-1.72 1.72c-.26.26-.29.71-.03.94s.71.29.94.03l1.72-1.72c.25.19.54.33.85.42V17.5c0 .39.31.7.7.7s.7-.31.7-.7v-2.35c.3-.09.59-.23.85-.42l1.72 1.72c.26.26.71.23.94-.03s.23-.71-.03-.94l-1.72-1.72c.16-.29.27-.6.31-.93h2.35c.39 0 .7-.31.7-.7s-.31-.7-.7-.7H14.8c-.04-.33-.15-.64-.31-.93l1.72-1.72c.26-.26.29-.71.03-.94s-.71-.29-.94-.03zM12 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-                        </div>
-                        <div class="skill-info">
-                            <h5 class="h5">UEFN (Fortnite)</h5>
-                            <p>Verse & Devices</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-code"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Programming Languages</h5>
-                            <p>C++, C#, Verse, Python (basic)</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-brain"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Design Patterns</h5>
-                            <p>Observer, Strategy, State, Component, etc.</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fab fa-git-alt"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Version Control</h5>
-                            <p>Git (GitHub, GitLab), Plastic SCM, Perforce</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-file-alt"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Documentation</h5>
-                            <p>Notion, Obsidian, Confluence</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="separator"></div>
-            <div class="skills-container-sidebar">
-                <h3 class="h3 skills-sidebar-title">Professional Attributes</h3>
-                <ul class="skills-grid">
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-rocket"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Rapid Prototyping</h5>
-                            <p>Quickly developing functional game ideas.</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-tasks"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Project Management</h5>
-                            <p>Agile, Scrum, task tracking (Jira, Trello).</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-users"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Team Collaboration</h5>
-                            <p>Effective communication in multidisciplinary teams.</p>
-                        </div>
-                    </li>
-                    <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-lightbulb"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Creative Problem-Solving</h5>
-                            <p>Innovative solutions to design & technical challenges.</p>
-                        </div>
-                    </li>
-                     <li class="skill-card">
-                        <div class="skill-icon"><i class="fas fa-sync-alt"></i></div>
-                        <div class="skill-info">
-                            <h5 class="h5">Agile Development</h5>
-                            <p>Experienced in iterative development cycles.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            </div>
     </aside>
 
     <div class="main-content">
@@ -193,18 +95,11 @@
         </nav>
 
         <article class="about active" data-page="about">
-            <header>
-                <h2 class="h2 article-title">About me</h2>
-            </header>
-            <section class="about-text">
-                <p>I am deeply committed to personal growth, constantly seeking to expand my knowledge and refine my skills every single day. I have a very creative mind and imagination and I'm always on the lookout for new tools to use to give more room to my creativity!</p>
-                <p>I really like to write and immerse myself in deep stories and/or interesting worlds. I'm also a huge DnD nerd and my love-niche are rhythm games, one of my favourite videogames of all times is Deemo :)</p>
-            </section>
-
-            <section class="service">
+            
+            <section class="service"> 
                 <h3 class="h3 service-title">Highlights</h3>
                 <div class="highlight-projects-container">
-                    <ul class="project-list highlight-list">
+                    <ul class="project-list highlight-list highlight-list-grid"> 
                         <li class="project-item active highlight-item" data-filter-item data-category="professional work">
                             <a href="#" class="open-modal" data-project="UEFN: Battleship">
                                 <figure class="project-img">
