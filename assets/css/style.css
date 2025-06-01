@@ -233,7 +233,16 @@ article.active {
 .article-title { 
     position: relative;
     padding-bottom: 7px;
+    margin-bottom: 15px; /* Add margin below main article titles */
 }
+/* Ensure "About Me" also has this margin if it's the first title */
+article.about > header + .about-text-intro {
+    margin-top: 0; /* Remove extra top margin if about-text-intro follows header */
+}
+article.about > header {
+    margin-bottom: 15px; /* Space after "About Me" title before intro text */
+}
+
 
 .article-title::after { 
     content: "";
@@ -390,11 +399,10 @@ main {
     align-items: center;
     gap: 15px; 
     border: 1px solid transparent;
-    /* Removed transition for hover effect */
 }
 
 .skill-card:hover {
-    border-color: transparent; /* Keep border transparent on hover */
+    border-color: transparent; 
 }
 
 .skill-icon {
@@ -407,12 +415,29 @@ main {
     align-items: center;
     justify-content: center;
 }
-.skill-icon svg {
+.skill-icon svg { 
     width: 28px; 
     height: 28px;
+    fill: currentColor; 
 }
-.skill-icon .fab.fa-unrealengine { /* Target specifically the Unreal icon if it's FontAwesome */
-    color: var(--emerald-green-primary); /* Ensure it has color */
+.skill-icon .fab.fa-unrealengine {
+    font-family: "Font Awesome 6 Brands", "FontAwesome"; /* Fallback for older FA if needed */
+    font-weight: 400; /* Brands are typically regular weight */
+    color: var(--emerald-green-primary) !important; /* Ensure color */
+    /* The pseudo-element approach is more robust if direct class styling fails */
+}
+.skill-icon .fab.fa-unrealengine::before { 
+    content: "\f3d9"; /* Unicode for Unreal Engine Brands icon */
+    font-family: "Font Awesome 6 Brands", "FontAwesome"; /* Be very explicit */
+    font-weight: 400; 
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block; 
+    color: var(--emerald-green-primary) !important; 
+    font-size: 1.6rem; 
+    line-height: 1;
 }
 
 
@@ -481,9 +506,9 @@ main {
   #ABOUT
 \*-----------------------------------*/
 .about-text-intro {
-    margin-bottom: 30px; /* Space between intro and highlights */
+    margin-bottom: 30px; 
     padding: 15px;
-    background: var(--eerie-black-1); /* Slightly different background */
+    background: var(--eerie-black-1); 
     border-radius: 14px;
     border: 1px solid var(--jet);
 }
@@ -544,69 +569,17 @@ ul.project-list.highlight-project-list {
 .modal-content p { color: var(--light-gray); font-size: var(--fs-6); font-weight: var(--fw-300); line-height: 1.6; }
 
 /* Clients Section Refined */
-.clients {
-    margin-bottom: 30px; /* Consistent margin */
-}
-.clients-title {
-    margin-bottom: 20px;
-    text-align: center; /* Center the title */
-}
-.clients-list {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping */
-    justify-content: center; /* Center items */
-    gap: 20px; /* Space between items */
-    padding: 0; /* Remove default padding if any */
-    margin: 0;
-    overflow-x: visible; /* No horizontal scroll needed if wrapping */
-}
-.clients-item {
-    min-width: auto; /* Reset min-width */
-    width: calc(50% - 10px); /* Two items per row on smaller screens, accounting for gap */
-    max-width: 120px; /* Max width for each logo item */
-    scroll-snap-align: none; /* Not needed with wrapping */
-}
-.clients-item a {
-    display: block;
-    padding: 10px; /* Padding around the image */
-    background: var(--eerie-black-1); /* Slight background for the item */
-    border-radius: 10px;
-    border: 1px solid var(--jet);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.clients-item a:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-2);
-}
-.clients-item img {
-    width: 100%;
-    height: auto; /* Maintain aspect ratio */
-    max-height: 60px; /* Control max height of the logo image itself */
-    object-fit: contain; /* Ensure logo is fully visible */
-    filter: grayscale(1) opacity(0.7); /* Default subtle look */
-    transition: filter var(--transition-1);
-}
-.clients-item a:hover img {
-    filter: grayscale(0) opacity(1); /* Full color on hover */
-}
-@media (min-width: 580px) {
-    .clients-list {
-        gap: 25px;
-    }
-    .clients-item {
-        width: calc(25% - 20px); /* Four items per row on medium screens */
-        max-width: 100px;
-    }
-}
-@media (min-width: 768px) {
-    .clients-item {
-        max-width: 120px; /* Slightly larger max for wider screens if desired */
-    }
-}
-
+.clients { margin-bottom: 30px; }
+.clients-title { margin-bottom: 20px; text-align: center; }
+.clients-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0; margin: 0; overflow-x: visible; }
+.clients-item { min-width: auto; width: calc(50% - 10px); max-width: 120px; scroll-snap-align: none; }
+.clients-item a { display: block; padding: 10px; background: var(--eerie-black-1); border-radius: 10px; border: 1px solid var(--jet); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.clients-item a:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); }
+.clients-item img { width: 100%; height: auto; max-height: 60px; object-fit: contain; filter: grayscale(1) opacity(0.7); transition: filter var(--transition-1); }
+.clients-item a:hover img { filter: grayscale(0) opacity(1); }
 
 /*-----------------------------------*\
-  #RESUME (Keep as is for structure, icon changed in HTML)
+  #RESUME
 \*-----------------------------------*/
 .timeline { margin-bottom: 30px; }
 .timeline .title-wrapper { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
@@ -622,7 +595,7 @@ ul.project-list.highlight-project-list {
 /*-----------------------------------*\
   #PORTFOLIO
 \*-----------------------------------*/
-.portfolio .about-text { display: none; } /* Hide the "For more info..." line */
+.portfolio .about-text { display: none; } 
 
 .filter-list { display: none; }
 .filter-select-box { position: relative; margin-bottom: 25px; }
@@ -651,15 +624,14 @@ ul.project-list.highlight-project-list {
     margin-bottom: 20px; 
     grid-template-columns: 1fr; 
 }
-@media (min-width: 580px) { #portfolio-grid-container .project-list { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 800px) { #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1200px) { #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); } }
 #portfolio-grid-container .project-list:last-of-type { margin-bottom: 10px; }
 
 .project-item { display: none; } 
 .project-item.active { display: flex; flex-direction: column; animation: scaleUp 0.25s ease forwards; }
 @keyframes scaleUp { 0% { opacity: 0; } 100% { opacity: 1; } }
+
 .project-item > a { width: 100%; display: flex; flex-direction: column; flex-grow: 1; }
+
 .project-img { position: relative; width: 100%; height: 200px; flex-shrink: 0; border-radius: 16px; overflow: hidden; margin-bottom: 15px; background-color: var(--onyx); }
 .project-img::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 1; transition: var(--transition-1); }
 .project-item > a:hover .project-img::before { background: hsla(0, 0%, 0%, 0.5); }
@@ -667,6 +639,7 @@ ul.project-list.highlight-project-list {
 .project-item > a:hover .project-item-icon-box { --scale: 1; opacity: 1; }
 .project-img img { width: 100%; height: 100%; object-fit: contain; transition: var(--transition-1); }
 .project-item > a:hover img { transform: scale(1.05); }
+
 .project-title { color: var(--white-2); font-size: var(--fs-5); font-weight: var(--fw-400); text-transform: capitalize; line-height: 1.3; margin-left: 10px; margin-bottom: 3px; }
 .project-category { color: var(--light-gray-70); font-size: var(--fs-6); font-weight: var(--fw-300); margin-left: 10px; margin-bottom: 8px; }
 .project-tech-icons { display: flex; gap: 8px; margin-left: 10px; margin-top: auto; padding-bottom: 5px; }
@@ -679,10 +652,9 @@ ul.project-list.highlight-project-list {
 .no-projects-message { color: var(--light-gray); text-align: center; padding: 20px; font-style: italic; }
 
 /*-----------------------------------*\
-  #CONTACT (form-title removed in HTML)
+  #CONTACT
 \*-----------------------------------*/
 .contact-form { margin-bottom: 10px; }
-/* .form-title { margin-bottom: 20px; } <-- This class was on the h3 we removed */
 .input-wrapper { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 25px; }
 .form-input { color: var(--white-2); font-size: var(--fs-6); font-weight: var(--fw-400); padding: 13px 20px; border: 1px solid var(--jet); border-radius: 14px; outline: none;}
 .form-input::placeholder { font-weight: var(--fw-500); }
@@ -699,11 +671,11 @@ textarea.form-input::-webkit-resizer { display: none; }
 .form-btn:disabled:hover::before { background: var(--bg-gradient-jet); }
 
 /*-----------------------------------*\
-  #PROJECT MODAL (Unchanged)
+  #PROJECT MODAL
 \*-----------------------------------*/
 .project-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.7); z-index: 1000; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out; }
 .project-modal.active { visibility: visible; opacity: 1; pointer-events: all; }
-.project-modal .modal-content { background: var(--eerie-black-2); width: 90vw; max-width: 500px; height: auto; max-height: 90vh; padding: 1.5rem; border-radius: 14px; position: relative; overflow-y: auto; display: flex; flex-direction: column; box-shadow: var(--shadow-5); transition: transform 0.15s ease-in-out; }
+.project-modal .modal-content { background: var(--eerie-black-2); width: 90vw; max-width: 500px; height: auto; max-height: 90vh; padding: 1.5rem; padding-bottom: 2rem; border-radius: 14px; position: relative; overflow-y: auto; display: flex; flex-direction: column; box-shadow: var(--shadow-5); transition: transform 0.15s ease-in-out; }
 .project-modal .modal-close { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; color: #f1f1f1; font-weight: bold; cursor: pointer; transition: color 0.2s ease-in-out, transform 0.2s ease-in-out; padding: 5px; line-height: 1; }
 .project-modal .modal-close:hover, .project-modal .modal-close:focus { color: var(--emerald-green-primary); transform: rotate(90deg); }
 .modal-header { text-align: center; margin-bottom: 1.5rem; }
@@ -717,7 +689,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 .detail-item { display: flex; flex-direction: column; gap: 0.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid hsla(0, 0%, 65%, 0.08); }
 .detail-item:last-child { border-bottom: none; padding-bottom: 0; }
 .detail-item h4 { color: var(--emerald-green-primary); font-size: var(--fs-5); margin-bottom: 0.2rem; }
-.detail-item p { color: var(--light-gray); font-size: var(--fs-6); line-height: 1.4; margin-bottom: 0; }
+.detail-item p { color: var(--light-gray); font-size: var(--fs-6); line-height: 1.6; margin-bottom: 0; }
 .tools-section { margin-top: 0.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid hsla(0, 0%, 65%, 0.08); }
 .tools-section:last-child { border-bottom: none; padding-bottom: 0; }
 .tools-section h4 { color: var(--emerald-green-primary); font-size: var(--fs-5); margin-bottom: 0.4rem; }
@@ -733,8 +705,11 @@ textarea.form-input::-webkit-resizer { display: none; }
 .modal-fulltext .detail-item:first-child { padding-top: 0; }
 .modal-fulltext .detail-item:first-child h4 { margin-top: 0; }
 .modal-fulltext .detail-item:last-child { border-bottom: none; padding-bottom: 0; }
+.modal-learn-more { margin-top: 20px; text-align: center; }
+.modal-learn-more .form-btn { display: inline-flex; width: auto; padding: 10px 20px; }
+.modal-learn-more .form-btn ion-icon { font-size: 1.2em; }
 
-/* --- RESPONSIVE (Minor adjustments for portfolio grid here) --- */
+/* --- RESPONSIVE --- */
 @media (min-width: 450px) { .clients-item { min-width: calc(33.33% - 10px); } }
 
 @media (min-width: 580px) { 
@@ -748,12 +723,14 @@ textarea.form-input::-webkit-resizer { display: none; }
     .navbar-list { gap: 20px; } 
     .navbar-link { font-size: 14px; } 
     
-    ul.project-list.highlight-project-list { 
-        grid-template-columns: repeat(2, 1fr) !important; 
-        gap: 30px !important; 
-    }
-    /* Other styles from this breakpoint... */
-    .testimonials-title { margin-bottom: 25px; } .testimonials-list { gap: 30px; margin: 0 -30px; padding: 30px; padding-bottom: 35px; } .content-card { padding: 30px; padding-top: 25px; } .testimonials-avatar-box { transform: translate(30px, -30px); border-radius: 20px; } .testimonials-avatar-box img { width: 80px; } .testimonials-item-title { margin-bottom: 10px; margin-left: 95px; } .testimonials-text { line-clamp: 2; -webkit-line-clamp: 2; } .modal-container { padding: 20px; } .testimonials-modal { display: flex; justify-content: flex-start; align-items: stretch; gap: 25px; padding: 30px; border-radius: 20px; } .modal-img-wrapper { display: flex; flex-direction: column; align-items: center; } .modal-avatar-box { border-radius: 18px; margin-bottom: 0; } .modal-avatar-box img { width: 65px; } .modal-img-wrapper > img { display: block; flex-grow: 1; width: 35px; } .clients-list { gap: 25px; max-width: 500px; margin-inline: auto; /* Center the wrapper */ } .clients-item { width: calc(33.33% - 17px); /* Aim for 3 items */ max-width: 100px; } .timeline-list { margin-left: 65px; } .timeline-item:not(:last-child)::before { left: -40px; } .timeline-item::after { height: 8px; width: 8px; left: -43px; } .project-img, .blog-banner-box { border-radius: 16px; } .blog-posts-list { gap: 30px; } .blog-content { padding: 25px; } .mapbox { height: 380px; border-radius: 18px; } .input-wrapper { gap: 30px; grid-template-columns: 1fr 1fr; margin-bottom: 30px; } .form-input { padding: 15px 20px; } textarea.form-input { margin-bottom: 30px; } .form-btn { font-size: 16px; padding: 16px 20px; } .form-btn ion-icon { font-size: 18px; } 
+    #portfolio-grid-container .project-list { grid-template-columns: repeat(2, 1fr); gap: 25px; }
+    ul.project-list.highlight-project-list { grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important; }
+    .clients-list { gap: 25px; max-width: 500px; margin-inline: auto; } 
+    .clients-item { width: calc(33.33% - 17px); max-width: 100px; } 
+    .timeline-list { margin-left: 65px; } .timeline-item:not(:last-child)::before { left: -40px; } .timeline-item::after { height: 8px; width: 8px; left: -43px; } 
+    .project-img, .blog-banner-box { border-radius: 16px; } 
+    .blog-posts-list { gap: 30px; } .blog-content { padding: 25px; } .mapbox { height: 380px; border-radius: 18px; } 
+    .input-wrapper { gap: 30px; grid-template-columns: 1fr 1fr; margin-bottom: 30px; } .form-input { padding: 15px 20px; } textarea.form-input { margin-bottom: 30px; } .form-btn { font-size: 16px; padding: 16px 20px; } .form-btn ion-icon { font-size: 18px; } 
 }
 
 @media (min-width: 768px) { 
@@ -762,6 +739,7 @@ textarea.form-input::-webkit-resizer { display: none; }
     .modal-media { flex: 0 0 300px; max-width: 300px; } 
     .modal-media iframe { height: 169px; } 
     .modal-media img { width: 100%; height: auto; max-height: 250px; object-fit: contain; } 
+    #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); } /* Change to 3 columns */
 }
 @media (min-width: 1024px) { 
     :root { --shadow-1: -4px 8px 24px hsla(0, 0%, 0%, 0.125); --shadow-2: 0 16px 30px hsla(0, 0%, 0%, 0.125); --shadow-3: 0 16px 40px hsla(0, 0%, 0%, 0.125); } 
@@ -776,7 +754,9 @@ textarea.form-input::-webkit-resizer { display: none; }
     .modal-media iframe { height: 225px; } 
     .modal-media img { width: 350px; height: 200px; object-fit: contain; } 
     .skills-grid { grid-template-columns: 1fr; gap: 15px; } 
-    .clients-list { max-width: none; /* Allow full width if needed */ }
-    .clients-item { width: calc(20% - 20px); /* Aim for 5 items */ max-width: 120px; }
+    .clients-list { max-width: none; }
+    .clients-item { width: calc(20% - 20px); max-width: 120px; }
+     /* Main portfolio still 3 columns, or adjust if needed */
+    #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 1250px) { body::-webkit-scrollbar { width: 20px; } body::-webkit-scrollbar-track { background: var(--smoky-black); } body::-webkit-scrollbar-thumb { border: 5px solid var(--smoky-black); background: hsla(0, 0%, 100%, 0.1); border-radius: 20px; box-shadow: inset 1px 1px 0 hsla(0, 0%, 100%, 0.11), inset -1px -1px 0 hsla(0, 0%, 100%, 0.11); } body::-webkit-scrollbar-thumb:hover { background: hsla(0, 0%, 100%, 0.15); } body::-webkit-scrollbar-button { height: 60px; } }
