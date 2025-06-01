@@ -170,6 +170,70 @@ const verseIcon = `
 
 // Project details object
 const projectDetails = {
+    "PoliceSimulator": {
+        title: "Police Simulator: Patrol Officers",
+        role: "Simulation Game",
+        duration: "Released June 2021 (EA), Sep 2022 (Full)",
+        teamSize: "Developed by Aesir Interactive",
+        video: "#", // Placeholder - you will change this link
+        image: "./assets/images/PoliceSimulator.png",
+        short: "Experience the daily life of a U.S. police officer in this realistic simulation.",
+        long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties. Players can patrol alone or with a friend in a cooperative multiplayer mode.",
+        tools: [
+            { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>', class: "unreal" }
+        ],
+        challengesSolutions: "N/A for this portfolio entry (example).",
+        projectSuccess: "Popular among simulation game enthusiasts for its attention to detail and immersive gameplay."
+    },
+    "HighOnLife": {
+        title: "High on Life",
+        role: "Acclaimed First-Person Shooter",
+        duration: "Released December 2022",
+        teamSize: "Developed by Squanch Games",
+        video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
+        image: "./assets/images/HighOnLife.png",
+        short: "A comedic sci-fi shooter where guns are alive and talk to you!",
+        long: "High On Life is a first-person shooter with a heavy emphasis on comedy, created by Justin Roiland. Players take on the role of a bounty hunter, wielding an arsenal of charismatic, talking guns to take down an alien cartel that wants to use humans as drugs.",
+        tools: [
+            { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>', class: "unreal" }
+        ],
+        challengesSolutions: "N/A for this portfolio entry.",
+        projectSuccess: "Became a hit for its unique humor, art style, and talking gun mechanics."
+    },
+    "Alien": {
+        title: "Alien (Game Prototype)",
+        role: "Game Creator (Personal Project)",
+        duration: "Prototype Phase",
+        teamSize: "Solo Project",
+        video: "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true", // Substack link
+        image: "./assets/images/work-5.jpg",
+        short: "A personal game prototype exploring mechanics inspired by the Alien franchise.",
+        long: "This is a personal project focused on prototyping specific game mechanics and atmosphere. More details and development insights can be found on my Substack.",
+        tools: [
+            { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>', class: "unreal" }
+        ],
+        challengesSolutions: "Focus on rapid prototyping and iteration of core gameplay loops.",
+        projectSuccess: "Serves as a platform for experimentation and skill development. Documented on Substack."
+    },
+    "Cycle": { 
+        title: "Cycle",
+        role: "Game Creator - Falmouth University",
+        duration: "University Project (Approx. 4 months)",
+        teamSize: "Solo Project",
+        video: "#", // No video link, so image won't be clickable in modal
+        image: "./assets/images/Cycle.png",
+        short: "A narrative-driven puzzle game exploring themes of repetition and memory.",
+        long: "Developed as part of my university coursework, Cycle focuses on environmental storytelling and intricate puzzle design. The game challenges players to uncover a hidden story by interacting with a dynamically changing environment.",
+        tools: [
+            { name: "Unity", icon: '<i class="fab fa-unity"></i>', class: "unity" }, 
+            { name: "C#", icon: '<i class="fas fa-code"></i>', class: "csharp" } 
+        ],
+        challengesSolutions: "Creating puzzles that were both challenging and intuitive, while seamlessly integrating them with the narrative, was a key focus. Iterative design and playtesting were crucial to achieving this balance.",
+        projectSuccess: "Received positive feedback for its atmospheric design and thought-provoking narrative during university showcases."
+    },
+    // Keep UEFN: Battleship and PulseParty here if they are still in the main portfolio section,
+    // otherwise, they can be removed if they are no longer referenced anywhere.
+    // For now, I'll assume they might still be in the main portfolio, so I'll keep their definitions.
     "UEFN: Battleship": {
         title: "UEFN: Battleship",
         role: "Game Creator - Untold Games",
@@ -186,21 +250,6 @@ const projectDetails = {
         challengesSolutions: "Implementing a robust grid-based combat system with real-time feedback was challenging. We overcame this by modularizing Verse scripts for each grid cell and optimizing network replication for projectile hits and explosions.",
         projectSuccess: "The game achieved over 100,000 unique players within the first month of release and received positive community feedback for its unique blend of strategy and arcade action."
     },
-    "HighOnLife": {
-        title: "High on Life",
-        role: "Acclaimed First-Person Shooter",
-        duration: "Released December 2022",
-        teamSize: "Developed by Squanch Games",
-        video: "https://www.youtube.com/watch?v=qk2y4clYe9o",
-        image: "./assets/images/HighOnLife.png",
-        short: "A comedic sci-fi shooter where guns are alive and talk to you!",
-        long: "High On Life is a first-person shooter with a heavy emphasis on comedy, created by Justin Roiland. Players take on the role of a bounty hunter, wielding an arsenal of charismatic, talking guns to take down an alien cartel that wants to use humans as drugs.",
-        tools: [
-            { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>', class: "unreal" }
-        ],
-        challengesSolutions: "N/A for this portfolio entry.",
-        projectSuccess: "Became a hit for its unique humor, art style, and talking gun mechanics."
-    },
     "PulseParty": {
         title: "PulseParty",
         role: "Technical Game Designer - Untold Games",
@@ -216,22 +265,6 @@ const projectDetails = {
         ],
         challengesSolutions: "Synchronizing dynamic lighting and visual effects precisely with music tempo across multiple clients presented a significant hurdle. We developed a custom audio analysis system in Verse to extract beat data and drive visual cues, ensuring a seamless experience for all players.",
         projectSuccess: "PulseParty was featured in a community spotlight, praised for its innovative rhythm mechanics and immersive atmosphere. It fostered a small but dedicated player base."
-    },
-    "Cycle": { 
-        title: "Cycle",
-        role: "Game Creator - Falmouth University",
-        duration: "University Project (Approx. 4 months)",
-        teamSize: "Solo Project",
-        video: "#", 
-        image: "./assets/images/Cycle.png",
-        short: "A narrative-driven puzzle game exploring themes of repetition and memory.",
-        long: "Developed as part of my university coursework, Cycle focuses on environmental storytelling and intricate puzzle design. The game challenges players to uncover a hidden story by interacting with a dynamically changing environment.",
-        tools: [
-            { name: "Unity", icon: '<i class="fab fa-unity"></i>', class: "unity" }, 
-            { name: "C#", icon: '<i class="fas fa-code"></i>', class: "csharp" } 
-        ],
-        challengesSolutions: "Creating puzzles that were both challenging and intuitive, while seamlessly integrating them with the narrative, was a key focus. Iterative design and playtesting were crucial to achieving this balance.",
-        projectSuccess: "Received positive feedback for its atmospheric design and thought-provoking narrative during university showcases."
     }
 };
 
@@ -253,7 +286,7 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) {
 
             let mediaContentHtml = '';
 
-            // Logic for media: Image links to video if video URL is present
+            // Logic for media: Image links to video/external link if data.video is present
             if (data.image) {
                 if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
                     mediaContentHtml = `
@@ -264,8 +297,7 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) {
                     mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
                 }
             } else if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
-                 // Fallback if only video URL is present but no image (though unlikely for your setup)
-                mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video/More Info</a> (Preview image not available)</p>`;
+                mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video / More Info</a> (Preview image not available)</p>`;
             } else {
                 mediaContentHtml = `<p>No media available for this project.</p>`;
             }
