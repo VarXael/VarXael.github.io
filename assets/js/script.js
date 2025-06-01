@@ -132,14 +132,11 @@ if (navigationLinks.length > 0 && pages.length > 0) { // Check if elements exist
       for (let j = 0; j < pages.length; j++) { 
         if (this.innerHTML.toLowerCase() === pages[j].dataset.page) {
           pages[j].classList.add("active");
-          // navigationLinks[j].classList.add("active"); // This was incorrect
           window.scrollTo(0, 0);
         } else {
           pages[j].classList.remove("active");
-          // navigationLinks[j].classList.remove("active"); // This was incorrect
         }
       }
-      // Correctly set active state for navigation links
       for (let k = 0; k < navigationLinks.length; k++) {
         if (navigationLinks[k] === this) {
             navigationLinks[k].classList.add("active");
@@ -171,7 +168,9 @@ const verseIcon = `
     </svg>
 `; 
 
+// Project details object
 const projectDetails = {
+    // REMOVED: "UEFN Battleship Temp Clone"
     "UEFN: Battleship": {
         title: "UEFN: Battleship",
         role: "Game Creator - Untold Games",
@@ -222,58 +221,48 @@ const projectDetails = {
     }
 };
 
-if (projectLinks.length > 0 && projectModal && modalBody && modalClose) { // Check if elements exist
+// Event listener setup for project links
+if (projectLinks.length > 0 && projectModal && modalBody && modalClose) {
     projectLinks.forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
 
             const title = link.dataset.project;
             const data = projectDetails[title];
-            if (!data) return;
+            if (!data) {
+                console.error("Project data not found for:", title);
+                modalBody.innerHTML = `<p>Details for this project are not available.</p>`;
+                projectModal.classList.add('active');
+                document.body.classList.add('no-scroll');
+                return;
+            }
 
             let mediaContentHtml = '';
 
+            // SIMPLIFIED MEDIA LOGIC: Always link image if video URL exists, otherwise just show image.
             if (data.image) {
-                if (data.video && data.video.startsWith("https://www.fortnite.com")) {
-                     mediaContentHtml = `
-                        <a href="${data.video}" target="_blank" rel="noopener noreferrer">
-                            <img src="${data.image}" alt="${data.title}">
-                        </a>
-                    `;
-                } else if (data.video && data.video !== "#") { 
-                     mediaContentHtml = `
-                        <a href="${data.video}" target="_blank" rel="noopener noreferrer">
-                            <img src="${data.image}" alt="${data.title}">
-                        </a>
-                    `;
-                }
-                else {
-                     mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
-                }
-            } else { 
-                const youtubeMatch = data.video ? data.video.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/) : null;
-                if (youtubeMatch && youtubeMatch[1]) {
-                    const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+                if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
                     mediaContentHtml = `
-                        <iframe
-                            src="${youtubeEmbedUrl}"
-                            frameborder="0"
-                            allowfullscreen
-                        ></iframe>
-                    `;
+                        <a href="${data.video}" target="_blank" rel="noopener noreferrer">
+                            <img src="${data.image}" alt="${data.title}">
+                        </a>`;
                 } else {
-                    mediaContentHtml = `<p>No media available for this project.</p>`;
+                    mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
                 }
+            } else if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
+                mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video</a> (Preview image not available)</p>`;
+            } else {
+                mediaContentHtml = `<p>No media available for this project.</p>`;
             }
 
 
-            const toolIconsHtml = data.tools.map(tool => {
+            const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
                 return `
                     <span class="tool-icon ${tool.class || ''}" title="${tool.name}">
                         ${tool.icon || tool.name}
                     </span>
                 `;
-            }).join('');
+            }).join('') : '<p>N/A</p>';
 
 
             modalBody.innerHTML = `
@@ -287,15 +276,15 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) { // Che
                     <div class="modal-details">
                         <div class="detail-item">
                             <h4>Role:</h4>
-                            <p>${data.role}</p>
+                            <p>${data.role || 'N/A'}</p>
                         </div>
                         <div class="detail-item">
                             <h4>Project Duration:</h4>
-                            <p>${data.duration}</p>
+                            <p>${data.duration || 'N/A'}</p>
                         </div>
                         <div class="detail-item">
                             <h4>Team Size:</h4>
-                            <p>${data.teamSize}</p>
+                            <p>${data.teamSize || 'N/A'}</p>
                         </div>
                         <div class="tools-section detail-item">
                             <h4>Tools:</h4>
@@ -308,16 +297,16 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) { // Che
                 <div class="modal-fulltext">
                     <div class="detail-item">
                         <h4>Project Description:</h4>
-                        <p>${data.short}</p>
-                        <p>${data.long}</p>
+                        <p>${data.short || 'No short description available.'}</p>
+                        <p>${data.long || 'No detailed description available.'}</p>
                     </div>
                     <div class="detail-item">
                         <h4>Challenges and Solutions:</h4>
-                        <p>${data.challengesSolutions}</p>
+                        <p>${data.challengesSolutions || 'Details not available.'}</p>
                     </div>
                     <div class="detail-item">
                         <h4>Project Success:</h4>
-                        <p>${data.projectSuccess}</p>
+                        <p>${data.projectSuccess || 'Details not available.'}</p>
                     </div>
                 </div>
             `;
@@ -330,14 +319,14 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) { // Che
     modalClose.addEventListener('click', () => {
         projectModal.classList.remove('active');
         document.body.classList.remove('no-scroll'); 
-        modalBody.innerHTML = '';
+        modalBody.innerHTML = ''; 
     });
 
     projectModal.addEventListener('click', e => {
-        if (e.target === projectModal) {
+        if (e.target === projectModal) { 
             projectModal.classList.remove('active');
             document.body.classList.remove('no-scroll'); 
-            modalBody.innerHTML = '';
+            modalBody.innerHTML = ''; 
         }
     });
 }

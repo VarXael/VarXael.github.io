@@ -310,28 +310,26 @@ main {
     margin-bottom: 15px;
     padding: 20px; 
     transition: var(--transition-2); 
-    /* Default height behavior for smaller screens */
-    max-height: none; /* Allow content to define height */
-    overflow: visible; /* Allow content to define height */
+    max-height: none; 
+    overflow: visible; 
 }
 
-/* MODIFICATION START: Styles for profile info moved into sidebar */
 .sidebar-profile-condensed {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center items horizontally */
-    gap: 10px; /* Space between avatar and CV button */
-    margin-bottom: 15px; /* Space below this section before the separator */
+    align-items: center; 
+    gap: 10px; 
+    margin-bottom: 15px; 
 }
 
 .sidebar-avatar-box {
-    background: transparent; /* Remove any background that might cause ellipse */
-    padding: 0; /* Remove padding that might cause ellipse */
+    background: transparent; 
+    padding: 0; 
     border-radius: 50%;
-    width: 80px; /* Adjust size as needed */
+    width: 80px; 
     height: 80px;
-    overflow: hidden; /* Ensure image stays within bounds */
-    display: flex; /* For centering image if it's smaller than container */
+    overflow: hidden; 
+    display: flex; 
     justify-content: center;
     align-items: center;
 }
@@ -339,8 +337,8 @@ main {
 .sidebar-avatar-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensure image covers the area without distortion */
-    border-radius: 50%; /* Ensure image itself is round */
+    object-fit: cover; 
+    border-radius: 50%; 
 }
 
 .sidebar-cv-btn {
@@ -357,7 +355,7 @@ main {
     transition: background-color var(--transition-1), transform var(--transition-1);
     white-space: nowrap;
     text-align: center;
-    text-decoration: none; /* Ensure links don't have underlines */
+    text-decoration: none; 
 }
 
 .sidebar-cv-btn ion-icon {
@@ -368,8 +366,6 @@ main {
     background: var(--emerald-green-light);
     transform: translateY(-1px);
 }
-/* MODIFICATION END: Styles for profile info moved into sidebar */
-
 
 /*-----------------------------------*\
   #SKILLS STYLES (Now primary content of sidebar)
@@ -489,44 +485,30 @@ main {
   #ABOUT
 \*-----------------------------------*/
 
-/* .about .article-title is removed from HTML */
-
-/* .about-text is removed from HTML */
-
-
-/**
- * #service (This is now the main content for "About" page, containing highlights)
- */
-
 .service {
     margin-bottom: 35px;
 }
 
-.service-title { /* This is the "Highlights" title */
+.service-title { 
     margin-bottom: 20px;
 }
 
-.highlight-list-grid {
-    display: grid;
-    gap: 25px; 
+/* MODIFICATION: Specific grid layout and item styling for highlight project list */
+ul.project-list.highlight-project-list {
+    /* This class is added to the <ul> in the Highlights section in index.html */
+    /* Increased specificity to ensure these rules apply over general .project-list styles */
+    grid-template-columns: repeat(2, 1fr); /* Strictly 2 columns for highlights */
+    gap: 30px; /* Increased gap for more spacing and "bigger" feel */
 }
 
-.highlight-list-grid .highlight-item {
-    width: 100%;
+.highlight-project-list .project-item .project-img {
+    height: 250px; /* Increased image height for "bigger" items */
 }
 
-
-.highlight-list .highlight-item .project-img {
-    height: 250px; 
+.highlight-project-list .project-item .project-title {
+    font-size: var(--fs-4); /* Increased title font size */
+    margin-bottom: 8px; /* More space below title */
 }
-
-
-.highlight-list .highlight-item:hover {
-    border-color: var(--emerald-green-primary); 
-    box-shadow: 0 0 20px hsla(160, 100%, 40%, 0.5), 0 0 40px hsla(160, 100%, 40%, 0.2); 
-    transform: scale(1.03) translateY(-5px); 
-}
-
 
 /**
  * #testimonials
@@ -730,13 +712,6 @@ main {
   #RESUME
 \*-----------------------------------*/
 
-/* .article-title for resume page remains */
-
-
-/**
- * education and experience
- */
-
 .timeline {
     margin-bottom: 30px;
 }
@@ -877,11 +852,12 @@ main {
 }
 
 .project-item {
-    display: none;
+    display: none; 
 }
 
 .project-item.active {
-    display: block; 
+    display: flex; 
+    flex-direction: column;
     animation: scaleUp 0.25s ease forwards;
 }
 
@@ -896,15 +872,20 @@ main {
 
 .project-item > a {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
 }
 
 .project-img {
     position: relative;
     width: 100%;
-    height: 200px;
+    height: 200px; 
+    flex-shrink: 0; 
     border-radius: 16px;
     overflow: hidden;
     margin-bottom: 15px;
+    background-color: var(--eerie-black-1); 
 }
 
 .project-img::before {
@@ -947,7 +928,7 @@ main {
 .project-img img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; 
     transition: var(--transition-1);
 }
 
@@ -955,24 +936,24 @@ main {
     transform: scale(1.1);
 }
 
-.project-title,
-.project-category {
-    margin-left: 10px;
-}
-
-.project-title {
+.project-title { 
     color: var(--white-2);
     font-size: var(--fs-5);
     font-weight: var(--fw-400);
     text-transform: capitalize;
     line-height: 1.3;
+    margin-left: 10px; 
+    margin-bottom: 5px; 
 }
 
 .project-category {
     color: var(--light-gray-70);
     font-size: var(--fs-6);
     font-weight: var(--fw-300);
+    margin-left: 10px; 
+    margin-top: auto;   
 }
+
 
 /*-----------------------------------*\
   #BLOG
@@ -1208,14 +1189,11 @@ textarea.form-input::-webkit-resizer {
     /**
    * #PORTFOLIO, BLOG
    */
-    .project-img,
+    .project-img, 
     .blog-banner-box {
         height: auto;
     }
 
-    .highlight-list .highlight-item .project-img {
-        height: 280px; 
-    }
 }
 
 /**
@@ -1248,7 +1226,7 @@ textarea.form-input::-webkit-resizer {
         margin-inline: auto;
         padding: 30px;
     }
-    /* .article-title for main content pages */
+    
     .main-content .article-title { 
         font-weight: var(--fw-600);
         padding-bottom: 15px;
@@ -1289,10 +1267,7 @@ textarea.form-input::-webkit-resizer {
     /**
    * #ABOUT
    */
-    /* .about .article-title is removed */
-    /* .about-text is removed */
-
-    /* service / highlights section */
+    
     .service-item { 
         display: flex;
         justify-content: flex-start;
@@ -1308,16 +1283,15 @@ textarea.form-input::-webkit-resizer {
         text-align: left;
     }
 
-    /* Highlight section for 580px+ */
-    .highlight-list-grid {
-      grid-template-columns: repeat(2, 1fr); 
+    /* .project-list for portfolio and highlights on this breakpoint */
+    /* The ul.project-list.highlight-project-list rule will override this for highlights due to higher specificity */
+    .project-list { 
+      /* This is already set to 2 columns by default for .project-list at this breakpoint if .grid-columns-2 is on the ul */
+      /* If .grid-columns-2 is NOT on the ul in HTML, then this rule is needed: */
+      /* grid-template-columns: repeat(2, 1fr);  */
       gap: 25px;
     }
-    .highlight-list-grid .highlight-item .project-img {
-        height: 200px; 
-    }
-
-
+    
     /* testimonials */
     .testimonials-title {
         margin-bottom: 25px;
@@ -1347,7 +1321,7 @@ textarea.form-input::-webkit-resizer {
         line-clamp: 2;
         -webkit-line-clamp: 2;
     }
-    /* testimonials modal */
+    
     .modal-container {
         padding: 20px; 
     }
@@ -1376,7 +1350,7 @@ textarea.form-input::-webkit-resizer {
         flex-grow: 1;
         width: 35px;
     }
-    /* clients */
+    
     .clients-list {
         gap: 50px;
         margin: 0 -30px;
@@ -1442,7 +1416,7 @@ textarea.form-input::-webkit-resizer {
         font-size: 18px;
     }
 
-    /* Profile Widget adjustments for larger screens */
+    
     .profile-widget {
         top: 70px; 
         right: 20px;
@@ -1496,18 +1470,7 @@ textarea.form-input::-webkit-resizer {
         width: 100%;
         height: auto;
         max-height: 250px; 
-        object-fit: cover;
-    }
-
-    /* Highlight section for 768px+ */
-    .highlight-list-grid .highlight-item .project-img {
-        height: 220px; 
-    }
-    .highlight-list-grid .highlight-item .project-title {
-        font-size: var(--fs-5); 
-    }
-    .highlight-list-grid .highlight-item .project-category {
-        font-size: var(--fs-7); 
+        object-fit: cover; 
     }
 }
 
@@ -1553,9 +1516,6 @@ textarea.form-input::-webkit-resizer {
         padding-top: 25px; 
     }
     
-    /**
-   * SIDEBAR (Skills Only Version) - Reverted to scroll with page
-   */
     .sidebar {
         position: sticky; 
         top: 25px;  
@@ -1564,8 +1524,8 @@ textarea.form-input::-webkit-resizer {
         flex-shrink: 0; 
         margin-bottom: 0; 
         align-self: flex-start; 
-        max-height: calc(100vh - 50px); /* MODIFICATION: Ensure sidebar can scroll if content is too tall */
-        overflow-y: auto; /* MODIFICATION: Allow sidebar to scroll if content exceeds max-height */
+        max-height: calc(100vh - 50px); 
+        overflow-y: auto; 
         padding-top: 25px; 
         padding-bottom: 25px; 
         z-index: 1; 
@@ -1578,20 +1538,10 @@ textarea.form-input::-webkit-resizer {
         min-width: 0; 
     }
     
-    /**
-	 * RESUME
-	 */
     .timeline-text {
         max-width: 700px;
     }
 
-    /* Highlight section for 1024px+ */
-    .highlight-list-grid .highlight-item .project-img {
-        height: 250px; 
-    }
-
-
-    /* Project Modal adjustments for desktop */
     .project-modal .modal-content {
         width: 60vw; 
         max-width: 1000px; 
@@ -1609,12 +1559,11 @@ textarea.form-input::-webkit-resizer {
     }
 
      .modal-media img {
-        width: 350px;
-        height: 200px;
-        object-fit: cover;
+        width: 350px; 
+        height: 200px; 
+        object-fit: cover; 
     }
 
-    /* Profile widget position on desktop */
     .profile-widget {
         top: 100px; 
         right: 25px; 
@@ -1641,7 +1590,6 @@ textarea.form-input::-webkit-resizer {
         line-height: 1.6;
     }
 
-    /* Skills grid in sidebar remains single column */
     .skills-grid {
         grid-template-columns: 1fr; 
         gap: 15px; 
@@ -1674,20 +1622,6 @@ textarea.form-input::-webkit-resizer {
     body::-webkit-scrollbar-button {
         height: 60px;
     }
-
-    /* .main-content width adjustment if sidebar width changes */
-    /* .main-content {
-         min-width: calc(100% - sidebar-width - gap); 
-         width: calc(100% - sidebar-width - gap);
-    } */
-
-    /* .sidebar {
-        width: fixed-sidebar-width; 
-    } */
-
-    .highlight-list-grid .highlight-item .project-img {
-        height: 280px; 
-    }
 }
 
 /*-----------------------------------*\
@@ -1702,7 +1636,6 @@ textarea.form-input::-webkit-resizer {
     display: flex; 
     align-items: center;
     justify-content: center;
-    /* backdrop-filter: blur(5px); */ 
     background: rgba(0, 0, 0, 0.7);
     z-index: 1000;
     visibility: hidden; 
@@ -1796,7 +1729,7 @@ textarea.form-input::-webkit-resizer {
     max-width: 300px; 
     height: auto; 
     max-height: 180px; 
-    object-fit: cover;
+    object-fit: cover; 
     border-radius: 10px;
     border: 1px solid hsla(0, 0%, 22%, 0.03);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -1933,57 +1866,56 @@ textarea.form-input::-webkit-resizer {
     .project-modal .modal-content {
         width: 70vw;
         max-width: 800px;
-        padding: 2rem; /* Restore larger padding */
+        padding: 2rem; 
     }
 
     .modal-grid {
-        flex-direction: row; /* Switch to row layout */
-        gap: 2rem; /* Restore larger gap */
+        flex-direction: row; 
+        gap: 2rem; 
     }
 
     .modal-media {
-        flex: 0 0 300px; /* Fixed width for media */
+        flex: 0 0 300px; 
         max-width: 300px;
-        padding: 1rem; /* Restore padding */
+        padding: 1rem; 
     }
 
     .modal-media iframe {
-        height: 169px; /* 16:9 for 300px width */
+        height: 169px; 
     }
 
     .modal-media img {
         max-width: 100%;
-        max-height: 220px; /* Slightly larger max height for image */
+        max-height: 220px; 
     }
 
     .modal-details {
-        padding: 1.5rem; /* Restore padding */
-        gap: 1rem; /* Restore gap */
+        padding: 1.5rem; 
+        gap: 1rem; 
     }
 
     .modal-fulltext {
-        padding: 1.5rem; /* Restore padding */
+        padding: 1.5rem; 
     }
 }
 
 @media (min-width: 1024px) { /* Desktop */
     .project-modal .modal-content {
         width: 60vw;
-        max-width: 1000px; /* Max width from original */
+        max-width: 1000px; 
     }
 
     .modal-media {
-        flex: 0 0 400px; /* Fixed width for media as per original design */
+        flex: 0 0 400px; 
         max-width: 400px;
     }
 
     .modal-media iframe {
-        height: 225px; /* 16:9 for 400px width */
+        height: 225px; 
     }
 
      .modal-media img {
-        width: 350px; /* Restore original image dimensions */
-        height: 200px;
-        object-fit: cover;
+        width: 350px; 
+        height: 200px; 
     }
 }
