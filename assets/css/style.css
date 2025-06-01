@@ -885,7 +885,7 @@ ul.project-list.highlight-project-list {
     border-radius: 16px;
     overflow: hidden;
     margin-bottom: 15px;
-    background-color: var(--eerie-black-1); 
+    background-color: var(--onyx); /* CHANGED from --eerie-black-1 */
 }
 
 .project-img::before {
@@ -928,7 +928,7 @@ ul.project-list.highlight-project-list {
 .project-img img {
     width: 100%;
     height: 100%;
-    object-fit: cover; 
+    object-fit: contain; 
     transition: var(--transition-1);
 }
 
@@ -1470,7 +1470,7 @@ textarea.form-input::-webkit-resizer {
         width: 100%;
         height: auto;
         max-height: 250px; 
-        object-fit: cover; 
+        object-fit: contain; 
     }
 }
 
@@ -1561,7 +1561,7 @@ textarea.form-input::-webkit-resizer {
      .modal-media img {
         width: 350px; 
         height: 200px; 
-        object-fit: cover; 
+        object-fit: contain; 
     }
 
     .profile-widget {
@@ -1712,7 +1712,7 @@ textarea.form-input::-webkit-resizer {
     justify-content: center;
     align-items: center;
     padding: 0.5rem; 
-    background: var(--jet);
+    background: var(--onyx); /* CHANGED from --jet */
     border-radius: 10px; 
     box-shadow: var(--shadow-1);
     border: 1px solid hsla(0, 0%, 22%, 0.08);
@@ -1729,7 +1729,7 @@ textarea.form-input::-webkit-resizer {
     max-width: 300px; 
     height: auto; 
     max-height: 180px; 
-    object-fit: cover; 
+    object-fit: contain; 
     border-radius: 10px;
     border: 1px solid hsla(0, 0%, 22%, 0.03);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
