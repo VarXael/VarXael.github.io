@@ -6,7 +6,7 @@ const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
 // OLD Testimonials modal (if still used elsewhere, keep)
 const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
 const modalContainer = document.querySelector("[data-modal-container]");
-const oldModalCloseBtn = document.querySelector("[data-modal-close-btn]");
+const oldModalCloseBtn = document.querySelector("[data-modal-close-btn]"); 
 const overlay = document.querySelector("[data-overlay]");
 const oldModalImg = document.querySelector("[data-modal-img]");
 const oldModalTitle = document.querySelector("[data-modal-title]");
@@ -57,7 +57,7 @@ const projectDetails = {
         role: "Simulation Game",
         teamSize: "Aesir Interactive",
         duration: "Released Sep 2022",
-        video: "#", 
+        video: "#", // You will update this link
         image: "./assets/images/PoliceSimulator.png",
         short: "Experience the daily life of a U.S. police officer.",
         long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties.",
@@ -365,7 +365,7 @@ const renderPortfolio = (filterCategory) => {
         portfolioGridContainer.appendChild(yearHeading);
 
         const projectListUl = document.createElement('ul');
-        projectListUl.className = 'project-list'; // Removed grid-columns-2 here, will be handled by media queries for #portfolio-grid-container .project-list
+        projectListUl.className = 'project-list'; // The specific column count will be handled by CSS media queries
         
         projectsByYear[year].forEach(project => {
             const listItem = document.createElement('li');
@@ -381,13 +381,12 @@ const renderPortfolio = (filterCategory) => {
                 link.rel = "noopener noreferrer";
             } else {
                 link.href = "#";
-                link.classList.add('open-modal'); // Add class for modal triggering
+                link.classList.add('open-modal'); 
             }
 
             const figure = document.createElement('figure');
             figure.className = 'project-img';
 
-            // Add eye icon only if it's a modal link AND NOT a direct link
             if (!project.isDirectLink) {
                 const iconBox = document.createElement('div');
                 iconBox.className = 'project-item-icon-box';
@@ -412,7 +411,7 @@ const renderPortfolio = (filterCategory) => {
             const categoryP = document.createElement('p');
             categoryP.className = 'project-category';
             let categoryText = project.role || '';
-            if (project.teamSize && project.teamSize.toLowerCase() !== 'n/a' && project.teamSize.toLowerCase() !== (project.role || '').toLowerCase()) {
+            if (project.teamSize && project.teamSize.toLowerCase() !== 'n/a' && project.teamSize.toLowerCase() !== (project.role || '').toLowerCase() && project.teamSize !== project.role) {
                 categoryText += ` - ${project.teamSize}`;
             }
             categoryP.textContent = categoryText || 'N/A';
@@ -424,7 +423,7 @@ const renderPortfolio = (filterCategory) => {
                 project.techStack.forEach(tech => {
                     const tempContainer = document.createElement('div'); 
                     tempContainer.innerHTML = tech.iconHTML.trim(); 
-                    if(tempContainer.firstChild) { // Ensure there's an element to append
+                    if(tempContainer.firstChild) { 
                         techIconsDiv.appendChild(tempContainer.firstChild); 
                     }
                 });
@@ -493,11 +492,11 @@ function openProjectModal(projectId) {
     document.body.classList.add('no-scroll');
 }
 
-// Event Delegation for dynamically created .open-modal links
+// Event Delegation for dynamically created .open-modal links in MAIN PORTFOLIO
 if (portfolioGridContainer) {
     portfolioGridContainer.addEventListener('click', function(e) {
         const clickedLink = e.target.closest('a.open-modal');
-        if (clickedLink && !clickedLink.hasAttribute('target')) { // Ensure it's a modal link, not a direct link
+        if (clickedLink && !clickedLink.hasAttribute('target')) { 
             e.preventDefault();
             const projectId = clickedLink.dataset.project;
             openProjectModal(projectId);
@@ -509,10 +508,12 @@ if (portfolioGridContainer) {
 if (highlightProjectsContainer) {
     const highlightLinks = highlightProjectsContainer.querySelectorAll('a.open-modal');
     highlightLinks.forEach(link => {
+        // Important: Ensure only ONE listener is attached, or remove old ones if this code runs multiple times.
+        // For simplicity here, assuming this part of DOMContentLoaded runs once.
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const projectId = this.dataset.project;
-            openProjectModal(projectId);
+            openProjectModal(projectId); 
         });
     });
 }
@@ -611,8 +612,9 @@ if (navigationLinks.length > 0 && pages.length > 0) {
       pages.forEach(page => {
         if (page.dataset.page === targetPage) {
           page.classList.add("active");
-          if (targetPage === 'portfolio') { // Re-render portfolio when navigating to it
-            renderPortfolio(selectValue ? selectValue.innerText.toLowerCase() : 'all');
+          if (targetPage === 'portfolio') { 
+            const currentFilter = selectValue ? selectValue.innerText.toLowerCase() : 'all';
+            renderPortfolio(currentFilter);
           }
           window.scrollTo(0, 0);
         } else {
