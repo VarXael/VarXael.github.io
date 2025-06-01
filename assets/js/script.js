@@ -3,14 +3,14 @@
 // element toggle function
 const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
 
-// OLD Testimonials modal (if still used elsewhere, keep; otherwise, can be removed if only new project modal is used)
+// OLD Testimonials modal (if still used elsewhere, keep)
 const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
 const modalContainer = document.querySelector("[data-modal-container]");
-const oldModalCloseBtn = document.querySelector("[data-modal-close-btn]"); // Renamed to avoid conflict
+const oldModalCloseBtn = document.querySelector("[data-modal-close-btn]");
 const overlay = document.querySelector("[data-overlay]");
-const oldModalImg = document.querySelector("[data-modal-img]"); // Renamed
-const oldModalTitle = document.querySelector("[data-modal-title]"); // Renamed
-const oldModalText = document.querySelector("[data-modal-text]"); // Renamed
+const oldModalImg = document.querySelector("[data-modal-img]");
+const oldModalTitle = document.querySelector("[data-modal-title]");
+const oldModalText = document.querySelector("[data-modal-text]");
 
 const oldTestimonialsModalFunc = function () {
   if (modalContainer && overlay) {
@@ -19,15 +19,15 @@ const oldTestimonialsModalFunc = function () {
   }
 }
 if (testimonialsItem.length > 0 && oldModalImg && oldModalTitle && oldModalText) {
-  for (let i = 0; i < testimonialsItem.length; i++) {
-    testimonialsItem[i].addEventListener("click", function () {
+  testimonialsItem.forEach(item => {
+    item.addEventListener("click", function () {
       oldModalImg.src = this.querySelector("[data-testimonials-avatar]").src;
       oldModalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
       oldModalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
       oldModalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
       oldTestimonialsModalFunc();
     });
-  }
+  });
 }
 if (oldModalCloseBtn) oldModalCloseBtn.addEventListener("click", oldTestimonialsModalFunc);
 if (overlay) overlay.addEventListener("click", oldTestimonialsModalFunc);
@@ -41,25 +41,23 @@ const selectValue = document.querySelector("[data-selecct-value]");
 // Portfolio filter variables
 const filterBtns = document.querySelectorAll("[data-filter-btn]");
 const portfolioGridContainer = document.getElementById('portfolio-grid-container');
+const highlightProjectsContainer = document.querySelector('.highlight-projects-container');
+
 
 // SVG icons
 const fortniteIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.86 6.71l-1.72 1.72c-.19-.25-.43-.46-.72-.62l.98-2.35c.13-.32.02-.69-.27-.84s-.69-.02-.84.27l-.98 2.35c-.3-.09-.61-.13-.93-.13s-.63.04-.93.13l-.98-2.35c-.13-.32-.51-.45-.84-.27s-.45.51-.27.84l.98 2.35c-.29.16-.53.37-.72.62l-1.72-1.72c-.26-.26-.71-.23-.94.03s-.23.71.03.94l1.72 1.72c-.16.29-.27.6-.31.93H5.5c-.39 0-.7.31-.7.7s.31.7.7.7h2.35c.04.33.15.64.31.93l-1.72 1.72c-.26.26-.29.71-.03.94s.71.29.94.03l1.72-1.72c.25.19.54.33.85.42V17.5c0 .39.31.7.7.7s.7-.31.7-.7v-2.35c.3-.09.59-.23.85-.42l1.72 1.72c.26.26.71.23.94-.03s-.23-.71-.03-.94l-1.72-1.72c.16-.29.27.6.31-.93h2.35c.39 0 .7-.31-.7-.7s-.31-.7-.7-.7H14.8c-.04-.33-.15-.64-.31-.93l1.72-1.72c.26-.26.29-.71.03-.94s-.71-.29-.94-.03zM12 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`; 
 const verseIconSVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/></svg>`; 
 
-// Project details object - THIS IS THE SINGLE SOURCE OF TRUTH FOR THE DYNAMIC PORTFOLIO
-// Ensure each project has: id, title, category, year, role, image, techStack.
-// 'video' is for modal link or direct link. 'isDirectLink: true' for non-modal links.
-// 'tools' is for the modal's tool list. 'techStack' is for the card's icons.
 const projectDetails = {
     "PoliceSimulator": {
-        id: "PoliceSimulator",
+        id: "PoliceSimulator", 
         title: "Police Simulator: Patrol Officers",
         category: "professional work",
-        year: 2024, 
+        year: 2022, 
         role: "Simulation Game",
         teamSize: "Aesir Interactive",
         duration: "Released Sep 2022",
-        video: "#", // Replace with actual video link for modal image click
+        video: "#", 
         image: "./assets/images/PoliceSimulator.png",
         short: "Experience the daily life of a U.S. police officer.",
         long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties.",
@@ -71,7 +69,7 @@ const projectDetails = {
         id: "HighOnLife",
         title: "High on Life",
         category: "professional work", 
-        year: 2025,
+        year: 2022,
         role: "First-Person Shooter",
         teamSize: "Squanch Games",
         duration: "Released Dec 2022",
@@ -154,7 +152,7 @@ const projectDetails = {
         id: "Alien",
         title: "Alien (Game Prototype)",
         category: "personal work",
-        year: 2022, 
+        year: 2021, 
         role: "Game Creator",
         teamSize: "Solo Project",
         duration: "Prototype Phase",
@@ -174,7 +172,7 @@ const projectDetails = {
         role: "Game Creator",
         teamSize: "Falmouth University",
         duration: "Approx. 4 months",
-        video: "#", // No external link for modal, will just show image
+        video: "#", 
         image: "./assets/images/Cycle.png",
         short: "Narrative-driven puzzle game.",
         long: "University coursework focusing on environmental storytelling and puzzle design.",
@@ -192,7 +190,7 @@ const projectDetails = {
         id: "CardsWeaver",
         title: "Card's Weaver",
         category: "university work",
-        year: 2023, // Adjust if different
+        year: 2021, 
         role: "Lead Game Designer",
         teamSize: "Verona University",
         image: "./assets/images/Card's Weaver.png",
@@ -206,7 +204,7 @@ const projectDetails = {
         id: "SoulDriven",
         title: "Soul Driven",
         category: "university work",
-        year: 2023, // Adjust if different
+        year: 2021, 
         role: "Game Developer",
         teamSize: "Verona University",
         image: "./assets/images/work-6.jpg",
@@ -250,6 +248,7 @@ const projectDetails = {
         category: "personal work",
         year: 2020, 
         role: "Game Designer",
+        teamSize: "Personal Project",
         image: "./assets/images/Monk.png",
         video: "https://drive.google.com/file/d/1cyUGRzfhP4CjVwDljmbiXhwORSPAUSpp/view?usp=sharing",
         isDirectLink: true,
@@ -261,8 +260,9 @@ const projectDetails = {
         id: "SyovaraHomebrew",
         title: "Syovara Homebrew",
         category: "personal work",
-        year: 2020, // Example, adjust
+        year: 2019, 
         role: "Game Designer",
+        teamSize: "Personal Project",
         image: "./assets/images/Syovara.jpg",
         video: "https://aminoapps.com/c/officialdd/page/item/syovara/eYNM_3qQT6IK3r02BM0LpLXwL0x51XeEbEb",
         isDirectLink: true,
@@ -273,9 +273,10 @@ const projectDetails = {
     "MaGiTeProject": {
         id: "MaGiTeProject",
         title: "MaGiTe Project",
-        category: "professional work", // Or university, adjust as needed
-        year: 2021, 
+        category: "professional work", 
+        year: 2020, 
         role: "Game Developer",
+        teamSize: "Umeå University",
         image: "./assets/images/Umeå_University_Resized.png",
         video: "#", 
         short: "Research project collaboration.",
@@ -288,6 +289,7 @@ const projectDetails = {
         category: "university work",
         year: 2020, 
         role: "Game Designer & Developer",
+        teamSize: "University Project",
         image: "./assets/images/work-4.jpg",
         video: "https://drive.google.com/file/d/1kqrXXSPwxUrCUG9qNnqnNzSuWa9S9QJv/view?usp=sharing",
         isDirectLink: true,
@@ -299,8 +301,9 @@ const projectDetails = {
         id: "FallingFusion",
         title: "Falling Fusion",
         category: "game jams",
-        year: 2021, 
+        year: 2022, 
         role: "Game Designer & Developer",
+        teamSize: "Game Jam Team",
         image: "./assets/images/work-8.jpg",
         video: "https://jonny5959.itch.io/falling-fusion",
         isDirectLink: true,
@@ -314,6 +317,7 @@ const projectDetails = {
         category: "game jams",
         year: 2022, 
         role: "Game Designer & Developer",
+        teamSize: "Game Jam Team",
         image: "./assets/images/work-7.jpg",
         video: "https://v3.globalgamejam.org/2022/games/nickel-ninja-3",
         isDirectLink: true,
@@ -323,13 +327,12 @@ const projectDetails = {
     }
 };
 
-// Function to render portfolio items
 const renderPortfolio = (filterCategory) => {
     if (!portfolioGridContainer) {
         console.error("Portfolio grid container not found!");
         return;
     }
-    portfolioGridContainer.innerHTML = ''; // Clear existing items
+    portfolioGridContainer.innerHTML = ''; 
 
     const projectsArray = Object.values(projectDetails);
 
@@ -344,17 +347,15 @@ const renderPortfolio = (filterCategory) => {
     
     const projectsByYear = filteredProjects.reduce((acc, project) => {
         const year = project.year || "Uncategorized"; 
-        if (!acc[year]) {
-            acc[year] = [];
-        }
+        if (!acc[year]) acc[year] = [];
         acc[year].push(project);
         return acc;
     }, {});
 
     const sortedYears = Object.keys(projectsByYear).sort((a, b) => {
-        if (a === "Uncategorized") return 1; // Push "Uncategorized" to the end
+        if (a === "Uncategorized") return 1; 
         if (b === "Uncategorized") return -1;
-        return b - a; // Sort numerically descending
+        return b - a; 
     });
 
     sortedYears.forEach(year => {
@@ -364,15 +365,15 @@ const renderPortfolio = (filterCategory) => {
         portfolioGridContainer.appendChild(yearHeading);
 
         const projectListUl = document.createElement('ul');
-        projectListUl.className = 'project-list grid-columns-2';
+        projectListUl.className = 'project-list'; // Removed grid-columns-2 here, will be handled by media queries for #portfolio-grid-container .project-list
         
         projectsByYear[year].forEach(project => {
             const listItem = document.createElement('li');
             listItem.className = 'project-item active';
-            listItem.dataset.category = project.category; // For potential future use, though filtering is by JS now
+            listItem.dataset.category = project.category;
 
             const link = document.createElement('a');
-            link.dataset.project = project.id; // Use unique ID for modal lookup
+            link.dataset.project = project.id;
 
             if (project.isDirectLink) {
                 link.href = project.video || "#";
@@ -380,12 +381,13 @@ const renderPortfolio = (filterCategory) => {
                 link.rel = "noopener noreferrer";
             } else {
                 link.href = "#";
-                link.classList.add('open-modal');
+                link.classList.add('open-modal'); // Add class for modal triggering
             }
 
             const figure = document.createElement('figure');
             figure.className = 'project-img';
 
+            // Add eye icon only if it's a modal link AND NOT a direct link
             if (!project.isDirectLink) {
                 const iconBox = document.createElement('div');
                 iconBox.className = 'project-item-icon-box';
@@ -396,7 +398,7 @@ const renderPortfolio = (filterCategory) => {
             }
             
             const img = document.createElement('img');
-            img.src = project.image || './assets/images/placeholder.png'; // Fallback image
+            img.src = project.image || './assets/images/placeholder.png';
             img.alt = project.title;
             img.loading = 'lazy';
             figure.appendChild(img);
@@ -409,16 +411,22 @@ const renderPortfolio = (filterCategory) => {
 
             const categoryP = document.createElement('p');
             categoryP.className = 'project-category';
-            categoryP.textContent = `${project.role || ''}${project.teamSize ? ` - ${project.teamSize}` : ''}`;
+            let categoryText = project.role || '';
+            if (project.teamSize && project.teamSize.toLowerCase() !== 'n/a' && project.teamSize.toLowerCase() !== (project.role || '').toLowerCase()) {
+                categoryText += ` - ${project.teamSize}`;
+            }
+            categoryP.textContent = categoryText || 'N/A';
             link.appendChild(categoryP);
 
             const techIconsDiv = document.createElement('div');
             techIconsDiv.className = 'project-tech-icons';
             if (project.techStack && project.techStack.length > 0) {
                 project.techStack.forEach(tech => {
-                    const tempContainer = document.createElement('div'); // Create a temporary container
-                    tempContainer.innerHTML = tech.iconHTML.trim(); // Set its innerHTML
-                    techIconsDiv.appendChild(tempContainer.firstChild); // Append the actual icon element
+                    const tempContainer = document.createElement('div'); 
+                    tempContainer.innerHTML = tech.iconHTML.trim(); 
+                    if(tempContainer.firstChild) { // Ensure there's an element to append
+                        techIconsDiv.appendChild(tempContainer.firstChild); 
+                    }
                 });
             }
             link.appendChild(techIconsDiv);
@@ -430,112 +438,85 @@ const renderPortfolio = (filterCategory) => {
     });
 };
 
-
-// NEW PROJECT MODAL variables and functions
 const projectModal = document.getElementById('projectModal');
 const modalBody = document.getElementById('modalBody');
 const modalClose = document.getElementById('modalClose');
 
-// Event Delegation for Project Modals
+function openProjectModal(projectId) {
+    const data = projectDetails[projectId];
+    if (!data) {
+        console.error("Project data not found for:", projectId);
+        if (modalBody) modalBody.innerHTML = `<p>Details for this project are not available.</p>`;
+        if (projectModal) projectModal.classList.add('active');
+        document.body.classList.add('no-scroll');
+        return;
+    }
+
+    let mediaContentHtml = '';
+    if (data.image) {
+        if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
+            mediaContentHtml = `<a href="${data.video}" target="_blank" rel="noopener noreferrer"><img src="${data.image}" alt="${data.title}"></a>`;
+        } else { 
+            mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
+        }
+    } else if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
+        mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video / More Info</a> (Preview image not available)</p>`;
+    } else {
+        mediaContentHtml = `<p>No media available for this project.</p>`;
+    }
+
+    const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
+        let iconContent = tool.icon || tool.name;
+        return `<span class="tool-icon ${tool.class || ''}" title="${tool.name}">${iconContent}</span>`;
+    }).join('') : '<p>N/A</p>';
+
+    if(modalBody) {
+        modalBody.innerHTML = `
+            <div class="modal-header"><h3>${data.title}</h3></div>
+            <div class="modal-grid">
+                <div class="modal-media">${mediaContentHtml}</div>
+                <div class="modal-details">
+                    <div class="detail-item"><h4>Role:</h4><p>${data.role || 'N/A'}</p></div>
+                    <div class="detail-item"><h4>Project Duration/Release:</h4><p>${data.duration || 'N/A'}</p></div>
+                    <div class="detail-item"><h4>Team/Developer:</h4><p>${data.teamSize || 'N/A'}</p></div>
+                    <div class="tools-section detail-item"><h4>Key Technologies:</h4><div class="tool-icons">${toolIconsHtml}</div></div>
+                </div>
+            </div>
+            <div class="modal-fulltext">
+                <div class="detail-item"><h4>Project Description:</h4><p>${data.short || ''}</p><p>${data.long || ''}</p></div>
+                <div class="detail-item"><h4>Challenges and Solutions:</h4><p>${data.challengesSolutions || 'N/A'}</p></div>
+                <div class="detail-item"><h4>Project Success/Notes:</h4><p>${data.projectSuccess || 'N/A'}</p></div>
+            </div>
+        `;
+    }
+    if (projectModal) projectModal.classList.add('active');
+    document.body.classList.add('no-scroll');
+}
+
+// Event Delegation for dynamically created .open-modal links
 if (portfolioGridContainer) {
     portfolioGridContainer.addEventListener('click', function(e) {
         const clickedLink = e.target.closest('a.open-modal');
-        if (clickedLink) {
-            e.preventDefault(); // Prevent default only if it's a modal link
-            
+        if (clickedLink && !clickedLink.hasAttribute('target')) { // Ensure it's a modal link, not a direct link
+            e.preventDefault();
             const projectId = clickedLink.dataset.project;
-            const data = projectDetails[projectId];
-            
-            if (!data) {
-                console.error("Project data not found for:", projectId);
-                if (modalBody) modalBody.innerHTML = `<p>Details for this project are not available.</p>`;
-                if (projectModal) projectModal.classList.add('active');
-                document.body.classList.add('no-scroll');
-                return;
-            }
-
-            let mediaContentHtml = '';
-            if (data.image) {
-                if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
-                    mediaContentHtml = `
-                        <a href="${data.video}" target="_blank" rel="noopener noreferrer">
-                            <img src="${data.image}" alt="${data.title}">
-                        </a>`;
-                } else { 
-                    mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
-                }
-            } else if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
-                mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video / More Info</a> (Preview image not available)</p>`;
-            } else {
-                mediaContentHtml = `<p>No media available for this project.</p>`;
-            }
-
-            const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
-                // Ensure SVGs are rendered correctly if they are part of 'icon'
-                let iconContent = tool.icon || tool.name;
-                if (typeof tool.icon === 'string' && tool.icon.trim().startsWith('<svg')) {
-                     // Directly use the SVG string
-                } else if (tool.icon) { // Assumes FontAwesome class or similar if not direct SVG
-                    iconContent = tool.icon;
-                }
-                return `
-                    <span class="tool-icon ${tool.class || ''}" title="${tool.name}">
-                        ${iconContent} 
-                    </span>`;
-            }).join('') : '<p>N/A</p>';
-
-            if(modalBody) {
-                modalBody.innerHTML = `
-                    <div class="modal-header">
-                        <h3>${data.title}</h3>
-                    </div>
-                    <div class="modal-grid">
-                        <div class="modal-media">
-                            ${mediaContentHtml}
-                        </div>
-                        <div class="modal-details">
-                            <div class="detail-item">
-                                <h4>Role:</h4>
-                                <p>${data.role || 'N/A'}</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>Project Duration/Release:</h4>
-                                <p>${data.duration || 'N/A'}</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>Team/Developer:</h4>
-                                <p>${data.teamSize || 'N/A'}</p>
-                            </div>
-                            <div class="tools-section detail-item">
-                                <h4>Key Technologies:</h4>
-                                <div class="tool-icons">
-                                    ${toolIconsHtml}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-fulltext">
-                        <div class="detail-item">
-                            <h4>Project Description:</h4>
-                            <p>${data.short || 'No short description available.'}</p>
-                            <p>${data.long || 'No detailed description available.'}</p>
-                        </div>
-                        <div class="detail-item">
-                            <h4>Challenges and Solutions:</h4>
-                            <p>${data.challengesSolutions || 'Details not available.'}</p>
-                        </div>
-                        <div class="detail-item">
-                            <h4>Project Success/Notes:</h4>
-                            <p>${data.projectSuccess || 'Details not available.'}</p>
-                        </div>
-                    </div>
-                `;
-            }
-            if (projectModal) projectModal.classList.add('active');
-            document.body.classList.add('no-scroll');
+            openProjectModal(projectId);
         }
     });
 }
+
+// Event Listener for statically defined Highlight items
+if (highlightProjectsContainer) {
+    const highlightLinks = highlightProjectsContainer.querySelectorAll('a.open-modal');
+    highlightLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const projectId = this.dataset.project;
+            openProjectModal(projectId);
+        });
+    });
+}
+
 
 // Modal Close Listeners
 if (modalClose) {
@@ -554,7 +535,6 @@ if (projectModal) {
         }
     });
 }
-
 
 // Initial Render and Filter Setup on Page Load
 document.addEventListener('DOMContentLoaded', () => {
@@ -582,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
       select.addEventListener("click", function () { elementToggleFunc(this); });
     }
     if (selectItems.length > 0 && selectValue && select) {
-        selectItems.forEach(item => { // Changed to forEach for clarity
+        selectItems.forEach(item => { 
           item.addEventListener("click", function () {
             let selectedCategory = this.innerText.toLowerCase();
             selectValue.innerText = this.innerText;
@@ -609,15 +589,15 @@ const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
 
 if (form && formInputs.length > 0 && formBtn) { 
-  for (let i = 0; i < formInputs.length; i++) {
-    formInputs[i].addEventListener("input", function () {
+  formInputs.forEach(input => {
+    input.addEventListener("input", function () {
       if (form.checkValidity()) {
         formBtn.removeAttribute("disabled");
       } else {
         formBtn.setAttribute("disabled", "");
       }
     });
-  }
+  });
 }
 
 // Page navigation variables and logic
@@ -625,21 +605,22 @@ const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 
 if (navigationLinks.length > 0 && pages.length > 0) { 
-  for (let i = 0; i < navigationLinks.length; i++) {
-    navigationLinks[i].addEventListener("click", function () {
-      for (let j = 0; j < pages.length; j++) { 
-        if (this.innerHTML.toLowerCase() === pages[j].dataset.page) {
-          pages[j].classList.add("active");
-          if (pages[j].dataset.page === 'portfolio') { // Re-render portfolio when navigating to it
+  navigationLinks.forEach(link => {
+    link.addEventListener("click", function () {
+      let targetPage = this.innerHTML.toLowerCase();
+      pages.forEach(page => {
+        if (page.dataset.page === targetPage) {
+          page.classList.add("active");
+          if (targetPage === 'portfolio') { // Re-render portfolio when navigating to it
             renderPortfolio(selectValue ? selectValue.innerText.toLowerCase() : 'all');
           }
           window.scrollTo(0, 0);
         } else {
-          pages[j].classList.remove("active");
+          page.classList.remove("active");
         }
-      }
-      navigationLinks.forEach(link => link.classList.remove('active')); // Clear all active
-      this.classList.add('active'); // Set current clicked link active
+      });
+      navigationLinks.forEach(navLink => navLink.classList.remove('active'));
+      this.classList.add('active');
     });
-  }
+  });
 }
