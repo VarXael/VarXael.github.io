@@ -170,7 +170,6 @@ const verseIcon = `
 
 // Project details object
 const projectDetails = {
-    // REMOVED: "UEFN Battleship Temp Clone"
     "UEFN: Battleship": {
         title: "UEFN: Battleship",
         role: "Game Creator - Untold Games",
@@ -186,6 +185,21 @@ const projectDetails = {
         ],
         challengesSolutions: "Implementing a robust grid-based combat system with real-time feedback was challenging. We overcame this by modularizing Verse scripts for each grid cell and optimizing network replication for projectile hits and explosions.",
         projectSuccess: "The game achieved over 100,000 unique players within the first month of release and received positive community feedback for its unique blend of strategy and arcade action."
+    },
+    "HighOnLife": {
+        title: "High on Life",
+        role: "Acclaimed First-Person Shooter",
+        duration: "Released December 2022",
+        teamSize: "Developed by Squanch Games",
+        video: "https://www.youtube.com/watch?v=qk2y4clYe9o",
+        image: "./assets/images/HighOnLife.png",
+        short: "A comedic sci-fi shooter where guns are alive and talk to you!",
+        long: "High On Life is a first-person shooter with a heavy emphasis on comedy, created by Justin Roiland. Players take on the role of a bounty hunter, wielding an arsenal of charismatic, talking guns to take down an alien cartel that wants to use humans as drugs.",
+        tools: [
+            { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>', class: "unreal" }
+        ],
+        challengesSolutions: "N/A for this portfolio entry.",
+        projectSuccess: "Became a hit for its unique humor, art style, and talking gun mechanics."
     },
     "PulseParty": {
         title: "PulseParty",
@@ -239,18 +253,19 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) {
 
             let mediaContentHtml = '';
 
-            // SIMPLIFIED MEDIA LOGIC: Always link image if video URL exists, otherwise just show image.
+            // Logic for media: Image links to video if video URL is present
             if (data.image) {
                 if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
                     mediaContentHtml = `
                         <a href="${data.video}" target="_blank" rel="noopener noreferrer">
                             <img src="${data.image}" alt="${data.title}">
                         </a>`;
-                } else {
+                } else { // If no video link, just display the image
                     mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
                 }
             } else if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
-                mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video</a> (Preview image not available)</p>`;
+                 // Fallback if only video URL is present but no image (though unlikely for your setup)
+                mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video/More Info</a> (Preview image not available)</p>`;
             } else {
                 mediaContentHtml = `<p>No media available for this project.</p>`;
             }
@@ -279,11 +294,11 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) {
                             <p>${data.role || 'N/A'}</p>
                         </div>
                         <div class="detail-item">
-                            <h4>Project Duration:</h4>
+                            <h4>Project Duration/Release:</h4>
                             <p>${data.duration || 'N/A'}</p>
                         </div>
                         <div class="detail-item">
-                            <h4>Team Size:</h4>
+                            <h4>Team/Developer:</h4>
                             <p>${data.teamSize || 'N/A'}</p>
                         </div>
                         <div class="tools-section detail-item">
@@ -305,7 +320,7 @@ if (projectLinks.length > 0 && projectModal && modalBody && modalClose) {
                         <p>${data.challengesSolutions || 'Details not available.'}</p>
                     </div>
                     <div class="detail-item">
-                        <h4>Project Success:</h4>
+                        <h4>Project Success/Notes:</h4>
                         <p>${data.projectSuccess || 'Details not available.'}</p>
                     </div>
                 </div>
