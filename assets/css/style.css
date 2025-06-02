@@ -233,14 +233,13 @@ article.active {
 .article-title { 
     position: relative;
     padding-bottom: 7px;
-    margin-bottom: 15px; /* Add margin below main article titles */
+    margin-bottom: 15px; 
 }
-/* Ensure "About Me" also has this margin if it's the first title */
 article.about > header + .about-text-intro {
-    margin-top: 0; /* Remove extra top margin if about-text-intro follows header */
+    margin-top: 0; 
 }
 article.about > header {
-    margin-bottom: 15px; /* Space after "About Me" title before intro text */
+    margin-bottom: 15px; 
 }
 
 
@@ -256,8 +255,8 @@ article.about > header {
 }
 
 .has-scrollbar::-webkit-scrollbar {
-    width: 5px; /* for vertical scrollbar */
-    height: 5px; /* for horizontal scrollbar */
+    width: 5px; 
+    height: 5px; 
 }
 
 .has-scrollbar::-webkit-scrollbar-track {
@@ -420,26 +419,10 @@ main {
     height: 28px;
     fill: currentColor; 
 }
-.skill-icon .fab.fa-unrealengine {
-    font-family: "Font Awesome 6 Brands", "FontAwesome"; /* Fallback for older FA if needed */
-    font-weight: 400; /* Brands are typically regular weight */
-    color: var(--emerald-green-primary) !important; /* Ensure color */
-    /* The pseudo-element approach is more robust if direct class styling fails */
+.skill-icon .fab { /* General style for FontAwesome brand icons if needed */
+    line-height: 1; /* Helps with vertical alignment for <i> based icons */
+    color: var(--emerald-green-primary); /* Ensure FA icons also get the color */
 }
-.skill-icon .fab.fa-unrealengine::before { 
-    content: "\f3d9"; /* Unicode for Unreal Engine Brands icon */
-    font-family: "Font Awesome 6 Brands", "FontAwesome"; /* Be very explicit */
-    font-weight: 400; 
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    display: inline-block; 
-    color: var(--emerald-green-primary) !important; 
-    font-size: 1.6rem; 
-    line-height: 1;
-}
-
 
 .skill-card .skill-info {
     display: flex;
@@ -622,7 +605,7 @@ ul.project-list.highlight-project-list {
     display: grid;
     gap: 20px; 
     margin-bottom: 20px; 
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr; /* Default: 1 column */
 }
 #portfolio-grid-container .project-list:last-of-type { margin-bottom: 10px; }
 
@@ -705,9 +688,19 @@ textarea.form-input::-webkit-resizer { display: none; }
 .modal-fulltext .detail-item:first-child { padding-top: 0; }
 .modal-fulltext .detail-item:first-child h4 { margin-top: 0; }
 .modal-fulltext .detail-item:last-child { border-bottom: none; padding-bottom: 0; }
-.modal-learn-more { margin-top: 20px; text-align: center; }
-.modal-learn-more .form-btn { display: inline-flex; width: auto; padding: 10px 20px; }
-.modal-learn-more .form-btn ion-icon { font-size: 1.2em; }
+
+.modal-learn-more {
+    margin-top: 20px; 
+    text-align: center; 
+}
+.modal-learn-more .form-btn { 
+    display: inline-flex; 
+    width: auto; 
+    padding: 10px 20px; 
+}
+.modal-learn-more .form-btn ion-icon {
+    font-size: 1.2em; 
+}
 
 /* --- RESPONSIVE --- */
 @media (min-width: 450px) { .clients-item { min-width: calc(33.33% - 10px); } }
@@ -739,7 +732,7 @@ textarea.form-input::-webkit-resizer { display: none; }
     .modal-media { flex: 0 0 300px; max-width: 300px; } 
     .modal-media iframe { height: 169px; } 
     .modal-media img { width: 100%; height: auto; max-height: 250px; object-fit: contain; } 
-    #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); } /* Change to 3 columns */
+    #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 1024px) { 
     :root { --shadow-1: -4px 8px 24px hsla(0, 0%, 0%, 0.125); --shadow-2: 0 16px 30px hsla(0, 0%, 0%, 0.125); --shadow-3: 0 16px 40px hsla(0, 0%, 0%, 0.125); } 
@@ -756,7 +749,6 @@ textarea.form-input::-webkit-resizer { display: none; }
     .skills-grid { grid-template-columns: 1fr; gap: 15px; } 
     .clients-list { max-width: none; }
     .clients-item { width: calc(20% - 20px); max-width: 120px; }
-     /* Main portfolio still 3 columns, or adjust if needed */
     #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 1250px) { body::-webkit-scrollbar { width: 20px; } body::-webkit-scrollbar-track { background: var(--smoky-black); } body::-webkit-scrollbar-thumb { border: 5px solid var(--smoky-black); background: hsla(0, 0%, 100%, 0.1); border-radius: 20px; box-shadow: inset 1px 1px 0 hsla(0, 0%, 100%, 0.11), inset -1px -1px 0 hsla(0, 0%, 100%, 0.11); } body::-webkit-scrollbar-thumb:hover { background: hsla(0, 0%, 100%, 0.15); } body::-webkit-scrollbar-button { height: 60px; } }
