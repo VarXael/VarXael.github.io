@@ -57,15 +57,14 @@ const projectDetails = {
         role: "Simulation Game",
         teamSize: "Aesir Interactive",
         duration: "Released Sep 2022",
-        video: "#", // You will update this link
-        learnMoreLink: "https://www.aessirinteractive.com/police-simulator-patrol-officers", // Example
+        video: "#",
+        learnMoreLink: "https://www.aessirinteractive.com/police-simulator-patrol-officers", 
         image: "./assets/images/PoliceSimulator.png",
         short: "Experience the daily life of a U.S. police officer.",
         long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties.",
         tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ],
         techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' } ],
-        myContribution: "Contributed to AI behavior for traffic simulations and pedestrian interactions. Optimized rendering performance for dense city environments.", // Example
-        projectSuccess: "Popular simulation game." // Kept for data, but won't be displayed directly in modal
+        myContribution: "Contributed to AI behavior for traffic simulations and pedestrian interactions. Optimized rendering performance for dense city environments.", 
     },
     "HighOnLife": {
         id: "HighOnLife",
@@ -76,14 +75,13 @@ const projectDetails = {
         teamSize: "Squanch Games",
         duration: "Released Dec 2022",
         video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
-        learnMoreLink: "https://squanchgames.com/high-on-life/", // Example
+        learnMoreLink: "https://squanchgames.com/high-on-life/", 
         image: "./assets/images/HighOnLife.png",
         short: "A comedic sci-fi shooter where guns are alive!",
         long: "High On Life is a first-person shooter with a heavy emphasis on comedy, created by Justin Roiland. Players wield charismatic, talking guns to take down an alien cartel.",
         tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ],
         techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' } ],
         myContribution: "N/A for this entry, showcasing the game itself.",
-        projectSuccess: "Hit for its unique humor and art style."
     },
     "UEFN: Battleship": {
         id: "UEFN: Battleship",
@@ -94,7 +92,7 @@ const projectDetails = {
         teamSize: "Untold Games",
         duration: "6 months",
         video: "https://www.fortnite.com/@untoldgames/1028-2740-2494",
-        learnMoreLink: "https://www.fortnite.com/@untoldgames/1028-2740-2494", // Example
+        learnMoreLink: "https://www.fortnite.com/@untoldgames/1028-2740-2494", 
         image: "./assets/images/Battleship.jpeg",
         short: "Fast-paced team strategy game in UEFN.",
         long: "Developed using Unreal Editor for Fortnite, with extensive Verse scripting for match logic and grid system management.",
@@ -107,7 +105,6 @@ const projectDetails = {
             { iconHTML: `<span class="tech-icon-verse" title="Verse">${verseIconSVG}</span>` }
         ],
         myContribution: "Led the design and Verse scripting for the core combat grid, ship placement, and win/loss conditions. Optimized network replication for real-time multiplayer gameplay.", 
-        projectSuccess: "Over 100,000 unique players in first month."
     },
     "PulseParty": {
         id: "PulseParty",
@@ -118,7 +115,7 @@ const projectDetails = {
         teamSize: "Untold Games",
         duration: "3 months",
         video: "https://www.fortnite.com/@untoldgames/8369-2685-8749", 
-        learnMoreLink: "https://www.fortnite.com/@untoldgames/8369-2685-8749", // Example
+        learnMoreLink: "https://www.fortnite.com/@untoldgames/8369-2685-8749", 
         image: "./assets/images/PulsePartyThumbnail.png", 
         short: "Rhythm-based multiplayer UEFN game.",
         long: "Responsibilities included game mechanics prototyping, network optimization, and dynamic tempo sync with music.",
@@ -131,7 +128,6 @@ const projectDetails = {
             { iconHTML: `<span class="tech-icon-verse" title="Verse">${verseIconSVG}</span>` }
         ],
         myContribution: "Prototyped core rhythm mechanics in Verse. Developed custom audio analysis system for beat synchronization. Optimized network performance for smooth multiplayer experience.",
-        projectSuccess: "Featured in community spotlight."
     },
     "PulseMatch": {
         id: "PulseMatch",
@@ -142,8 +138,8 @@ const projectDetails = {
         teamSize: "Untold Games",
         duration: "N/A",
         video: "https://www.fortnite.com/@untoldgames/9111-6971-7741", 
-        isDirectLink: true, // This will link out directly from the card
-        learnMoreLink: "https://www.fortnite.com/@untoldgames/9111-6971-7741", // Also for modal if it were to open
+        isDirectLink: true, 
+        learnMoreLink: "https://www.fortnite.com/@untoldgames/9111-6971-7741", 
         image: "./assets/images/PulseMatch.jpeg",
         short: "UEFN game experience focused on matchmaking concepts.",
         long: "A project exploring matchmaking and social features within the UEFN platform.",
@@ -156,7 +152,6 @@ const projectDetails = {
              { iconHTML: `<span class="tech-icon-verse" title="Verse">${verseIconSVG}</span>` }
         ],
         myContribution: "Designed and implemented Verse logic for experimental matchmaking algorithms and player queuing systems.",
-        projectSuccess: "Internal R&D project."
     },
     "Alien": {
         id: "Alien",
@@ -174,18 +169,17 @@ const projectDetails = {
         tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ],
         techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' } ],
         myContribution: "Developed AI for stealth-based enemy encounters. Prototyped environmental interaction systems. Explored lighting and atmospheric effects to capture the 'Alien' mood.",
-        projectSuccess: "Platform for experimentation."
     },
     "Cycle": { 
         id: "Cycle",
         title: "Cycle",
         category: "university work",
-        year: 2022, // Adjusted year as per your last JS
+        year: 2022, 
         role: "Game Creator",
         teamSize: "Falmouth University",
         duration: "Approx. 4 months",
         video: "#", 
-        learnMoreLink: null, // No specific link for this one
+        learnMoreLink: null, 
         image: "./assets/images/Cycle.png",
         short: "Narrative-driven puzzle game.",
         long: "University coursework focusing on environmental storytelling and puzzle design.",
@@ -198,7 +192,6 @@ const projectDetails = {
             { iconHTML: '<i class="fas fa-code" title="C#"></i>' }
         ],
         myContribution: "Designed and scripted all puzzle mechanics. Wrote the narrative and integrated it with gameplay progression. Created all 2D art assets and level layouts.",
-        projectSuccess: "Positive feedback on atmosphere and narrative."
     },
     "CardsWeaver": {
         id: "CardsWeaver",
@@ -236,7 +229,7 @@ const projectDetails = {
         id: "Covid19Training",
         title: "Covid 19 Training",
         category: "professional work",
-        year: 2021, // Adjusted year
+        year: 2021, 
         role: "Game Programmer",
         teamSize: "Cineon Training",
         image: "./assets/images/work-2.jpg",
@@ -252,7 +245,7 @@ const projectDetails = {
         id: "UnrealEngineCourse",
         title: "Unreal Engine Course",
         category: "professional work",
-        year: 2022, // Adjusted year
+        year: 2022, 
         role: "Unreal Engine Tutor",
         teamSize: "Creativity Unleashed",
         image: "./assets/images/work-1.jpg",
@@ -304,11 +297,11 @@ const projectDetails = {
         role: "Game Developer",
         teamSize: "Umeå University",
         image: "./assets/images/Umeå_University_Resized.png",
-        video: "#", // Needs a specific link if it's to open a modal with info
+        video: "#", 
         learnMoreLink: null,
         short: "Research project collaboration.",
         long: "Contributed to the MaGiTe research project, focusing on [Your specific area of contribution, e.g., 'gameplay prototyping for educational modules'].",
-        techStack: [], // Add tech used, e.g., Unity, C#
+        techStack: [], 
         myContribution: "[Detail your specific contributions here if applicable.]",
     },
     "ProjectCenturion": {
@@ -347,7 +340,7 @@ const projectDetails = {
         id: "NickelNinja",
         title: "Nickel Ninja",
         category: "game jams",
-        year: 2023, // Adjusted year
+        year: 2023, 
         role: "Game Designer & Developer",
         teamSize: "Game Jam Team",
         image: "./assets/images/work-7.jpg",
@@ -634,22 +627,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Contact form variables and logic
-const form = document.querySelector("[data-form]");
-const formInputs = document.querySelectorAll("[data-form-input]");
-const formBtn = document.querySelector("[data-form-btn]");
-
-if (form && formInputs.length > 0 && formBtn) { 
-  formInputs.forEach(input => {
-    input.addEventListener("input", function () {
-      if (form.checkValidity()) {
-        formBtn.removeAttribute("disabled");
-      } else {
-        formBtn.setAttribute("disabled", "");
-      }
-    });
-  });
-}
 
 // Page navigation variables and logic
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
@@ -659,6 +636,7 @@ if (navigationLinks.length > 0 && pages.length > 0) {
   navigationLinks.forEach(link => {
     link.addEventListener("click", function () {
       let targetPage = this.innerHTML.toLowerCase();
+      
       pages.forEach(page => {
         if (page.dataset.page === targetPage) {
           page.classList.add("active");
