@@ -41,13 +41,14 @@ const selectValue = document.querySelector("[data-selecct-value]");
 // Portfolio filter variables
 const filterBtns = document.querySelectorAll("[data-filter-btn]");
 const portfolioGridContainer = document.getElementById('portfolio-grid-container');
-const highlightProjectsContainer = document.querySelector('.highlight-projects-container');
+const highlightProjectsUl = document.querySelector('.highlight-projects-container .project-list.highlight-project-list');
 
 
 // SVG icons
 const fortniteIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.86 6.71l-1.72 1.72c-.19-.25-.43-.46-.72-.62l.98-2.35c.13-.32.02-.69-.27-.84s-.69-.02-.84.27l-.98 2.35c-.3-.09-.61-.13-.93-.13s-.63.04-.93.13l-.98-2.35c-.13-.32-.51-.45-.84-.27s-.45.51-.27.84l.98 2.35c-.29.16-.53.37-.72.62l-1.72-1.72c-.26-.26-.71-.23-.94.03s-.23.71.03.94l1.72 1.72c-.16.29-.27.6-.31.93H5.5c-.39 0-.7.31-.7.7s.31.7.7.7h2.35c.04.33.15.64.31.93l-1.72 1.72c-.26.26-.29.71-.03.94s.71.29.94.03l1.72-1.72c.25.19.54.33.85.42V17.5c0 .39.31.7.7.7s.7-.31.7-.7v-2.35c.3-.09.59-.23.85-.42l1.72 1.72c.26.26.71.23.94-.03s-.23-.71-.03-.94l-1.72-1.72c.16-.29.27.6.31-.93h2.35c.39 0 .7-.31-.7-.7s-.31-.7-.7-.7H14.8c-.04-.33-.15-.64-.31-.93l1.72-1.72c.26-.26.29-.71.03-.94s-.71-.29-.94-.03zM12 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`; 
 const verseIconSVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/></svg>`; 
 const unrealEngineIconSVG = `<svg viewBox="0 0 210.4 210.4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M105.2 5c55.3 0 100.2 45 100.2 100.2s-45 100.2-100.2 100.2S5 160.5 5 105.2 50 5 105.2 5m0-5C47.1 0 0 47.1 0 105.2s47.1 105.2 105.2 105.2 105.2-47.1 105.2-105.2S163.4 0 105.2 0z"/><path d="M97.9 42.2s-23.7 6.7-45 29.3-24 38.7-24 50.7c4.7-8 33.7-52.1 40.5-31.1v50.2s-.4 6.8-10.8 4.1c3.1 5.8 19.1 20.1 48 23 6.6-6.6 15.2-16.1 15.2-16.1l14.4 12.2s25.9-16.8 36.1-41.2c-9.5 6.2-21 20.6-27 10.5V72.7s15.4-23.1 17.8-24.2c-6.1 1.1-27.6 8.2-38.9 22.8-3.2-3.5-12.1-3.6-12.1-3.6s7 5.8 7.1 11.1 0 49.5 0 54.6c-4.8 4.9-9.9 7.5-13.2 7.5-7.7 0-9.9-2.7-12-5.4V71.3s-3.8 3.2-6.8-2S84.1 54 97.9 42.2z"/></svg>`;
+const unityIconSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="1em" height="1em"><path d="M12.012 2.5a.708.708 0 00-.702.714v17.572a.71.71 0 00.702.714.715.715 0 00.708-.714V3.214a.71.71 0 00-.708-.714zm6.445 3.174l-5.07 2.927v8.788l5.07 2.937a.71.71 0 001.058-.616V6.29a.71.71 0 00-1.058-.616zm-12.896 0a.71.71 0 00-1.058.616v11.422a.71.71 0 001.058.616l5.07-2.937V8.601l-5.07-2.927zM11.304.002A.71.71 0 0010.59.61L3.41 4.66a.71.71 0 00-.352.617V18.72a.71.71 0 00.352.616L10.59 23.39a.714.714 0 00.708 0l7.18-4.056a.71.71 0 00.352-.616V5.277a.71.71 0 00-.352-.617L11.304 0z"/></svg>`; 
 
 
 const projectDetails = {
@@ -64,35 +65,30 @@ const projectDetails = {
         image: "./assets/images/PoliceSimulator.png",
         short: "Experience the daily life of a U.S. police officer.",
         long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties.",
-        tools: [ { name: "Unreal Engine 4.27", icon: unrealEngineIconSVG } ], 
-        techStack: [ { iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine 4.27">${unrealEngineIconSVG}</span>` } ],
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ], 
+        cardEngineName: "Unreal Engine", 
         myContribution: "Contributed to AI behavior for traffic simulations and pedestrian interactions. Optimized rendering performance for dense city environments.", 
     },
     "HighOnLife": {
         id: "HighOnLife",
         title: "High on Life (Nintendo Switch Port)",
         category: "professional work", 
-        year: 2024, 
+        year: 2025, 
         role: "Game Programmer (Porting Team)",
         teamSize: "Untold Games Team",
         duration: "Sept 2023 - April 2024 (approx. 8 months)",
         video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica", 
         learnMoreLink: "https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061", 
         image: "./assets/images/HighOnLife.png",
-        short: "Contributed to the Nintendo Switch port of Squanch Games' acclaimed FPS, focusing on optimization, bug resolution, and feature parity.",
+        short: "Our team at Untold Games was tasked with porting High On Life to the Nintendo Switch, focusing on optimization, bug resolution, and feature parity to deliver a quality experience.",
         long: "As part of the Untold Games team, we undertook the complex challenge of porting the visually rich and technically demanding 'High on Life' to the Nintendo Switch. This collaborative effort involved close coordination with Turn Me Up Games and Squanch Games to adapt the Unreal Engine project for the Switch hardware, ensuring a stable, performant, and feature-complete experience for players on the new platform.",
         myContribution: "Key contributor to the Nintendo Switch port, specializing in extensive bug-fixing across AI, gameplay mechanics (collisions, abilities), UI, and audio. Developed vital debugging tools and artist utilities. Refactored and optimized C++ & Blueprint code for critical systems, ensuring stability and performance on the Switch. Became a go-to resource for deep system knowledge and complex troubleshooting.",
         tools: [ 
-            { name: "Unreal Engine 4.27", icon: unrealEngineIconSVG },
-            { name: "C++", icon: '<i class="fas fa-file-code"></i>' }, 
-            { name: "Blueprints", icon: '<i class="fas fa-project-diagram"></i>' },
-            { name: "Nintendo Switch SDK", icon: '<ion-icon name="logo-nintendo"></ion-icon>'}
+            { name: "Unreal Engine", icon: unrealEngineIconSVG },
+            { name: "C++" }, 
+            { name: "Blueprints" }
         ],
-        techStack: [ 
-            { iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine 4.27">${unrealEngineIconSVG}</span>` },
-            { iconHTML: '<i class="fas fa-bug" title="Bug Fixing & Stability"></i>'},
-            { iconHTML: '<i class="fas fa-tools" title="Tool Development"></i>'}
-        ]
+        cardEngineName: "Unreal Engine",
     },
     "UEFN: Battleship": {
         id: "UEFN: Battleship",
@@ -110,12 +106,9 @@ const projectDetails = {
         myContribution: "Led the overall game design, including ruleset, win/loss conditions, and player progression. Developed the primary gameplay systems using Verse, including the combat grid, ship placement logic, and real-time feedback for player actions. Optimized network replication for responsive multiplayer gameplay and iterated on design based on playtesting feedback.",
         tools: [
             { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" },
-            { name: "Verse", icon: verseIconSVG, class: "verse" }
+            { name: "Verse" }
         ],
-        techStack: [
-            { iconHTML: `<span class="tech-icon-fortnite" title="UEFN">${fortniteIconSVG}</span>` },
-            { iconHTML: `<span class="tech-icon-verse" title="Verse Programming">${verseIconSVG}</span>` }
-        ]
+        cardEngineName: "UEFN",
     },
     "PulseParty": {
         id: "PulseParty",
@@ -132,12 +125,9 @@ const projectDetails = {
         long: "Responsibilities included game mechanics prototyping, network optimization, and dynamic tempo sync with music.",
         tools: [
             { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" }, 
-            { name: "Verse", icon: verseIconSVG, class: "verse" } 
+            { name: "Verse" } 
         ],
-        techStack: [
-            { iconHTML: `<span class="tech-icon-fortnite" title="UEFN">${fortniteIconSVG}</span>` },
-            { iconHTML: `<span class="tech-icon-verse" title="Verse Programming">${verseIconSVG}</span>` }
-        ],
+        cardEngineName: "UEFN",
         myContribution: "Prototyped core rhythm mechanics in Verse. Developed custom audio analysis system for beat synchronization. Optimized network performance for smooth multiplayer experience.",
     },
     "PulseMatch": {
@@ -156,12 +146,9 @@ const projectDetails = {
         long: "A project exploring matchmaking and social features within the UEFN platform.",
         tools: [
             { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" },
-            { name: "Verse", icon: verseIconSVG, class: "verse" }
+            { name: "Verse" }
         ],
-        techStack: [
-             { iconHTML: `<span class="tech-icon-fortnite" title="UEFN">${fortniteIconSVG}</span>` },
-             { iconHTML: `<span class="tech-icon-verse" title="Verse Programming">${verseIconSVG}</span>` }
-        ],
+        cardEngineName: "UEFN",
         myContribution: "Designed and implemented Verse logic for experimental matchmaking algorithms and player queuing systems.",
     },
     "Alien": {
@@ -177,8 +164,8 @@ const projectDetails = {
         image: "./assets/images/work-5.jpg",
         short: "Personal prototype inspired by the Alien franchise.",
         long: "Focused on prototyping mechanics and atmosphere. More details on Substack.",
-        tools: [ { name: "Unreal Engine 4", icon: unrealEngineIconSVG } ], 
-        techStack: [ { iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine 4">${unrealEngineIconSVG}</span>` } ],
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ], 
+        cardEngineName: "Unreal Engine",
         myContribution: "Developed AI for stealth-based enemy encounters. Prototyped environmental interaction systems. Explored lighting and atmospheric effects to capture the 'Alien' mood.",
     },
     "Cycle": { 
@@ -193,16 +180,10 @@ const projectDetails = {
         learnMoreLink: null, 
         image: "./assets/images/Cycle.png",
         short: "Narrative-driven puzzle game.",
-        long: "University coursework focusing on environmental storytelling and puzzle design.",
-        tools: [
-            { name: "Unity", icon: '<i class="fab fa-unity"></i>' }, 
-            { name: "C#", icon: '<i class="fas fa-code"></i>' } 
-        ],
-        techStack: [
-            { iconHTML: '<i class="fab fa-unity" title="Unity"></i>' },
-            { iconHTML: '<i class="fas fa-code" title="C#"></i>' }
-        ],
-        myContribution: "Designed and scripted all puzzle mechanics. Wrote the narrative and integrated it with gameplay progression. Created all 2D art assets and level layouts.",
+        long: "University coursework focusing on environmental storytelling and puzzle design using Unreal Engine.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
+        cardEngineName: "Unreal Engine",
+        myContribution: "Designed and scripted all puzzle mechanics using Blueprints. Wrote the narrative and integrated it with gameplay progression. Created 3D assets and level layouts within Unreal Engine.",
     },
     "CardsWeaver": {
         id: "CardsWeaver",
@@ -215,10 +196,11 @@ const projectDetails = {
         video: "https://batraf.itch.io/cards-weaver",
         isDirectLink: true,
         learnMoreLink: "https://batraf.itch.io/cards-weaver",
-        short: "Card-based game developed at university.",
-        long: "A university project focusing on card game mechanics and design principles.",
-        techStack: [{ iconHTML: '<i class="fab fa-unity" title="Unity"></i>' }],
-        myContribution: "Led the conceptualization of core game rules and card interactions. Designed the UI/UX for card play and resource management. Balanced card abilities for engaging gameplay.",
+        short: "Card-based game developed at university using Unreal Engine.",
+        long: "A university project focusing on card game mechanics and design principles, implemented in Unreal Engine.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
+        cardEngineName: "Unreal Engine",
+        myContribution: "Led the conceptualization of core game rules and card interactions. Designed the UI/UX for card play and resource management using UMG. Balanced card abilities for engaging gameplay.",
     },
     "SoulDriven": {
         id: "SoulDriven",
@@ -233,7 +215,8 @@ const projectDetails = {
         learnMoreLink: "https://fraffer.itch.io/soul-driven",
         short: "Action game developed as a university project.",
         long: "A university project exploring action game development concepts.",
-        techStack: [{ iconHTML: '<i class="fab fa-unity" title="Unity"></i>' }],
+        tools: [ { name: "Unity", icon: unityIconSVG } ], // Keeping Unity as per original, user did not specify to change this one
+        cardEngineName: "Unity",
         myContribution: "Implemented player character controls and combat mechanics. Developed enemy AI patterns and attack sequences. Created particle effects for abilities and impacts.",
     },
     "Covid19Training": {
@@ -248,8 +231,9 @@ const projectDetails = {
         isDirectLink: true,
         learnMoreLink: "https://cineon.training/covid-19-personal-protective-equipment-ppe-training/",
         short: "VR Training simulation for PPE.",
-        long: "Developed PPE training scenarios using VR technology.",
-        techStack: [{ iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine">${unrealEngineIconSVG}</span>` }],
+        long: "Developed PPE training scenarios using VR technology in Unreal Engine.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
+        cardEngineName: "Unreal Engine",
         myContribution: "Scripted interaction logic for VR controllers and training objects. Implemented a scenario progression system with feedback mechanisms. Optimized performance for smooth VR experience.",
     },
     "UnrealEngineCourse": {
@@ -265,7 +249,8 @@ const projectDetails = {
         learnMoreLink: "https://www.udemy.com/course/complete-unreal-engine-megacourse-beginner-to-expert/",
         short: "Online course for Unreal Engine.",
         long: "A 16-hour course introducing Unreal Engine Blueprints and programming structures.",
-        techStack: [{ iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine">${unrealEngineIconSVG}</span>` }],
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
+        cardEngineName: "Unreal Engine",
         myContribution: "Designed and recorded course modules covering Unreal Engine fundamentals, Blueprints, and common game programming patterns. Created example projects and exercises for students.",
     },
     "MonkHomebrew": {
@@ -281,7 +266,8 @@ const projectDetails = {
         learnMoreLink: "https://drive.google.com/file/d/1cyUGRzfhP4CjVwDljmbiXhwORSPAUSpp/view?usp=sharing",
         short: "D&D Homebrew content for the Monk class.",
         long: "Personal game design project creating new options for D&D.",
-        techStack: [],
+        tools: [],
+        cardEngineName: "Tabletop", 
         myContribution: "Designed new subclasses and abilities for the D&D Monk class, focusing on thematic cohesion and mechanical balance. Formatted content for community sharing.",
     },
     "SyovaraHomebrew": {
@@ -297,7 +283,8 @@ const projectDetails = {
         learnMoreLink: "https://aminoapps.com/c/officialdd/page/item/syovara/eYNM_3qQT6IK3r02BM0LpLXwL0x51XeEbEb",
         short: "D&D Homebrew setting/content.",
         long: "A personal world-building and game design project for D&D.",
-        techStack: [],
+        tools: [],
+        cardEngineName: "Tabletop",
         myContribution: "Developed lore, cultures, and unique mechanics for a custom D&D setting. Created new player options and monster stat blocks tailored to the world.",
     },
     "MaGiTeProject": {
@@ -310,10 +297,11 @@ const projectDetails = {
         image: "./assets/images/Umeå_University_Resized.png",
         video: "#", 
         learnMoreLink: null,
-        short: "Research project collaboration.",
-        long: "Contributed to the MaGiTe research project, focusing on [Your specific area of contribution, e.g., 'gameplay prototyping for educational modules'].",
-        techStack: [], 
-        myContribution: "[Detail your specific contributions here if applicable.]",
+        short: "Research project collaboration using Unreal Engine.",
+        long: "Contributed to the MaGiTe research project, focusing on gameplay prototyping for educational modules within Unreal Engine.",
+        tools: [{ name: "Unreal Engine", icon: unrealEngineIconSVG }], 
+        cardEngineName: "Unreal Engine", 
+        myContribution: "Developed interactive prototypes and simulations for educational content using Unreal Engine Blueprints and C++.",
     },
     "ProjectCenturion": {
         id: "ProjectCenturion",
@@ -328,7 +316,8 @@ const projectDetails = {
         learnMoreLink: "https://drive.google.com/file/d/1kqrXXSPwxUrCUG9qNnqnNzSuWa9S9QJv/view?usp=sharing",
         short: "University game project with a historical theme.",
         long: "A game developed as part of university studies, focusing on design and development.",
-        techStack: [{ iconHTML: '<i class="fab fa-unity" title="Unity"></i>'}],
+        tools: [ { name: "Unity", icon: unityIconSVG } ], // Keeping Unity as per original, user did not specify to change this one
+        cardEngineName: "Unity",
         myContribution: "Co-designed core gameplay loop and level structure. Implemented player movement and interaction systems using Unity and C#.",
     },
     "FallingFusion": {
@@ -342,10 +331,11 @@ const projectDetails = {
         video: "https://jonny5959.itch.io/falling-fusion",
         isDirectLink: true,
         learnMoreLink: "https://jonny5959.itch.io/falling-fusion",
-        short: "Game Jam entry with a fusion mechanic.",
-        long: "A rapidly developed game for a game jam, focusing on core mechanics.",
-        techStack: [{ iconHTML: '<i class="fab fa-unity" title="Unity"></i>'}],
-        myContribution: "Designed the core 'fusion' mechanic and implemented it in Unity. Created procedurally generated level segments for replayability during the jam.",
+        short: "Game Jam entry with a fusion mechanic, developed in Unreal Engine.",
+        long: "A rapidly developed game for a game jam, focusing on core mechanics using Unreal Engine.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
+        cardEngineName: "Unreal Engine",
+        myContribution: "Designed the core 'fusion' mechanic and implemented it in Unreal Engine using Blueprints. Created procedurally generated level segments for replayability during the jam.",
     },
      "NickelNinja": {
         id: "NickelNinja",
@@ -360,10 +350,118 @@ const projectDetails = {
         learnMoreLink: "https://v3.globalgamejam.org/2022/games/nickel-ninja-3",
         short: "Global Game Jam 2022 entry.",
         long: "A game created during the Global Game Jam 2022.",
-        techStack: [{ iconHTML: '<i class="fab fa-unity" title="Unity"></i>'}],
+        tools: [ { name: "Unity", icon: unityIconSVG } ], // Keeping Unity as per original, user did not specify to change this one
+        cardEngineName: "Unity",
         myContribution: "Contributed to level design and character ability scripting. Collaborated on art asset integration and bug fixing under tight deadlines.",
     }
 };
+
+const highlightProjectIds = ["PoliceSimulator", "HighOnLife", "Alien", "Cycle"];
+
+// Helper function to create a project list item
+const createProjectListItem = (project) => {
+    const listItem = document.createElement('li');
+    listItem.className = 'project-item active'; // Keep active for initial display, filtering might hide it later
+    listItem.dataset.category = project.category;
+
+    const link = document.createElement('a');
+    link.dataset.project = project.id;
+
+    if (project.isDirectLink) {
+        link.href = project.video || "#";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+    } else {
+        link.href = "#";
+        link.classList.add('open-modal');
+    }
+
+    const figure = document.createElement('figure');
+    figure.className = 'project-img';
+
+    if (!project.isDirectLink) {
+        const iconBox = document.createElement('div');
+        iconBox.className = 'project-item-icon-box';
+        const ionIcon = document.createElement('ion-icon');
+        ionIcon.name = 'eye-outline';
+        iconBox.appendChild(ionIcon);
+        figure.appendChild(iconBox);
+    }
+
+    const img = document.createElement('img');
+    img.src = project.image || './assets/images/placeholder.png';
+    img.alt = project.title;
+    img.loading = 'lazy';
+    figure.appendChild(img);
+
+    // Add engine badge to the figure
+    if (project.cardEngineName && project.cardEngineName !== "N/A") {
+        const engineBadge = document.createElement('div');
+        let badgeText = project.cardEngineName;
+        let badgeClass = ''; 
+        const cardEngineLower = project.cardEngineName.toLowerCase();
+
+        if (cardEngineLower.includes("unreal")) {
+            badgeText = "Unreal";
+            badgeClass = "unreal-engine-badge";
+        } else if (cardEngineLower.includes("unity")) {
+            badgeText = "Unity";
+            badgeClass = "unity-engine-badge";
+        } else if (cardEngineLower.includes("uefn")) {
+            badgeText = "UEFN";
+            badgeClass = "uefn-badge";
+        } else if (cardEngineLower === "tabletop") {
+            badgeText = "Game Design";
+            badgeClass = "game-design-badge";
+        }
+        
+        if (badgeClass) {
+            engineBadge.className = `project-engine-badge ${badgeClass}`;
+            engineBadge.textContent = badgeText;
+            engineBadge.title = project.cardEngineName;
+            figure.appendChild(engineBadge);
+        }
+    }
+
+    link.appendChild(figure);
+
+    const titleH3 = document.createElement('h3');
+    titleH3.className = 'project-title';
+    titleH3.textContent = project.title;
+    link.appendChild(titleH3);
+
+    const categoryP = document.createElement('p');
+    categoryP.className = 'project-category';
+    let categoryText = project.role || '';
+    if (project.teamSize && project.teamSize.toLowerCase() !== 'n/a' && project.teamSize.toLowerCase() !== (project.role || '').toLowerCase() && project.teamSize !== project.role) {
+        categoryText += ` - ${project.teamSize}`;
+    }
+    categoryP.textContent = categoryText || 'N/A';
+    link.appendChild(categoryP);
+
+    listItem.appendChild(link);
+    return listItem;
+};
+
+
+const renderHighlightProjects = () => {
+    if (!highlightProjectsUl) {
+        console.error("Highlight projects UL container not found!");
+        return;
+    }
+    highlightProjectsUl.innerHTML = ''; // Clear existing static items
+
+    highlightProjectIds.forEach(projectId => {
+        const project = projectDetails[projectId];
+        if (project) {
+            const listItem = createProjectListItem(project);
+            highlightProjectsUl.appendChild(listItem);
+        } else {
+            console.warn(`Project details not found for highlight project ID: ${projectId}`);
+        }
+    });
+};
+
 
 const renderPortfolio = (filterCategory) => {
     if (!portfolioGridContainer) {
@@ -406,69 +504,7 @@ const renderPortfolio = (filterCategory) => {
         projectListUl.className = 'project-list'; 
         
         projectsByYear[year].forEach(project => {
-            const listItem = document.createElement('li');
-            listItem.className = 'project-item active';
-            listItem.dataset.category = project.category;
-
-            const link = document.createElement('a');
-            link.dataset.project = project.id;
-
-            if (project.isDirectLink) {
-                link.href = project.video || "#";
-                link.target = "_blank";
-                link.rel = "noopener noreferrer";
-            } else {
-                link.href = "#";
-                link.classList.add('open-modal'); 
-            }
-
-            const figure = document.createElement('figure');
-            figure.className = 'project-img';
-
-            if (!project.isDirectLink) {
-                const iconBox = document.createElement('div');
-                iconBox.className = 'project-item-icon-box';
-                const ionIcon = document.createElement('ion-icon');
-                ionIcon.name = 'eye-outline';
-                iconBox.appendChild(ionIcon);
-                figure.appendChild(iconBox);
-            }
-            
-            const img = document.createElement('img');
-            img.src = project.image || './assets/images/placeholder.png';
-            img.alt = project.title;
-            img.loading = 'lazy';
-            figure.appendChild(img);
-            link.appendChild(figure);
-
-            const titleH3 = document.createElement('h3');
-            titleH3.className = 'project-title';
-            titleH3.textContent = project.title;
-            link.appendChild(titleH3);
-
-            const categoryP = document.createElement('p');
-            categoryP.className = 'project-category';
-            let categoryText = project.role || '';
-            if (project.teamSize && project.teamSize.toLowerCase() !== 'n/a' && project.teamSize.toLowerCase() !== (project.role || '').toLowerCase() && project.teamSize !== project.role) {
-                categoryText += ` - ${project.teamSize}`;
-            }
-            categoryP.textContent = categoryText || 'N/A';
-            link.appendChild(categoryP);
-
-            const techIconsDiv = document.createElement('div');
-            techIconsDiv.className = 'project-tech-icons';
-            if (project.techStack && project.techStack.length > 0) {
-                project.techStack.forEach(tech => {
-                    const tempContainer = document.createElement('div'); 
-                    tempContainer.innerHTML = tech.iconHTML.trim(); 
-                    if(tempContainer.firstChild) { 
-                        techIconsDiv.appendChild(tempContainer.firstChild); 
-                    }
-                });
-            }
-            link.appendChild(techIconsDiv);
-            
-            listItem.appendChild(link);
+            const listItem = createProjectListItem(project); // Use helper function
             projectListUl.appendChild(listItem);
         });
         portfolioGridContainer.appendChild(projectListUl);
@@ -504,7 +540,13 @@ function openProjectModal(projectId) {
 
     const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
         let iconHtml = '';
-        if (tool.icon) {
+        const toolNameLower = (tool.name || '').toLowerCase();
+        if (tool.icon && 
+            ( toolNameLower.includes('unreal') || 
+              toolNameLower.includes('unity') ||
+              toolNameLower.includes('uefn') 
+            )
+           ) {
             iconHtml = tool.icon; 
         }
         return `<span class="tool-item" title="${tool.name || ''}">
@@ -570,15 +612,15 @@ if (portfolioGridContainer) {
     });
 }
 
-// Event Listener for statically defined Highlight items
-if (highlightProjectsContainer) {
-    const highlightLinks = highlightProjectsContainer.querySelectorAll('a.open-modal');
-    highlightLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+// Event Listener for dynamically created Highlight items
+if (highlightProjectsUl) {
+    highlightProjectsUl.addEventListener('click', function(e) {
+        const clickedLink = e.target.closest('a.open-modal');
+         if (clickedLink && !clickedLink.hasAttribute('target')) { // Ensure it's a modal link
             e.preventDefault();
-            const projectId = this.dataset.project;
-            openProjectModal(projectId); 
-        });
+            const projectId = clickedLink.dataset.project;
+            openProjectModal(projectId);
+        }
     });
 }
 
@@ -603,6 +645,7 @@ if (projectModal) {
 
 // Initial Render and Filter Setup on Page Load
 document.addEventListener('DOMContentLoaded', () => {
+    renderHighlightProjects(); // Render highlights first
     renderPortfolio('all'); 
     if (filterBtns.length > 0 && filterBtns[0]) filterBtns[0].classList.add('active'); 
     if(selectValue) selectValue.innerText = "All";
@@ -664,6 +707,10 @@ if (navigationLinks.length > 0 && pages.length > 0) {
           if (targetPage === 'portfolio') { 
             const currentFilter = selectValue ? selectValue.innerText.toLowerCase() : 'all';
             renderPortfolio(currentFilter);
+          }
+          // If navigating to 'about', ensure highlights are rendered
+          if (targetPage === 'about') {
+            renderHighlightProjects();
           }
           window.scrollTo(0, 0);
         } else {

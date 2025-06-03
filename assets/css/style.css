@@ -320,7 +320,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center; 
-    gap: 8px; 
+    gap: 10px; /* Adjusted gap */
     margin-bottom: 15px; 
 }
 
@@ -344,7 +344,31 @@ main {
     border-radius: 50%; 
 }
 
-.sidebar-compact-contact {
+.sidebar-action-buttons {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    width: 100%; /* Take full width of parent */
+    justify-content: center;
+}
+
+.sidebar-action-buttons > .sidebar-social-btn,
+.sidebar-action-buttons > .sidebar-cv-btn {
+    flex-grow: 1; 
+    flex-basis: 0; /* Allow buttons to grow and shrink from an equal base */
+    width: auto; /* Override the 100% width */
+    padding: 6px 10px; 
+    font-size: var(--fs-8); 
+    margin-top: 0; /* Remove margin-top if it was set by general rule */
+    min-width: 0; /* Important for flex items to shrink properly */
+}
+
+.sidebar-action-buttons > .sidebar-social-btn i,
+.sidebar-action-buttons > .sidebar-cv-btn ion-icon {
+    font-size: 14px; 
+}
+
+
+.sidebar-compact-contact { /* This class seems unused in HTML, but keeping styles if intended for future use */
     width: 100%;
     text-align: center;
     margin-bottom: 8px; 
@@ -374,11 +398,12 @@ main {
     overflow: hidden;
     text-overflow: ellipsis; 
     max-width: 180px; 
-    text-align: left; 
+    display: inline-block; 
+    vertical-align: middle; 
 }
 
 
-.sidebar-cv-btn,
+.sidebar-cv-btn, /* General styles for buttons if used elsewhere */
 .sidebar-social-btn { 
     display: inline-flex; 
     align-items: center;
@@ -396,12 +421,12 @@ main {
     box-sizing: border-box; 
     margin-top: 8px; 
 }
-.sidebar-profile-condensed > .sidebar-social-btn:first-of-type {
+.sidebar-profile-condensed > .sidebar-social-btn:first-of-type { /* If a social button is first and NOT in sidebar-action-buttons */
     margin-top: 0; 
 }
 
 
-.sidebar-cv-btn {
+.sidebar-cv-btn { /* Specific color for CV button */
     background: var(--emerald-green-primary);
     color: var(--eerie-black-2); 
 }
@@ -413,7 +438,7 @@ main {
     font-size: 16px; 
 }
 
-.sidebar-github-btn {
+.sidebar-github-btn { /* Specific color for GitHub button */
     background: hsl(210, 15%, 25%); 
     color: var(--white-2);
 }
@@ -425,7 +450,6 @@ main {
 .sidebar-github-btn i { 
     font-size: 16px;
 }
-
 
 /*-----------------------------------*\
   #SKILLS STYLES (Sidebar)
@@ -445,16 +469,16 @@ main {
 .skills-grid {
     display: grid;
     grid-template-columns: 1fr; 
-    gap: 15px; 
+    gap: 12px; /* Slightly reduced gap for skills */
 }
 
 .skill-card {
     background: var(--eerie-black-1);
     border-radius: 10px;
-    padding: 15px; 
+    padding: 12px; /* Slightly reduced padding for skill cards */
     display: flex;
     align-items: center;
-    gap: 15px; 
+    gap: 12px; /* Slightly reduced gap inside skill cards */
     border: 1px solid transparent;
 }
 
@@ -463,18 +487,18 @@ main {
 }
 
 .skill-icon {
-    font-size: 1.6rem; 
+    font-size: 1.5rem; /* Slightly reduced icon size */
     color: var(--emerald-green-primary);
-    width: 35px;
-    min-width: 35px;
-    height: 35px;
+    width: 30px; /* Slightly reduced icon box size */
+    min-width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .skill-icon svg { 
-    width: 28px; 
-    height: 28px;
+    width: 24px; /* Adjusted SVG size */
+    height: 24px;
     fill: currentColor; 
 }
 .skill-icon .fab { 
@@ -491,15 +515,15 @@ main {
 
 .skill-card h5 {
     color: var(--white-2);
-    font-size: var(--fs-5); 
+    font-size: var(--fs-6); /* Adjusted font size for skill title */
     font-weight: var(--fw-500);
-    margin-bottom: 3px;
+    margin-bottom: 2px; /* Reduced margin */
 }
 
 .skill-card p {
     color: var(--light-gray);
-    font-size: var(--fs-7); 
-    line-height: 1.4;
+    font-size: var(--fs-7); /* Adjusted font size for skill description */
+    line-height: 1.3; /* Adjusted line height */
 }
 
 
@@ -561,7 +585,29 @@ main {
     margin-bottom: 1em;
 }
 .about-text-intro p:last-child {
-    margin-bottom: 0;
+    margin-bottom: 0; 
+}
+.contact-prompt-about {
+    margin-top: 25px; 
+    padding-top: 20px; 
+    border-top: 1px solid var(--jet); 
+    text-align: center;
+}
+.contact-prompt-about p {
+    color: var(--light-gray);
+    font-size: var(--fs-6);
+    margin-bottom: 10px;
+}
+.contact-link-about { 
+    color: var(--emerald-green-primary);
+    text-decoration: none;
+    font-weight: var(--fw-500);
+    display: inline-block; 
+    margin-top: 5px; 
+}
+.contact-link-about:hover {
+    text-decoration: underline;
+    color: var(--emerald-green-light);
 }
 
 
@@ -674,7 +720,16 @@ ul.project-list.highlight-project-list {
 
 .project-item > a { width: 100%; display: flex; flex-direction: column; flex-grow: 1; }
 
-.project-img { position: relative; width: 100%; height: 200px; flex-shrink: 0; border-radius: 16px; overflow: hidden; margin-bottom: 15px; background-color: var(--onyx); }
+.project-img { 
+    position: relative; 
+    width: 100%; 
+    height: 200px; 
+    flex-shrink: 0; 
+    border-radius: 16px; 
+    overflow: hidden; 
+    margin-bottom: 10px; 
+    background-color: var(--onyx); 
+}
 .project-img::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 1; transition: var(--transition-1); }
 .project-item > a:hover .project-img::before { background: hsla(0, 0%, 0%, 0.5); }
 .project-item-icon-box { --scale: 0.8; background: var(--jet); color: var(--emerald-green-primary); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(var(--scale)); font-size: 20px; padding: 18px; border-radius: 12px; opacity: 0; z-index: 1; transition: var(--transition-1); }
@@ -682,15 +737,34 @@ ul.project-list.highlight-project-list {
 .project-img img { width: 100%; height: 100%; object-fit: contain; transition: var(--transition-1); }
 .project-item > a:hover img { transform: scale(1.05); }
 
+/* Project Card Engine Badge */
+.project-engine-badge {
+    position: absolute;
+    top: 8px; 
+    right: 8px;  /* Changed from left to right */
+    background: rgba(0, 0, 0, 0.75); 
+    color: var(--white-2);
+    padding: 3px 7px;
+    border-radius: 5px;
+    font-size: 10px; 
+    font-weight: var(--fw-600); 
+    line-height: 1;
+    z-index: 2; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+}
+.project-engine-badge.unreal-engine-badge { background-color: hsla(212, 35%, 25%, 0.85) !important; /* Darker, desaturated blue/grey */ }
+.project-engine-badge.unity-engine-badge { background-color: hsla(0, 0%, 25%, 0.85) !important; } /* Darker Grey for Unity */
+.project-engine-badge.uefn-badge { background-color: hsla(100, 60%, 35%, 0.85) !important; } /* Darker Fortnite green */
+.project-engine-badge.game-design-badge { background-color: hsla(270, 60%, 45%, 0.85) !important; /* Purple for Game Design */ }
+
+
 .project-title { color: var(--white-2); font-size: var(--fs-5); font-weight: var(--fw-400); text-transform: capitalize; line-height: 1.3; margin-left: 10px; margin-bottom: 3px; }
 .project-category { color: var(--light-gray-70); font-size: var(--fs-6); font-weight: var(--fw-300); margin-left: 10px; margin-bottom: 8px; }
-.project-tech-icons { display: flex; gap: 8px; margin-left: 10px; margin-top: auto; padding-bottom: 5px; }
-.project-tech-icons i,
-.project-tech-icons svg { font-size: 1rem; color: var(--light-gray); transition: color var(--transition-1); width: 1em; height: 1em; }
-.project-tech-icons .tech-icon-fortnite svg { fill: #72f238; }
-.project-tech-icons .tech-icon-verse svg { fill: #007bff; }
-.project-item > a:hover .project-tech-icons i,
-.project-item > a:hover .project-tech-icons svg { color: var(--emerald-green-light); }
+.project-tech-icons { display: none; } 
+
+
 .no-projects-message { color: var(--light-gray); text-align: center; padding: 20px; font-style: italic; }
 
 /*-----------------------------------*\
@@ -743,6 +817,9 @@ ul.project-list.highlight-project-list {
     font-size: inherit; 
     width: 100%;
     height: 100%;
+}
+.tool-icon svg {
+    fill: currentColor; 
 }
 .tool-icon.fortnite svg { fill: #72f238; } 
 .tool-icon.verse svg { fill: #007bff; } 
@@ -856,7 +933,7 @@ ul.project-list.highlight-project-list {
     .modal-media { flex: 0 0 400px; max-width: 400px; } 
     .modal-media iframe { height: 225px; } 
     .modal-media img { width: 350px; height: 200px; object-fit: contain; } 
-    .skills-grid { grid-template-columns: 1fr; gap: 15px; } 
+    .skills-grid { grid-template-columns: 1fr; gap: 12px; } /* Re-asserting 1fr for skills grid in sidebar */
     .clients-list { max-width: none; }
     .clients-item { width: calc(20% - 20px); max-width: 120px; }
     #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); }
