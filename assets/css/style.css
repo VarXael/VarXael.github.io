@@ -357,12 +357,13 @@ main {
     font-size: var(--fs-7);
     color: var(--light-gray);
     transition: color var(--transition-1);
-    padding: 5px 0; 
+    padding: 2px 0; 
 }
 .contact-link-sidebar ion-icon {
     font-size: 1.1em; 
     color: var(--emerald-green-primary);
     transition: color var(--transition-1);
+    flex-shrink: 0; 
 }
 .contact-link-sidebar:hover,
 .contact-link-sidebar:hover ion-icon {
@@ -373,6 +374,7 @@ main {
     overflow: hidden;
     text-overflow: ellipsis; 
     max-width: 180px; 
+    text-align: left; 
 }
 
 
@@ -423,7 +425,6 @@ main {
 .sidebar-github-btn i { 
     font-size: 16px;
 }
-
 
 /*-----------------------------------*\
   #SKILLS STYLES (Sidebar)
@@ -714,12 +715,43 @@ ul.project-list.highlight-project-list {
 .tools-section { margin-top: 0.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid hsla(0, 0%, 65%, 0.08); }
 .tools-section:last-child { border-bottom: none; padding-bottom: 0; }
 .tools-section h4 { color: var(--emerald-green-primary); font-size: var(--fs-5); margin-bottom: 0.4rem; }
-.tool-icons { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
-.tool-icon { font-size: 1rem; color: var(--light-gray); transition: color 0.2s ease; width: 1em; height: 1em; }
+
+.tool-list { 
+    display: flex;
+    flex-direction: column; 
+    gap: 8px; 
+}
+.tool-item { 
+    display: flex; 
+    align-items: center;
+    gap: 8px; 
+}
+.tool-icon { 
+    font-size: 1rem; 
+    color: var(--light-gray); 
+    transition: color 0.2s ease;
+    width: 1.2em; 
+    height: 1.2em;
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; 
+}
+.tool-icon i, 
+.tool-icon svg { 
+    font-size: inherit; 
+    width: 100%;
+    height: 100%;
+}
 .tool-icon.fortnite svg { fill: #72f238; } 
 .tool-icon.verse svg { fill: #007bff; } 
 .tool-icon:hover { color: var(--emerald-green-primary); }
-.tool-icon i { font-size: inherit; }
+.tool-name { 
+    color: var(--white-2); 
+    font-size: var(--fs-7); 
+    line-height: 1.4;
+}
+
 .modal-fulltext { flex: none; color: var(--light-gray); font-size: var(--fs-6); line-height: 1.6; padding: 1rem; background: var(--jet); border-radius: 10px; margin-top: 1rem; box-shadow: var(--shadow-1); border: 1px solid hsla(0, 0%, 22%, 0.08); }
 .modal-fulltext h4 { margin-bottom: 0.2rem; font-size: var(--fs-5); color: var(--emerald-green-primary); margin-top: 0.5rem; }
 .modal-fulltext .detail-item { gap: 0.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid hsla(0, 0%, 65%, 0.08); }
@@ -731,42 +763,51 @@ ul.project-list.highlight-project-list {
     margin-top: 20px; 
     text-align: center; 
 }
-.modal-learn-more .form-btn { /* Re-using .form-btn styles for the "Learn More" link */
+.modal-learn-more a.form-btn { 
     position: relative;
-    display: inline-flex; /* To make it not full width & center icon/text */
-    width: auto; /* Auto width based on content */
-    background: var(--border-gradient-onyx);
-    color: var(--emerald-green-primary);
+    display: inline-flex !important;  
+    width: auto !important; 
+    background: var(--border-gradient-onyx) !important;
+    color: var(--emerald-green-primary) !important;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    padding: 10px 20px; /* Adjusted padding */
-    border-radius: 14px;
-    font-size: var(--fs-6);
+    padding: 10px 20px !important; 
+    border-radius: 14px !important;
+    font-size: var(--fs-6) !important;
+    font-weight: var(--fw-500); 
     text-transform: capitalize;
-    box-shadow: var(--shadow-3);
-    z-index: 1;
-    transition: var(--transition-1);
-    text-decoration: none; /* Ensure no underline from anchor tag */
+    box-shadow: var(--shadow-3) !important;
+    z-index: 1 !important;
+    transition: var(--transition-1) !important;
+    text-decoration: none !important; 
+    border: none; 
+    cursor: pointer;
 }
-.modal-learn-more .form-btn::before {
+.modal-learn-more a.form-btn::before {
     content: "";
     position: absolute;
     inset: 1px;
-    background: var(--bg-gradient-jet);
-    border-radius: inherit;
-    z-index: -1;
-    transition: var(--transition-1);
+    background: var(--bg-gradient-jet) !important;
+    border-radius: inherit !important;
+    z-index: -1 !important;
+    transition: var(--transition-1) !important;
 }
-.modal-learn-more .form-btn:hover {
-    background: var(--bg-gradient-green-1);
-    color: var(--emerald-green-primary); /* Keep text color or change as preferred */
+.modal-learn-more a.form-btn:hover {
+    background: var(--bg-gradient-green-1) !important;
+    color: var(--emerald-green-primary) !important; 
+    transform: translateY(-1px); 
 }
-.modal-learn-more .form-btn:hover::before {
-    background: var(--bg-gradient-green-2);
+.modal-learn-more a.form-btn:hover::before {
+    background: var(--bg-gradient-green-2) !important;
 }
 .modal-learn-more .form-btn ion-icon {
     font-size: 1.2em; 
-    margin-right: 5px; /* Space between icon and text */
+    margin-right: 5px; 
+    color: var(--emerald-green-primary); 
+}
+.modal-learn-more .form-btn:hover ion-icon {
+    color: var(--emerald-green-primary); 
 }
 
 

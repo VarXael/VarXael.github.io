@@ -62,49 +62,58 @@ const projectDetails = {
         image: "./assets/images/PoliceSimulator.png",
         short: "Experience the daily life of a U.S. police officer.",
         long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties.",
-        tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ],
+        tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ], 
         techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' } ],
         myContribution: "Contributed to AI behavior for traffic simulations and pedestrian interactions. Optimized rendering performance for dense city environments.", 
     },
     "HighOnLife": {
         id: "HighOnLife",
-        title: "High on Life",
+        title: "High on Life (Nintendo Switch Port)",
         category: "professional work", 
-        year: 2025,
-        role: "First-Person Shooter",
-        teamSize: "Squanch Games",
-        duration: "Released Dec 2022",
-        video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
-        learnMoreLink: "https://squanchgames.com/high-on-life/", 
+        year: 2024, 
+        role: "Game Programmer (Porting Team)",
+        teamSize: "Untold Games Team",
+        duration: "Sept 2023 - April 2024 (approx. 8 months)",
+        video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica", 
+        learnMoreLink: "https://shrub-raptorex-ec1.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061", 
         image: "./assets/images/HighOnLife.png",
-        short: "A comedic sci-fi shooter where guns are alive!",
-        long: "High On Life is a first-person shooter with a heavy emphasis on comedy, created by Justin Roiland. Players wield charismatic, talking guns to take down an alien cartel.",
-        tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ],
-        techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' } ],
-        myContribution: "N/A for this entry, showcasing the game itself.",
+        short: "Spearheaded the Nintendo Switch port of Squanch Games' acclaimed FPS, High on Life, focusing on optimization, bug resolution, and feature parity.",
+        long: "As part of the Untold Games team, we undertook the complex challenge of porting the visually rich and technically demanding 'High on Life' to the Nintendo Switch. This collaborative effort involved close coordination with Turn Me Up Games and Squanch Games to adapt the Unreal Engine project for the Switch hardware, ensuring a stable, performant, and feature-complete experience for players on the new platform.",
+        myContribution: "Key contributor to the Nintendo Switch port, specializing in extensive bug-fixing across AI, gameplay mechanics (collisions, abilities), UI, and audio. Developed vital debugging tools and artist utilities. Refactored and optimized C++ & Blueprint code for critical systems, ensuring stability and performance on the Switch. Became a go-to resource for deep system knowledge and complex troubleshooting.",
+        tools: [ 
+            { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' },
+            { name: "C++", icon: '<i class="fas fa-file-code"></i>' }, 
+            { name: "Blueprints", icon: '<i class="fas fa-project-diagram"></i>' },
+            { name: "Nintendo Switch SDK", icon: '<ion-icon name="logo-nintendo"></ion-icon>'}
+        ],
+        techStack: [ 
+            { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' },
+            { iconHTML: '<i class="fas fa-cogs" title="Porting & Optimization"></i>'},
+            { iconHTML: '<i class="fas fa-bug" title="Bug Fixing"></i>'}
+        ]
     },
     "UEFN: Battleship": {
         id: "UEFN: Battleship",
         title: "UEFN: Battleship",
         category: "professional work",
         year: 2023,
-        role: "Game Creator",
-        teamSize: "Untold Games",
-        duration: "6 months",
+        role: "Lead Game Creator & Verse Developer", 
+        teamSize: "Untold Games (Small Team)", 
+        duration: "6 months (Concept to Launch)",
         video: "https://www.fortnite.com/@untoldgames/1028-2740-2494",
-        learnMoreLink: "https://www.fortnite.com/@untoldgames/1028-2740-2494", 
+        learnMoreLink: "YOUR_NOTION_OR_SUBSTACK_LINK_FOR_BATTLESHIP", 
         image: "./assets/images/Battleship.jpeg",
-        short: "Fast-paced team strategy game in UEFN.",
-        long: "Developed using Unreal Editor for Fortnite, with extensive Verse scripting for match logic and grid system management.",
+        short: "Designed and developed a fast-paced, team-based strategy game within UEFN, inspired by the classic Battleship, utilizing Verse for core mechanics.",
+        long: "This project involved the complete creation of a multiplayer strategy game, 'UEFN: Battleship,' from initial concept to public release on the Fortnite platform. As the lead creator, I spearheaded the design of game mechanics, level layout, and player experience, with a heavy focus on implementing core logic using Verse scripting and UEFN's device system.",
+        myContribution: "Led the overall game design, including ruleset, win/loss conditions, and player progression. Developed the primary gameplay systems using Verse, including the combat grid, ship placement logic, and real-time feedback for player actions. Optimized network replication for responsive multiplayer gameplay and iterated on design based on playtesting feedback.",
         tools: [
-            { name: "Fortnite (UEFN)", icon: fortniteIconSVG, class: "fortnite" },
-            { name: "Verse Scripting", icon: verseIconSVG, class: "verse" }
+            { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" },
+            { name: "Verse", icon: verseIconSVG, class: "verse" }
         ],
         techStack: [
             { iconHTML: `<span class="tech-icon-fortnite" title="UEFN">${fortniteIconSVG}</span>` },
-            { iconHTML: `<span class="tech-icon-verse" title="Verse">${verseIconSVG}</span>` }
-        ],
-        myContribution: "Led the design and Verse scripting for the core combat grid, ship placement, and win/loss conditions. Optimized network replication for real-time multiplayer gameplay.", 
+            { iconHTML: `<span class="tech-icon-verse" title="Verse Programming">${verseIconSVG}</span>` }
+        ]
     },
     "PulseParty": {
         id: "PulseParty",
@@ -120,12 +129,12 @@ const projectDetails = {
         short: "Rhythm-based multiplayer UEFN game.",
         long: "Responsibilities included game mechanics prototyping, network optimization, and dynamic tempo sync with music.",
         tools: [
-            { name: "Verse Scripting", icon: verseIconSVG, class: "verse" },
-            { name: "Fortnite (UEFN)", icon: fortniteIconSVG, class: "fortnite" } 
+            { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" }, 
+            { name: "Verse", icon: verseIconSVG, class: "verse" } 
         ],
         techStack: [
             { iconHTML: `<span class="tech-icon-fortnite" title="UEFN">${fortniteIconSVG}</span>` },
-            { iconHTML: `<span class="tech-icon-verse" title="Verse">${verseIconSVG}</span>` }
+            { iconHTML: `<span class="tech-icon-verse" title="Verse Programming">${verseIconSVG}</span>` }
         ],
         myContribution: "Prototyped core rhythm mechanics in Verse. Developed custom audio analysis system for beat synchronization. Optimized network performance for smooth multiplayer experience.",
     },
@@ -144,12 +153,12 @@ const projectDetails = {
         short: "UEFN game experience focused on matchmaking concepts.",
         long: "A project exploring matchmaking and social features within the UEFN platform.",
         tools: [
-            { name: "Fortnite (UEFN)", icon: fortniteIconSVG, class: "fortnite" },
-            { name: "Verse Scripting", icon: verseIconSVG, class: "verse" }
+            { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" },
+            { name: "Verse", icon: verseIconSVG, class: "verse" }
         ],
         techStack: [
              { iconHTML: `<span class="tech-icon-fortnite" title="UEFN">${fortniteIconSVG}</span>` },
-             { iconHTML: `<span class="tech-icon-verse" title="Verse">${verseIconSVG}</span>` }
+             { iconHTML: `<span class="tech-icon-verse" title="Verse Programming">${verseIconSVG}</span>` }
         ],
         myContribution: "Designed and implemented Verse logic for experimental matchmaking algorithms and player queuing systems.",
     },
@@ -166,8 +175,8 @@ const projectDetails = {
         image: "./assets/images/work-5.jpg",
         short: "Personal prototype inspired by the Alien franchise.",
         long: "Focused on prototyping mechanics and atmosphere. More details on Substack.",
-        tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ],
-        techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' } ],
+        tools: [ { name: "Unreal Engine 4", icon: '<i class="fab fa-unrealengine"></i>' } ], 
+        techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine 4"></i>' } ],
         myContribution: "Developed AI for stealth-based enemy encounters. Prototyped environmental interaction systems. Explored lighting and atmospheric effects to capture the 'Alien' mood.",
     },
     "Cycle": { 
@@ -492,8 +501,14 @@ function openProjectModal(projectId) {
     }
 
     const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
-        let iconContent = tool.icon || tool.name;
-        return `<span class="tool-icon ${tool.class || ''}" title="${tool.name}">${iconContent}</span>`;
+        let iconHtml = '';
+        if (tool.icon) {
+            iconHtml = tool.icon; 
+        }
+        return `<span class="tool-item" title="${tool.name}">
+                    ${iconHtml ? `<span class="tool-icon ${tool.class || ''}">${iconHtml}</span>` : ''}
+                    <span class="tool-name">${tool.name}</span>
+                </span>`;
     }).join('') : '<p>N/A</p>';
 
     let learnMoreButtonHTML = '';
@@ -516,7 +531,11 @@ function openProjectModal(projectId) {
                     <div class="detail-item"><h4>Role:</h4><p>${data.role || 'N/A'}</p></div>
                     <div class="detail-item"><h4>Project Duration/Release:</h4><p>${data.duration || 'N/A'}</p></div>
                     <div class="detail-item"><h4>Team/Developer:</h4><p>${data.teamSize || 'N/A'}</p></div>
-                    <div class="tools-section detail-item"><h4>Key Technologies:</h4><div class="tool-icons">${toolIconsHtml}</div></div>
+                    <div class="tools-section detail-item"><h4>Key Technologies:</h4>
+                        <div class="tool-list"> 
+                            ${toolIconsHtml}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-fulltext">
