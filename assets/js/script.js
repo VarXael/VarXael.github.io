@@ -47,6 +47,8 @@ const highlightProjectsContainer = document.querySelector('.highlight-projects-c
 // SVG icons
 const fortniteIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.86 6.71l-1.72 1.72c-.19-.25-.43-.46-.72-.62l.98-2.35c.13-.32.02-.69-.27-.84s-.69-.02-.84.27l-.98 2.35c-.3-.09-.61-.13-.93-.13s-.63.04-.93.13l-.98-2.35c-.13-.32-.51-.45-.84-.27s-.45.51-.27.84l.98 2.35c-.29.16-.53.37-.72.62l-1.72-1.72c-.26-.26-.71-.23-.94.03s-.23.71.03.94l1.72 1.72c-.16.29-.27.6-.31.93H5.5c-.39 0-.7.31-.7.7s.31.7.7.7h2.35c.04.33.15.64.31.93l-1.72 1.72c-.26.26-.29.71-.03.94s.71.29.94.03l1.72-1.72c.25.19.54.33.85.42V17.5c0 .39.31.7.7.7s.7-.31.7-.7v-2.35c.3-.09.59-.23.85-.42l1.72 1.72c.26.26.71.23.94-.03s-.23-.71-.03-.94l-1.72-1.72c.16-.29.27.6.31-.93h2.35c.39 0 .7-.31-.7-.7s-.31-.7-.7-.7H14.8c-.04-.33-.15-.64-.31-.93l1.72-1.72c.26-.26.29-.71.03-.94s-.71-.29-.94-.03zM12 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`; 
 const verseIconSVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/></svg>`; 
+const unrealEngineIconSVG = `<svg viewBox="0 0 210.4 210.4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M105.2 5c55.3 0 100.2 45 100.2 100.2s-45 100.2-100.2 100.2S5 160.5 5 105.2 50 5 105.2 5m0-5C47.1 0 0 47.1 0 105.2s47.1 105.2 105.2 105.2 105.2-47.1 105.2-105.2S163.4 0 105.2 0z"/><path d="M97.9 42.2s-23.7 6.7-45 29.3-24 38.7-24 50.7c4.7-8 33.7-52.1 40.5-31.1v50.2s-.4 6.8-10.8 4.1c3.1 5.8 19.1 20.1 48 23 6.6-6.6 15.2-16.1 15.2-16.1l14.4 12.2s25.9-16.8 36.1-41.2c-9.5 6.2-21 20.6-27 10.5V72.7s15.4-23.1 17.8-24.2c-6.1 1.1-27.6 8.2-38.9 22.8-3.2-3.5-12.1-3.6-12.1-3.6s7 5.8 7.1 11.1 0 49.5 0 54.6c-4.8 4.9-9.9 7.5-13.2 7.5-7.7 0-9.9-2.7-12-5.4V71.3s-3.8 3.2-6.8-2S84.1 54 97.9 42.2z"/></svg>`;
+
 
 const projectDetails = {
     "PoliceSimulator": {
@@ -62,8 +64,8 @@ const projectDetails = {
         image: "./assets/images/PoliceSimulator.png",
         short: "Experience the daily life of a U.S. police officer.",
         long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties.",
-        tools: [ { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' } ], 
-        techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' } ],
+        tools: [ { name: "Unreal Engine 4.27", icon: unrealEngineIconSVG } ], 
+        techStack: [ { iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine 4.27">${unrealEngineIconSVG}</span>` } ],
         myContribution: "Contributed to AI behavior for traffic simulations and pedestrian interactions. Optimized rendering performance for dense city environments.", 
     },
     "HighOnLife": {
@@ -75,21 +77,21 @@ const projectDetails = {
         teamSize: "Untold Games Team",
         duration: "Sept 2023 - April 2024 (approx. 8 months)",
         video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica", 
-        learnMoreLink: "https://shrub-raptorex-ec1.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061", 
+        learnMoreLink: "https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061", 
         image: "./assets/images/HighOnLife.png",
-        short: "Spearheaded the Nintendo Switch port of Squanch Games' acclaimed FPS, High on Life, focusing on optimization, bug resolution, and feature parity.",
+        short: "Contributed to the Nintendo Switch port of Squanch Games' acclaimed FPS, focusing on optimization, bug resolution, and feature parity.",
         long: "As part of the Untold Games team, we undertook the complex challenge of porting the visually rich and technically demanding 'High on Life' to the Nintendo Switch. This collaborative effort involved close coordination with Turn Me Up Games and Squanch Games to adapt the Unreal Engine project for the Switch hardware, ensuring a stable, performant, and feature-complete experience for players on the new platform.",
         myContribution: "Key contributor to the Nintendo Switch port, specializing in extensive bug-fixing across AI, gameplay mechanics (collisions, abilities), UI, and audio. Developed vital debugging tools and artist utilities. Refactored and optimized C++ & Blueprint code for critical systems, ensuring stability and performance on the Switch. Became a go-to resource for deep system knowledge and complex troubleshooting.",
         tools: [ 
-            { name: "Unreal Engine", icon: '<i class="fab fa-unrealengine"></i>' },
+            { name: "Unreal Engine 4.27", icon: unrealEngineIconSVG },
             { name: "C++", icon: '<i class="fas fa-file-code"></i>' }, 
             { name: "Blueprints", icon: '<i class="fas fa-project-diagram"></i>' },
             { name: "Nintendo Switch SDK", icon: '<ion-icon name="logo-nintendo"></ion-icon>'}
         ],
         techStack: [ 
-            { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' },
-            { iconHTML: '<i class="fas fa-cogs" title="Porting & Optimization"></i>'},
-            { iconHTML: '<i class="fas fa-bug" title="Bug Fixing"></i>'}
+            { iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine 4.27">${unrealEngineIconSVG}</span>` },
+            { iconHTML: '<i class="fas fa-bug" title="Bug Fixing & Stability"></i>'},
+            { iconHTML: '<i class="fas fa-tools" title="Tool Development"></i>'}
         ]
     },
     "UEFN: Battleship": {
@@ -175,8 +177,8 @@ const projectDetails = {
         image: "./assets/images/work-5.jpg",
         short: "Personal prototype inspired by the Alien franchise.",
         long: "Focused on prototyping mechanics and atmosphere. More details on Substack.",
-        tools: [ { name: "Unreal Engine 4", icon: '<i class="fab fa-unrealengine"></i>' } ], 
-        techStack: [ { iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine 4"></i>' } ],
+        tools: [ { name: "Unreal Engine 4", icon: unrealEngineIconSVG } ], 
+        techStack: [ { iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine 4">${unrealEngineIconSVG}</span>` } ],
         myContribution: "Developed AI for stealth-based enemy encounters. Prototyped environmental interaction systems. Explored lighting and atmospheric effects to capture the 'Alien' mood.",
     },
     "Cycle": { 
@@ -247,7 +249,7 @@ const projectDetails = {
         learnMoreLink: "https://cineon.training/covid-19-personal-protective-equipment-ppe-training/",
         short: "VR Training simulation for PPE.",
         long: "Developed PPE training scenarios using VR technology.",
-        techStack: [{ iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' }],
+        techStack: [{ iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine">${unrealEngineIconSVG}</span>` }],
         myContribution: "Scripted interaction logic for VR controllers and training objects. Implemented a scenario progression system with feedback mechanisms. Optimized performance for smooth VR experience.",
     },
     "UnrealEngineCourse": {
@@ -263,7 +265,7 @@ const projectDetails = {
         learnMoreLink: "https://www.udemy.com/course/complete-unreal-engine-megacourse-beginner-to-expert/",
         short: "Online course for Unreal Engine.",
         long: "A 16-hour course introducing Unreal Engine Blueprints and programming structures.",
-        techStack: [{ iconHTML: '<i class="fab fa-unrealengine" title="Unreal Engine"></i>' }],
+        techStack: [{ iconHTML: `<span class="tech-icon-unreal" title="Unreal Engine">${unrealEngineIconSVG}</span>` }],
         myContribution: "Designed and recorded course modules covering Unreal Engine fundamentals, Blueprints, and common game programming patterns. Created example projects and exercises for students.",
     },
     "MonkHomebrew": {
@@ -505,9 +507,9 @@ function openProjectModal(projectId) {
         if (tool.icon) {
             iconHtml = tool.icon; 
         }
-        return `<span class="tool-item" title="${tool.name}">
+        return `<span class="tool-item" title="${tool.name || ''}">
                     ${iconHtml ? `<span class="tool-icon ${tool.class || ''}">${iconHtml}</span>` : ''}
-                    <span class="tool-name">${tool.name}</span>
+                    <span class="tool-name">${tool.name || ''}</span>
                 </span>`;
     }).join('') : '<p>N/A</p>';
 

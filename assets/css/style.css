@@ -426,6 +426,7 @@ main {
     font-size: 16px;
 }
 
+
 /*-----------------------------------*\
   #SKILLS STYLES (Sidebar)
 \*-----------------------------------*/
@@ -712,10 +713,10 @@ ul.project-list.highlight-project-list {
 .detail-item:last-child { border-bottom: none; padding-bottom: 0; }
 .detail-item h4 { color: var(--emerald-green-primary); font-size: var(--fs-5); margin-bottom: 0.2rem; }
 .detail-item p { color: var(--light-gray); font-size: var(--fs-6); line-height: 1.6; margin-bottom: 0; }
+
 .tools-section { margin-top: 0.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid hsla(0, 0%, 65%, 0.08); }
 .tools-section:last-child { border-bottom: none; padding-bottom: 0; }
 .tools-section h4 { color: var(--emerald-green-primary); font-size: var(--fs-5); margin-bottom: 0.4rem; }
-
 .tool-list { 
     display: flex;
     flex-direction: column; 
