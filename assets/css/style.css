@@ -737,29 +737,6 @@ ul.project-list.highlight-project-list {
 .project-img img { width: 100%; height: 100%; object-fit: contain; transition: var(--transition-1); }
 .project-item > a:hover img { transform: scale(1.05); }
 
-/* Project Card Engine Badge */
-.project-engine-badge {
-    position: absolute;
-    top: 8px; 
-    right: 8px;  /* Changed from left to right */
-    background: rgba(0, 0, 0, 0.75); 
-    color: var(--white-2);
-    padding: 3px 7px;
-    border-radius: 5px;
-    font-size: 10px; 
-    font-weight: var(--fw-600); 
-    line-height: 1;
-    z-index: 2; 
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: 1px solid rgba(255, 255, 255, 0.15); 
-}
-.project-engine-badge.unreal-engine-badge { background-color: hsla(212, 35%, 25%, 0.85) !important; /* Darker, desaturated blue/grey */ }
-.project-engine-badge.unity-engine-badge { background-color: hsla(0, 0%, 25%, 0.85) !important; } /* Darker Grey for Unity */
-.project-engine-badge.uefn-badge { background-color: hsla(100, 60%, 35%, 0.85) !important; } /* Darker Fortnite green */
-.project-engine-badge.game-design-badge { background-color: hsla(270, 60%, 45%, 0.85) !important; /* Purple for Game Design */ }
-
-
 .project-title { color: var(--white-2); font-size: var(--fs-5); font-weight: var(--fw-400); text-transform: capitalize; line-height: 1.3; margin-left: 10px; margin-bottom: 3px; }
 .project-category { color: var(--light-gray-70); font-size: var(--fs-6); font-weight: var(--fw-300); margin-left: 10px; margin-bottom: 8px; }
 .project-tech-icons { display: none; } 
@@ -974,3 +951,52 @@ ul.project-list.highlight-project-list {
     #portfolio-grid-container .project-list { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 1250px) { body::-webkit-scrollbar { width: 20px; } body::-webkit-scrollbar-track { background: var(--smoky-black); } body::-webkit-scrollbar-thumb { border: 5px solid var(--smoky-black); background: hsla(0, 0%, 100%, 0.1); border-radius: 20px; box-shadow: inset 1px 1px 0 hsla(0, 0%, 100%, 0.11), inset -1px -1px 0 hsla(0, 0%, 100%, 0.11); } body::-webkit-scrollbar-thumb:hover { background: hsla(0, 0%, 100%, 0.15); } body::-webkit-scrollbar-button { height: 60px; } }
+
+/*-----------------------------------*\
+  #PROJECT CARD TAGS
+\*-----------------------------------*/
+
+.project-tags-container {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.project-card-tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: var(--fw-600);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--white-2);
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.project-card-tag.icon-tag {
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.project-card-tag svg {
+    width: 1.2em;
+    height: 1.2em;
+    fill: currentColor;
+}
+
+/* Specific background colors can be added here */
+.unreal-engine-badge { background-color: hsla(212, 35%, 25%, 0.85); }
+.unity-engine-badge { background-color: hsla(0, 0%, 25%, 0.85); }
+.uefn-badge { background-color: hsla(100, 60%, 35%, 0.85); }
+.game-design-badge { background-color: hsla(270, 60%, 45%, 0.85); }
+
+.porting-tag { background-color: hsla(0, 0%, 45%, 0.85); }
+.nintendo-switch-tag { background-color: rgba(230, 0, 18, 0.75); }
