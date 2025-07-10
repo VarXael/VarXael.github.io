@@ -82,23 +82,27 @@ const projectDetails = {
     "HighOnLife": {
         id: "HighOnLife",
         title: "High on Life (Nintendo Switch Port)",
-        category: "professional work", 
-        year: 2025, 
-        role: "Game Programmer (Porting Team)",
-        teamSize: "Untold Games Team",
-        duration: "Sept 2023 - April 2024 (approx. 8 months)",
-        video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica", 
-        learnMoreLink: "https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061", 
+        category: "professional work",
+        year: 2025,
+        role: "Game Programmer & Systems Specialist",
+        context: "Untold Games (for Squanch Games & Turn Me Up Games)",
+        duration: "Approx. 8 months (2024-2025)",
+        video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
+        learnMoreLink: "https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061",
         image: "./assets/images/HighOnLife.png",
-        short: "Our team at Untold Games was tasked with porting High On Life to the Nintendo Switch, focusing on optimization, bug resolution, and feature parity to deliver a quality experience.",
-        long: "As part of the Untold Games team, we undertook the complex challenge of porting the visually rich and technically demanding 'High on Life' to the Nintendo Switch. This collaborative effort involved close coordination with Turn Me Up Games and Squanch Games to adapt the Unreal Engine project for the Switch hardware, ensuring a stable, performant, and feature-complete experience for players on the new platform.",
-        myContribution: "Key contributor to the Nintendo Switch port, specializing in extensive bug-fixing across AI, gameplay mechanics (collisions, abilities), UI, and audio. Developed vital debugging tools and artist utilities. Refactored and optimized C++ & Blueprint code for critical systems, ensuring stability and performance on the Switch. Became a go-to resource for deep system knowledge and complex troubleshooting.",
-        tools: [ 
+        short: "As a key systems specialist on the porting team, I was responsible for deep-level debugging, engine-level problem-solving, and critical system stabilization for the Nintendo Switch.",
+        long: "I worked with Untold Games on the complex technical challenge of porting 'High on Life' to the Switch. My role quickly evolved beyond general programming to become a go-to resource for the project's most difficult issues, requiring a deep understanding of Unreal Engine's architecture to diagnose and fix problems that manifested uniquely on the target hardware.",
+        tools: [
             { name: "Unreal Engine", icon: unrealEngineIconSVG },
-            { name: "C++" }, 
-            { name: "Blueprints" }
+            { name: "C++", icon: codeIconSVG },
+            { name: "Blueprints", icon: codeIconSVG }
         ],
         cardEngineName: "Unreal Engine",
+        myContribution: [
+            "<b>Engine-Level Debugging:</b> Investigated and resolved critical, engine-level bugs, including a C++ division-by-zero error that disabled the entire collision system and a persistent memory leak in the Game Instance caused by a latent Ubergraph reference.",
+            "<b>Systems & Gameplay Stabilization:</b> Overhauled the logic for fast-moving actors (dashes, projectiles) using sphere traces to prevent them from passing through objects. Reworked flawed UE4 Remote Event implementations to create a stable, hardcoded alternative that prevented race conditions during level streaming.",
+            "<b>Tool & Utility Development:</b> Extended the existing cheat manager and its UI to add essential performance stats. Designed and implemented a multi-iteration lighting tool for a technical artist, enabling rapid, in-editor changes to level lighting configurations."
+        ].join('<br><br>'),
     },
     "UEFN: Battleship": {
         id: "UEFN: Battleship",
