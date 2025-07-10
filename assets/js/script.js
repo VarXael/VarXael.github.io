@@ -49,25 +49,35 @@ const fortniteIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24
 const verseIconSVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/></svg>`; 
 const unrealEngineIconSVG = `<svg viewBox="0 0 210.4 210.4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M105.2 5c55.3 0 100.2 45 100.2 100.2s-45 100.2-100.2 100.2S5 160.5 5 105.2 50 5 105.2 5m0-5C47.1 0 0 47.1 0 105.2s47.1 105.2 105.2 105.2 105.2-47.1 105.2-105.2S163.4 0 105.2 0z"/><path d="M97.9 42.2s-23.7 6.7-45 29.3-24 38.7-24 50.7c4.7-8 33.7-52.1 40.5-31.1v50.2s-.4 6.8-10.8 4.1c3.1 5.8 19.1 20.1 48 23 6.6-6.6 15.2-16.1 15.2-16.1l14.4 12.2s25.9-16.8 36.1-41.2c-9.5 6.2-21 20.6-27 10.5V72.7s15.4-23.1 17.8-24.2c-6.1 1.1-27.6 8.2-38.9 22.8-3.2-3.5-12.1-3.6-12.1-3.6s7 5.8 7.1 11.1 0 49.5 0 54.6c-4.8 4.9-9.9 7.5-13.2 7.5-7.7 0-9.9-2.7-12-5.4V71.3s-3.8 3.2-6.8-2S84.1 54 97.9 42.2z"/></svg>`;
 const unityIconSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="1em" height="1em"><path d="M12.012 2.5a.708.708 0 00-.702.714v17.572a.71.71 0 00.702.714.715.715 0 00.708-.714V3.214a.71.71 0 00-.708-.714zm6.445 3.174l-5.07 2.927v8.788l5.07 2.937a.71.71 0 001.058-.616V6.29a.71.71 0 00-1.058-.616zm-12.896 0a.71.71 0 00-1.058.616v11.422a.71.71 0 001.058.616l5.07-2.937V8.601l-5.07-2.927zM11.304.002A.71.71 0 0010.59.61L3.41 4.66a.71.71 0 00-.352.617V18.72a.71.71 0 00.352.616L10.59 23.39a.714.714 0 00.708 0l7.18-4.056a.71.71 0 00.352-.616V5.277a.71.71 0 00-.352-.617L11.304 0z"/></svg>`; 
+const codeIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`;
 
 
 const projectDetails = {
     "PoliceSimulator": {
-        id: "PoliceSimulator", 
-        title: "Police Simulator: Patrol Officers",
+        id: "PoliceSimulator",
+        title: "Police Simulator: Patrol Officers (Switch Port)",
         category: "professional work",
-        year: 2024, 
-        role: "Simulation Game",
-        teamSize: "Aesir Interactive",
-        duration: "Released Sep 2022",
-        video: "#",
-        learnMoreLink: "https://www.aessirinteractive.com/police-simulator-patrol-officers", 
+        year: 2024,
+        role: "Game Programmer & Technical Designer",
+        context: "Untold Games (for Aesir Interactive)",
+        duration: "Approx. 4 months", // Remember to update this with your actual duration
+        video: "https://www.youtube.com/watch?v=fL2SOhYZ6k8",
+        learnMoreLink: null,
         image: "./assets/images/PoliceSimulator.png",
-        short: "Experience the daily life of a U.S. police officer.",
-        long: "Police Simulator: Patrol Officers lets players join the police force of a fictional American city, Brighton. From citing parking violations to investigating traffic accidents and pursuing suspects, the game offers a wide range of typical police duties.",
-        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ], 
-        cardEngineName: "Unreal Engine", 
-        myContribution: "Contributed to AI behavior for traffic simulations and pedestrian interactions. Optimized rendering performance for dense city environments.", 
+        short: "Contributed to the Nintendo Switch port, developing a comprehensive ImGui-based debug menu and creating extensive technical design documentation.",
+        long: "As part of the Untold Games team, I tackled the port of this complex Unreal Engine 4.27 title. The role blended programming with technical design, requiring me to not only fix bugs but also to deeply analyze, document, and create tools for the game's intricate systems. A key challenge was navigating the instability of World Partition, which demanded creative and unconventional debugging strategies.",
+        tools: [
+            { name: "Unreal Engine", icon: unrealEngineIconSVG },
+            { name: "C++", icon: codeIconSVG },
+            { name: "ImGui", icon: codeIconSVG }
+        ],
+        cardEngineName: "Unreal Engine",
+        myContribution: [
+            "<b>Tool Development:</b> Designed and implemented a full-featured debug cheat menu from scratch using ImGui, providing the QA and development team with crucial tools for testing.",
+            "<b>Technical Design & Documentation:</b> Authored an exhaustive technical document detailing every game mechanic, system, and item. Became the go-to resource for system interactions and design implications.",
+            "<b>Systems Analysis & Problem-Solving:</b> Investigated and solved complex issues related to the experimental World Partition system. Devised a workaround to modify Data Assets at runtime for debugging NPC population, a feature not natively supported.",
+            "<b>Core Gameplay & Bug-Fixing:</b> Overhauled the Switch input system, fixed critical bugs that blocked the use of the main development test map, and resolved a wide array of other gameplay-related issues."
+        ].join('<br><br>'),
     },
     "HighOnLife": {
         id: "HighOnLife",
@@ -525,14 +535,17 @@ function openProjectModal(projectId) {
         return;
     }
 
+    const hasVideo = data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"));
+    const mediaClass = hasVideo ? 'modal-media media-with-video' : 'modal-media';
+
     let mediaContentHtml = '';
     if (data.image) {
-        if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
+        if (hasVideo) {
             mediaContentHtml = `<a href="${data.video}" target="_blank" rel="noopener noreferrer"><img src="${data.image}" alt="${data.title}"></a>`;
         } else { 
             mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
         }
-    } else if (data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"))) {
+    } else if (hasVideo) {
         mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video / More Info</a> (Preview image not available)</p>`;
     } else {
         mediaContentHtml = `<p>No media available for this project.</p>`;
@@ -540,14 +553,8 @@ function openProjectModal(projectId) {
 
     const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
         let iconHtml = '';
-        const toolNameLower = (tool.name || '').toLowerCase();
-        if (tool.icon && 
-            ( toolNameLower.includes('unreal') || 
-              toolNameLower.includes('unity') ||
-              toolNameLower.includes('uefn') 
-            )
-           ) {
-            iconHtml = tool.icon; 
+        if (tool.icon) {
+            iconHtml = tool.icon;
         }
         return `<span class="tool-item" title="${tool.name || ''}">
                     ${iconHtml ? `<span class="tool-icon ${tool.class || ''}">${iconHtml}</span>` : ''}
@@ -567,35 +574,35 @@ function openProjectModal(projectId) {
     }
 
     if(modalBody) {
-        modalBody.innerHTML = `
-            <div class="modal-header"><h3>${data.title}</h3></div>
-            <div class="modal-grid">
-                <div class="modal-media">${mediaContentHtml}</div>
-                <div class="modal-details">
-                    <div class="detail-item"><h4>Role:</h4><p>${data.role || 'N/A'}</p></div>
-                    <div class="detail-item"><h4>Project Duration/Release:</h4><p>${data.duration || 'N/A'}</p></div>
-                    <div class="detail-item"><h4>Team/Developer:</h4><p>${data.teamSize || 'N/A'}</p></div>
-                    <div class="tools-section detail-item"><h4>Key Technologies:</h4>
-                        <div class="tool-list"> 
-                            ${toolIconsHtml}
-                        </div>
+    modalBody.innerHTML = `
+        <div class="modal-header"><h3>${data.title}</h3></div>
+        <div class="modal-grid">
+            <div class="${mediaClass}">${mediaContentHtml}</div>
+            <div class="modal-details">
+                <div class="detail-item"><h4>Role:</h4><p>${data.role || 'N/A'}</p></div>
+                ${data.context ? `<div class="detail-item"><h4>Context:</h4><p>${data.context}</p></div>` : ''}
+                ${data.duration ? `<div class="detail-item"><h4>Duration:</h4><p>${data.duration}</p></div>` : ''}
+                <div class="tools-section detail-item"><h4>Key Technologies:</h4>
+                    <div class="tool-list"> 
+                        ${toolIconsHtml}
                     </div>
                 </div>
+                ${learnMoreButtonHTML}
             </div>
-            <div class="modal-fulltext">
-                <div class="detail-item">
-                    <h4>Project Overview:</h4>
-                    <p>${data.short || 'No overview available.'}</p>
-                    ${data.long && data.long !== data.short ? `<p style="margin-top: 0.5em;">${data.long}</p>` : ''}
-                </div>
-                <div class="detail-item">
-                    <h4>My Key Contributions:</h4>
-                    <p>${data.myContribution || 'Details not specified.'}</p>
-                </div>
+        </div>
+        <div class="modal-fulltext">
+            <div class="detail-item">
+                <h4>Project Overview:</h4>
+                <p>${data.short || 'No overview available.'}</p>
+                ${data.long && data.long !== data.short ? `<p style="margin-top: 0.5em;">${data.long}</p>` : ''}
             </div>
-            ${learnMoreButtonHTML} 
-        `;
-    }
+            <div class="detail-item">
+                <h4>My Key Contributions:</h4>
+                <div>${data.myContribution || 'Details not specified.'}</div>
+            </div>
+        </div>
+    `;
+}
     if (projectModal) projectModal.classList.add('active');
     document.body.classList.add('no-scroll');
 }
