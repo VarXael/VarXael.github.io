@@ -50,7 +50,7 @@ const verseIconSVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http:/
 const unrealEngineIconSVG = `<svg viewBox="0 0 210.4 210.4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M105.2 5c55.3 0 100.2 45 100.2 100.2s-45 100.2-100.2 100.2S5 160.5 5 105.2 50 5 105.2 5m0-5C47.1 0 0 47.1 0 105.2s47.1 105.2 105.2 105.2 105.2-47.1 105.2-105.2S163.4 0 105.2 0z"/><path d="M97.9 42.2s-23.7 6.7-45 29.3-24 38.7-24 50.7c4.7-8 33.7-52.1 40.5-31.1v50.2s-.4 6.8-10.8 4.1c3.1 5.8 19.1 20.1 48 23 6.6-6.6 15.2-16.1 15.2-16.1l14.4 12.2s25.9-16.8 36.1-41.2c-9.5 6.2-21 20.6-27 10.5V72.7s15.4-23.1 17.8-24.2c-6.1 1.1-27.6 8.2-38.9 22.8-3.2-3.5-12.1-3.6-12.1-3.6s7 5.8 7.1 11.1 0 49.5 0 54.6c-4.8 4.9-9.9 7.5-13.2 7.5-7.7 0-9.9-2.7-12-5.4V71.3s-3.8 3.2-6.8-2S84.1 54 97.9 42.2z"/></svg>`;
 const unityIconSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="1em" height="1em"><path d="M12.012 2.5a.708.708 0 00-.702.714v17.572a.71.71 0 00.702.714.715.715 0 00.708-.714V3.214a.71.71 0 00-.708-.714zm6.445 3.174l-5.07 2.927v8.788l5.07 2.937a.71.71 0 001.058-.616V6.29a.71.71 0 00-1.058-.616zm-12.896 0a.71.71 0 00-1.058.616v11.422a.71.71 0 001.058.616l5.07-2.937V8.601l-5.07-2.927zM11.304.002A.71.71 0 0010.59.61L3.41 4.66a.71.71 0 00-.352.617V18.72a.71.71 0 00.352.616L10.59 23.39a.714.714 0 00.708 0l7.18-4.056a.71.71 0 00.352-.616V5.277a.71.71 0 00-.352-.617L11.304 0z"/></svg>`; 
 const codeIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`;
-const nintendoSwitchSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="currentColor" d="M0 2.5A2.5 2.5 0 0 1 2.5 0h11A2.5 2.5 0 0 1 16 2.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 13.5v-11ZM4.5 4a.5.5 0 0 0-1 0v3.5a.5.5 0 0 0 1 0V4Zm6-1.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2Z"/></svg>`;
+
 
 const projectDetails = {
     "PoliceSimulator": {
@@ -72,10 +72,7 @@ const projectDetails = {
             { name: "ImGui", icon: codeIconSVG }
         ],
         cardEngineName: "Unreal Engine",
-        projectTags: [
-            { text: 'Porting' },
-            { icon: nintendoSwitchSVG, title: 'Nintendo Switch' }
-        ],
+        projectTags: ['Porting: Switch'],
         myContribution: [
             "<b>Tool Development:</b> Designed and implemented a full-featured debug cheat menu from scratch using ImGui, providing the QA and development team with crucial tools for testing.",
             "<b>Technical Design & Documentation:</b> Authored an exhaustive technical document detailing every game mechanic, system, and item. Became the go-to resource for system interactions and design implications.",
@@ -102,10 +99,7 @@ const projectDetails = {
             { name: "Blueprints", icon: codeIconSVG }
         ],
         cardEngineName: "Unreal Engine",
-        projectTags: [
-            { text: 'Porting' },
-            { icon: nintendoSwitchSVG, title: 'Nintendo Switch' }
-        ],
+        projectTags: ['Porting: Switch'],
         myContribution: [
             "<b>Engine-Level Debugging:</b> Investigated and resolved critical, engine-level bugs, including a C++ division-by-zero error that disabled the entire collision system and a persistent memory leak in the Game Instance caused by a latent Ubergraph reference.",
             "<b>Systems & Gameplay Stabilization:</b> Overhauled the logic for fast-moving actors (dashes, projectiles) using sphere traces to prevent them from passing through objects. Reworked flawed UE4 Remote Event implementations to create a stable, hardcoded alternative that prevented race conditions during level streaming.",
@@ -420,7 +414,7 @@ const createProjectListItem = (project) => {
     img.loading = 'lazy';
     figure.appendChild(img);
 
-    // --- NEW TAGS LOGIC STARTS HERE ---
+    // --- TAGS LOGIC STARTS HERE ---
     const tagsContainer = document.createElement('div');
     tagsContainer.className = 'project-tags-container';
 
@@ -446,33 +440,19 @@ const createProjectListItem = (project) => {
         }
         
         if (badgeClass) {
-            engineBadge.className = `project-card-tag ${badgeClass}`; // Use base class for styling
+            engineBadge.className = `project-card-tag ${badgeClass}`;
             engineBadge.textContent = badgeText;
             engineBadge.title = project.cardEngineName;
-            tagsContainer.appendChild(engineBadge); // Append to container
+            tagsContainer.appendChild(engineBadge);
         }
     }
 
     // Add custom tags from the new array
     if (project.projectTags && Array.isArray(project.projectTags)) {
-        project.projectTags.forEach(tagObject => {
+        project.projectTags.forEach(tagText => {
             const tagElement = document.createElement('div');
-            tagElement.className = 'project-card-tag'; // Base class for all tags
-
-            if (tagObject.icon) {
-                tagElement.innerHTML = tagObject.icon;
-                tagElement.title = tagObject.title;
-                tagElement.classList.add('icon-tag');
-                if (tagObject.title) {
-                    const tagClass = tagObject.title.toLowerCase().replace(/ /g, '-');
-                    tagElement.classList.add(`${tagClass}-tag`);
-                }
-            } else if (tagObject.text) {
-                tagElement.textContent = tagObject.text;
-                const tagClass = tagObject.text.toLowerCase().replace(/ /g, '-');
-                tagElement.classList.add(`${tagClass}-tag`);
-            }
-
+            tagElement.className = 'project-card-tag';
+            tagElement.textContent = tagText;
             tagsContainer.appendChild(tagElement);
         });
     }
@@ -480,7 +460,7 @@ const createProjectListItem = (project) => {
     if (tagsContainer.hasChildNodes()) {
         figure.appendChild(tagsContainer);
     }
-    // --- NEW TAGS LOGIC ENDS HERE ---
+    // --- TAGS LOGIC ENDS HERE ---
 
     link.appendChild(figure);
 

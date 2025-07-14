@@ -981,22 +981,7 @@ ul.project-list.highlight-project-list {
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.project-card-tag.icon-tag {
-    padding: 5px;
-    border-radius: 50%;
-}
-
-.project-card-tag svg {
-    width: 1.2em;
-    height: 1.2em;
-    fill: currentColor;
-}
-
-/* Specific background colors can be added here */
 .unreal-engine-badge { background-color: hsla(212, 35%, 25%, 0.85); }
 .unity-engine-badge { background-color: hsla(0, 0%, 25%, 0.85); }
 .uefn-badge { background-color: hsla(100, 60%, 35%, 0.85); }
 .game-design-badge { background-color: hsla(270, 60%, 45%, 0.85); }
-
-.porting-tag { background-color: hsla(0, 0%, 45%, 0.85); }
-.nintendo-switch-tag { background-color: rgba(230, 0, 18, 0.75); }
