@@ -41,7 +41,10 @@ const selectValue = document.querySelector("[data-selecct-value]");
 // Portfolio filter variables
 const filterBtns = document.querySelectorAll("[data-filter-btn]");
 const portfolioGridContainer = document.getElementById('portfolio-grid-container');
-const highlightProjectsUl = document.querySelector('.highlight-projects-container .project-list.highlight-project-list');
+
+// NEW: Containers for About page sections
+const professionalWorkUl = document.querySelector('.professional-work-list');
+const techDesignWorkUl = document.querySelector('.tech-design-list');
 
 
 // SVG icons
@@ -53,10 +56,56 @@ const codeIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height=
 
 
 const projectDetails = {
+    // --- NEW Project Placeholders (using Alien as template) ---
+    "ProjectCircle": {
+        id: "ProjectCircle",
+        title: "Project Circle (WIP)",
+        category: "personal work",
+        published: false,
+        isFeatured: true, // This will make it the hero card
+        year: 2025,
+        role: "Sole Creator & Technical Game Designer",
+        image: "./assets/images/work-5.jpg", // Using Alien's image
+        short: "My hero piece: A third-person action RPG focusing on a dynamic, multi-form weapon system and expressive, physics-based combat.",
+        long: "This is my current passion project, where I am designing and implementing all core systems from scratch. The goal is to create a deeply engaging combat experience where player choice and expression are paramount, facilitated by a unique weapon that can transform between multiple tactical forms on the fly.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
+        cardEngineName: "Unreal Engine",
+        myContribution: "Currently designing the core character controller, state machine, and the foundational C++ framework for the multi-form weapon system.",
+    },
+    "FullCppMechGame": {
+        id: "FullCppMechGame",
+        title: "Full C++ Mech Game",
+        category: "personal work",
+        published: false,
+        year: 2024,
+        role: "Sole Creator & Technical Game Designer",
+        image: "./assets/images/work-5.jpg", // Using Alien's image
+        short: "A prototype for a fast-paced mech combat game, built entirely in C++ to explore advanced topics like component-based architecture and custom physics.",
+        long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics—movement, possession, and environmental interaction—that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
+        cardEngineName: "Unreal Engine",
+        myContribution: "Designed and implemented the mech's movement component, weapon firing systems, and a custom damage model, all within a C++ framework.",
+    },
+    "TheLibrary": {
+        id: "TheLibrary",
+        title: "The Library",
+        category: "personal work",
+        published: false,
+        year: 2023,
+        role: "Sole Creator & Technical Game Designer",
+        image: "./assets/images/work-5.jpg", // Using Alien's image
+        short: "An atmospheric puzzle game prototype where players manipulate time to solve environmental puzzles and uncover a branching narrative.",
+        long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics—movement, possession, and environmental interaction—that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
+        cardEngineName: "Unreal Engine",
+        myContribution: "Developed the core time-manipulation mechanic using Blueprints and designed a flexible, data-driven system for scripting narrative events and puzzle logic.",
+    },
+    // --- Existing Projects ---
     "PoliceSimulator": {
         id: "PoliceSimulator",
         title: "Police Simulator: Patrol Officers (Switch Port)",
         category: "professional work",
+        published: true,
         year: 2024,
         role: "Game Programmer & Technical Designer",
         context: "Untold Games (for Aesir Interactive)",
@@ -84,6 +133,7 @@ const projectDetails = {
         id: "HighOnLife",
         title: "High on Life (Nintendo Switch Port)",
         category: "professional work",
+        published: true,
         year: 2025,
         role: "Game Programmer & Systems Specialist",
         context: "Untold Games (for Squanch Games & Turn Me Up Games)",
@@ -110,6 +160,7 @@ const projectDetails = {
         id: "UEFN: Battleship",
         title: "UEFN: Battleship",
         category: "professional work",
+        published: true,
         year: 2023,
         role: "Lead Creator & Verse Developer",
         context: "Untold Games (Small Team)",
@@ -134,6 +185,7 @@ const projectDetails = {
         id: "PulseParty",
         title: "PulseParty",
         category: "professional work",
+        published: true,
         year: 2023,
         role: "Technical Game Designer",
         teamSize: "Untold Games",
@@ -154,6 +206,7 @@ const projectDetails = {
         id: "PulseMatch",
         title: "PulseMatch",
         category: "professional work",
+        published: true,
         year: 2023, 
         role: "Technical Game Designer",
         teamSize: "Untold Games",
@@ -175,6 +228,7 @@ const projectDetails = {
         id: "Alien",
         title: "Alien (Game Prototype)",
         category: "personal work",
+        published: true,
         year: 2022,
         role: "Sole Creator & Technical Game Designer",
         context: "Personal TGD Prototyping Series",
@@ -197,6 +251,7 @@ const projectDetails = {
         id: "Cycle",
         title: "Cycle (Award-Winning)",
         category: "university work",
+        published: true,
         year: 2022,
         role: "Game Director & Lead Systems Designer",
         context: "Award-winning 3rd-year university project (Falmouth University). Selected to represent Falmouth at the G7 Summit 2021.",
@@ -225,6 +280,7 @@ const projectDetails = {
         id: "CardsWeaver",
         title: "Card's Weaver",
         category: "university work",
+        published: true,
         year: 2023, 
         role: "Lead Game Designer",
         teamSize: "Verona University",
@@ -242,6 +298,7 @@ const projectDetails = {
         id: "SoulDriven",
         title: "Soul Driven",
         category: "university work",
+        published: true,
         year: 2023, 
         role: "Game Developer",
         teamSize: "Verona University",
@@ -259,6 +316,7 @@ const projectDetails = {
         id: "Covid19Training",
         title: "Covid 19 Training",
         category: "professional work",
+        published: true,
         year: 2021, 
         role: "Game Programmer",
         teamSize: "Cineon Training",
@@ -276,6 +334,7 @@ const projectDetails = {
         id: "UnrealEngineCourse",
         title: "Unreal Engine Course",
         category: "professional work",
+        published: true,
         year: 2022, 
         role: "Unreal Engine Tutor",
         teamSize: "Creativity Unleashed",
@@ -293,6 +352,7 @@ const projectDetails = {
         id: "MonkHomebrew",
         title: "Monk Homebrew",
         category: "personal work",
+        published: true,
         year: 2023, 
         role: "Game Designer",
         teamSize: "Personal Project",
@@ -310,6 +370,7 @@ const projectDetails = {
         id: "SyovaraHomebrew",
         title: "Syovara Homebrew",
         category: "personal work",
+        published: true,
         year: 2023, 
         role: "Game Designer",
         teamSize: "Personal Project",
@@ -326,7 +387,8 @@ const projectDetails = {
     "MaGiTeProject": {
         id: "MaGiTeProject",
         title: "MaGiTe Project",
-        category: "professional work", 
+        category: "professional work",
+        published: true,
         year: 2025, 
         role: "Game Developer",
         teamSize: "Umeå University",
@@ -343,6 +405,7 @@ const projectDetails = {
         id: "ProjectCenturion",
         title: "Project Centurion",
         category: "university work",
+        published: true,
         year: 2020, 
         role: "Game Designer & Developer",
         teamSize: "University Project",
@@ -352,7 +415,7 @@ const projectDetails = {
         learnMoreLink: "https://drive.google.com/file/d/1kqrXXSPwxUrCUG9qNnqnNzSuWa9S9QJv/view?usp=sharing",
         short: "University game project with a historical theme.",
         long: "A game developed as part of university studies, focusing on design and development.",
-        tools: [ { name: "Unity", icon: unityIconSVG } ], // Keeping Unity as per original, user did not specify to change this one
+        tools: [ { name: "Unity", icon: unityIconSVG } ],
         cardEngineName: "Unity",
         myContribution: "Co-designed core gameplay loop and level structure. Implemented player movement and interaction systems using Unity and C#.",
     },
@@ -360,6 +423,7 @@ const projectDetails = {
         id: "FallingFusion",
         title: "Falling Fusion",
         category: "game jams",
+        published: true,
         year: 2022, 
         role: "Game Designer & Developer",
         teamSize: "Game Jam Team",
@@ -377,6 +441,7 @@ const projectDetails = {
         id: "NickelNinja",
         title: "Nickel Ninja",
         category: "game jams",
+        published: true,
         year: 2023, 
         role: "Game Designer & Developer",
         teamSize: "Game Jam Team",
@@ -386,18 +451,31 @@ const projectDetails = {
         learnMoreLink: "https://v3.globalgamejam.org/2022/games/nickel-ninja-3",
         short: "Global Game Jam 2022 entry.",
         long: "A game created during the Global Game Jam 2022.",
-        tools: [ { name: "Unity", icon: unityIconSVG } ], // Keeping Unity as per original, user did not specify to change this one
+        tools: [ { name: "Unity", icon: unityIconSVG } ],
         cardEngineName: "Unity",
         myContribution: "Contributed to level design and character ability scripting. Collaborated on art asset integration and bug fixing under tight deadlines.",
     }
 };
 
-const highlightProjectIds = ["PoliceSimulator", "HighOnLife", "Alien", "Cycle"];
+// NEW: Define which projects go into which "About" page section
+const professionalWorkIds = ["HighOnLife", "PoliceSimulator"];
+const techDesignWorkIds = [
+    "ProjectCircle", // Featured project first
+    "FullCppMechGame",
+    "TheLibrary",
+    "Alien",
+    "Cycle",
+    "SoulDriven",
+    "MaGiTeProject"
+];
+
 
 // Helper function to create a project list item
 const createProjectListItem = (project) => {
     const listItem = document.createElement('li');
-    listItem.className = 'project-item active';
+    // Add the "featured" class if the project is marked as such
+    const itemClass = project.isFeatured ? 'project-item project-item-featured active' : 'project-item active';
+    listItem.className = itemClass;
     listItem.dataset.category = project.category;
 
     const link = document.createElement('a');
@@ -415,6 +493,21 @@ const createProjectListItem = (project) => {
     const figure = document.createElement('figure');
     figure.className = 'project-img';
 
+    if (project.category) {
+        const categoryTagContainer = document.createElement('div');
+        categoryTagContainer.className = 'project-category-tag-container';
+        const categoryTag = document.createElement('div');
+        const categoryClassName = project.category.toLowerCase().replace(/\s+/g, '-'); 
+        let categoryText = project.category.replace(' work', '').replace(' jams', ' Jam');
+        categoryText = categoryText.charAt(0).toUpperCase() + categoryText.slice(1);
+        const fullCategoryTitle = project.category.replace(/\b\w/g, l => l.toUpperCase());
+        categoryTag.className = `project-card-tag category-badge ${categoryClassName}-badge`;
+        categoryTag.textContent = categoryText;
+        categoryTag.title = fullCategoryTitle;
+        categoryTagContainer.appendChild(categoryTag);
+        figure.appendChild(categoryTagContainer);
+    }
+    
     if (!project.isDirectLink) {
         const iconBox = document.createElement('div');
         iconBox.className = 'project-item-icon-box';
@@ -430,30 +523,18 @@ const createProjectListItem = (project) => {
     img.loading = 'lazy';
     figure.appendChild(img);
 
-    // --- TAGS LOGIC STARTS HERE ---
     const tagsContainer = document.createElement('div');
     tagsContainer.className = 'project-tags-container';
-
-    // Add engine badge to the container
     if (project.cardEngineName && project.cardEngineName !== "N/A") {
         const engineBadge = document.createElement('div');
         let badgeText = project.cardEngineName;
         let badgeClass = '';
         const cardEngineLower = project.cardEngineName.toLowerCase();
 
-        if (cardEngineLower.includes("unreal")) {
-            badgeText = "Unreal";
-            badgeClass = "unreal-engine-badge";
-        } else if (cardEngineLower.includes("unity")) {
-            badgeText = "Unity";
-            badgeClass = "unity-engine-badge";
-        } else if (cardEngineLower.includes("uefn")) {
-            badgeText = "UEFN";
-            badgeClass = "uefn-badge";
-        } else if (cardEngineLower === "tabletop") {
-            badgeText = "Game Design";
-            badgeClass = "game-design-badge";
-        }
+        if (cardEngineLower.includes("unreal")) { badgeText = "Unreal"; badgeClass = "unreal-engine-badge"; } 
+        else if (cardEngineLower.includes("unity")) { badgeText = "Unity"; badgeClass = "unity-engine-badge"; } 
+        else if (cardEngineLower.includes("uefn")) { badgeText = "UEFN"; badgeClass = "uefn-badge"; } 
+        else if (cardEngineLower === "tabletop") { badgeText = "Game Design"; badgeClass = "game-design-badge"; }
         
         if (badgeClass) {
             engineBadge.className = `project-card-tag ${badgeClass}`;
@@ -462,8 +543,6 @@ const createProjectListItem = (project) => {
             tagsContainer.appendChild(engineBadge);
         }
     }
-
-    // Add custom tags from the new array
     if (project.projectTags && Array.isArray(project.projectTags)) {
         project.projectTags.forEach(tagText => {
             const tagElement = document.createElement('div');
@@ -472,90 +551,85 @@ const createProjectListItem = (project) => {
             tagsContainer.appendChild(tagElement);
         });
     }
-
     if (tagsContainer.hasChildNodes()) {
         figure.appendChild(tagsContainer);
     }
-    // --- TAGS LOGIC ENDS HERE ---
-
     link.appendChild(figure);
+
+    // Create a container for text content to handle featured layout
+    const textContentDiv = document.createElement('div');
+    textContentDiv.className = 'project-text-content';
 
     const titleH3 = document.createElement('h3');
     titleH3.className = 'project-title';
     titleH3.textContent = project.title;
-    link.appendChild(titleH3);
+    textContentDiv.appendChild(titleH3);
 
     const categoryP = document.createElement('p');
     categoryP.className = 'project-category';
-    categoryP.textContent = project.role || 'N/A';
-    link.appendChild(categoryP);
-
+    // For featured cards, show the short description instead of the role
+    categoryP.textContent = project.isFeatured ? project.short : (project.role || 'N/A');
+    textContentDiv.appendChild(categoryP);
+    
+    link.appendChild(textContentDiv);
     listItem.appendChild(link);
     return listItem;
 };
 
-
-const renderHighlightProjects = () => {
-    if (!highlightProjectsUl) {
-        console.error("Highlight projects UL container not found!");
+// NEW: Function to render specific project lists into a target element
+const renderProjectList = (targetElement, projectIds) => {
+    if (!targetElement) {
+        // Silently fail if the element isn't on the current page
         return;
     }
-    highlightProjectsUl.innerHTML = ''; // Clear existing static items
-
-    highlightProjectIds.forEach(projectId => {
+    targetElement.innerHTML = '';
+    projectIds.forEach(projectId => {
         const project = projectDetails[projectId];
-        if (project) {
+        // MODIFIED: Only render if project exists AND is published
+        if (project && project.published) {
             const listItem = createProjectListItem(project);
-            highlightProjectsUl.appendChild(listItem);
-        } else {
-            console.warn(`Project details not found for highlight project ID: ${projectId}`);
+            targetElement.appendChild(listItem);
+        } else if (!project) {
+            console.warn(`Project details not found for project ID: ${projectId}`);
         }
     });
 };
 
-
 const renderPortfolio = (filterCategory) => {
-    if (!portfolioGridContainer) {
-        console.error("Portfolio grid container not found!");
-        return;
-    }
+    if (!portfolioGridContainer) return;
     portfolioGridContainer.innerHTML = ''; 
-
     const projectsArray = Object.values(projectDetails);
 
-    const filteredProjects = projectsArray.filter(project => 
+    // MODIFIED: Filter out unpublished projects first
+    const publishedProjects = projectsArray.filter(project => project.published);
+
+    const filteredProjects = publishedProjects.filter(project => 
         filterCategory === 'all' || (project.category && project.category.toLowerCase() === filterCategory.toLowerCase())
     );
-
     if (filteredProjects.length === 0) {
         portfolioGridContainer.innerHTML = `<p class="no-projects-message">No projects found for the "${filterCategory.replace(/\b\w/g, l => l.toUpperCase())}" category.</p>`;
         return;
     }
-    
     const projectsByYear = filteredProjects.reduce((acc, project) => {
         const year = project.year || "Uncategorized"; 
         if (!acc[year]) acc[year] = [];
         acc[year].push(project);
         return acc;
     }, {});
-
     const sortedYears = Object.keys(projectsByYear).sort((a, b) => {
         if (a === "Uncategorized") return 1; 
         if (b === "Uncategorized") return -1;
         return b - a; 
     });
-
     sortedYears.forEach(year => {
         const yearHeading = document.createElement('h3');
         yearHeading.className = 'year-heading';
         yearHeading.textContent = year;
         portfolioGridContainer.appendChild(yearHeading);
-
         const projectListUl = document.createElement('ul');
         projectListUl.className = 'project-list'; 
-        
         projectsByYear[year].forEach(project => {
-            const listItem = createProjectListItem(project); // Use helper function
+            const listItem = createProjectListItem(project);
             projectListUl.appendChild(listItem);
         });
         portfolioGridContainer.appendChild(projectListUl);
@@ -575,34 +649,25 @@ function openProjectModal(projectId) {
         document.body.classList.add('no-scroll');
         return;
     }
-
     const hasVideo = data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"));
     const mediaClass = hasVideo ? 'modal-media media-with-video' : 'modal-media';
-
     let mediaContentHtml = '';
     if (data.image) {
-        if (hasVideo) {
-            mediaContentHtml = `<a href="${data.video}" target="_blank" rel="noopener noreferrer"><img src="${data.image}" alt="${data.title}"></a>`;
-        } else { 
-            mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
-        }
+        if (hasVideo) { mediaContentHtml = `<a href="${data.video}" target="_blank" rel="noopener noreferrer"><img src="${data.image}" alt="${data.title}"></a>`; } 
+        else { mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`; }
     } else if (hasVideo) {
         mediaContentHtml = `<p><a href="${data.video}" target="_blank" rel="noopener noreferrer">Watch Video / More Info</a> (Preview image not available)</p>`;
     } else {
         mediaContentHtml = `<p>No media available for this project.</p>`;
     }
-
     const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
         let iconHtml = '';
-        if (tool.icon) {
-            iconHtml = tool.icon;
-        }
+        if (tool.icon) { iconHtml = tool.icon; }
         return `<span class="tool-item" title="${tool.name || ''}">
                     ${iconHtml ? `<span class="tool-icon ${tool.class || ''}">${iconHtml}</span>` : ''}
                     <span class="tool-name">${tool.name || ''}</span>
                 </span>`;
     }).join('') : '<p>N/A</p>';
-
     let learnMoreButtonHTML = '';
     if (data.learnMoreLink && data.learnMoreLink !== "#") {
         learnMoreButtonHTML = `
@@ -613,7 +678,6 @@ function openProjectModal(projectId) {
                 </a>
             </div>`;
     }
-
     if(modalBody) {
     modalBody.innerHTML = `
         <div class="modal-header"><h3>${data.title}</h3></div>
@@ -648,32 +712,16 @@ function openProjectModal(projectId) {
     document.body.classList.add('no-scroll');
 }
 
-// Event Delegation for dynamically created .open-modal links in MAIN PORTFOLIO
-if (portfolioGridContainer) {
-    portfolioGridContainer.addEventListener('click', function(e) {
-        const clickedLink = e.target.closest('a.open-modal');
-        if (clickedLink && !clickedLink.hasAttribute('target')) { 
-            e.preventDefault();
-            const projectId = clickedLink.dataset.project;
-            openProjectModal(projectId);
-        }
-    });
-}
+// Event Delegation for MAIN PORTFOLIO and NEW ABOUT sections
+document.body.addEventListener('click', function(e) {
+    const clickedLink = e.target.closest('a.open-modal');
+    if (clickedLink && !clickedLink.hasAttribute('target')) { 
+        e.preventDefault();
+        const projectId = clickedLink.dataset.project;
+        openProjectModal(projectId);
+    }
+});
 
-// Event Listener for dynamically created Highlight items
-if (highlightProjectsUl) {
-    highlightProjectsUl.addEventListener('click', function(e) {
-        const clickedLink = e.target.closest('a.open-modal');
-         if (clickedLink && !clickedLink.hasAttribute('target')) { // Ensure it's a modal link
-            e.preventDefault();
-            const projectId = clickedLink.dataset.project;
-            openProjectModal(projectId);
-        }
-    });
-}
-
-
-// Modal Close Listeners
 if (modalClose) {
     modalClose.addEventListener('click', () => {
         if (projectModal) projectModal.classList.remove('active');
@@ -691,22 +739,25 @@ if (projectModal) {
     });
 }
 
-// Initial Render and Filter Setup on Page Load
+// Renders content on initial page load
 document.addEventListener('DOMContentLoaded', () => {
-    renderHighlightProjects(); // Render highlights first
+    // Render the new "About" page sections
+    renderProjectList(professionalWorkUl, professionalWorkIds);
+    renderProjectList(techDesignWorkUl, techDesignWorkIds);
+    
+    // Initial render for portfolio page
     renderPortfolio('all'); 
+    
     if (filterBtns.length > 0 && filterBtns[0]) filterBtns[0].classList.add('active'); 
     if(selectValue) selectValue.innerText = "All";
 
     let lastClickedFilterBtn = filterBtns.length > 0 ? filterBtns[0] : null;
-
     if (filterBtns.length > 0) {
         filterBtns.forEach(btn => {
             btn.addEventListener("click", function () {
                 const selectedCategory = this.innerText.toLowerCase();
                 if(selectValue) selectValue.innerText = this.innerText;
                 renderPortfolio(selectedCategory);
-
                 if (lastClickedFilterBtn) lastClickedFilterBtn.classList.remove("active");
                 this.classList.add("active");
                 lastClickedFilterBtn = this;
@@ -724,7 +775,6 @@ document.addEventListener('DOMContentLoaded', () => {
             selectValue.innerText = this.innerText;
             elementToggleFunc(select);
             renderPortfolio(selectedCategory);
-            
             filterBtns.forEach(fBtn => {
                 if (fBtn.innerText.toLowerCase() === selectedCategory) {
                     if(lastClickedFilterBtn) lastClickedFilterBtn.classList.remove('active');
@@ -739,8 +789,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-// Page navigation variables and logic
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 
@@ -748,17 +796,18 @@ if (navigationLinks.length > 0 && pages.length > 0) {
   navigationLinks.forEach(link => {
     link.addEventListener("click", function () {
       let targetPage = this.innerHTML.toLowerCase();
-      
       pages.forEach(page => {
         if (page.dataset.page === targetPage) {
           page.classList.add("active");
+          // If navigating to 'about', ensure the sections are rendered
+          if (targetPage === 'about') {
+            renderProjectList(professionalWorkUl, professionalWorkIds);
+            renderProjectList(techDesignWorkUl, techDesignWorkIds);
+          }
+          // If navigating to portfolio, ensure it renders correctly
           if (targetPage === 'portfolio') { 
             const currentFilter = selectValue ? selectValue.innerText.toLowerCase() : 'all';
             renderPortfolio(currentFilter);
-          }
-          // If navigating to 'about', ensure highlights are rendered
-          if (targetPage === 'about') {
-            renderHighlightProjects();
           }
           window.scrollTo(0, 0);
         } else {
