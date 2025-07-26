@@ -175,35 +175,51 @@ const projectDetails = {
         id: "Alien",
         title: "Alien (Game Prototype)",
         category: "personal work",
-        year: 2022, 
-        role: "Game Creator",
-        teamSize: "Solo Project",
-        duration: "Prototype Phase",
-        video: "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true", 
+        year: 2022,
+        role: "Sole Creator & Technical Game Designer",
+        context: "Personal TGD Prototyping Series",
+        duration: "Approx. 2 months",
+        video: "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
         learnMoreLink: "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
         image: "./assets/images/work-5.jpg",
-        short: "Personal prototype inspired by the Alien franchise.",
-        long: "Focused on prototyping mechanics and atmosphere. More details on Substack.",
-        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ], 
-        cardEngineName: "Unreal Engine",
-        myContribution: "Developed AI for stealth-based enemy encounters. Prototyped environmental interaction systems. Explored lighting and atmospheric effects to capture the 'Alien' mood.",
-    },
-    "Cycle": { 
-        id: "Cycle",
-        title: "Cycle",
-        category: "university work",
-        year: 2022, 
-        role: "Game Creator",
-        teamSize: "Falmouth University",
-        duration: "Approx. 4 months",
-        video: "#", 
-        learnMoreLink: null, 
-        image: "./assets/images/Cycle.png",
-        short: "Narrative-driven puzzle game.",
-        long: "University coursework focusing on environmental storytelling and puzzle design using Unreal Engine.",
+        short: "A reverse-horror prototype inspired by AVP2, focusing on unique movement and possession mechanics designed to empower the player.",
+        long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics—movement, possession, and environmental interaction—that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
-        myContribution: "Designed and scripted all puzzle mechanics using Blueprints. Wrote the narrative and integrated it with gameplay progression. Created 3D assets and level layouts within Unreal Engine.",
+        myContribution: [
+            "<b>System Design - Movement:</b> Designed and implemented a multi-layered movement system. This included a standard jump, a forward-dashing double jump for aggressive repositioning, and a physics-based tentacle grapple. The grapple allows the player to attach to any surface and launch themselves, creating a high-skill-ceiling traversal tool.",
+            "<br><br><b>System Design - Possession:</b> Developed the core 'Possession' mechanic from concept to implementation. The player can target enemies with the tentacle and launch into them to take full control of their body, weapons, and abilities. This system was designed to be the central gameplay loop.",
+            "<br><br><b>System Design - Emergent Mechanics:</b> Engineered systems that allow for creative gameplay combinations. While possessing a host, the player can still use the alien's tentacles to interact with the world. This allows for emergent strategies like grabbing environmental objects for cover or snatching a second weapon from a fallen enemy to dual-wield.",
+            "<br><br><b>Prototyping & Iteration:</b> Rapidly prototyped a sonar/detection system to support stealth gameplay and assembled a test level using free assets to validate the fun and functionality of the combined mechanics in a practical scenario."
+        ].join(''),
+    },
+    "Cycle": {
+        id: "Cycle",
+        title: "Cycle (Award-Winning)",
+        category: "university work",
+        year: 2022,
+        role: "Game Director & Lead Systems Designer",
+        context: "Award-winning 3rd-year university project (Falmouth University). Selected to represent Falmouth at the G7 Summit 2021.",
+        duration: "8 months (Oct 2020 - May 2021)",
+        video: "https://youtu.be/Cuwhx4b7tYo", // Trailer
+        learnMoreLink: "https://wrong-world-studios.itch.io/cycle", // Itch.io page
+        image: "./assets/images/Cycle.png",
+        short: "Directed a team of three to create an award-winning surrealist puzzle game. I was solely responsible for all technical implementation, system design, and project management from concept to release.",
+        long: "Cycle is a surrealist puzzle-adventure game that won 'Best 3rd Year Videogame' at Falmouth University (2021) and was chosen to represent the university at the G7 Summit. As the game director and only programmer/designer on a team of three, I led the project's vision and was responsible for building every gameplay system from scratch in Unreal Engine, an engine I learned specifically for this project.",
+        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
+        cardEngineName: "Unreal Engine",
+        myContribution: [
+            "<b>Game Direction & Project Management:</b> Led the project from pre-production to publishing on Itch.io, managing deadlines, maintaining the core vision, and guiding a team of two artists. My leadership was crucial in navigating production challenges and delivering a polished, award-winning final product.",
+            "<br><br><b>Core Systems Architecture:</b> As the sole developer, I designed and implemented all of the game's foundational systems, including:",
+            "<ul>"+
+            "<li style='margin-left: 20px; margin-top: 5px;'>A central <b>hub-world system</b> that changes dynamically based on player progression.</li>"+
+            "<li style='margin-left: 20px; margin-top: 5px;'>A <b>seamless world transition</b> mechanic that teleports the player between levels without loading screens, contributing to the game's surreal feeling.</li>"+
+            "<li style='margin-left: 20px; margin-top: 5px;'>A comprehensive <b>progression and collectibles system</b> that tracks player progress and unlocks a final cinematic.</li>"+
+            "<li style='margin-left: 20px; margin-top: 5px;'>A dynamic <b>day/night cycle</b> tied directly to the game's narrative phases.</li>"+
+            "</ul>",
+            "<b>Puzzle & Level Design Implementation:</b> Designed, scripted, and playtested all in-game puzzle mechanics. I was responsible for the technical implementation of all levels, including the intricate 'Coliseum' puzzle and the hub world, translating design concepts into interactive spaces.",
+            "<br><br><b>Team & Acknowledgment:</b> This project's success was built on the immense trust and talent of my teammates, Anastasia Petrovitch and Oliver Stone. Their artistic vision was instrumental in creating the game's unique and beautiful atmosphere."
+        ].join(''),
     },
     "CardsWeaver": {
         id: "CardsWeaver",
