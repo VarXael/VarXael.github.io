@@ -469,16 +469,16 @@ main {
 .skills-grid {
     display: grid;
     grid-template-columns: 1fr; 
-    gap: 12px; /* Slightly reduced gap for skills */
+    gap: 10px; /* Slightly reduced gap for skills */
 }
 
 .skill-card {
     background: var(--eerie-black-1);
     border-radius: 10px;
-    padding: 12px; /* Slightly reduced padding for skill cards */
+    padding: 10px; /* Slightly reduced padding for skill cards */
     display: flex;
     align-items: center;
-    gap: 12px; /* Slightly reduced gap inside skill cards */
+    gap: 10px; /* Slightly reduced gap inside skill cards */
     border: 1px solid transparent;
 }
 
@@ -979,7 +979,18 @@ main {
     .sidebar, article { width: auto; box-shadow: var(--shadow-5); } 
     article { min-height: 100%; } 
     main { max-width: 1200px; margin-inline: auto; display: flex; align-items: flex-start; gap: 25px; padding-top: 25px; } 
-    .sidebar { position: sticky; top: 25px; width: 300px; min-width: 280px; flex-shrink: 0; margin-bottom: 0; align-self: flex-start; max-height: calc(100vh - 50px); overflow-y: auto; padding-top: 25px; padding-bottom: 25px; z-index: 1; } 
+    .sidebar { 
+        position: sticky; 
+        top: 25px; 
+        width: 300px; 
+        min-width: 280px; 
+        flex-shrink: 0; 
+        margin-bottom: 0; 
+        align-self: flex-start; 
+        padding-top: 25px; 
+        padding-bottom: 25px; 
+        z-index: 1; 
+    }
     .main-content { flex-grow: 1; margin: 0; width: auto; min-width: 0; } 
     .timeline-text { max-width: 700px; } 
     .project-modal .modal-content { width: 60vw; max-width: 1000px; height: auto; max-height: 90vh; } 
