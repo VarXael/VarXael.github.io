@@ -66,11 +66,11 @@ const projectDetails = {
         year: 2025,
         role: "Sole Systems Architect & Technical Designer",
         image: "./assets/images/ProjectCadence.png",
-        video: "https://www.youtube.com/watch?v=3bJd7wOyewk", 
+        video: "https://www.youtube.com/watch?v=3bJd7wOyewk",
         
-        short: "A high-performance C++ event system for Unreal Engine that uses a music-driven timeline to trigger complex, designer-scripted gameplay in Blueprints.",
+        short: "A C++ Framework that uses Metasound to drive Rhythm-based gameplay!",
 
-        long: "Project: Cadence is a powerful framework for creating gameplay synchronized to a music track. The system uses Metasound to drive a high-precision timeline, which is populated with thousands of event timestamps imported directly from external sources like osu! beatmaps. These timestamps are then used to trigger unique, designer-created gameplay events. The entire architecture is built to be a reusable engine plugin and a foundation for an in-editor visual mapping tool.",
+        long: "Project: Cadence is a powerful framework for creating gameplay synchronized to a music track. The system uses Metasound to drive a timeline of notes, which can be mapped by either the player or imported directly from external sources like osu! beatmaps. These timestamps are then used to trigger unique gameplay events. The entire architecture is built to be a reusable engine plugin and a foundation for an in-editor visual mapping tool.",
 
         tools: [ 
             { name: "Unreal Engine", icon: unrealEngineIconSVG }, 
@@ -81,7 +81,7 @@ const projectDetails = {
 
         myContribution: [
             // 1. Core Functionality
-            "<b>Data-Driven & Modular by Design:</b> The system's core is a C++ timeline driven by Metasound. It can instantly translate external rhythm data from sources like osu! into a timeline of precise timestamps, each ready to trigger a custom gameplay event. The entire framework is built to be a self-contained, reusable Engine Plugin.",
+            "<b>Data-Driven & Modular by Design:</b> The system's core is a C++ timeline driven by Metasound. The system uses a python script as a parser to extract information from an osu beatmap, and map a data table with timestamps of each note. That data is then used to associate behaviour and events to that specific note to make something happen in the game. Osu is currently used as a mapping tool placeholder. It will be replaced with an in-editor tool that a designer, or the final user, can use to create their own custom beatmaps. The entire framework is built to be a self-contained, reusable Engine Plugin.",
             
             // 2. Performance
             "<br><br><b>Architected for High Performance:</b> To handle thousands of concurrent events without performance loss, the framework uses lightweight UObjects to manage note states, avoiding the significant overhead of spawning an Actor for every event. Each note instance manages its own lifecycle and is cleanly garbage collected. The architecture is explicitly designed to support a future object pooling system to completely eliminate runtime allocation.",
@@ -125,7 +125,7 @@ const projectDetails = {
         role: "Sole Creator & Technical Game Designer",
         image: "./assets/images/work-5.jpg",
         short: "An atmospheric puzzle game prototype where players manipulate time to solve environmental puzzles and uncover a branching narrative.",
-        long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics—movement, possession, and environmental interaction—that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
+        long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics: movement, possession, and environmental interaction, that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution: "Developed the core time-manipulation mechanic using Blueprints and designed a flexible, data-driven system for scripting narrative events and puzzle logic.",
@@ -143,7 +143,7 @@ const projectDetails = {
         video: "https://www.youtube.com/watch?v=fL2SOhYZ6k8",
         learnMoreLink: null,
         image: "./assets/images/PoliceSimulator.png",
-        short: "Contributed to the Nintendo Switch port, developing a comprehensive ImGui-based debug menu and creating extensive technical design documentation.",
+        short: "Contributed to the Nintendo Switch port responsible for tackling deep-level bugs, fixing core gameplay systems, and developing essential tools for the team.",
         long: "As part of the Untold Games team, I tackled the port of this complex Unreal Engine title. The role blended programming with technical design, requiring me to not only fix bugs but also to deeply analyze and document the game's intricate systems to support the development and QA process.",
         tools: [
             { name: "Unreal Engine", icon: unrealEngineIconSVG },
@@ -276,12 +276,12 @@ const projectDetails = {
         video: "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
         learnMoreLink: "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
         image: "./assets/images/work-5.jpg",
-        short: "A reverse-horror prototype inspired by AVP2, focusing on unique movement and possession mechanics designed to empower the player.",
-        long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics—movement, possession, and environmental interaction—that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
+        short: "A reverse-horror prototype inspired by AVP2, focusing on unique movement and possession mechanics designed to make the facehugger alien from AVP2 feel even more powerful.",
+        long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy but powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics: movement, possession, and environmental interaction to create emergent dynamic gameplay scenarios, where the player feels like a huge threat for any living being around.",
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution: [
-            "<b>System Design - Movement:</b> Designed and implemented a multi-layered movement system. This included a standard jump, a forward-dashing double jump for aggressive repositioning, and a physics-based tentacle grapple. The grapple allows the player to attach to any surface and launch themselves, creating a high-skill-ceiling traversal tool.",
+            "<b>System Design - Movement:</b> Designed and implemented a powerful movement system. This included a standard jump, a forward-dashing double jump for aggressive repositioning, and a tentacle grapple movement ability. The grapple allows the player to attach to any surface and launch themselves, creating a high-skill-ceiling traversal tool.",
             "<br><br><b>System Design - Possession:</b> Developed the core 'Possession' mechanic from concept to implementation. The player can target enemies with the tentacle and launch into them to take full control of their body, weapons, and abilities. This system was designed to be the central gameplay loop.",
             "<br><br><b>System Design - Emergent Mechanics:</b> Engineered systems that allow for creative gameplay combinations. While possessing a host, the player can still use the alien's tentacles to interact with the world. This allows for emergent strategies like grabbing environmental objects for cover or snatching a second weapon from a fallen enemy to dual-wield.",
             "<br><br><b>Prototyping & Iteration:</b> Rapidly prototyped a sonar/detection system to support stealth gameplay and assembled a test level using free assets to validate the fun and functionality of the combined mechanics in a practical scenario."
@@ -750,7 +750,7 @@ function openProjectModal(projectId) {
                 ${data.long && data.long !== data.short ? `<p style="margin-top: 0.5em;">${data.long}</p>` : ''}
             </div>
             <div class="detail-item">
-                <h4>My Key Contributions:</h4>
+                <h4>Project Details:</h4>
                 <div>${data.myContribution || 'Details not specified.'}</div>
             </div>
         </div>
