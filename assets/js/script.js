@@ -141,12 +141,11 @@ const projectDetails = {
         year: 2024,
         role: "Game Programmer & Technical Designer",
         context: "Untold Games (for Aesir Interactive & Turn Me Up Games)",
-        duration: "Approx. 6 months",
         video: "https://www.youtube.com/watch?v=fL2SOhYZ6k8",
         learnMoreLink: null,
         image: "./assets/images/PoliceSimulator.png",
         short: "Contributed to the Nintendo Switch port, developing a comprehensive ImGui-based debug menu and creating extensive technical design documentation.",
-        long: "As part of the Untold Games team, I tackled the port of this complex Unreal Engine 4.27 title. The role blended programming with technical design, requiring me to not only fix bugs but also to deeply analyze, document, and create tools for the game's intricate systems. A key challenge was navigating the instability of World Partition, which demanded creative and unconventional debugging strategies.",
+        long: "As part of the Untold Games team, I tackled the port of this complex Unreal Engine title. The role blended programming with technical design, requiring me to not only fix bugs but also to deeply analyze and document the game's intricate systems to support the development and QA process.",
         tools: [
             { name: "Unreal Engine", icon: unrealEngineIconSVG },
             { name: "C++", icon: codeIconSVG },
@@ -155,10 +154,10 @@ const projectDetails = {
         cardEngineName: "Unreal Engine",
         projectTags: ['Porting: Switch'],
         myContribution: [
-            "<b>Tool Development:</b> Designed and implemented a full-featured debug cheat menu from scratch using ImGui, providing the QA and development team with crucial tools for testing.",
-            "<b>Technical Design & Documentation:</b> Authored an exhaustive technical document detailing every game mechanic, system, and item. Became the go-to resource for system interactions and design implications.",
-            "<b>Systems Analysis & Problem-Solving:</b> Investigated and solved complex issues related to the experimental World Partition system. Devised a workaround to modify Data Assets at runtime for debugging NPC population, a feature not natively supported.",
-            "<b>Core Gameplay & Bug-Fixing:</b> Overhauled the Switch input system, fixed critical bugs that blocked the use of the main development test map, and resolved a wide array of other gameplay-related issues."
+            "<b>Tool Development:</b> Designed and implemented a full-featured debug cheat menu from scratch using ImGui, providing the QA and development team with crucial tools for testing and validation.",
+            "<b>Technical Design & Documentation:</b> Authored an exhaustive technical document detailing every game mechanic and system, becoming a key resource for understanding system interactions and design implications.",
+            "<b>Systems Analysis & Problem-Solving:</b> Demonstrated a strong ability to debug and solve complex issues within large-scale systems, including world streaming and runtime data management. Developed custom debugging techniques to overcome engine limitations and accelerate problem-solving.",
+            "<b>Core Gameplay & Bug-Fixing:</b> Overhauled the Switch input system, fixed critical bugs related to level loading and stability, and resolved a wide array of other gameplay-related issues."
         ].join('<br><br>'),
     },
     "HighOnLife": {
@@ -170,12 +169,11 @@ const projectDetails = {
         year: 2025,
         role: "Game Programmer & Tech Game Designer",
         context: "Untold Games (for Squanch Games & Turn Me Up Games)",
-        duration: "Approx. 8 months (2024-2025)",
         video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
-        learnMoreLink: "https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061",
+        learnMoreLink: "request", //"#https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061",
         image: "./assets/images/HighOnLife.png",
         short: "Contributed to the Nintendo Switch port responsible for tackling deep-level bugs, fixing core gameplay systems, and developing essential tools for the team.",
-        long: "I worked with Untold Games on the complex technical challenge of porting 'High on Life' to the Switch. My role quickly evolved beyond general programming to become a go-to resource for the project's most difficult issues, requiring a deep understanding of Unreal Engine's architecture to diagnose and fix problems that manifested uniquely on the target hardware.",
+        long: "I worked with Untold Games on the complex technical challenge of porting 'High on Life' to the Switch. My role quickly evolved beyond general programming to become a go-to resource for the project's most difficult issues, requiring a deep understanding of Unreal Engine's architecture and High On Life systems to diagnose and fix problems that manifested uniquely on the target hardware.",
         tools: [
             { name: "Unreal Engine", icon: unrealEngineIconSVG },
             { name: "C++", icon: codeIconSVG },
@@ -184,10 +182,10 @@ const projectDetails = {
         cardEngineName: "Unreal Engine",
         projectTags: ['Porting: Switch'],
         myContribution: [
-            "<b>As a key game programmer and Tech Designer on the porting team, I was responsible for deep-level debugging, problem-solving, and bugfixing for the Nintendo Switch",
-            "<b>Debugging:</b> Investigated and resolved critical bugs, including a C++ division-by-zero error that disabled the entire collision system and a persistent memory leak in the Game Instance caused by a latent Ubergraph reference.",
-            "<b>Systems & Gameplay Stabilization:</b> Overhauled the logic for fast-moving actors (dashes, projectiles) using sphere traces to prevent them from passing through objects. Reworked flawed UE4 Remote Event implementations to create a stable, hardcoded alternative that prevented race conditions during level streaming.",
-            "<b>Tool & Utility Development:</b> Extended the existing cheat manager and its UI to add essential performance stats. Designed and implemented a multi-iteration lighting tool for a technical artist, enabling rapid, in-editor changes to level lighting configurations."
+            "<b>Role:</b> As a key game programmer and Tech Designer on the porting team, I was responsible for deep-level debugging, problem-solving, and bugfixing for the Nintendo Switch. Moreover, my acquired knowledge of High On Life gameplay systems made me a key member for any questions or support the team needed.",
+            "<b>Debugging:</b> Investigated and resolved critical bugs in C++ and blueprints, related to the core game mechanics gameplay systems and more.", 
+            "<b>Systems & Gameplay Stabilization:</b> Rewrote logic of different system to ensure stability on the Nintendo Switch. Solved a lot of different issues related to level streaming and race conditions.",
+            "<b>Tool & Utility Development:</b> Extended the existing cheat manager and its UI to add essential performance stats. Designed and implemented a multi-iteration lighting tool for a technical artist, enabling rapid, in-editor changes to level lighting configurations. Created testing maps used to debug hard to find issues."
         ].join('<br><br>'),
     },
     "UEFN: Battleship": {
@@ -712,13 +710,22 @@ function openProjectModal(projectId) {
     }).join('') : '<p>N/A</p>';
     let learnMoreButtonHTML = '';
     if (data.learnMoreLink && data.learnMoreLink !== "#") {
-        learnMoreButtonHTML = `
-            <div class="modal-learn-more">
-                <a href="${data.learnMoreLink}" target="_blank" rel="noopener noreferrer" class="form-btn">
-                    <ion-icon name="link-outline"></ion-icon>
-                    <span>Learn More</span>
-                </a>
-            </div>`;
+        
+        // NEW LOGIC GOES HERE
+        if (data.learnMoreLink === "request") {
+            learnMoreButtonHTML = `
+                <div class="modal-learn-more-request">
+                    <p>Detailed technical breakdown available upon request.</p>
+                </div>`;
+        } else {
+            learnMoreButtonHTML = `
+                <div class="modal-learn-more">
+                    <a href="${data.learnMoreLink}" target="_blank" rel="noopener noreferrer" class="form-btn">
+                        <ion-icon name="link-outline"></ion-icon>
+                        <span>Learn More</span>
+                    </a>
+                </div>`;
+        }
     }
     if(modalBody) {
     modalBody.innerHTML = `

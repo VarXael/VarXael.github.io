@@ -1066,3 +1066,22 @@ main {
 .unity-engine-badge {}
 .uefn-badge {}
 .game-design-badge {}
+
+
+/* --- LEARN MORE BUTTON STYLING --- */
+
+/* Add this to the bottom of your style.css */
+.modal-learn-more-request {
+    margin-top: auto;
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.modal-learn-more-request p {
+    color: var(--light-gray-70);
+    font-size: var(--fs-7);
+    font-style: italic;
+    background-color: var(--onyx);
+    padding: 10px;
+    border-radius: 12px;
+}
