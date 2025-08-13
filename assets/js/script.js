@@ -56,30 +56,60 @@ const codeIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height=
 
 
 const projectDetails = {
-    // --- NEW Project Placeholders (using Alien as template) ---
-    "ProjectCircle": {
-        id: "ProjectCircle",
-        title: "Project Circle (WIP)",
+    "ProjectCadence": {
+        id: "ProjectCadence",
+        title: "Project: Cadence (Music-Driven Event System)",
         category: "personal work",
-        published: false,
-        isFeatured: true, // This will make it the hero card
+        published: true,
+        isFeatured: true,
+        duration: "1 month, currently WIP",
         year: 2025,
-        role: "Sole Creator & Technical Game Designer",
-        image: "./assets/images/work-5.jpg", // Using Alien's image
-        short: "My hero piece: A third-person action RPG focusing on a dynamic, multi-form weapon system and expressive, physics-based combat.",
-        long: "This is my current passion project, where I am designing and implementing all core systems from scratch. The goal is to create a deeply engaging combat experience where player choice and expression are paramount, facilitated by a unique weapon that can transform between multiple tactical forms on the fly.",
-        tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
+        role: "Sole Systems Architect & Technical Designer",
+        image: "./assets/images/work-5.jpg", 
+        video: "#", 
+        
+        short: "A high-performance C++ event system for Unreal Engine that uses a music-driven timeline to trigger complex, designer-scripted gameplay in Blueprints.",
+
+        long: "Project: Cadence is a powerful framework for creating gameplay synchronized to a music track. The system uses Metasound to drive a high-precision timeline, which is populated with thousands of event timestamps imported directly from external sources like osu! beatmaps. These timestamps are then used to trigger unique, designer-created gameplay events. The entire architecture is built to be a reusable engine plugin and a foundation for an in-editor visual mapping tool.",
+
+        tools: [ 
+            { name: "Unreal Engine", icon: unrealEngineIconSVG }, 
+            { name: "C++", icon: codeIconSVG },
+            { name: "Metasound", icon: codeIconSVG } 
+        ],
         cardEngineName: "Unreal Engine",
-        myContribution: "Currently designing the core character controller, state machine, and the foundational C++ framework for the multi-form weapon system.",
+
+        myContribution: [
+            // 1. Core Functionality
+            "<b>Data-Driven & Modular by Design:</b> The system's core is a C++ timeline driven by Metasound. It can instantly translate external rhythm data from sources like osu! into a timeline of precise timestamps, each ready to trigger a custom gameplay event. The entire framework is built to be a self-contained, reusable Engine Plugin.",
+            
+            // 2. Performance
+            "<br><br><b>Architected for High Performance:</b> To handle thousands of concurrent events without performance loss, the framework uses lightweight UObjects to manage note states, avoiding the significant overhead of spawning an Actor for every event. Each note instance manages its own lifecycle and is cleanly garbage collected. The architecture is explicitly designed to support a future object pooling system to completely eliminate runtime allocation.",
+            
+            // 3. Designer Workflow
+            "<br><br><b>Empowering for Designers:</b> The entire system is built for designers to create unique gameplay without touching C++. At each timestamp, a custom Blueprint 'Brain' (`UMusicActionInstance`) runs its own unique logic. This 'Brain' can then execute a library of simple, reusable 'Actions' (`UMusicAction`) to make things happen in the world—from moving a platform to spawning a wave of enemies, all within a single note.",
+            
+            // 4. Versatility
+            "<br><br><b>Versatile and Scalable:</b> Because the framework is a fundamental time-based event scheduler, it is incredibly flexible. It can be used as the foundation for a wide variety of game genres, such as:",
+            "<ul>"+
+            "<li style='margin-left: 20px; margin-top: 5px;'>A <b>rhythm FPS</b> where enemy attacks and behaviors are synchronized to the song's notes.</li>"+
+            "<li style='margin-left: 20px; margin-top: 5px;'>A <b>fast-paced parkour game</b> where platforms and obstacles appear in sequence with the music, creating rhythmic traversal challenges.</li>"+
+            "<li style='margin-left: 20px; margin-top: 5px;'>A <b>top-down twin-stick shooter</b> where enemy waves and boss patterns are choreographed to the beat.</li>"+
+            "</ul>",
+            
+            // 5. Future Plans
+            "<br><br><b>Future Plans:</b> The immediate next step is to heavily playtest and refine the framework. The ultimate goal is to package the system as a public-facing Unreal Engine plugin available on my GitHub and to use it as the foundation for my own rhythm-action game."
+        ].join('')
     },
     "FullCppMechGame": {
         id: "FullCppMechGame",
         title: "Full C++ Mech Game",
         category: "personal work",
         published: false,
+        isFeatured: true,
         year: 2024,
         role: "Sole Creator & Technical Game Designer",
-        image: "./assets/images/work-5.jpg", // Using Alien's image
+        image: "./assets/images/work-5.jpg",
         short: "A prototype for a fast-paced mech combat game, built entirely in C++ to explore advanced topics like component-based architecture and custom physics.",
         long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics—movement, possession, and environmental interaction—that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
@@ -91,9 +121,10 @@ const projectDetails = {
         title: "The Library",
         category: "personal work",
         published: false,
+        isFeatured: true,
         year: 2023,
         role: "Sole Creator & Technical Game Designer",
-        image: "./assets/images/work-5.jpg", // Using Alien's image
+        image: "./assets/images/work-5.jpg",
         short: "An atmospheric puzzle game prototype where players manipulate time to solve environmental puzzles and uncover a branching narrative.",
         long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy and powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics—movement, possession, and environmental interaction—that create emergent, dynamic gameplay scenarios, transforming the player from a vulnerable creature into a formidable predator.",
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
@@ -103,13 +134,14 @@ const projectDetails = {
     // --- Existing Projects ---
     "PoliceSimulator": {
         id: "PoliceSimulator",
-        title: "Police Simulator: Patrol Officers (Switch Port)",
+        title: "Police Simulator: Patrol Officers (Nintendo Switch Port)",
         category: "professional work",
         published: true,
+        isFeatured: true,
         year: 2024,
         role: "Game Programmer & Technical Designer",
-        context: "Untold Games (for Aesir Interactive)",
-        duration: "Approx. 4 months",
+        context: "Untold Games (for Aesir Interactive & Turn Me Up Games)",
+        duration: "Approx. 6 months",
         video: "https://www.youtube.com/watch?v=fL2SOhYZ6k8",
         learnMoreLink: null,
         image: "./assets/images/PoliceSimulator.png",
@@ -134,14 +166,15 @@ const projectDetails = {
         title: "High on Life (Nintendo Switch Port)",
         category: "professional work",
         published: true,
+        isFeatured: true,
         year: 2025,
-        role: "Game Programmer & Systems Specialist",
+        role: "Game Programmer & Tech Game Designer",
         context: "Untold Games (for Squanch Games & Turn Me Up Games)",
         duration: "Approx. 8 months (2024-2025)",
         video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
         learnMoreLink: "https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061",
         image: "./assets/images/HighOnLife.png",
-        short: "As a key systems specialist on the porting team, I was responsible for deep-level debugging, engine-level problem-solving, and critical system stabilization for the Nintendo Switch.",
+        short: "Contributed to the Nintendo Switch port responsible for tackling deep-level bugs, fixing core gameplay systems, and developing essential tools for the team.",
         long: "I worked with Untold Games on the complex technical challenge of porting 'High on Life' to the Switch. My role quickly evolved beyond general programming to become a go-to resource for the project's most difficult issues, requiring a deep understanding of Unreal Engine's architecture to diagnose and fix problems that manifested uniquely on the target hardware.",
         tools: [
             { name: "Unreal Engine", icon: unrealEngineIconSVG },
@@ -151,7 +184,8 @@ const projectDetails = {
         cardEngineName: "Unreal Engine",
         projectTags: ['Porting: Switch'],
         myContribution: [
-            "<b>Engine-Level Debugging:</b> Investigated and resolved critical, engine-level bugs, including a C++ division-by-zero error that disabled the entire collision system and a persistent memory leak in the Game Instance caused by a latent Ubergraph reference.",
+            "<b>As a key game programmer and Tech Designer on the porting team, I was responsible for deep-level debugging, problem-solving, and bugfixing for the Nintendo Switch",
+            "<b>Debugging:</b> Investigated and resolved critical bugs, including a C++ division-by-zero error that disabled the entire collision system and a persistent memory leak in the Game Instance caused by a latent Ubergraph reference.",
             "<b>Systems & Gameplay Stabilization:</b> Overhauled the logic for fast-moving actors (dashes, projectiles) using sphere traces to prevent them from passing through objects. Reworked flawed UE4 Remote Event implementations to create a stable, hardcoded alternative that prevented race conditions during level streaming.",
             "<b>Tool & Utility Development:</b> Extended the existing cheat manager and its UI to add essential performance stats. Designed and implemented a multi-iteration lighting tool for a technical artist, enabling rapid, in-editor changes to level lighting configurations."
         ].join('<br><br>'),
@@ -163,22 +197,22 @@ const projectDetails = {
         published: true,
         year: 2023,
         role: "Lead Creator & Verse Developer",
-        context: "Untold Games (Small Team)",
-        duration: "6 months (Concept to Launch)",
+        context: "Game Developer (me)",
+        duration: "1 months (Concept to Launch)",
         video: "https://www.fortnite.com/@untoldgames/1028-2740-2494",
         learnMoreLink: null,
         image: "./assets/images/Battleship.jpeg",
-        short: "As the lead creator, I designed and developed this fast-paced strategy game from concept to launch on the Fortnite platform, using Verse for all core mechanics.",
-        long: "This project involved the complete creation of a multiplayer strategy game from the ground up. I spearheaded the game design, level layout, and player experience, with a heavy focus on implementing the core logic using Verse scripting and UEFN's device system to deliver a polished and engaging final product.",
+        short: "As the lead creator, I designed and developed this fast-paced strategy game from concept to launch on the Fortnite platform, using Verse for all custom core mechanics.",
+        long: "This project involved the complete creation of a multiplayer strategy game from the ground up. I spearheaded the game design, level layout, and player experience, with the challenge of creating the entire battleship custom system within Verse.",
         tools: [
             { name: "UEFN", icon: fortniteIconSVG },
             { name: "Verse", icon: codeIconSVG }
         ],
         cardEngineName: "UEFN",
         myContribution: [
-            "<b>Game Design & Vision:</b> Led the complete game design process, defining the core ruleset, win/loss conditions, player progression, and overall strategic loop.",
+            "<b>Game Design & Vision:</b> Led the complete game design process, defining the core ruleset, win/loss conditions, player progression, and overall gameplay loop.",
             "<b>Core Gameplay Programming (Verse):</b> Developed all primary gameplay systems using Verse, including the interactive combat grid, ship placement logic, and real-time player feedback systems.",
-            "<b>Multiplayer & Optimization:</b> Architected and optimized the network replication for responsive multiplayer gameplay and iterated on game balance based on extensive playtesting feedback."
+            "<b>Multiplayer & Optimization:</b> Iterated on game balance based on extensive playtesting feedback."
         ].join('<br><br>'),
     },
     "PulseParty": {
@@ -187,20 +221,24 @@ const projectDetails = {
         category: "professional work",
         published: true,
         year: 2023,
-        role: "Technical Game Designer",
-        teamSize: "Untold Games",
-        duration: "3 months",
-        video: "https://www.fortnite.com/@untoldgames/8369-2685-8749", 
+        role: "Technical Game Designer & Lead Systems Programmer",
+        context: "Untold Games (Team of 3)",
+        duration: "1 month",
+        video: "https://www.youtube.com/watch?v=CzMTSNYmdYI",
         learnMoreLink: "https://www.fortnite.com/@untoldgames/8369-2685-8749", 
         image: "./assets/images/PulsePartyThumbnail.png", 
-        short: "Rhythm-based multiplayer UEFN game.",
-        long: "Responsibilities included game mechanics prototyping, network optimization, and dynamic tempo sync with music.",
+        short: "A chaotic party game where the knock-out deathmatch mechanic from PulseMatch was evolved into 8 unique minigames.",
+        long: "As a larger scope follow-up to PulseMatch, PulseParty expands the core concept into a full party game experience. Players face off in a series of 8 different competitions, including races, deathmatches, and king of the hill modes. The primary goal remains the same: push your enemies out of the map!",
         tools: [
             { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" }, 
-            { name: "Verse" } 
+            { name: "Verse", icon: codeIconSVG } 
         ],
         cardEngineName: "UEFN",
-        myContribution: "Prototyped core rhythm mechanics in Verse. Developed custom audio analysis system for beat synchronization. Optimized network performance for smooth multiplayer experience.",
+        myContribution: [
+            "<b>Lead Systems Programmer (Verse):</b> Built the entire party game framework from the ground up, including the expanded hub, the map-switching logic for a sequence of 8 minigames, and a robust game state manager to handle the unique rules for each mode.",
+            "<b>Technical Design & Tooling:</b> Supported the other two designers on the team by creating flexible and powerful tools in Verse. This enabled them to rapidly prototype, implement, and balance gameplay mechanics without needing direct programming support.",
+            "<b>Playtesting & Iteration:</b> Worked closely with the team to extensively playtest the game, taking direct feedback to refine and stabilize the core systems for the final release."
+        ].join('<br><br>'),
     },
     "PulseMatch": {
         id: "PulseMatch",
@@ -209,26 +247,31 @@ const projectDetails = {
         published: true,
         year: 2023, 
         role: "Technical Game Designer",
-        teamSize: "Untold Games",
-        duration: "N/A",
+        context: "Untold Games (Team of 3)",
+        duration: "1 month",
         video: "https://www.fortnite.com/@untoldgames/9111-6971-7741", 
         isDirectLink: true, 
         learnMoreLink: "https://www.fortnite.com/@untoldgames/9111-6971-7741", 
         image: "./assets/images/PulseMatch.jpeg",
-        short: "UEFN game experience focused on matchmaking concepts.",
-        long: "A project exploring matchmaking and social features within the UEFN platform.",
+        short: "A competitive deathmatch game based on knock-out mechanics across multiple randomized maps.",
+        long: "This project was focused on creating a replayable deathmatch experience where the core gameplay loop is to eliminate opponents by launching them off the stage. My role was a hybrid of level design and systems programming.",
         tools: [
             { name: "UEFN", icon: fortniteIconSVG, class: "fortnite" },
-            { name: "Verse" }
+            { name: "Verse", icon: codeIconSVG }
         ],
         cardEngineName: "UEFN",
-        myContribution: "Designed and implemented Verse logic for experimental matchmaking algorithms and player queuing systems.",
+        myContribution: [
+            "<b>Systems Architecture (Verse):</b> Architected and implemented the foundational systems for the game loop, including a robust map-switching framework that moved players between a central hub and randomized combat arenas.",
+            "<br><br><b>Level Design & Creation:</b> Designed and built several of the combat arenas, focusing on creating varied layouts that encouraged different player strategies and engagement.",
+            "<br><br><b>Core Gameplay (Verse):</b> Developed the hub world logic, allowing players to choose and vote on the next map, ensuring a dynamic and replayable experience."
+        ].join('')
     },
     "Alien": {
         id: "Alien",
         title: "Alien (Game Prototype)",
         category: "personal work",
         published: true,
+        isFeatured: true,
         year: 2022,
         role: "Sole Creator & Technical Game Designer",
         context: "Personal TGD Prototyping Series",
@@ -252,6 +295,7 @@ const projectDetails = {
         title: "Cycle (Award-Winning)",
         category: "university work",
         published: true,
+        isFeatured: true,
         year: 2022,
         role: "Game Director & Lead Systems Designer",
         context: "Award-winning 3rd-year university project (Falmouth University). Selected to represent Falmouth at the G7 Summit 2021.",
@@ -388,7 +432,7 @@ const projectDetails = {
         id: "MaGiTeProject",
         title: "MaGiTe Project",
         category: "professional work",
-        published: true,
+        published: false,
         year: 2025, 
         role: "Game Developer",
         teamSize: "Umeå University",
@@ -460,13 +504,11 @@ const projectDetails = {
 // NEW: Define which projects go into which "About" page section
 const professionalWorkIds = ["HighOnLife", "PoliceSimulator"];
 const techDesignWorkIds = [
-    "ProjectCircle", // Featured project first
+    "ProjectCadence",
     "FullCppMechGame",
     "TheLibrary",
     "Alien",
-    "Cycle",
-    "SoulDriven",
-    "MaGiTeProject"
+    "Cycle"
 ];
 
 
