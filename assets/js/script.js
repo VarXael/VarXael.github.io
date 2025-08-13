@@ -168,7 +168,7 @@ const projectDetails = {
         year: 2025,
         role: "Game Programmer & Tech Game Designer",
         context: "Untold Games (for Squanch Games & Turn Me Up Games)",
-        video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
+        video: "https://www.youtube.com/watch?v=qk2y4clYe9o",
         learnMoreLink: "request", //"#https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061", //You looking through this code are sneaky, aren't you? Nice one, you can have it u.u
         image: "./assets/images/HighOnLife.png",
         short: "Contributed to the Nintendo Switch port responsible for tackling deep-level bugs, fixing core gameplay systems, and developing essential tools for the team.",
