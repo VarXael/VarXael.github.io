@@ -65,8 +65,8 @@ const projectDetails = {
         duration: "1 month, currently WIP",
         year: 2025,
         role: "Sole Systems Architect & Technical Designer",
-        image: "./assets/images/work-5.jpg", 
-        video: "#", 
+        image: "./assets/images/ProjectCadence.png",
+        video: "https://www.youtube.com/watch?v=3bJd7wOyewk", 
         
         short: "A high-performance C++ event system for Unreal Engine that uses a music-driven timeline to trigger complex, designer-scripted gameplay in Blueprints.",
 
@@ -87,8 +87,7 @@ const projectDetails = {
             "<br><br><b>Architected for High Performance:</b> To handle thousands of concurrent events without performance loss, the framework uses lightweight UObjects to manage note states, avoiding the significant overhead of spawning an Actor for every event. Each note instance manages its own lifecycle and is cleanly garbage collected. The architecture is explicitly designed to support a future object pooling system to completely eliminate runtime allocation.",
             
             // 3. Designer Workflow
-            "<br><br><b>Empowering for Designers:</b> The entire system is built for designers to create unique gameplay without touching C++. At each timestamp, a custom Blueprint 'Brain' (`UMusicActionInstance`) runs its own unique logic. This 'Brain' can then execute a library of simple, reusable 'Actions' (`UMusicAction`) to make things happen in the world—from moving a platform to spawning a wave of enemies, all within a single note.",
-            
+            "<br><br><b>Empowering for Designers:</b> The entire system is built for designers to create unique gameplay without touching C++. The system revolves around 2 main blueprints that the designer can derive from: MusicActionInstance and MusicAction. A timestamp is associated with them, and they are used to trigger custom actions on that specific timestamp. The music action instance acts as the manager for the MusicActions, and tells them 'When' to execute. Meanwhile, the MusicAction is the actual behaviour we want to execute (Move Platform, Make Enemy shoot, Make enemy spawn etc..).",
             // 4. Versatility
             "<br><br><b>Versatile and Scalable:</b> Because the framework is a fundamental time-based event scheduler, it is incredibly flexible. It can be used as the foundation for a wide variety of game genres, such as:",
             "<ul>"+
@@ -170,7 +169,7 @@ const projectDetails = {
         role: "Game Programmer & Tech Game Designer",
         context: "Untold Games (for Squanch Games & Turn Me Up Games)",
         video: "https://www.youtube.com/watch?v=EvhUMyenR9c&ab_channel=NintendoofAmerica",
-        learnMoreLink: "request", //"#https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061",
+        learnMoreLink: "request", //"#https://savory-dietician-b97.notion.site/High-On-Life-20753eb8bf2d803ba572f7ae3def0061", //You looking through this code are sneaky, aren't you? Nice one, you can have it u.u
         image: "./assets/images/HighOnLife.png",
         short: "Contributed to the Nintendo Switch port responsible for tackling deep-level bugs, fixing core gameplay systems, and developing essential tools for the team.",
         long: "I worked with Untold Games on the complex technical challenge of porting 'High on Life' to the Switch. My role quickly evolved beyond general programming to become a go-to resource for the project's most difficult issues, requiring a deep understanding of Unreal Engine's architecture and High On Life systems to diagnose and fix problems that manifested uniquely on the target hardware.",
