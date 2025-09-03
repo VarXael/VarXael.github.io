@@ -300,13 +300,13 @@ const projectDetails = {
         video: "https://youtu.be/Cuwhx4b7tYo", // Trailer
         learnMoreLink: "https://wrong-world-studios.itch.io/cycle", // Itch.io page
         image: "./assets/images/Cycle.png",
-        short: "Directed a team of three to create an award-winning surrealist puzzle game. I was solely responsible for all technical implementation, system design, and project management from concept to release.",
-        long: "Cycle is a surrealist puzzle-adventure game that won 'Best 3rd Year Videogame' at Falmouth University (2021) and was chosen to represent the university at the G7 Summit. As the game director and only programmer/designer on a team of three, I led the project's vision and was responsible for building every gameplay system from scratch in Unreal Engine, an engine I learned specifically for this project.",
+        short: "Led a team of three on an award-winning surrealist puzzle game, taking full responsibility for all programming, system design, and technical implementation from concept to release.",
+        long: "Cycle is a surrealist puzzle-adventure game that won 'Best 3rd Year Videogame' at Falmouth University (2021) and was chosen to represent the university at the G7 Summit. On a team of three, I was responsible for leading the project's vision while also acting as the sole programmer and designer, building every gameplay system from scratch in Unreal Engine, an engine I learned specifically for this project.",
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution: [
-            "<b>Game Direction & Project Management:</b> Led the project from pre-production to publishing on Itch.io, managing deadlines, maintaining the core vision, and guiding a team of two artists. My leadership was crucial in navigating production challenges and delivering a polished, award-winning final product.",
-            "<br><br><b>Core Systems Architecture:</b> As the sole developer, I designed and implemented all of the game's foundational systems, including:",
+            "<b>Project Leadership & Management:</b> Led a team of three (myself and two artists) from pre-production to publishing on Itch.io, managing deadlines, maintaining the core vision, and guiding the project to a polished, award-winning final state.",
+            "<br><br><b>Core Systems Architecture:</b> As the sole programmer and designer on the project, I designed and implemented all of the game's foundational systems, including:",
             "<ul>"+
             "<li style='margin-left: 20px; margin-top: 5px;'>A central <b>hub-world system</b> that changes dynamically based on player progression.</li>"+
             "<li style='margin-left: 20px; margin-top: 5px;'>A <b>seamless world transition</b> mechanic that teleports the player between levels without loading screens, contributing to the game's surreal feeling.</li>"+
