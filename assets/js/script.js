@@ -66,7 +66,7 @@ const projectDetails = {
         year: 2025,
         role: "Sole Systems Architect & Technical Designer",
         image: "./assets/images/ProjectCadence.png",
-        video: "https://www.youtube.com/watch?v=3bJd7wOyewk",
+        video: "https://www.youtube.com/watch?v=GeYIX1rnFPA",
         
         short: "A C++ Framework that uses Metasound to drive Rhythm-based gameplay!",
 
