@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -26,59 +26,75 @@
                     <i class="fab fa-github"></i> 
                     <span>GitHub</span>
                 </a>
-                <!-- THIS LINK HAS BEEN CHANGED -->
                 <a href="./cv.html" target="_blank" class="sidebar-cv-btn">
                     <ion-icon name="document-text-outline"></ion-icon>
                     <span>CV</span>
                 </a>
             </div>
-        </div>
-        <div class="separator"></div>
-        <div class="skills-container-sidebar">
-            <h3 class="h3 skills-sidebar-title">Key Skills</h3>
             
-            <!-- === THIS IS THE MODIFIED SECTION === -->
-            <ul class="skills-grid">
-                <li class="skill-card">
-                    <div class="skill-icon"><i class="fas fa-code"></i></div>
-                    <div class="skill-info">
-                        <h5 class="h5">Languages</h5>
-                        <p>C++, C#, Verse, Blueprints</p>
-                    </div>
-                </li>
-                <li class="skill-card">
-                    <div class="skill-icon">
-                        <svg viewBox="0 0 210.4 210.4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M105.2 5c55.3 0 100.2 45 100.2 100.2s-45 100.2-100.2 100.2S5 160.5 5 105.2 50 5 105.2 5m0-5C47.1 0 0 47.1 0 105.2s47.1 105.2 105.2 105.2 105.2-47.1 105.2-105.2S163.4 0 105.2 0z"/><path d="M97.9 42.2s-23.7 6.7-45 29.3-24 38.7-24 50.7c4.7-8 33.7-52.1 40.5-31.1v50.2s-.4 6.8-10.8 4.1c3.1 5.8 19.1 20.1 48 23 6.6-6.6 15.2-16.1 15.2-16.1l14.4 12.2s25.9-16.8 36.1-41.2c-9.5 6.2-21 20.6-27 10.5V72.7s15.4-23.1 17.8-24.2c-6.1 1.1-27.6 8.2-38.9 22.8-3.2-3.5-12.1-3.6-12.1-3.6s7 5.8 7.1 11.1 0 49.5 0 54.6c-4.8 4.9-9.9 7.5-13.2 7.5-7.7 0-9.9-2.7-12-5.4V71.3s-3.8 3.2-6.8-2S84.1 54 97.9 42.2z"/></svg>
-                    </div>
-                    <div class="skill-info">
-                        <h5 class="h5">Engines</h5>
-                        <p>Unreal Engine, Unity, UEFN</p>
-                    </div>
-                </li>
-                 <li class="skill-card">
-                    <div class="skill-icon"><i class="fas fa-tasks"></i></div>
-                    <div class="skill-info">
-                        <h5 class="h5">Expertise</h5>
-                        <p>Systems Design, Prototyping, Porting</p>
-                    </div>
-                </li>
-                <li class="skill-card">
-                    <div class="skill-icon"><i class="fas fa-sitemap"></i></div>
-                    <div class="skill-info">
-                        <h5 class="h5">Game Design</h5>
-                        <p>Leadership, Documentation, Systems</p> 
-                    </div>
-                </li>
-                <li class="skill-card">
-                    <div class="skill-icon"><i class="fas fa-tools"></i></div>
-                    <div class="skill-info">
-                        <h5 class="h5">Tools & Methods</h5>
-                        <p>Git, Plastic SCM, Rider, Agile</p> 
-                    </div>
-                </li>
-            </ul>
-            <!-- === END OF MODIFIED SECTION === -->
+            <div class="sidebar-compact-contact">
+                <a href="#" class="contact-link-sidebar copy-email-btn" data-email="giuseppeluigi.alfieri@gmail.com">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <span class="email-text">giuseppeluigi.alfieri@gmail.com</span>
+                </a>
+            </div>
+        </div>
 
+        <div class="separator"></div>
+        
+        <div class="sidebar-roles-legend">
+            <h3 class="h3 skills-sidebar-title">View by Discipline</h3>
+            <div class="sidebar-role-cluster">
+                <button class="sidebar-role-btn srb--game-designer" data-role-target="Game Designer">
+                    <span>Game Designer</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+                <button class="sidebar-role-btn srb--technical-game-designer" data-role-target="Technical Game Designer">
+                    <span>Technical Game Designer</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+                <button class="sidebar-role-btn srb--leadership" data-role-target="Leadership">
+                    <span>Leadership</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+                <button class="sidebar-role-btn srb--game-programmer" data-role-target="Game Programmer">
+                    <span>Game Programmer</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+        
+        <div class="skills-container-sidebar">
+            <h3 class="h3 skills-sidebar-title">Tech Stack</h3>
+            <div class="skills-compact">
+                <div class="tech-category">
+                    <strong class="tech-font">LANGUAGES:</strong>
+                    <div class="tech-pill-box">
+                        <span class="tech-pill">C++</span>
+                        <span class="tech-pill">C#</span>
+                        <span class="tech-pill">Verse</span>
+                        <span class="tech-pill">Blueprints</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <strong class="tech-font">ENGINES:</strong>
+                    <div class="tech-pill-box">
+                        <span class="tech-pill">Unreal Engine</span>
+                        <span class="tech-pill">Unity</span>
+                        <span class="tech-pill">UEFN</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <strong class="tech-font">TOOLS:</strong>
+                    <div class="tech-pill-box">
+                        <span class="tech-pill">Git</span>
+                        <span class="tech-pill">Plastic SCM</span>
+                        <span class="tech-pill">Rider</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </aside>
 
@@ -103,33 +119,42 @@
             </header>
 
             <section class="about-text-intro">
-                <p>
-                    I am deeply committed to personal growth, constantly seeking to expand my knowledge and refine my skills every single day. I am an avid Unreal Engine enthusiast, and I love using the engine and study more about it every single day.
+                <p class="about-lead">
+                    I design games where the systems tell the story.
                 </p>
                 <p>
-                    I love structure and designing creative systems. Much of my free time is spent conceptualizing new video game mechanics, crafting design systems for both existing videogames and imaginative worlds and trying to contextualize everything through the narrative they create and story they want to tell.
+                    I’m a game designer who thinks systematically — I architect interconnected mechanics where every piece has a reason to exist, and where the design and the experience are inseparable. From a music-driven event framework to a game where scanning IS the entire gameplay loop, my work is about building systems that create meaning.
                 </p>
-                 <p>
-                    My favorite gaming niches are rhythm games and fast-paced FPS titles. One of my all-time favorite video games is Deemo!
+                <p>
+                    Everything I design, I can build. I work in Unreal Engine and C++, and I move fluently between design documentation and implementation. When I’m on a team, I tend to become the person who brings clarity to the vision and structure to the process — not because I claim the role, but because it happens naturally through how I communicate and work.
                 </p>
+                <p>
+                    I’ve ported shipped titles to Nintendo Switch, led teams from concept to release, won awards for my university work, and I’m currently building a game where the world doesn’t exist until you scan it into memory.
+                </p>
+
+                <div class="about-roles">
+                    <h4 class="about-roles-title">What I Do</h4>
+                    <div class="about-roles-grid" id="about-roles-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
                 <div class="contact-prompt-about">
-                    <p>Interested in knowing more? <a href="mailto:giuseppeluigi.alfieri@gmail.com" class="contact-link-about">giuseppeluigi.alfieri@gmail.com</a></p>
+                    <p>Interested in knowing more? <a href="#" class="contact-link-about copy-email-btn" data-email="giuseppeluigi.alfieri@gmail.com"><span class="email-text">giuseppeluigi.alfieri@gmail.com</span></a></p>
                 </div>
             </section>
             
-            <!-- NEW Professional Work Section -->
             <section class="professional-work">
                 <h3 class="h3 service-title">Professional Work Highlight</h3>
                 <ul class="project-list professional-work-list">
-                    <!-- This will be populated by script.js -->
+                    <!-- Populated by JS -->
                 </ul>
             </section>
 
-            <!-- NEW Tech Design Work Section -->
             <section class="tech-design-work">
                 <h3 class="h3 service-title">Tech Design Work Highlight</h3>
                 <ul class="project-list tech-design-list">
-                     <!-- This will be populated by script.js -->
+                     <!-- Populated by JS -->
                 </ul>
             </section>
 
@@ -241,28 +266,16 @@
             </header>
             <section class="projects">
                 <ul class="filter-list">
-                    <li class="filter-item">
-                        <button class="active" data-filter-btn>All</button>
-                    </li>
-                    <li class="filter-item">
-                        <button data-filter-btn>Professional Work</button>
-                    </li>
-                    <li class="filter-item">
-                        <button data-filter-btn>University Work</button>
-                    </li>
-                    <li class="filter-item">
-                        <button data-filter-btn>Personal Work</button>
-                    </li>
-                    <li class="filter-item">
-                        <button data-filter-btn>Game Jams</button>
-                    </li>
+                    <li class="filter-item"><button class="active" data-filter-btn>All</button></li>
+                    <li class="filter-item"><button data-filter-btn>Professional Work</button></li>
+                    <li class="filter-item"><button data-filter-btn>University Work</button></li>
+                    <li class="filter-item"><button data-filter-btn>Personal Work</button></li>
+                    <li class="filter-item"><button data-filter-btn>Game Jams</button></li>
                 </ul>
                 <div class="filter-select-box">
                     <button class="filter-select" data-select>
-                        <div class="select-value" data-selecct-value>Select category</div>
-                        <div class="select-icon">
-                            <ion-icon name="chevron-down"></ion-icon>
-                        </div>
+                        <div class="select-value" data-select-value>Select category</div>
+                        <div class="select-icon"><ion-icon name="chevron-down"></ion-icon></div>
                     </button>
                     <ul class="select-list">
                         <li class="select-item"><button data-select-item>All</button></li>
@@ -278,14 +291,23 @@
             </section>
         </article>
 
+        <!-- Original Project Modal -->
         <div class="project-modal" id="projectModal">
             <div class="modal-content">
                 <button class="modal-close" id="modalClose">×</button>
                 <div id="modalBody"></div>
             </div>
         </div>
-    </div>
 
+        <!-- NEW Role / Gallery Modal -->
+        <div class="role-modal" id="roleModal">
+            <div class="modal-content">
+                <button class="modal-close" id="roleModalClose">×</button>
+                <div id="roleModalBody"></div>
+            </div>
+        </div>
+
+    </div>
     </main>
 
 <script src="./assets/js/script.js"></script>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#1e1e1f"/>
+  <rect x="0" y="0" width="800" height="450" fill="#00cc88" opacity="0.08"/>
+  <line x1="0" y1="0" x2="800" y2="450" stroke="#00cc88" opacity="0.05" stroke-width="1"/>
+  <line x1="800" y1="0" x2="0" y2="450" stroke="#00cc88" opacity="0.05" stroke-width="1"/>
+  <rect x="200" y="120" width="400" height="210" rx="16" fill="none" stroke="#00cc88" opacity="0.2" stroke-width="1" stroke-dasharray="8 4"/>
+  <text x="400" y="200" text-anchor="middle" font-family="Poppins, sans-serif" font-size="28" font-weight="600" fill="#f1f1f1" opacity="0.9">Project: Sasha</text>
+  <text x="400" y="240" text-anchor="middle" font-family="Poppins, sans-serif" font-size="14" fill="#00cc88" opacity="0.7">Top-Down Action-Exploration</text>
+  <text x="400" y="280" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" fill="#666" opacity="0.5">FOOTAGE COMING SOON</text>
+</svg>
