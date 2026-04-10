@@ -52,45 +52,20 @@ const unrealEngineIconSVG = `<svg viewBox="0 0 210.4 210.4" xmlns="http://www.w3
 const unityIconSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M12.012 2.5a.708.708 0 00-.702.714v17.572a.71.71 0 00.702.714.715.715 0 00.708-.714V3.214a.71.71 0 00-.708-.714zm6.445 3.174l-5.07 2.927v8.788l5.07 2.937a.71.71 0 001.058-.616V6.29a.71.71 0 00-1.058-.616zm-12.896 0a.71.71 0 00-1.058.616v11.422a.71.71 0 001.058.616l5.07-2.937V8.601l-5.07-2.927zM11.304.002A.71.71 0 0010.59.61L3.41 4.66a.71.71 0 00-.352.617V18.72a.71.71 0 00.352.616L10.59 23.39a.714.714 0 00.708 0l7.18-4.056a.71.71 0 00.352-.616V5.277a.71.71 0 00-.352-.617L11.304 0z"/></svg>`; 
 const codeIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`;
 
-// --- DATA OBJECT FOR ROLE DEFINITIONS ---
 const roleDefinitions = {
-    "Game Designer": {
-        title: "Game Designer",
-        tagClass: "role-tag--game-designer",
-        description: "I think in systems. I design interconnected mechanics where every piece has a reason to exist and every decision creates consequence."
-    },
-    "Technical Game Designer": {
-        title: "Technical Game Designer",
-        tagClass: "role-tag--technical-game-designer",
-        description: "Everything I design, I also implement. If this tag is on a project, I created the design AND built it in engine."
-    },
-    "Leadership": {
-        title: "Leadership",
-        tagClass: "role-tag--leadership",
-        description: "I bring teams together and drive the vision from concept to ship. On these projects, I was the person people looked to for direction."
-    },
-    "Game Programmer": {
-        title: "Game Programmer",
-        tagClass: "role-tag--game-programmer",
-        description: "I write production code — C++, Blueprints, Verse. On these projects, I implemented systems within an existing design or codebase."
-    }
+    "Game Designer": { title: "Game Designer", tagClass: "role-tag--game-designer", description: "I think in systems. I design interconnected mechanics where every piece has a reason to exist and every decision creates consequence." },
+    "Technical Game Designer": { title: "Technical Game Designer", tagClass: "role-tag--technical-game-designer", description: "Everything I design, I also implement. If this tag is on a project, I created the design AND built it in engine." },
+    "Leadership": { title: "Leadership", tagClass: "role-tag--leadership", description: "I bring teams together and drive the vision from concept to ship. On these projects, I was the person people looked to for direction." },
+    "Game Programmer": { title: "Game Programmer", tagClass: "role-tag--game-programmer", description: "I write production code — C++, Blueprints, Verse. On these projects, I implemented systems within an existing design or codebase." }
 };
 
-// DYNAMICALLY GENERATE ABOUT ROLES GRID
 const aboutRolesGrid = document.getElementById('about-roles-grid');
 if (aboutRolesGrid) {
     aboutRolesGrid.innerHTML = Object.keys(roleDefinitions).map(role => {
         const def = roleDefinitions[role];
-        return `
-            <div class="about-role-item" data-role-target="${role}">
-                <span class="role-tag ${def.tagClass}">${def.title}</span>
-                <p>${def.description}</p>
-                <div class="role-click-hint">View Evidence <ion-icon name="arrow-forward-outline"></ion-icon></div>
-            </div>
-        `;
+        return `<div class="about-role-item" data-role-target="${role}"><span class="role-tag ${def.tagClass}">${def.title}</span><p>${def.description}</p><div class="role-click-hint">View Evidence <ion-icon name="arrow-forward-outline"></ion-icon></div></div>`;
     }).join('');
 }
-
 
 // FULL PROJECT DETAILS OBJECT
 const projectDetails = {
@@ -107,21 +82,20 @@ const projectDetails = {
         role: "Sole Systems Architect & Technical Designer",
         image: "./assets/images/ProjectCadence.png",
         video: "https://www.youtube.com/watch?v=GeYIX1rnFPA",
-        short: "A C++ Framework that uses Metasound to drive Rhythm-based gameplay!",
-        long: "Project: Cadence is a powerful framework for creating gameplay synchronized to a music track. The system uses Metasound to drive a timeline of notes, which can be mapped by either the player or imported directly from external sources like osu! beatmaps. These timestamps are then used to trigger unique gameplay events. The entire architecture is built to be a reusable engine plugin and a foundation for an in-editor visual mapping tool.",
+        short: "A C++ Unreal Engine plugin that uses Metasound to drive rhythm-based gameplay events. Parse an osu beatmap, map timestamps to actions, make things happen in-game at exactly those moments. Built as a reusable framework for any rhythm game genre.",
+        long: "Project Cadence started from a question on a bus: could osu beatmap timestamps actually drive gameplay events in Unreal Engine? The answer is the plugin. A C++ timeline driven by Metasound, separating timing data from behavior so the same beatmap can power completely different game genres.",
+        story: "I was on a bus listening to osu beatmaps and had a thought: could you parse a beatmap file, extract the note timestamps, and use them to make things happen in a game at exactly those moments? Not theoretically. Literally, as a buildable system. I went home and started finding out.\n\nThat became Project Cadence. A C++ plugin that uses Metasound to drive a timeline of notes. Each timestamp gets mapped to a gameplay action — move a platform, spawn an enemy, trigger an effect. The design separates timing data from behavior completely, so the same beatmap can power a completely different game depending on what behaviors you attach to each note.\n\nThe osu integration came from using osu as a mapping tool. A Python parser extracts the note timestamps from a beatmap file and builds a data table. That data table is what the system reads. The plan is to replace it with an in-editor tool eventually, but osu proved the concept immediately because the mapping tooling already existed and the community had thousands of beatmaps ready to use.\n\nPerformance was a constraint from the start. Thousands of events potentially firing per track. The solution was lightweight UObjects instead of Actors for note state management — no spawn cost, no overhead, clean lifecycle. The architecture explicitly leaves room for object pooling as the next step.\n\nProject Circle was the first real test of whether the framework could hold up under a different genre entirely. It did, mostly. What it exposed was where the architecture needed extending.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG }, { name: "Metasound", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution:[
-            "<b>Data-Driven & Modular by Design:</b> The system's core is a C++ timeline driven by Metasound. The system uses a python script as a parser to extract information from an osu beatmap, and map a data table with timestamps of each note. That data is then used to associate behaviour and events to that specific note to make something happen in the game. Osu is currently used as a mapping tool placeholder. It will be replaced with an in-editor tool that a designer, or the final user, can use to create their own custom beatmaps. The entire framework is built to be a self-contained, reusable Engine Plugin.",
-            "<b>Architected for High Performance:</b> To handle thousands of concurrent events without performance loss, the framework uses lightweight UObjects to manage note states, avoiding the significant overhead of spawning an Actor for every event. Each note instance manages its own lifecycle and is cleanly garbage collected. The architecture is explicitly designed to support a future object pooling system to completely eliminate runtime allocation.",
-            "<b>Empowering for Designers:</b> The entire system is built for designers to create unique gameplay without touching C++. The system revolves around 2 main blueprints that the designer can derive from: MusicActionInstance and MusicAction. A timestamp is associated with them, and they are used to trigger custom actions on that specific timestamp. The music action instance acts as the manager for the MusicActions, and tells them 'When' to execute. Meanwhile, the MusicAction is the actual behaviour we want to execute (Move Platform, Make Enemy shoot, Make enemy spawn etc..).",
-            "<b>Versatile and Scalable:</b> Because the framework is a fundamental time-based event scheduler, it is incredibly flexible. It can be used as the foundation for a wide variety of game genres, such as:",
-            "<ul><li>A <b>rhythm FPS</b> where enemy attacks and behaviors are synchronized to the song's notes.</li><li>A <b>fast-paced parkour game</b> where platforms and obstacles appear in sequence with the music, creating rhythmic traversal challenges.</li><li>A <b>top-down twin-stick shooter</b> where enemy waves and boss patterns are choreographed to the beat.</li></ul>",
-            "<b>Future Plans:</b> The immediate next step is to heavily playtest and refine the framework. The ultimate goal is to package the system as a public-facing Unreal Engine plugin available on my GitHub and to use it as the foundation for my own rhythm-action game."
-        ].join('</p><p>'), // Changed generic joins to ensure paragraph breaks
+            "<b>Data-Driven & Modular by Design:</b> The system's core is a C++ timeline driven by Metasound. A Python script parses osu beatmap data into a data table mapping timestamps to note events. Each note is then associated with a gameplay behavior that fires at that exact moment. The entire framework is built as a self-contained, reusable Engine Plugin.",
+            "<b>Architected for High Performance:</b> Lightweight UObjects manage note states instead of Actors, avoiding spawn overhead for thousands of concurrent events. Each instance manages its own lifecycle and is designed for a future object pooling system.",
+            "<b>Designer-First:</b> Two Blueprint-derivable classes handle everything. MusicActionInstance manages timing. MusicAction defines what happens. Designers create gameplay without touching C++.",
+            "<b>Future Plans:</b> Package as a public Unreal Engine plugin. Replace the osu parser with an in-editor mapping tool. Use as the foundation for an original rhythm-action game."
+        ].join('</p><p>'),
         roleContributions: {
-            "Game Designer": "<p><b>Design Philosophy:</b> Designed the entire system around a core principle: music should drive gameplay, not accompany it. The framework separates timing data from behavior, so designers can create entirely different game genres from the same musical source.</p><p><b>Versatility by Design:</b> Architected the system to support rhythm FPS, parkour games, twin-stick shooters, and more — all from one framework. Every design decision prioritized flexibility over specificity.</p>",
-            "Technical Game Designer": "<p><b>Core Architecture:</b> Built a C++ timeline driven by Metasound. Uses a Python parser to extract osu! beatmap data into DataTables, mapping timestamps to gameplay events. The entire framework is built as a self-contained, reusable Engine Plugin.</p><p><b>Performance Architecture:</b> Uses lightweight UObjects instead of Actors to handle thousands of concurrent events without performance loss. Each note instance manages its own lifecycle and is designed for future object pooling.</p><p><b>Designer Empowerment:</b> Built two core Blueprint-derivable classes (MusicActionInstance and MusicAction) so designers can create unique gameplay without touching C++. The instance manages 'when,' the action manages 'what.'</p>"
+            "Game Designer": "<p><b>Design Philosophy:</b> Designed the system around one principle: music should drive gameplay, not accompany it. Timing data and behavior are separated entirely, so designers can produce different genres from the same beatmap without touching the framework.</p><p><b>Versatility by Design:</b> The framework supports rhythm FPS, parkour, twin-stick shooters, and more from one architecture. Every design decision prioritized flexibility over specificity.</p>",
+            "Technical Game Designer": "<p><b>Core Architecture:</b> C++ timeline driven by Metasound. Python parser extracts osu beatmap data into DataTables. Entire framework is a self-contained, reusable Engine Plugin.</p><p><b>Performance Architecture:</b> Lightweight UObjects instead of Actors for note state management. Each instance manages its own lifecycle. Designed explicitly for future object pooling.</p><p><b>Designer Empowerment:</b> MusicActionInstance manages when. MusicAction manages what. Designers derive from both to create unique gameplay without C++.</p>"
         }
     },
     "ProjectSasha": {
@@ -134,23 +108,21 @@ const projectDetails = {
         roles: ["Game Designer", "Technical Game Designer"],
         duration: "In Development",
         year: 2025,
-        role: "Sole Creator — Designer, Programmer, World Builder",
+        role: "Sole Creator — Designer, Programmer",
         image: "./assets/images/ProjectSasha.svg",
         video: null,
-        short: "A top-down action-exploration game where scanning IS the entire game. Knowledge is the resource, memory is the currency, and every mechanic maps to a single philosophical question: what is worth remembering?",
-        long: "Project Sasha is built around a single mechanic — scanning — that drives every other system: exploration, combat, progression, and narrative. The player controls an android navigating a brutalist megastructure. There is no traditional inventory — only data stored in a finite memory budget. The tension of every moment is the tension between knowing more and having the capacity to act. The game draws from BLAME!, NieR: Automata, and Armored Core 6 aesthetically and structurally.",
+        videos: [
+            { label: "Scanning V.1", file: "./assets/videos/Sasha SonarVersion 0.3.mp4" },
+            { label: "Memory Economy", file: "./assets/videos/Sasha Memory system 0.1.mp4" }
+        ],
+        short: "A top-down exploration game where scanning IS the entire game. Knowledge is the resource, memory is the currency, and every mechanic asks: what is worth remembering?",
+        long: "Project Sasha is built around a single mechanic—scanning—that drives exploration, combat, and progression. You control an android navigating a brutalist megastructure. There is no traditional inventory; everything you carry, know, or use is data stored in a finite memory budget. The game draws from BLAME! and NieR: Automata—functional, sparse, and data-first.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
-        myContribution:[
-            "<b>Core Design Philosophy:</b> Designed the entire game around four pillars: knowledge as resource, the world is dark until earned, commitment creates consequence, and the terminal is the exhale. Every mechanic maps to a memory decision — ghost scanning (volatile, reversible) vs full scanning (permanent, costly).",
-            "<b>Scanning System Architecture:</b> Designed a two-tier scanning system with a unique dot-cloud visual language. Objects progress from invisible → dot cloud (passive awareness) → ghost scan (volatile data, ice blue) → full scan (permanent, amber → solid mesh). Ghost scans are spatially constrained — players must physically traverse large objects, painting them with attention.",
-            "<b>Memory Architecture:</b> Designed a finite memory budget system where everything costs megabytes — scanned objects, weapons, programs. Weapons must be transferred to the OS chip to be executable, permanently reducing scan capacity. Every weapon is a tradeoff. Map chips are discrete data containers found in the world, not purchased.",
-            "<b>World & Lore Design:</b> Created a complete fictional framework ('Digital Gnosticism') where the metaphor and the mechanic are the same thing. The world is unformatted Biometal (Vantablack) until scanned into existence (Grey Concrete). Combat requires scanning enemies to force them into a solid state before they can be destroyed.",
-            "<b>Current Status:</b> Scanning mechanic prototype complete. Character movement and further systems in active development."
-        ].join('</p><p>'),
+        myContribution: "<p>Architected the entire 'Megabyte' economy and engineered the underlying scanning mechanics, prioritizing procedural data-states and memory allocation over standard character controllers.</p>",
         roleContributions: {
-            "Game Designer": "<p><b>Core Design Pillars:</b> Built the entire game around four pillars: knowledge as resource, the world is dark until earned, commitment creates consequence, and the terminal is the exhale. Every mechanic maps to a memory decision.</p><p><b>Memory Architecture:</b> Designed a finite memory budget where everything costs megabytes — scans, weapons, programs. Weapons must transfer to the OS chip to be usable, permanently reducing scan capacity. Every weapon is a tradeoff.</p><p><b>World & Lore:</b> Created 'Digital Gnosticism' — a framework where the world is unformatted Biometal (Vantablack) until scanned into existence (Grey Concrete). The metaphor and the mechanic are the same thing.</p>",
-            "Technical Game Designer": "<p><b>Two-Tier Scanning System:</b> Designed and implemented a scanning system with a unique dot-cloud visual language. Objects progress through states: invisible → dot cloud → ghost scan (volatile, ice blue) → full scan (permanent, amber → solid mesh).</p><p><b>Spatial Scanning:</b> Ghost scans are spatially constrained — players must physically traverse large objects, painting them with attention by moving alongside them. Scan speed uses an exponential fill curve modeling resistance.</p>"
+            "Game Designer": "<p><b>Systemic Narrative:</b> Designed a cohesive economy where knowledge is the resource. It took a month of heavy iteration to unify exploration, combat, and progression under a single 'Megabyte' budget where every mechanical decision is a memory decision.</p><p><b>Player Choice & Tension:</b> Created a risk/reward exploration loop similar to managing torches in Minecraft. Players can 'Ghost Scan' (volatile, free) to push further into the dark, or 'Full Scan' (permanent, costly) to solidify the world, forcing a constant tradeoff between knowing more and having the capacity to act.</p><p><b>World Design:</b> Developed 'Digital Gnosticism'—a framework where the world is unformatted Biometal until scanned into physical existence.</p>",
+            "Technical Game Designer": "<p><b>Scanning Algorithms:</b> Built the core scanning mechanic using <span class='magic-link' data-src='./assets/videos/Sasha SonarVersion 0.3.mp4'>BFS Waves</span> constrained by radius, creating an organic flood-fill effect rather than a cheap, instant radial reveal.</p><p><b>Procedural Visual Language:</b> Engineered a procedural mesh system that generates a dynamic dot-cloud based on an object's bounding box and data weight. The material tints (Grey → Ice Blue → Amber) communicate exact game states to the player entirely without UI.</p><p><b>Memory Architecture:</b> Programmed the <span class='magic-link' data-src='./assets/videos/Sasha Memory system 0.1.mp4'>Megabyte Framework</span>, including volatile memory allocation, hardcoded budgets, and an overflow protection system that flashes red and blocks scans if memory limits are exceeded.</p>"
         }
     },
     "ProjectCircle": {
@@ -166,16 +138,18 @@ const projectDetails = {
         role: "Sole Creator — Technical Game Designer",
         image: "./assets/images/ProjectCircle.svg",
         video: null,
-        short: "A rhythm-based bullet hell FPS built on top of Project: Cadence, stress-testing the framework's ability to drive an entirely different genre of gameplay.",
-        long: "Project Circle is a design experiment that pushes the Cadence music-driven event system into FPS territory. Enemy attacks, bullet patterns, and spawns are all synchronized to the beat. The project served as a real-world stress test of the Cadence framework's flexibility and exposed the boundaries of the system's current architecture.",
+        short: "A rhythm bullet hell FPS built on the Cadence plugin. You race inside a hollow sphere while a giant boss shoots at you in sync with the music. Community-made songs, one song per planet, one boss per sphere. Proved the Cadence framework could drive combat. Exposed where the architecture needed extending.",
+        long: "Project Circle started as a stress test for Cadence and became its own design territory. The core: you move inside a hollow sphere (gravity pulls you to the inner surface), a boss occupies the same space, all its attacks and patterns are synchronized to the current song. The community picks the songs. Each planet has a different track and a different authored challenge.",
+        story: "The idea came directly from Cadence. I had a framework for making gameplay happen in sync with music and I wanted to know if it could handle something chaotic — a bullet hell where the chaos itself is rhythmically authored.\n\nThe spherical gravity came from an older design obsession. The player is inside the planet, walking on the interior surface. The visual result is that the world curves upward around you in every direction, which changes how you read incoming projectile patterns and how movement feels at speed. It fits a bullet hell well because your situational awareness has to work differently.\n\nThe design had community songs as a core pillar. Each planet corresponds to one track. The boss patterns for that planet are mapped to that song's beats. A community member who creates a beatmap is also authoring the boss fight. The system was already designed to support this because of how Cadence separates timing data from behavior — you map timestamps to actions, and different mappers would map different actions to the same beats.\n\nWhat the prototype proved: Cadence could drive complex combat choreography across multiple simultaneous enemy behaviors. What it exposed: the framework needed extension to handle the density of events a bullet hell requires without the timing system becoming a bottleneck.\n\nI have a new design direction for it now that I want to develop properly.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution:[
-            "<b>Framework Stress Test:</b> Used Project Cadence as the foundation and built a first-person bullet hell prototype on top of it, proving the framework could drive combat-oriented gameplay, not just rhythm-action.",
-            "<b>Design Iteration:</b> Explored the design space of rhythm-synchronized enemy behavior — choreographing attack patterns, spawn waves, and bullet trajectories to the beat. Identified where the Cadence system excelled and where its architecture needed extension."
+            "<b>Framework Stress Test:</b> Used Project Cadence as the foundation and built a first-person bullet hell prototype on top of it, proving the framework could drive complex combat choreography across simultaneous enemy behaviors.",
+            "<b>Spherical Gravity System:</b> Implemented custom gravity pulling the player to the interior surface of a hollow sphere. Player walks on the inside of the planet, world curves upward in every direction, changing how movement and projectile reading works.",
+            "<b>Community-Driven Design:</b> Designed the beatmap-to-boss-pattern pipeline so community mappers could author fight choreography by creating beatmaps. Different mappers, different authored experiences on the same planet."
         ].join('</p><p>'),
         roleContributions: {
-            "Technical Game Designer": "<p><b>Framework Stress Test:</b> Built a fully functional 3D bullet hell prototype directly on top of the Cadence C++ framework to validate its cross-genre capabilities. Synced complex enemy attack patterns and projectile spawns entirely to Metasound data.</p>"
+            "Technical Game Designer": "<p><b>Framework Validation:</b> Built a fully functional 3D bullet hell prototype on the Cadence C++ framework, syncing complex enemy attack patterns and projectile spawns entirely to Metasound data. Validated cross-genre capability. Identified where the architecture needed extension for high-density event scenarios.</p><p><b>Spherical World Design:</b> Designed and implemented the interior-sphere movement model. Player gravity inverted to interior surface, creating a readable but disorienting play space that changes how bullet patterns are authored and dodged.</p>"
         }
     },
     "CRTexe": {
@@ -189,21 +163,21 @@ const projectDetails = {
         role: "Project Lead & SFX Designer",
         context: "Brackeys Game Jam — Team of 8",
         duration: "Game Jam",
-        video: null, // Fixed: Moved itch link to learnMore
+        video: null,
         learnMoreLink: "https://gianluca-iacchini.itch.io/crt-exe",
+        links: [
+        {"label":"Play on itch.io","icon":"game-controller-outline","url":"https://gianluca-iacchini.itch.io/crt-exe"}
+        ],
         image: "./assets/images/CRTexe.svg",
-        short: "Led a team of 8 through conceptualization, system design, and production in a game jam environment.",
-        long: "CRT.exe is a puzzle-exploration game built in Godot during the Brackeys Game Jam 2026.1. On a team of 8 people with varied skill sets and experience levels, I naturally stepped into the leadership role — defining the game's core concept, designing the system behind the idea, and managing the production pipeline to bring it to submission. My hands-on contribution was all sound effects.",
+        short: "Led a team of 8 through a game jam by designing the game around how the team could actually function. Each area owned by one person, one mechanic, one hidden code. No dependencies, no bottlenecks.",
+        long: "CRT.exe is a puzzle-exploration game built during Brackeys Game Jam 2026.1. On a team of 8 with strong independent personalities, I designed the game structure specifically to give each person full ownership of one piece. The design and the team philosophy were the same thing.",
+        story: "Every team has a different dynamic. This one had strong, independent personalities, which is great for creativity and harder for cohesion. The question was not how to get everyone to agree on everything, but what structure would let each person contribute without depending on anyone else to make progress.\n\nThe theme was strange places. The idea I pitched was simple: there is a TV, it asks for a code, you find the code somewhere in the current area, you input it, and now you are somewhere new. That is the whole loop.\n\nThe reason it worked for the team was structural. Anyone who wanted to could claim an area, design whatever mechanic they felt like for it, hide a code somewhere inside, and own that piece completely from start to finish. No coordination required. No one blocking anyone else. You could make progress on your area without a single conversation with the rest of the group.\n\nThe design solved the team problem. They were the same solution.\n\nI went in planning to just make sound effects and not stress too much about it. I ended up leading the whole group to a finished submission. The game was rough. But I left knowing exactly how I would run the next one.",
         tools:[ { name: "Godot", icon: codeIconSVG } ],
         cardEngineName: "Godot",
-        myContribution:[
-            "<b>Project Leadership:</b> Led conceptualization and production for a team of 8. Defined the game's core concept, structured the development pipeline, and ensured the team stayed aligned from idea to submission.",
-            "<b>System Design:</b> Designed the underlying system and puzzle logic that the rest of the team implemented. Communicated the design vision clearly enough that 7 other people could build it without ambiguity.",
-            "<b>SFX Design:</b> Created all sound effects for the game, contributing to the atmospheric and unsettling tone."
-        ].join('</p><p>'),
+        myContribution: "<p>Led conceptualization and production for a team of 8. Designed a game structure that gave each team member full ownership of one area with no cross-dependencies. Created all sound effects. Ended up leading the full group despite planning a minimal role.</p>",
         roleContributions: {
-            "Leadership": "<p><b>Project Leadership:</b> Led conceptualization and production for a team of 8 with varied skill sets and experience levels. Defined the core concept, structured the development pipeline, and ensured the team stayed aligned from idea to submission.</p>",
-            "Game Designer": "<p><b>Core Puzzle Logic:</b> Designed the underlying systemic puzzle logic that the engineering team implemented. Communicated the design vision clearly enough that 7 other people could build it without ambiguity.</p>"
+            "Leadership": "<p><b>Team Structure:</b> Diagnosed what would make this specific team functional and built the production structure around it. Each person owned one area completely: their mechanic, their level, their hidden code. No bottlenecks, no blocking. Team reached a finished submission.</p>",
+            "Game Designer": "<p><b>Systems Design:</b> Designed a gameplay loop where the structure of the game was also the structure of the team. The TV-and-code loop meant each area was self-contained by design, which is what made parallel independent development possible.</p>"
         }
     },
     "PoliceSimulator": {
@@ -245,19 +219,23 @@ const projectDetails = {
         role: "Game Programmer & Tech Game Designer",
         context: "Untold Games (for Squanch Games)",
         video: "https://www.youtube.com/watch?v=qk2y4clYe9o",
-        learnMoreLink: "request", 
+        learnMoreLink: "request",
+        links: [{"label":"Available on Request","icon":"mail-outline","url":"request"}
+        ],
         image: "./assets/images/HighOnLife.png",
-        short: "Nintendo Switch port tackling deep-level architecture bugs and system stability.",
-        long: "I worked with Untold Games on the complex technical challenge of porting 'High on Life' to the Switch. My role quickly evolved beyond general programming to become a go-to resource for the project's most difficult issues.",
+        short: "Nintendo Switch port of High on Life. Over 8 months became the team's primary reference for the game's systems. Deep C++ and Blueprint debugging, internal tooling built from scratch, critical subsystems rewritten for Switch stability.",
+        long: "Porting a game as large and technically complex as High on Life to the Switch meant wearing a lot of hats. Beyond fixing bugs, I ended up being the person the team came to when they needed to understand how any system in the game worked — input, level streaming, enemy AI, UI, you name it. The role evolved from programmer to de facto system archaeologist.",
+        story: "A few months in I was genuinely having fun. The game's humor would catch me off guard constantly, and there was always something that would make me burst out laughing mid-debugging session.\n\nThe Lasagna Technique: There was a boss fight where one specific attack would break every collision in the entire game. Player, enemies, everything would fall through the floor indefinitely. To debug it I built stacked collision floors in their own sublevels, one on top of the other, to see which one the player would still land on when falling. I called it the Lasagna Technique. The actual cause was a division by zero inside the boss attack code. The Switch compiler handled that edge case differently from PC and killed the entire collision matrix. One code change fixed it. I was a very happy person for a few days.\n\nThe Bink Situation: Every video in the game would go black if the player inserted an SD card. After a week of digging I found that the Unreal Engine source code for Switch had the read path and write path pointing to the same location. It was looking for videos to read inside the write folder, finding nothing, and defaulting to black. I hardcoded the video path directly into the Bink media player CPP. Hacky, but it worked. I still have no idea how that bug had never surfaced in any other project.\n\nThe Ubergraph Crash: Random crashes happening seemingly anywhere in the game. Traced it to a Blueprint event in the Game Instance that had two output execution pins connected to nothing. From prior study of Unreal's Ubergraph — the compiled, low-level version of Blueprints — I knew unused pins could create memory leaks. The Game Instance is the only object that persists across every level load in Unreal Engine. Those loose references were preventing the world from being properly destroyed during map transitions. Rewrote the event in C++, removed the pins, fixed.\n\nThe Lighting Tool: A technical artist needed to switch between different lighting setups per area for performance reasons. Simple idea: box colliders throughout levels, each holding a lighting configuration, player entering triggers the switch. It took nine iterations to get it working correctly. Grapple hook disabled all player collisions including ours, so we had to create a separate attached actor. That actor caused a different issue where spawning inside a collider wouldn't register, so we added a forced collision check every 0.5 seconds for 60 seconds. Each fix introduced a new edge case. Nine iterations. It worked perfectly in the end.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution:[
-            "<b>Debugging:</b> Investigated and resolved critical bugs in C++ and blueprints, related to the core game mechanics gameplay systems and more.", 
-            "<b>Systems & Gameplay Stabilization:</b> Rewrote logic of different system to ensure stability on the Nintendo Switch. Solved a lot of different issues related to level streaming and race conditions."
+            "<b>Deep Bug Fixing:</b> Investigated and resolved critical bugs across C++ and Blueprints. Division-by-zero killing the entire collision matrix. Blueprint memory leaks in the Game Instance causing random crashes on level transitions. Race conditions from misused Delay nodes. Remote Events firing on levels that hadn't finished streaming in.",
+            "<b>Internal Tooling:</b> Extended the cheat manager with Switch performance stats. Built a multi-iteration lighting configuration tool for a technical artist, handling edge cases across grapple hook collision conflicts, spawn-inside-volume detection, and dynamic attachment at runtime.",
+            "<b>Systems Knowledge:</b> Became the team's primary reference for how the game worked. Input system, level streaming, enemy AI behavior trees, UI architecture — if you needed to understand something, I was the first person the team came to."
         ].join('</p><p>'),
         roleContributions: {
-            "Game Programmer": "<p><b>Deep-Level Debugging:</b> Investigated and resolved critical bugs in C++ and Blueprints related to core gameplay systems. Rewrote logic of different systems to ensure stability on the Nintendo Switch.</p>",
-            "Technical Game Designer": "<p><b>Tool Development:</b> Extended the cheat manager UI with essential performance stats. Designed and implemented a multi-iteration lighting tool for a technical artist, enabling rapid in-editor changes to level lighting.</p>"
+            "Game Programmer": "<p><b>Deep-Level Debugging:</b> Fixed critical C++ and Blueprint bugs — division by zero killing the collision matrix, Ubergraph memory leaks in the Game Instance, Bink video player reading from the wrong path, Remote Events firing on unloaded levels, collision frequency performance changes creating pass-through bugs for fast-moving actors.</p><p><b>Switch-Specific Systems:</b> Rewrote the input identification system for Joy-Con and Pro Controller detection. Standardized how the settings menu handled controller type switching. Traced and fixed platform-specific compiler behavior differences.</p>",
+            "Technical Game Designer": "<p><b>Tool Development:</b> Extended the cheat manager UI with Switch performance monitoring stats. Designed and implemented a lighting configuration system for a technical artist — a nine-iteration process working around grapple hook collision conflicts, spawn-inside-volume edge cases, and dynamic actor attachment at runtime.</p><p><b>System Documentation:</b> Became the team's primary knowledge source for how High on Life's systems interconnected. Level streaming architecture, enemy AI behavior trees, the custom input system Squanch Games had built — I understood it and made sure others could too.</p>"
         }
     },
     "UEFN: Battleship": {
@@ -270,8 +248,11 @@ const projectDetails = {
         year: 2023,
         role: "Lead Creator & Verse Developer",
         context: "Game Developer (me)",
-        video: null, // Fixed: Moved fortnite link to learnMore
+        video: null, 
         learnMoreLink: "https://www.fortnite.com/@untoldgames/1028-2740-2494",
+        links: [
+        {"label":"Play on Fortnite","icon":"game-controller-outline","url":"https://www.fortnite.com/@untoldgames/1028-2740-2494"}
+        ],
         image: "./assets/images/Battleship.jpeg",
         short: "Fast-paced strategy game from concept to launch on Fortnite.",
         long: "This project involved the complete creation of a multiplayer strategy game from the ground up. I spearheaded the game design, level layout, and player experience, with the challenge of creating the entire battleship custom system within Verse.",
@@ -294,6 +275,9 @@ const projectDetails = {
         role: "Lead Systems Programmer",
         video: "https://www.youtube.com/watch?v=CzMTSNYmdYI",
         learnMoreLink: "https://www.fortnite.com/@untoldgames/8369-2685-8749",
+        links: [
+        {"label":"Play on Fortnite","icon":"game-controller-outline","url":"https://www.fortnite.com/@untoldgames/8369-2685-8749"}
+        ],
         image: "./assets/images/PulsePartyThumbnail.png", 
         short: "A chaotic party game with 8 unique minigames built in Verse.",
         long: "As a larger scope follow-up to PulseMatch, PulseParty expands the core concept into a full party game experience. Players face off in a series of 8 different competitions, including races, deathmatches, and king of the hill modes.",
@@ -316,8 +300,11 @@ const projectDetails = {
         year: 2022,
         role: "Sole Creator",
         image: "./assets/images/work-5.jpg",
-        video: null, // Fixed
+        video: null, 
         learnMoreLink: "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
+        links: [
+        {"label":"Read on Substack","icon":"document-text-outline","url":"https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true"}
+        ],
         short: "A reverse-horror prototype focusing on unique movement and possession mechanics.",
         long: "This project is a love letter to the 2001 classic 'Aliens Versus Predator 2,' aiming to recreate the feeling of being a stealthy but powerful Facehugger. The core design goal was to explore and prototype a set of interconnected mechanics: movement, possession, and environmental interaction.",
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
@@ -330,26 +317,33 @@ const projectDetails = {
     },
     "Cycle": {
         id: "Cycle",
-        title: "Cycle (Award-Winning)",
+        title: "Cycle",
         category: "university work",
         published: true,
         tier: "hero",
         roles: ["Leadership", "Game Designer", "Game Programmer"],
         isFeatured: true,
-        year: 2022,
-        role: "Game Director & Lead Systems Designer",
+        year: 2021,
+        role: "Game Director, Sole Programmer, Designer",
+        context: "Falmouth University — Team of 3",
         video: "https://youtu.be/Cuwhx4b7tYo",
         learnMoreLink: "https://wrong-world-studios.itch.io/cycle",
+        links: [
+        {"label":"Play on itch.io","icon":"game-controller-outline","url":"https://wrong-world-studios.itch.io/cycle"}
+        ,{"label":"View on The Rookies","icon":"trophy-outline","url":"https://www.therookies.co/entries/13406"}
+        ,{"label":"View on GitHub","icon":"logo-github","url":"https://github.com/VarXael/Cycle"}
+        ],
         image: "./assets/images/Cycle.png",
-        short: "Award-winning surrealist puzzle game. Best 3rd Year Videogame at Falmouth University.",
-        long: "Cycle is a surrealist puzzle-adventure game that won 'Best 3rd Year Videogame' at Falmouth University (2021) and was chosen to represent the university at the G7 Summit. On a team of three, I was responsible for leading the project's vision while also acting as the sole programmer and designer.",
+        short: "Best 3rd Year Videogame at Falmouth University 2021. Chosen to represent Falmouth at the G7 Summit in Cornwall. Built by a team of 3: two artists and me. I had never used Unreal Engine before this project. I spent August learning it, then we made the game.",
+        long: "Cycle is a surrealist puzzle-adventure about retrieving the phases of a day and returning them to a world stuck in a single moment. Built over 8 months by two artists and one programmer. I was the programmer, director, producer, level designer, puzzle designer, and playtester. Everything that ran in the engine, I built.",
+        story: "Oliver approached me after our second year and said he wanted to make something together. I knew him well but we had never actually worked on the same project. He was genuinely talented so I said yes immediately. I also knew Anastasia had to be part of it — I had worked with her the year before and was floored by her concept art. The three of us formed Wrong World Studios.\n\nI had never used Unreal Engine before this project. I spent the entire month of August learning it. We started development in October.\n\nThe first phase was world building. We wanted something that felt truly different. I had this elaborate concept called Pillar World — giant beams of primordial flame, a darkness below, creatures built from solidified light. It was too complex for what three people could build in eight months. Anastasia was the one who shifted our direction. She opened my eyes to surrealism: you do not need to explain a world for it to feel real. You just need it to feel strange and somehow safe at the same time.\n\nThat became Cycle. A world stuck in a single moment, waiting for someone to bring the phases of the day back. The feeling we were after was something like: I know you feel lost, but I am here, and I will guide you through this.\n\nI wore every hat on the project. There were decisions the team disagreed with. I made them anyway, and in most cases they turned out to be right. That responsibility was uncomfortable and it taught me more about directing than anything else I have done.\n\nThe seamless teleports are probably my favourite technical detail. You get moved around the world without ever knowing it happened. Nobody who played the game ever noticed — but people consistently reported feeling slightly disoriented in a way they could not explain. That was exactly the feeling we wanted.\n\nThe G7 Summit preparation was less dramatic than it sounds. They mainly wanted a timer added and the menus adjusted for easy playtesting by delegates.\n\nWe won Best 3rd Year Videogame at Falmouth University 2021. The university still shows Cycle at their expos, years after I left. That means a lot.\n\nBoth Anastasia and Oliver have since left the games industry. That gives me a stronger reason to keep going — to one day make something as strange and beautiful as what we built together, and show it to them.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
-        myContribution: "<p>Led a team of three (myself and two artists) from pre-production to publishing on Itch.io. Designed and implemented all foundational systems: a dynamic hub-world that changes based on progression, seamless world transitions without loading screens, and a day/night cycle.</p>",
+        myContribution: "<p>Sole programmer on a team of three. Designed and built every system in the engine from scratch, while also directing the project, managing production, and designing levels and puzzles. Learned Unreal Engine in August, started the project in October.</p>",
         roleContributions: {
-            "Leadership": "<p><b>Project Direction:</b> Led a team of three (myself and two artists) from pre-production to publishing on Itch.io. Managed deadlines, maintained the core vision.</p>",
-            "Game Designer": "<p><b>Systems Architecture:</b> Designed all foundational systems: a dynamic hub-world that changes based on progression, seamless world transitions without loading screens.</p>",
-            "Game Programmer": "<p><b>Sole Programmer:</b> As the project's only programmer, I built the entire game in Unreal Engine from scratch.</p>"
+            "Leadership": "<p><b>Project Direction:</b> Led a team of three from pre-production through publishing on Itch.io and The Rookies. Set and held creative direction through disagreements. Managed milestones, kept the project scoped to what three people could actually ship. Prepared the game for the G7 Summit demonstration in Cornwall.</p><p><b>Team Formation:</b> Assembled the team, recognising the specific strengths each person brought. Both teammates poured enormous trust into the project from the start and delivered exceptional work throughout.</p>",
+            "Game Designer": "<p><b>Systems Design:</b> Designed the hub world that changes dynamically as the player retrieves each phase of the day. Designed the day/night cycle system tied directly to game progression. Designed and iterated the puzzle systems across all levels, playtesting each one personally to verify they worked.</p><p><b>Level Design:</b> First time designing levels seriously. Built and iterated the frog level, the coliseum puzzle, the clock level, and the final sun sequence. The clock level was designed and working in a week. The coliseum took considerably longer.</p>",
+            "Game Programmer": "<p><b>Sole Programmer:</b> Built every system in Unreal Engine 4 from scratch on an engine I had never used before. Hub world progression, seamless level transitions the player never consciously notices, collectibles system with a final cutscene, day/night cycle, respawn system, puzzle logic across all levels.</p><p><b>Seamless Transitions:</b> Players are teleported between areas without awareness of the transition. Consistently produced a subtle feeling of disorientation without players identifying the cause. Nobody noticed the teleport. Everybody felt something.</p>"
         }
     },
     "CardsWeaver": {
@@ -362,8 +356,11 @@ const projectDetails = {
         year: 2023, 
         role: "Lead Game Designer",
         image: "./assets/images/Card's Weaver.png",
-        video: null, // Fixed: Moved itch link to learnMore
+        video: null, 
         learnMoreLink: "https://batraf.itch.io/cards-weaver",
+        links: [
+        {"label":"Play on itch.io","icon":"game-controller-outline","url":"https://batraf.itch.io/cards-weaver"}
+        ],
         short: "Card-based game developed at university using Unreal Engine.",
         long: "A university project focusing on card game mechanics and design principles, implemented in Unreal Engine.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
@@ -380,39 +377,50 @@ const projectDetails = {
         category: "university work",
         published: true,
         tier: "listed",
-        roles: ["Game Programmer"],
-        year: 2023, 
-        role: "Game Developer",
+        roles: ["Game Programmer", "Technical Game Designer"],
+        year: 2023,
+        role: "Systems Programmer",
         teamSize: "Verona University",
         image: "./assets/images/work-6.jpg",
-        video: null, // Fixed
-        learnMoreLink: "https://fraffer.itch.io/soul-driven",
-        short: "Action game developed as a university project.",
-        long: "A university project exploring action game development concepts.",
+        video: null,
+        learnMoreLink: "https://gitlab.com/Pietro92/soul-driven-project",
+        links: [
+        {"label":"Play on itch.io","icon":"game-controller-outline","url":"https://fraffer.itch.io/soul-driven"}
+        ,{"label":"View on GitLab","icon":"logo-gitlab","url":"https://gitlab.com/Pietro92/soul-driven-project"}
+        ],
+        short: "University project for a mobile game class. Built the entire character class-switching system using the Strategy design pattern — ISoulInterface, swappable Soul classes, parallel weapon hierarchy, and a step-by-step onboarding doc so any team member could add a new class without touching core systems.",
+        long: "Soul Driven is an action game built at the University of Verona. My contribution was the character architecture: a runtime class-switching system built around the Strategy pattern, with full documentation so the system could grow without me.",
+        story: "It was a university project for a mobile game class, team of a few people. I was responsible for the player character systems.\n\nThe core problem: the game had multiple playable classes (Warrior, Mage, Ranger) and the player needed to be able to switch between them at runtime. The naive solution is a big switch statement somewhere. The right solution is the Strategy pattern.\n\nI built ISoulInterface, which defines the contract every Soul class has to fulfil. Each Soul (Warrior, Mage, Ranger) derives from a Souls base class that implements LoadStats(), pulling from its own ScriptableObject stat table. The Player holds a reference to the current Soul via the interface and swaps it at runtime. Weapons run in a parallel hierarchy via IWeaponInterface, also swapped independently.\n\nThe part I'm most proud of is the documentation. I drew out the full class diagram in Miro and wrote a step-by-step guide: how to name your script, which folder it goes in, which interface to implement, how to create and register the ScriptableObject, how to link it to the stat manager. A new class was an independent, documented process that anyone on the team could follow without touching the systems I'd built.\n\nThe architecture held. Adding classes didn't break anything.",
         tools:[ { name: "Unity", icon: unityIconSVG } ],
         cardEngineName: "Unity",
-        myContribution: "<p>Implemented player character controls and combat mechanics. Developed enemy AI patterns and attack sequences. Created particle effects for abilities and impacts.</p>",
-        roleContributions: {} // Placeholder pending your input
+        myContribution: "<p>Designed and implemented the entire character class system using the Strategy design pattern. ISoulInterface defines the class contract. Each Soul class derives from a Souls base and loads its own stat table from a ScriptableObject. Player holds a runtime-swappable Soul reference. Parallel weapon hierarchy via IWeaponInterface. Wrote a full Miro documentation board — class diagrams and a step-by-step guide for adding new Soul classes without touching core systems.</p>",
+        roleContributions: {
+            "Technical Game Designer": "<p><b>System Architecture:</b> Designed the class-switching system around the Strategy pattern so Soul classes were hot-swappable at runtime without conditional logic in the Player. Each Soul owns its stats, its weapons, and its animations independently.</p><p><b>Documentation:</b> Produced a full class diagram and an onboarding flowchart for adding new Soul classes. Anyone on the team could add a class following the guide without needing to understand the underlying architecture.</p>",
+            "Game Programmer": "<p><b>Strategy Pattern Implementation:</b> Built ISoulInterface and IWeaponInterface, the Souls and Weapon base classes, and the ScriptableObject stat table system. Player swaps ISoulInterface references at runtime. Stat loading, weapon assignment, and animation override all happen through the interface without Player knowing which Soul is active.</p>"
+        }
     },
     "Covid19Training": {
         id: "Covid19Training",
         title: "Covid 19 Training",
         category: "professional work",
-        published: true,
+        published: false,
         tier: "listed",
         roles:["Game Programmer"],
         year: 2021, 
         role: "Game Programmer",
         teamSize: "Cineon Training",
         image: "./assets/images/work-2.jpg",
-        video: null, // Fixed
+        video: null,
         learnMoreLink: "https://cineon.training/covid-19-personal-protective-equipment-ppe-training/",
+        links: [
+        {"label":"View Project","icon":"link-outline","url":"https://cineon.training/covid-19-personal-protective-equipment-ppe-training/"}
+        ],
         short: "VR Training simulation for PPE in Unreal Engine.",
         long: "Developed PPE training scenarios using VR technology in Unreal Engine.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution: "<p>Scripted interaction logic for VR controllers and training objects. Implemented a scenario progression system with feedback mechanisms. Optimized performance for smooth VR experience.</p>",
-        roleContributions: {} // Placeholder pending your input
+        roleContributions: {} 
     },
     "UnrealEngineCourse": {
         id: "UnrealEngineCourse",
@@ -420,19 +428,22 @@ const projectDetails = {
         category: "professional work",
         published: true,
         tier: "listed",
-        roles: ["Game Programmer", "Technical Game Designer"], // Fixed: empty roles break the gallery logic
+        roles: ["Game Programmer", "Technical Game Designer"], 
         year: 2022, 
         role: "Unreal Engine Tutor",
         teamSize: "Creativity Unleashed",
         image: "./assets/images/work-1.jpg",
         video: null,
         learnMoreLink: "https://www.udemy.com/course/complete-unreal-engine-megacourse-beginner-to-expert/",
+        links: [
+        {"label":"View on Udemy","icon":"school-outline","url":"https://www.udemy.com/course/complete-unreal-engine-megacourse-beginner-to-expert/"}
+        ],
         short: "Online course for Unreal Engine.",
         long: "A 16-hour course introducing Unreal Engine Blueprints and programming structures.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         myContribution: "<p>Designed and recorded course modules covering Unreal Engine fundamentals, Blueprints, and common game programming patterns. Created example projects and exercises for students.</p>",
-        roleContributions: {} // Placeholder pending your input
+        roleContributions: {} 
     },
     "MonkHomebrew": {
         id: "MonkHomebrew",
@@ -441,24 +452,30 @@ const projectDetails = {
         published: true,
         tier: "listed",
         roles: ["Game Designer"],
-        year: 2023, 
+        year: 2023,
         role: "Game Designer",
         teamSize: "Personal Project",
         image: "./assets/images/Monk.png",
         video: null,
         learnMoreLink: "https://drive.google.com/file/d/1cyUGRzfhP4CjVwDljmbiXhwORSPAUSpp/view?usp=sharing",
-        short: "D&D Homebrew content for the Monk class.",
-        long: "Personal game design project creating new options for D&D.",
-        tools:[], // Fixed format
-        cardEngineName: "Tabletop", 
-        myContribution: "<p>Designed new subclasses and abilities for the D&D Monk class, focusing on thematic cohesion and mechanical balance. Formatted content for community sharing.</p>",
-        roleContributions: {} 
+        links: [
+        {"label":"Download PDF","icon":"document-outline","url":"https://drive.google.com/file/d/1cyUGRzfhP4CjVwDljmbiXhwORSPAUSpp/view?usp=sharing"}
+        ],
+        short: "Rebuilt the D&D Monk class from scratch around a new core mechanic: Vessels of Ki. Spectral floating objects that store memories, emotions and ideas, used for attacking, defending, and resource management. The base class redesign was tight enough that existing subclasses slotted into the new identity without major reworks — several became more purposeful within it.",
+        long: "The design challenge wasn't making the Monk more powerful. It was giving it a coherent identity that its subclasses could amplify rather than contradict. The Vessels of Ki system replaced the existing ki point economy with something tactile and thematic, while remaining mechanically compatible with the existing subclass structure.",
+        story: "The PHB Monk has a mechanical identity problem. Its features are useful but disconnected — ki points, Stunning Strike, Deflect Missiles, Unarmored Defense. There's no through-line. Subclasses then try to bolt something thematic on top of a chassis that doesn't have a clear idea of what it is.\n\nThe redesign started from a single question: what if ki was something you could hold, shape, and lose? The answer became Vessels — spectral floating objects orbiting the monk, imbued with memories, emotions, or ideas. You create them, fill them, and sacrifice them. Attacking with them, defending with them, empowering abilities with them. The resource is physical and present at the table.\n\nThe proof that the system worked came from the subclasses. Way of Shadow empties vessels to cast its spells — thematically, you're sacrificing something to disappear. Way of Mercy sacrifices a vessel to bring someone back from death — the vessel becomes the price of resurrection. Deflect Attack now destroys a vessel to reduce incoming damage — mechanically identical to before, but now it costs something you can see. Every existing subclass feature had a more natural home in the new framework than it had originally.\n\nThe base class was changed enough that some subclasses needed tweaks. None needed a full rebuild. That's the test.",
+        tools:[],
+        cardEngineName: "Tabletop",
+        myContribution: "<p>Rebuilt the D&D 5e Monk class around a new core mechanic — Vessels of Ki — replacing the existing ki point economy with a resource that is tactile, visible, and thematically loaded. Designed Ki Absorptions and Ki Strikes as the primary action economy, rewrote class features at every level to interface with the vessel system, and adapted eight existing subclasses (Shadow, Mercy, Open Hand, Ascendant Dragon, Astral Self, Drunken Master, Sun Soul, Long Death) to use vessels natively.</p>",
+        roleContributions: {
+            "Game Designer": "<p><b>Core Mechanic Design:</b> Designed the Vessels of Ki system from scratch — creation, filling, bonding, sacrifice mechanics, and the two-action categories (Ki Absorptions and Ki Strikes) that replaced the original ki point usage model. The resource is finite, physical, and carries flavor: vessels contain memories and emotions that affect how they interact with enemies and allies.</p><p><b>Subclass Integration:</b> Rewrote eight existing subclasses to interface natively with the vessel system. The test for each: does using a vessel here feel like a natural extension of the subclass identity, or a tax? Every subclass passed. Several became more thematically coherent within the new framework than they were originally.</p>"
+        }
     },
     "SyovaraHomebrew": {
         id: "SyovaraHomebrew",
         title: "Syovara Homebrew",
         category: "personal work",
-        published: true,
+        published: false,
         tier: "listed",
         roles: ["Game Designer"],
         year: 2023, 
@@ -478,7 +495,7 @@ const projectDetails = {
         id: "MaGiTeProject",
         title: "MaGiTe Project",
         category: "professional work",
-        published: true,
+        published: false,
         tier: "listed",
         roles:["Game Programmer"],
         year: 2025, 
@@ -505,8 +522,11 @@ const projectDetails = {
         role: "Game Designer & Developer",
         teamSize: "University Project",
         image: "./assets/images/work-4.jpg",
-        video: null, // Fixed
+        video: null, 
         learnMoreLink: "https://drive.google.com/file/d/1kqrXXSPwxUrCUG9qNnqnNzSuWa9S9QJv/view?usp=sharing",
+        links: [
+        {"label":"View Document","icon":"document-outline","url":"https://drive.google.com/file/d/1kqrXXSPwxUrCUG9qNnqnNzSuWa9S9QJv/view?usp=sharing"}
+        ],
         short: "University game project with a historical theme.",
         long: "A game developed as part of university studies, focusing on design and development.",
         tools:[ { name: "Unity", icon: unityIconSVG } ],
@@ -518,14 +538,14 @@ const projectDetails = {
         id: "FallingFusion",
         title: "Falling Fusion",
         category: "game jams",
-        published: true,
+        published: false,
         tier: "listed",
         roles:["Game Designer"],
         year: 2022, 
         role: "Game Designer & Developer",
         teamSize: "Game Jam Team",
         image: "./assets/images/work-8.jpg",
-        video: null, // Fixed
+        video: null, 
         learnMoreLink: "https://jonny5959.itch.io/falling-fusion",
         short: "Game Jam entry with a fusion mechanic, developed in Unreal Engine.",
         long: "A rapidly developed game for a game jam, focusing on core mechanics using Unreal Engine.",
@@ -538,7 +558,7 @@ const projectDetails = {
         id: "NickelNinja",
         title: "Nickel Ninja",
         category: "game jams",
-        published: true,
+        published: false,
         tier: "listed",
         roles: ["Game Designer"],
         year: 2023, 
@@ -556,7 +576,7 @@ const projectDetails = {
     },
     "FullCppMechGame": {
         id: "FullCppMechGame",
-        title: "Turn-Based Tactics (100% C++ Challenge)",
+        title: "Turn-Based Tactics (The C++ Bet)",
         category: "personal work",
         published: true,
         isFeatured: true,
@@ -566,20 +586,23 @@ const projectDetails = {
         role: "Sole Creator",
         image: "./assets/images/work-5.jpg", 
         video: null,
-        learnMoreLink: null, // We will put the GitHub link here later!
-        short: "A 1v1 turn-based strategy game built strictly in C++, taken from a Computer Science exam prompt to test my limits.",
-        long: "A colleague (who is also a Computer Science professor) playfully teased me about my non-traditional programming background. In response, I asked for his toughest 'build a videogame' exam prompt and built it in my free time to prove a point—and to help him playtest his own academic design. I set a strict rule: 100% C++, zero Blueprints. In one month, while working full-time, I built the entire turn-based grid game from scratch, mastering C++ architecture along the way.",
+        learnMoreLink: "https://github.com/VarXael/MechaTopDown",
+        links: [
+        {"label":"View on GitHub","icon":"logo-github","url":"https://github.com/VarXael/MechaTopDown"}
+        ],
+        short: "A 1v1 turn-based strategy game built strictly in C++ to prove a point to a skeptical Computer Science professor.",
+        long: "A colleague of mine—who happens to be a University Computer Science professor—was jokingly taking the piss out of my non-traditional programming background. I asked for his toughest 'build a videogame' exam prompt and built it in my free time just to flex on him (and to help him playtest his own missing edge cases). I set one strict rule: 100% C++, zero Blueprints. A month later, while working full-time, I had a fully functional grid-based tactics game and a newfound mastery of Unreal's C++ framework.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
-        myContribution: "<p>Translated a rigid academic design document into a fully functional game, building a custom grid system, pathfinding algorithms, and a robust turn-state manager entirely in C++.</p>",
+        myContribution: "<p>Took a rigid academic design document and turned it into a fully functional game, building a custom grid system, pathfinding algorithms, and a robust turn-state manager entirely in C++.</p>",
         roleContributions: {
-            "Technical Game Designer": "<p><b>System Translation:</b> Took a rigid academic Game Design Document (specifying exact grid sizes, obstacle logic, HP pools, and combat RNG) and architected a flexible system that respected those constraints.</p><p><b>Class Design:</b> Implemented the logic for asymmetric units (Sniper vs. Brawler), ensuring ranges, movement penalties, and combat mechanics functioned flawlessly on a 25x25 grid.</p>",
-            "Game Programmer": "<p><b>100% C++ Architecture:</b> Built the entire project without Blueprints to force my own learning. This required mastering Unreal's C++ framework, memory management, and class hierarchy in record time.</p><p><b>Algorithmic Implementation:</b> Engineered the grid-based movement and pathfinding (implementing DFS algorithms) to handle movement range calculations and obstacle avoidance.</p><p><b>Turn State Management:</b> Programmed the core game loop, including the coin-toss setup phase, alternating unit placement, and the strict phase-based combat turns.</p>"
+            "Game Programmer": "<p><b>100% C++ Architecture:</b> Built the entire project without Blueprints. I had to learn Unreal's C++ framework, memory management, and class hierarchy on the fly.</p><p><b>Algorithmic Implementation:</b> Engineered the grid-based movement and pathfinding (implementing DFS algorithms) to handle movement range calculations and obstacle avoidance.</p>",
+            "Technical Game Designer": "<p><b>System Translation:</b> Took the professor's strict academic document (specifying grid sizes, obstacle logic, HP pools, and combat RNG) and architected a playable system that respected those exact constraints.</p><p><b>Class Design:</b> Implemented the logic for asymmetric units (Sniper vs. Brawler), ensuring ranges, movement penalties, and combat mechanics functioned flawlessly on a 25x25 grid.</p>"
         }
     },
     "TheLibrary": {
         id: "TheLibrary",
-        title: "The Library (System Architecture Sprint)",
+        title: "The Library (12-Hour Blueprint Sprint)",
         category: "personal work",
         published: true, 
         isFeatured: true,
@@ -589,14 +612,17 @@ const projectDetails = {
         role: "Sole Programmer & Systems Designer",
         image: "./assets/images/work-5.jpg",
         video: null,
-        learnMoreLink: null,
-        short: "A technical design prototype featuring a dynamic spline-based inventory spawner and a modular customer queue system.",
-        long: "This was a technical design sprint for a management game concept where a librarian retrieves specific books for a constant flow of customers. I architected two major systems: a spline-based shelf spawner that reads item dimensions to perfectly pack physical books, and a robust customer queue manager. The personal challenge? I coded the entire modular queue system in Blueprints for 12 hours straight without pressing 'Play' once to test it. When I finally compiled and hit play, it ran flawlessly on the first try with zero bugs.",
+        learnMoreLink: "https://github.com/VarXael/LibraryProject",
+        links: [
+        {"label":"View on GitHub","icon":"logo-github","url":"https://github.com/VarXael/LibraryProject"}
+        ],
+        short: "A prototype for a Papers, Please-style management game, where I blind-coded the entire customer queue system in a 12-hour sprint.",
+        long: "The concept was a magical shop where customers ask for weird, narrative-triggering books—think 'Papers, Please' meets 'Overcooked'. As the sole programmer, I architected the shelf-spawning and customer queue logic. I opened Unreal, started connecting Blueprints, and entered a fugue state for 12 hours straight without pressing 'Play' to test it once. When I finally compiled and hit play... nothing moved. I realized movement speed was set to 0. I changed it to 400, pressed play again, and BAM. The entire system ran flawlessly on the first try. Zero spaghetti, zero bugs. Just pure, modular logic.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "Blueprints", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
-        myContribution: "<p>Engineered the dynamic object spawner and the customer state machine entirely in Blueprints, proving my structural understanding of visual scripting.</p>",
+        myContribution: "<p>Built a dynamic object spawner and a highly modular customer state machine, proving that visual scripting doesn't have to equal spaghetti code.</p>",
         roleContributions: {
-            "Technical Game Designer": "<p><b>Spline-Based Inventory Spawner:</b> Built a dynamic spawner that reads book dimensions (sizes 5, 10, 20, etc.) from Data Tables and uses math to perfectly pack them along a defined spline path inside bookshelf geometry.</p><p><b>State Machine & Queue Management:</b> Architected a modular customer queue system involving spawn doors, dynamic line nodes, and counter interactions. The system smoothly handles AI pathing and state transitions as customers wait, order, and leave.</p><p><b>Blind Implementation Sprint:</b> Proved my structural understanding of Blueprint architecture by coding the entire queue logic in a 12-hour blind sprint. Because the architecture was completely modular and avoided spaghetti-code, it compiled and ran perfectly on the very first test.</p>"
+            "Technical Game Designer": "<p><b>Spline-Based Inventory Spawner:</b> Built a dynamic spawner that reads book dimensions (sizes 5, 10, 20, etc.) from Data Tables and uses math to perfectly pack them along a defined spline path inside bookshelf geometry.</p><p><b>The 12-Hour Blind Sprint:</b> Architected a modular customer queue system (spawn doors, dynamic line nodes, counter interactions) by coding for 12 hours straight without pressing play. Because the logic was completely modular and well-planned in my head, it compiled and ran perfectly on the very first test (once I fixed the speed variable!).</p>"
         }
     }
 };
@@ -641,6 +667,20 @@ const createProjectListItem = (project, isStrictGrid = false) => {
     img.alt = project.title;
     img.loading = 'lazy';
     figure.appendChild(img);
+
+    // Video badge
+    if (project.videos && project.videos.length > 0) {
+        const vbadge = document.createElement('div');
+        vbadge.className = 'card-video-badge';
+        vbadge.innerHTML = '<ion-icon name="play-circle-outline"></ion-icon>';
+        figure.appendChild(vbadge);
+    } else if (project.video) {
+        const vbadge = document.createElement('div');
+        vbadge.className = 'card-video-badge';
+        vbadge.innerHTML = '<ion-icon name="play-circle-outline"></ion-icon>';
+        figure.appendChild(vbadge);
+    }
+
     link.appendChild(figure);
 
     const textContentDiv = document.createElement('div');
@@ -726,31 +766,40 @@ const renderPortfolio = (filterCategory) => {
         return;
     }
 
+    // Sort all projects by year descending
+    const sorted = [...filteredProjects].sort((a, b) => {
+        const ya = a.year || 0, yb = b.year || 0;
+        return yb - ya;
+    });
+
+    // Build continuous timeline: thin year marker, then projects in grid rows
     const projectsByYear = {};
-    filteredProjects.forEach(p => {
-        const year = p.year || "Other";
-        if (!projectsByYear[year]) projectsByYear[year] =[];
-        projectsByYear[year].push(p);
+    sorted.forEach(p => {
+        const y = p.year || 'Other';
+        if (!projectsByYear[y]) projectsByYear[y] = [];
+        projectsByYear[y].push(p);
     });
 
     const sortedYears = Object.keys(projectsByYear).sort((a, b) => {
-        if (a === "Other") return 1;
-        if (b === "Other") return -1;
+        if (a === 'Other') return 1;
+        if (b === 'Other') return -1;
         return b - a;
     });
 
-    sortedYears.forEach(year => {
-        const yearHeading = document.createElement('h3');
-        yearHeading.className = 'year-heading';
-        yearHeading.textContent = year;
-        portfolioGridContainer.appendChild(yearHeading);
+    sortedYears.forEach((year, yi) => {
+        // Thin year separator
+        const sep = document.createElement('div');
+        sep.className = 'timeline-sep' + (yi === 0 ? ' timeline-sep--first' : '');
+        sep.innerHTML = `<span class="timeline-sep__year">${year}</span><span class="timeline-sep__line"></span>`;
+        portfolioGridContainer.appendChild(sep);
 
-        const projectListUl = document.createElement('ul');
-        projectListUl.className = 'project-list';
+        // Cards in a wrapping grid
+        const row = document.createElement('div');
+        row.className = 'timeline-row';
         projectsByYear[year].forEach(project => {
-            projectListUl.appendChild(createProjectListItem(project, true));
+            row.appendChild(createProjectListItem(project, true));
         });
-        portfolioGridContainer.appendChild(projectListUl);
+        portfolioGridContainer.appendChild(row);
     });
 };
 
@@ -776,67 +825,292 @@ function buildContributionHTML(data) {
     return `<div class="detail-item"><p>Details not specified.</p></div>`;
 }
 
+function getYouTubeId(url) {
+    if (!url) return null;
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+    return match ? match[1] : null;
+}
+
 function openProjectModal(projectId) {
     const data = projectDetails[projectId];
     if (!data) return;
-    
+
+    const modalBody = document.getElementById('modalBody');
+    const projectModal = document.getElementById('projectModal');
+
     const modalShortText = data.short || data.myContribution || "Details provided below.";
     const modalLongText = (data.long && data.long !== data.short) ? data.long : '';
-
-    const hasVideo = data.video && data.video !== "#" && (data.video.startsWith("http://") || data.video.startsWith("https://"));
-    let mediaContentHtml = '';
-    if (data.image) {
-        if (hasVideo) mediaContentHtml = `<a href="${data.video}" target="_blank"><img src="${data.image}" alt="${data.title}"></a>`; 
-        else mediaContentHtml = `<img src="${data.image}" alt="${data.title}">`;
-    }
-    const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool => {
-        return `<span class="tool-item" title="${tool.name || ''}">${tool.icon ? `<span class="tool-icon ${tool.class || ''}">${tool.icon}</span>` : ''}<span class="tool-name">${tool.name || ''}</span></span>`;
-    }).join('') : '<p>N/A</p>';
+    const youtubeId = getYouTubeId(data.video);
+    const hasClips = data.videos && data.videos.length > 0;
     
-    let learnMoreButtonHTML = '';
-    if (data.learnMoreLink && data.learnMoreLink !== "#") {
-        if (data.learnMoreLink === "request") {
-            learnMoreButtonHTML = `<div class="modal-learn-more-request"><p>Detailed technical breakdown available upon request.</p></div>`;
-        } else {
-            learnMoreButtonHTML = `<div class="modal-learn-more"><a href="${data.learnMoreLink}" target="_blank" class="form-btn"><ion-icon name="link-outline"></ion-icon><span>Learn More</span></a></div>`;
-        }
+    const hasAnyMedia = hasClips || youtubeId || data.image;
+
+    // Tools & Links
+    const toolIconsHtml = data.tools && data.tools.length > 0 ? data.tools.map(tool =>
+        `<span class="pm-tool-item" title="${tool.name || ''}">${tool.icon ? `<span class="pm-tool-icon">${tool.icon}</span>` : ''}<span class="pm-tool-name">${tool.name || ''}</span></span>`
+    ).join('') : '<p>N/A</p>';
+
+    let linksHTML = '';
+    if (data.links && data.links.length > 0) {
+        linksHTML = '<div class="pm-links">' + data.links.map(l => {
+            if (l.url === 'request') return `<div class="pm-link-item pm-link-item--request"><ion-icon name="mail-outline"></ion-icon><span>Available on request</span></div>`;
+            return `<a href="${l.url}" target="_blank" rel="noopener" class="pm-link-item"><ion-icon name="${l.icon}"></ion-icon><span>${l.label}</span></a>`;
+        }).join('') + '</div>';
+    } else if (data.learnMoreLink && data.learnMoreLink !== '#') {
+        linksHTML = `<div class="pm-links"><a href="${data.learnMoreLink}" target="_blank" rel="noopener" class="pm-link-item"><ion-icon name="link-outline"></ion-icon><span>Learn More</span></a></div>`;
     }
-    if(modalBody) {
-        const roleTagsHtml = data.roles && data.roles.length > 0
-            ? data.roles.map(r => `<span class="role-tag role-tag--${r.toLowerCase().replace(/\s+/g, '-')}">${r}</span>`).join('') : '';
 
-        let sidebarImageHtml = '';
-        if (data.image && hasVideo) {
-            sidebarImageHtml = `<a href="${data.video}" target="_blank" class="modal-hero-img-wrap modal-hero-img-wrap--video"><img src="${data.image}" alt="${data.title}" class="modal-hero-img"><div class="modal-hero-play">▶</div></a>`;
-        } else if (data.image) {
-            sidebarImageHtml = `<div class="modal-hero-img-wrap"><img src="${data.image}" alt="${data.title}" class="modal-hero-img"></div>`;
+    // Tabs
+    const hasStory = data.story && data.story.trim().length > 0;
+    let storyHtml = hasStory ? (data.story.includes('<p>') ? data.story : data.story.split('\n\n').map(p => `<p>${p.trim()}</p>`).join('')) : '';
+    const tabsHtml = hasStory ? `
+        <div class="pm-tabs">
+            <button class="pm-tab active" data-tab="overview">Overview</button>
+            <button class="pm-tab" data-tab="story">The Story</button>
+        </div>` : '';
+
+    // Media HTML Generation
+    let mediaHtml = '';
+    let playlistHtml = '';
+    const fallbackImgSrc = data.image || './assets/images/placeholder.png';
+
+    if (hasClips) {
+        mediaHtml = `
+            <img class="pm-poster" src="${fallbackImgSrc}" alt="${data.title}">
+            <video class="pm-video main-video-player" src="${data.videos[0].file}" muted loop playsinline controls></video>
+            <div class="pm-click-overlay" title="Click to Expand"></div>
+        `;
+        if (data.videos.length > 1) {
+            playlistHtml = `<div class="pm-playlist-container"><div class="pm-playlist-minimal">` +
+                data.videos.map((vid, idx) => `
+                    <button class="playlist-btn-min ${idx === 0 ? 'active' : ''}" data-vid-src="${vid.file}">
+                        <ion-icon name="play"></ion-icon> ${vid.label}
+                    </button>
+                `).join('') + `</div></div>`;
         }
+    } else if (youtubeId) {
+        mediaHtml = `
+            <a href="https://www.youtube.com/watch?v=${youtubeId}" target="_blank" class="yt-fallback">
+                <img src="https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg" alt="YouTube Thumbnail" onerror="this.src='https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg'">
+                <div class="yt-fallback-btn"><ion-icon name="logo-youtube"></ion-icon> Watch Trailer</div>
+            </a>
+        `;
+    } else if (data.image) {
+        mediaHtml = `<img class="pm-poster" src="${data.image}" alt="${data.title}" style="opacity:1;">`;
+    }
 
+    const roleTagsHtml = data.roles && data.roles.length > 0
+        ? data.roles.map(r => `<span class="role-tag role-tag--${r.toLowerCase().replace(/\s+/g, '-')}">${r}</span>`).join('') : '';
+
+    if (modalBody) {
         modalBody.innerHTML = `
-            <div class="modal-two-zone">
-                <div class="modal-sidebar">
-                    ${sidebarImageHtml}
-                    <div class="modal-sidebar-meta">
-                        ${roleTagsHtml ? `<div class="modal-role-tags">${roleTagsHtml}</div>` : ''}
-                        <div class="modal-meta-list">
-                            <div class="modal-meta-item"><span class="modal-meta-label">Role</span><span class="modal-meta-value">${data.role || 'N/A'}</span></div>
-                            ${data.context ? `<div class="modal-meta-item"><span class="modal-meta-label">Context</span><span class="modal-meta-value">${data.context}</span></div>` : ''}
-                            ${data.duration ? `<div class="modal-meta-item"><span class="modal-meta-label">Duration</span><span class="modal-meta-value">${data.duration}</span></div>` : ''}
-                            <div class="modal-meta-item"><span class="modal-meta-label">Tools</span><div class="tool-list">${toolIconsHtml}</div></div>
+            <div class="pm-wrapper" id="pmWrapper">
+                
+                <!-- LEFT PANEL: MEDIA (32%) -->
+                ${hasAnyMedia ? `
+                <div class="pm-left-panel" id="pmLeftPanel">
+                    <div class="pm-media-player" id="pmMediaPlayer">
+                        ${mediaHtml}
+                    </div>
+                    ${playlistHtml}
+                    <div class="pm-meta-stage">
+                        ${roleTagsHtml ? `<div class="pm-role-tags">${roleTagsHtml}</div>` : ''}
+                        <div class="pm-meta-grid">
+                            <div class="pm-meta-item"><span class="pm-meta-label">Role</span><span class="pm-meta-value">${data.role || 'N/A'}</span></div>
+                            ${data.context ? `<div class="pm-meta-item"><span class="pm-meta-label">Context</span><span class="pm-meta-value">${data.context}</span></div>` : ''}
+                            ${data.duration ? `<div class="pm-meta-item"><span class="pm-meta-label">Duration</span><span class="pm-meta-value">${data.duration}</span></div>` : ''}
                         </div>
-                        ${learnMoreButtonHTML}
+                        ${data.tools && data.tools.length > 0 ? `<div class="pm-tool-list">${toolIconsHtml}</div>` : ''}
+                        ${linksHTML}
                     </div>
                 </div>
-                <div class="modal-main">
-                    <h3 class="modal-project-title">${data.title}</h3>
-                    <div class="modal-overview">
-                        <p class="modal-short">${modalShortText}</p>
-                        ${modalLongText ? `<p class="modal-long">${modalLongText}</p>` : ''}
+                ` : ''}
+
+                <!-- RIGHT PANEL: TEXT (68%) -->
+                <div class="pm-right-panel" id="pmRightPanel" style="${!hasAnyMedia ? 'border-radius: 16px;' : ''}">
+                    <button class="pm-close-btn" id="pmCloseBtn"><ion-icon name="close-outline"></ion-icon></button>
+                    
+                    <h3 class="pm-title">${data.title}</h3>
+                    
+                    ${tabsHtml}
+                    
+                    <div class="pm-tab-content" data-tab-content="overview">
+                        <div class="pm-overview">
+                            <p class="pm-short">${modalShortText}</p>
+                            ${modalLongText ? `<p class="pm-long">${modalLongText}</p>` : ''}
+                        </div>
+                        <div class="pm-contributions">${buildContributionHTML(data)}</div>
                     </div>
-                    <div class="modal-contributions">${buildContributionHTML(data)}</div>
+                    
+                    ${hasStory ? `<div class="pm-tab-content pm-tab-content--hidden" data-tab-content="story"><div class="pm-story">${storyHtml}</div></div>` : ''}
                 </div>
             </div>`;
+
+        // ── PEEK AND COMMIT LOGIC ── //
+        const wrapper = modalBody.querySelector('#pmWrapper');
+        const leftPanel = modalBody.querySelector('#pmLeftPanel');
+        const rightPanel = modalBody.querySelector('#pmRightPanel');
+        const mediaPlayer = modalBody.querySelector('#pmMediaPlayer');
+        const innerClose = modalBody.querySelector('#pmCloseBtn');
+        const videoElement = modalBody.querySelector('.main-video-player');
+        
+        let isMegaMode = false;
+        let defaultVideoSrc = videoElement ? videoElement.src : null;
+        let currentActiveSrc = defaultVideoSrc;
+
+        if(innerClose) innerClose.addEventListener('click', cleanupAndCloseModal);
+
+        // Enter/Exit Mega Mode
+        const setMegaMode = (state) => {
+            if (!hasAnyMedia) return;
+            isMegaMode = state;
+            if (isMegaMode) {
+                wrapper.classList.add('is-mega');
+                if (leftPanel) leftPanel.classList.remove('is-peeking'); 
+            } else {
+                wrapper.classList.remove('is-mega');
+                if (videoElement && leftPanel) {
+                    videoElement.pause();
+                    leftPanel.classList.remove('is-playing');
+                }
+            }
+        };
+
+        // Click overlay -> Enter Mega Mode
+        const clickOverlay = modalBody.querySelector('.pm-click-overlay');
+        if (clickOverlay && videoElement) {
+            clickOverlay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!isMegaMode) {
+                    setMegaMode(true);
+                    leftPanel.classList.add('is-playing');
+                    videoElement.play().catch(()=>{});
+                }
+            });
+        }
+
+        // Hover Image -> Peek
+        if (mediaPlayer && videoElement) {
+            mediaPlayer.addEventListener('mouseenter', () => {
+                if (!isMegaMode && leftPanel) {
+                    leftPanel.classList.add('is-peeking');
+                    leftPanel.classList.add('is-playing');
+                    videoElement.play().catch(()=>{});
+                }
+            });
+
+            mediaPlayer.addEventListener('mouseleave', () => {
+                if (!isMegaMode && leftPanel) {
+                    leftPanel.classList.remove('is-peeking');
+                    leftPanel.classList.remove('is-playing');
+                    videoElement.pause();
+                }
+            });
+        }
+
+        // Click Text -> Revert to Sleek Mode
+        if (rightPanel) {
+            rightPanel.addEventListener('click', (e) => {
+                if(e.target.closest('button') || e.target.closest('a') || e.target.closest('.magic-link')) return;
+                if (isMegaMode) setMegaMode(false);
+            });
+        }
+
+        // ── VIDEO PLAYLIST (Underneath Video) ──
+        const playBtns = modalBody.querySelectorAll('.playlist-btn-min');
+
+        const switchVideo = (src) => {
+            if (!videoElement || currentActiveSrc === src) return;
+            videoElement.src = src;
+            videoElement.load();
+            currentActiveSrc = src;
+
+            playBtns.forEach(b => {
+                b.classList.toggle('active', b.dataset.vidSrc === src);
+            });
+        };
+
+        if (playBtns.length > 0) {
+            playBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    switchVideo(btn.dataset.vidSrc);
+                    if(videoElement) videoElement.play().catch(()=>{});
+                    if(leftPanel) leftPanel.classList.add('is-playing');
+                });
+            });
+        }
+
+        // ── SLEEK MAGIC LINKS LOGIC ──
+        const magicLinks = modalBody.querySelectorAll('.magic-link');
+        magicLinks.forEach(link => {
+            // Hover: Peek
+            link.addEventListener('mouseenter', () => {
+                if (!isMegaMode && leftPanel && videoElement) {
+                    const targetSrc = link.getAttribute('data-src');
+                    if (targetSrc) {
+                        switchVideo(targetSrc);
+                        leftPanel.classList.add('is-peeking');
+                        leftPanel.classList.add('is-playing');
+                        videoElement.play().catch(()=>{});
+                    }
+                }
+            });
+
+            // Leave: Un-peek & reset
+            link.addEventListener('mouseleave', () => {
+                if (!isMegaMode && leftPanel && videoElement) {
+                    leftPanel.classList.remove('is-peeking');
+                    leftPanel.classList.remove('is-playing');
+                    videoElement.pause();
+                    switchVideo(defaultVideoSrc); // Reverts back so poster matches
+                }
+            });
+
+            // Click: Double-click to close, Single to open/switch
+            link.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                const targetSrc = link.getAttribute('data-src');
+                if (targetSrc && videoElement) {
+                    
+                    // If already massive and watching this video, close it.
+                    if (isMegaMode && currentActiveSrc === targetSrc) {
+                        setMegaMode(false);
+                        return;
+                    }
+
+                    switchVideo(targetSrc);
+                    setMegaMode(true);
+                    leftPanel.classList.add('is-playing');
+                    videoElement.play().catch(()=>{});
+                    
+                    // Visual pulse feedback
+                    if(mediaPlayer) {
+                        mediaPlayer.classList.remove('pulse-glow');
+                        void mediaPlayer.offsetWidth; // reflow
+                        mediaPlayer.classList.add('pulse-glow');
+                    }
+                }
+            });
+        });
+
+        // Tab switching
+        if (hasStory) {
+            modalBody.querySelectorAll('.pm-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    modalBody.querySelectorAll('.pm-tab').forEach(t => t.classList.remove('active'));
+                    modalBody.querySelectorAll('.pm-tab-content').forEach(c => c.classList.add('pm-tab-content--hidden'));
+                    tab.classList.add('active');
+                    
+                    const target = modalBody.querySelector(`[data-tab-content="${tab.dataset.tab}"]`);
+                    if (target) target.classList.remove('pm-tab-content--hidden');
+
+                    if (tab.dataset.tab === 'story' && isMegaMode) setMegaMode(false);
+                });
+            });
+        }
     }
+
     if (projectModal) projectModal.classList.add('active');
     document.body.classList.add('no-scroll');
 }
@@ -847,16 +1121,7 @@ const roleModalBody = document.getElementById('roleModalBody');
 const roleModalClose = document.getElementById('roleModalClose');
 
 function getGalleryCta(project) {
-    const link = project.learnMoreLink || project.video;
-    if (link && link !== '#' && link !== 'request') {
-        let label = 'Open Project', icon = 'link-outline';
-        if (link.includes('notion'))            { label = 'Read GDD';        icon = 'document-text-outline'; }
-        else if (link.includes('itch.io'))      { label = 'Play on itch.io'; icon = 'game-controller-outline'; }
-        else if (link.includes('drive.google')) { label = 'View Document';   icon = 'document-outline'; }
-        else if (link.includes('youtube') || link.includes('youtu.be') || link.includes('fortnite')) { label = 'Watch Video'; icon = 'play-circle-outline'; }
-        else if (link.includes('github'))       { label = 'View on GitHub';  icon = 'logo-github'; }
-        return { label, icon, url: link, external: true };
-    }
+    // ALWAYS open the project modal. No external link jumping anymore!
     return { label: 'Project Details', icon: 'information-circle-outline', url: null, external: false };
 }
 
@@ -894,9 +1159,8 @@ window.openRoleModal = function(roleName) {
             : '<span class="rpc-tool-pill rpc-tool-pill--na">N/A</span>';
         const contextLine = p.context || p.duration || null;
 
-        const ctaHtml = cta.external
-            ? `<a href="${cta.url}" target="_blank" rel="noopener noreferrer" class="rpc-cta-btn"><ion-icon name="${cta.icon}"></ion-icon>${cta.label}</a>`
-            : `<button class="rpc-cta-btn rpc-cta-btn--modal" data-project="${p.id}"><ion-icon name="${cta.icon}"></ion-icon>${cta.label}</button>`;
+        // Guaranteed to open modal because of the fixed getGalleryCta
+        const ctaHtml = `<button class="rpc-cta-btn rpc-cta-btn--modal" data-project="${p.id}"><ion-icon name="${cta.icon}"></ion-icon>${cta.label}</button>`;
 
         return `
             <div class="rpc-card" data-project-id="${p.id}">
@@ -987,39 +1251,86 @@ if (roleModal) {
     });
 }
 
+// Global cleanup function
+function cleanupAndCloseModal() {
+    const pModal = document.getElementById('projectModal');
+    if (pModal) pModal.classList.remove('active');
+    
+    // Only remove no-scroll if role gallery isn't open
+    const rModal = document.getElementById('roleModal');
+    if (!rModal || !rModal.classList.contains('active')) {
+        document.body.classList.remove('no-scroll');
+    }
+
+    const mc = pModal && pModal.querySelector('.pm-wrapper');
+    if (mc) {
+        const videoPlayers = mc.querySelectorAll('video');
+        videoPlayers.forEach(vid => vid.pause());
+        const iframes = mc.querySelectorAll('iframe');
+        iframes.forEach(iframe => iframe.src = '');
+    }
+    const mBody = document.getElementById('modalBody');
+    if (mBody) mBody.innerHTML = '';
+}
+
+// ── GLOBAL EVENT LISTENER ──
 document.body.addEventListener('click', function(e) {
+    // 1. Standard Project Links
     const clickedProjectLink = e.target.closest('a.open-modal');
     if (clickedProjectLink && !clickedProjectLink.hasAttribute('target')) { 
         e.preventDefault();
         openProjectModal(clickedProjectLink.dataset.project);
     }
 
+    // 2. Role Gallery Triggers
     const clickedRoleTrigger = e.target.closest('.about-role-item, .sidebar-role-btn');
     if (clickedRoleTrigger) {
         openRoleModal(clickedRoleTrigger.dataset.roleTarget);
     }
-});
 
-if (modalClose) {
-    modalClose.addEventListener('click', () => {
-        if (projectModal) projectModal.classList.remove('active');
-        if (roleModal && !roleModal.classList.contains('active')) {
-            document.body.classList.remove('no-scroll'); 
+    // 3. Close Modal by clicking the dark overlay outside the wrapper
+    if (e.target.id === 'projectModal' || e.target.id === 'modalBody') {
+        cleanupAndCloseModal();
+    }
+
+    // 4. MAGIC LINKS INSIDE ROLE GALLERY
+    const clickedMagicLink = e.target.closest('.magic-link');
+    if (clickedMagicLink && clickedMagicLink.closest('#roleModal')) {
+        e.preventDefault();
+        const targetSrc = clickedMagicLink.getAttribute('data-src');
+        if (!targetSrc) return;
+
+        const rpcCard = clickedMagicLink.closest('.rpc-card');
+        if (rpcCard) {
+            const projectId = rpcCard.getAttribute('data-project-id');
+            // Close Role Modal
+            document.getElementById('roleModal').classList.remove('active');
+            // Open Main Modal
+            openProjectModal(projectId);
+            
+            // Wait for DOM then play & force Mega Mode
+            setTimeout(() => {
+                const videoPlayer = document.querySelector('#projectModal .main-video-player');
+                const wrapper = document.querySelector('#projectModal .pm-wrapper');
+                const leftPanel = document.querySelector('#projectModal .pm-left-panel');
+                
+                if (videoPlayer) {
+                    videoPlayer.src = targetSrc;
+                    videoPlayer.load();
+                    videoPlayer.play().catch(()=>{});
+                    
+                    if(wrapper) wrapper.classList.add('is-mega');
+                    if(leftPanel) leftPanel.classList.add('is-playing');
+
+                    const playBtns = document.querySelectorAll('#projectModal .playlist-btn-min');
+                    playBtns.forEach(b => {
+                        b.classList.toggle('active', b.dataset.vidSrc === targetSrc);
+                    });
+                }
+            }, 50);
         }
-        if (modalBody) modalBody.innerHTML = ''; 
-    });
-}
-if (projectModal) {
-    projectModal.addEventListener('click', e => {
-        if (e.target === projectModal) { 
-            projectModal.classList.remove('active');
-            if (roleModal && !roleModal.classList.contains('active')) {
-                document.body.classList.remove('no-scroll'); 
-            }
-            if (modalBody) modalBody.innerHTML = ''; 
-        }
-    });
-}
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     renderProjectList(professionalWorkUl, professionalWorkIds);
