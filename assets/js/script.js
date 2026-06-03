@@ -3,7 +3,6 @@
 // ==========================================
 // 1. THE MASSIVE PROJECT DATABASE (All 22 Projects Restored)
 // ==========================================
-
 const fortniteIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.86 6.71l-1.72 1.72c-.19-.25-.43-.46-.72-.62l.98-2.35c.13-.32.02-.69-.27-.84s-.69-.02-.84.27l-.98 2.35c-.3-.09-.61-.13-.93-.13s-.63.04-.93.13l-.98-2.35c-.13-.32-.51-.45-.84-.27s-.45.51-.27.84l.98 2.35c-.29.16-.53.37-.72.62l-1.72-1.72c-.26-.26-.71-.23-.94.03s-.23.71.03.94l1.72 1.72c-.16.29-.27.6-.31.93H5.5c-.39 0-.7.31-.7.7s.31.7.7.7h2.35c.04.33.15.64.31.93l-1.72 1.72c-.26.26-.29.71-.03.94s.71.29.94.03l1.72-1.72c.25.19.54.33.85.42V17.5c0 .39.31.7.7.7s.7-.31.7-.7v-2.35c.3-.09.59-.23.85-.42l1.72 1.72c.26.26.71.23.94-.03s-.23-.71-.03-.94l-1.72-1.72c.16-.29.27.6.31-.93h2.35c.39 0 .7-.31-.7-.7s-.31-.7-.7-.7H14.8c-.04-.33-.15-.64-.31-.93l1.72-1.72c.26-.26.29-.71.03-.94s-.71-.29-.94-.03zM12 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`; 
 const verseIconSVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/></svg>`; 
 const unrealEngineIconSVG = `<svg viewBox="0 0 210.4 210.4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M105.2 5c55.3 0 100.2 45 100.2 100.2s-45 100.2-100.2 100.2S5 160.5 5 105.2 50 5 105.2 5m0-5C47.1 0 0 47.1 0 105.2s47.1 105.2 105.2 105.2 105.2-47.1 105.2-105.2S163.4 0 105.2 0z"/><path d="M97.9 42.2s-23.7 6.7-45 29.3-24 38.7-24 50.7c4.7-8 33.7-52.1 40.5-31.1v50.2s-.4 6.8-10.8 4.1c3.1 5.8 19.1 20.1 48 23 6.6-6.6 15.2-16.1 15.2-16.1l14.4 12.2s25.9-16.8 36.1-41.2c-9.5 6.2-21 20.6-27 10.5V72.7s15.4-23.1 17.8-24.2c-6.1 1.1-27.6 8.2-38.9 22.8-3.2-3.5-12.1-3.6-12.1-3.6s7 5.8 7.1 11.1 0 49.5 0 54.6c-4.8 4.9-9.9 7.5-13.2 7.5-7.7 0-9.9-2.7-12-5.4V71.3s-3.8 3.2-6.8-2S84.1 54 97.9 42.2z"/></svg>`;
@@ -23,12 +22,11 @@ const projectDetails = {
         video: "https://www.youtube.com/watch?v=GeYIX1rnFPA",
         short: "A C++ Unreal Engine plugin that uses Metasound to drive rhythm-based gameplay events.",
         long: "Project Cadence started from a question on a bus: could osu beatmap timestamps actually drive gameplay events in Unreal Engine? The answer is the plugin. A C++ timeline driven by Metasound, separating timing data from behavior so the same beatmap can power completely different game genres.",
-        story: "I was on a bus listening to osu beatmaps and had a thought: could you parse a beatmap file, extract the note timestamps, and use them to make things happen in a game at exactly those moments? Not theoretically. Literally, as a buildable system. I went home and started finding out.",
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG }, { name: "Metasound", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
-            "Game Designer": "<p>Designed the system around one principle: music should drive gameplay, not accompany it. Timing data and behavior are separated entirely.</p>",
-            "Technical Game Designer": "<p>C++ timeline driven by Metasound. Python parser extracts osu beatmap data into DataTables. Lightweight UObjects manage note states instead of Actors, avoiding spawn overhead for thousands of concurrent events.</p>"
+            "Game Designer": "<p><b>Design Philosophy:</b> Designed the system around one principle: music should drive gameplay, not accompany it. Timing data and behavior are separated entirely.</p>",
+            "Technical Game Designer": "<p><b>Core Architecture:</b> C++ timeline driven by Metasound. Python parser extracts osu beatmap data into DataTables. Lightweight UObjects manage note states instead of Actors, avoiding spawn overhead for thousands of concurrent events.</p>"
         }
     },
     "ProjectSasha": {
@@ -49,8 +47,8 @@ const projectDetails = {
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
-            "Game Designer": "<p>Designed a cohesive economy where knowledge is the resource. It took a month of heavy iteration to unify exploration, combat, and progression under a single 'Megabyte' budget.</p>",
-            "Technical Game Designer": "<p>Built the core scanning mechanic using BFS Waves constrained by radius, creating an organic flood-fill effect rather than a cheap, instant radial reveal.</p>"
+            "Game Designer": "<p><b>Systemic Narrative:</b> Designed a cohesive economy where knowledge is the resource. It took a month of heavy iteration to unify exploration, combat, and progression under a single 'Megabyte' budget.</p>",
+            "Technical Game Designer": "<p><b>Scanning Algorithms:</b> Built the core scanning mechanic using BFS Waves constrained by radius, creating an organic flood-fill effect rather than a cheap, instant radial reveal.</p>"
         }
     },
     "ProjectCircle": {
@@ -66,7 +64,7 @@ const projectDetails = {
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
-            "Technical Game Designer": "<p>Built a fully functional 3D bullet hell prototype on the Cadence C++ framework, syncing complex enemy attack patterns and projectile spawns entirely to Metasound data.</p>"
+            "Technical Game Designer": "<p><b>Framework Validation:</b> Built a fully functional 3D bullet hell prototype on the Cadence C++ framework, syncing complex enemy attack patterns and projectile spawns entirely to Metasound data.</p>"
         }
     },
     "CRTexe": {
@@ -79,11 +77,11 @@ const projectDetails = {
         role: "Project Lead",
         image: "./assets/images/CRTexe.svg",
         short: "Led a team of 8 through a game jam by designing the game around how the team could actually function. One person, one area, no dependencies.",
-        links: [{"label":"Play on itch.io","icon":"fa-solid fa-gamepad","url":"https://gianluca-iacchini.itch.io/crt-exe"}],
+        links: [{"label":"Play on itch.io","icon":"fas fa-gamepad","url":"https://gianluca-iacchini.itch.io/crt-exe"}],
         tools:[ { name: "Godot", icon: codeIconSVG } ],
         cardEngineName: "Godot",
         roleContributions: {
-            "Leadership": "<p>Diagnosed what would make this specific team functional and built the production structure around it. Each person owned one area completely.</p>"
+            "Leadership": "<p><b>Team Structure:</b> Diagnosed what would make this specific team functional and built the production structure around it. Each person owned one area completely.</p>"
         }
     },
     "PoliceSimulator": {
@@ -115,6 +113,7 @@ const projectDetails = {
         video: "https://www.youtube.com/watch?v=qk2y4clYe9o",
         image: "./assets/images/HighOnLife.png",
         short: "Nintendo Switch port of High on Life. Deep C++ and Blueprint debugging, internal tooling built from scratch.",
+        links: [{"label":"Classified / Request Access","icon":"fas fa-lock","url":"request"}],
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -132,6 +131,7 @@ const projectDetails = {
         role: "Lead Creator & Verse Developer",
         image: "./assets/images/Battleship.jpeg",
         short: "Fast-paced strategy game from concept to launch on Fortnite.",
+        links: [{"label":"Play on Fortnite","icon":"fas fa-gamepad","url":"https://www.fortnite.com/@untoldgames/1028-2740-2494"}],
         tools:[ { name: "UEFN", icon: fortniteIconSVG }, { name: "Verse", icon: verseIconSVG } ],
         cardEngineName: "UEFN",
         roleContributions: {
@@ -148,6 +148,7 @@ const projectDetails = {
         video: "https://www.youtube.com/watch?v=CzMTSNYmdYI",
         image: "./assets/images/PulsePartyThumbnail.png", 
         short: "A chaotic party game with 8 unique minigames built in Verse.",
+        links: [{"label":"Play on Fortnite","icon":"fas fa-gamepad","url":"https://www.fortnite.com/@untoldgames/8369-2685-8749"}],
         tools:[ { name: "UEFN", icon: fortniteIconSVG }, { name: "Verse", icon: verseIconSVG } ],
         cardEngineName: "UEFN",
         roleContributions: {
@@ -165,6 +166,11 @@ const projectDetails = {
         video: "https://youtu.be/Cuwhx4b7tYo",
         image: "./assets/images/Cycle.png",
         short: "Best 3rd Year Videogame at Falmouth University 2021. Built by a team of 3. I had never used Unreal Engine before this project.",
+        links: [
+            {"label":"Play on itch.io","icon":"fas fa-gamepad","url":"https://wrong-world-studios.itch.io/cycle"},
+            {"label":"View on The Rookies","icon":"fas fa-trophy","url":"https://www.therookies.co/entries/13406"},
+            {"label":"View on GitHub","icon":"fab fa-github","url":"https://github.com/VarXael/Cycle"}
+        ],
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -180,6 +186,7 @@ const projectDetails = {
         year: 2022,
         image: "./assets/images/work-5.jpg",
         short: "A reverse-horror prototype focusing on unique movement and possession mechanics.",
+        links: [{"label":"Read on Substack","icon":"fas fa-file-alt","url":"https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true"}],
         tools: [ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -195,6 +202,7 @@ const projectDetails = {
         year: 2023, 
         image: "./assets/images/Card's Weaver.png",
         short: "Card-based game developed at university using Unreal Engine.",
+        links: [{"label":"Play on itch.io","icon":"fas fa-gamepad","url":"https://batraf.itch.io/cards-weaver"}],
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -211,6 +219,10 @@ const projectDetails = {
         role: "Systems Programmer",
         image: "./assets/images/work-6.jpg",
         short: "Built the entire character class-switching system using the Strategy design pattern.",
+        links: [
+            {"label":"Play on itch.io","icon":"fas fa-gamepad","url":"https://fraffer.itch.io/soul-driven"},
+            {"label":"View on GitLab","icon":"fab fa-gitlab","url":"https://gitlab.com/Pietro92/soul-driven-project"}
+        ],
         tools:[ { name: "Unity", icon: unityIconSVG } ],
         cardEngineName: "Unity",
         roleContributions: {
@@ -226,6 +238,7 @@ const projectDetails = {
         year: 2021, 
         image: "./assets/images/work-2.jpg",
         short: "VR Training simulation for PPE in Unreal Engine.",
+        links: [{"label":"View Project","icon":"fas fa-link","url":"https://cineon.training/covid-19-personal-protective-equipment-ppe-training/"}],
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -241,6 +254,7 @@ const projectDetails = {
         year: 2022, 
         image: "./assets/images/work-1.jpg",
         short: "A 16-hour course introducing Unreal Engine Blueprints and programming structures.",
+        links: [{"label":"View on Udemy","icon":"fas fa-graduation-cap","url":"https://www.udemy.com/course/complete-unreal-engine-megacourse-beginner-to-expert/"}],
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -256,6 +270,7 @@ const projectDetails = {
         year: 2023,
         image: "./assets/images/Monk.png",
         short: "Rebuilt the D&D Monk class from scratch around a new core mechanic: Vessels of Ki.",
+        links: [{"label":"Download PDF","icon":"fas fa-file-pdf","url":"https://drive.google.com/file/d/1cyUGRzfhP4CjVwDljmbiXhwORSPAUSpp/view?usp=sharing"}],
         tools:[],
         cardEngineName: "Tabletop",
         roleContributions: {
@@ -272,6 +287,7 @@ const projectDetails = {
         role: "Sole Creator",
         image: "./assets/images/work-5.jpg", 
         short: "A 1v1 turn-based strategy game built strictly in C++ to prove a point.",
+        links: [{"label":"View on GitHub","icon":"fab fa-github","url":"https://github.com/VarXael/MechaTopDown"}],
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "C++", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -287,6 +303,7 @@ const projectDetails = {
         year: 2023,
         image: "./assets/images/work-5.jpg",
         short: "A prototype for a Papers, Please-style management game, blind-coded in a 12-hour sprint.",
+        links: [{"label":"View on GitHub","icon":"fab fa-github","url":"https://github.com/VarXael/LibraryProject"}],
         tools:[ { name: "Unreal Engine", icon: unrealEngineIconSVG }, { name: "Blueprints", icon: codeIconSVG } ],
         cardEngineName: "Unreal Engine",
         roleContributions: {
@@ -294,6 +311,9 @@ const projectDetails = {
         }
     }
 };
+
+const professionalWorkIds = ["HighOnLife", "PoliceSimulator"];
+const techDesignWorkIds = ["ProjectSasha", "ProjectCadence", "ProjectCircle", "Alien", "Cycle"];
 
 const ROLE_ORDER =["Game Designer", "Technical Game Designer", "Leadership", "Game Programmer"];
 const sortRoles = (roles) => {
@@ -305,8 +325,16 @@ const sortRoles = (roles) => {
     });
 };
 
+const roleDefinitions = {
+    "Game Designer": { title: "Game Designer", tagClass: "role-tag", description: "I think in systems. I design interconnected mechanics where every piece has a reason to exist and every decision creates consequence." },
+    "Technical Game Designer": { title: "Technical Game Designer", tagClass: "role-tag", description: "Everything I design, I also implement. If this tag is on a project, I created the design AND built it in engine." },
+    "Leadership": { title: "Leadership", tagClass: "role-tag", description: "I bring teams together and drive the vision from concept to ship. On these projects, I was the person people looked to for direction." },
+    "Game Programmer": { title: "Game Programmer", tagClass: "role-tag", description: "I write production code — C++, Blueprints, Verse. On these projects, I implemented systems within an existing design or codebase." }
+};
+
+
 // ==========================================
-// 2. THE ONE-WAY GATE LOGIC (INTRO)
+// 2. THE ONE-WAY GATE LOGIC (INTRO) & THEME TOGGLE
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -318,53 +346,91 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gateUnlocked) return;
         gateUnlocked = true;
         
-        // Prevent screen jumping
         window.scrollTo(0, 0);
 
-        // Fade the gate into the void
         if (gate) {
             gate.style.opacity = '0';
             gate.style.transform = 'scale(1.05)';
         }
         
-        // Reveal the portfolio and unlock scrolling safely
         if (portfolio) {
             portfolio.style.display = 'grid'; 
             setTimeout(() => {
                 portfolio.style.opacity = '1';
-                
-                // UNLOCK BOTH HTML AND BODY TO GUARANTEE SCROLLING WORKS
                 document.documentElement.classList.remove('locked');
                 document.body.classList.remove('locked');
             }, 50);
         }
 
-        // Destroy gate node entirely
         setTimeout(() => { 
             if (gate) gate.style.display = 'none'; 
         }, 1500);
     }
 
-    // Trigger gate on interaction
-    window.addEventListener('wheel', unlockGate, { once: true });
-    window.addEventListener('click', unlockGate, { once: true });
-    window.addEventListener('touchstart', unlockGate, { once: true });
+    if (gate) {
+        window.addEventListener('wheel', unlockGate, { once: true });
+        window.addEventListener('click', unlockGate, { once: true });
+        window.addEventListener('touchstart', unlockGate, { once: true });
+    }
+
+    // THEME TOGGLE (Abyss <-> YorHa)
+    const themeBtn = document.getElementById('themeToggle');
+    const themeLabel = document.getElementById('themeLabel');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            const isYorha = document.body.classList.contains('theme-yorha');
+            if (isYorha) {
+                document.body.classList.remove('theme-yorha');
+                themeLabel.innerText = "ABYSS";
+            } else {
+                document.body.classList.add('theme-yorha');
+                themeLabel.innerText = "YORHA";
+            }
+        });
+    }
+
+    // TABS SYSTEM (Overview vs Archives)
+    const navLinks = document.querySelectorAll('.nav-link');
+    const pageTabs = document.querySelectorAll('.page-tab');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Remove active from all links and tabs
+            navLinks.forEach(n => n.classList.remove('active'));
+            pageTabs.forEach(t => t.classList.remove('active'));
+            
+            // Add active to clicked link
+            link.classList.add('active');
+            
+            // Show corresponding tab
+            const targetId = link.getAttribute('data-tab-target');
+            document.getElementById('tab-' + targetId).classList.add('active');
+            window.scrollTo(0, 0);
+        });
+    });
 
 
     // ==========================================
     // 3. DYNAMIC CARD GENERATOR & FILTERS
     // ==========================================
+
+    const aboutRolesGrid = document.getElementById('about-roles-grid');
+    if (aboutRolesGrid) {
+        aboutRolesGrid.innerHTML = Object.keys(roleDefinitions).map(role => {
+            const def = roleDefinitions[role];
+            return `<div class="about-role-item open-role-modal" data-role-target="${role}"><span class="role-tag">${def.title}</span><p>${def.description}</p></div>`;
+        }).join('');
+    }
+
     const createProjectListItem = (project) => {
         const article = document.createElement('article');
         article.className = 'project-card open-modal';
         article.dataset.project = project.id;
 
-        // Brackets
         const brackets = document.createElement('div');
         brackets.className = 'card-brackets';
         article.appendChild(brackets);
 
-        // Image Visual
         const visual = document.createElement('div');
         visual.className = 'card-visual';
         
@@ -380,7 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
         visual.appendChild(img);
         article.appendChild(visual);
 
-        // Body
         const body = document.createElement('div');
         body.className = 'card-body';
         
@@ -411,14 +476,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return article;
     };
 
+    const renderProjectList = (containerId, projectIds) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+        projectIds.forEach(projectId => {
+            const project = projectDetails[projectId];
+            if (project && project.published) {
+                container.appendChild(createProjectListItem(project));
+            }
+        });
+    };
+
     const renderPortfolio = (filterCategory) => {
         const container = document.getElementById('portfolio-grid-container');
         if (!container) return;
         container.innerHTML = '';
         
         const projectsArray = Object.values(projectDetails).filter(p => p.published);
-        
-        // Exact string matching based on the data-filter attribute
         const filteredProjects = projectsArray.filter(project => {
             if (filterCategory === 'all') return true;
             if (!project.category) return false;
@@ -435,7 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Filter Buttons logic uses `data-filter` to prevent string mismatch bugs
     const filterBtns = document.querySelectorAll(".filter-btn");
     filterBtns.forEach(btn => {
         btn.addEventListener("click", function () {
@@ -461,14 +535,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const sortedRoles = sortRoles(Object.keys(data.roleContributions));
             return sortedRoles.map(role => {
                 const content = data.roleContributions[role];
-                return `<div class="detail-item role-contribution">
+                return `<div class="role-contribution">
                     <h4 class="pm-meta-label">${role}</h4>
                     <div>${content}</div>
                 </div>`;
             }).join('');
         }
-        if (data.myContribution) return `<div class="detail-item role-contribution"><h4 class="pm-meta-label">EXECUTION_DATA</h4><div>${data.myContribution}</div></div>`;
-        return `<div class="detail-item"><p>NO DATA.</p></div>`;
+        if (data.myContribution) return `<div class="role-contribution"><h4 class="pm-meta-label">EXECUTION_DATA</h4><div>${data.myContribution}</div></div>`;
+        return `<div class="role-contribution"><p>NO DATA.</p></div>`;
     }
 
     function openProjectModal(projectId) {
@@ -492,8 +566,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.links && data.links.length > 0) {
             linksHTML = '<div class="pm-links">' + data.links.map(l => {
                 if (l.url === 'request') return `<div class="pm-link-item pm-link-item--request"><i class="fas fa-lock"></i><span>Classified / Request Access</span></div>`;
-                return `<a href="${l.url}" target="_blank" rel="noopener" class="pm-link-item"><i class="${l.icon}"></i><span>${l.label}</span></a>`;
+                return `<a href="${l.url}" target="_blank" rel="noopener" class="pm-link-item"><i class="${l.icon || 'fas fa-link'}"></i><span>${l.label}</span></a>`;
             }).join('') + '</div>';
+        } else if (data.learnMoreLink && data.learnMoreLink !== '#') {
+            linksHTML = `<div class="pm-links"><a href="${data.learnMoreLink}" target="_blank" rel="noopener" class="pm-link-item"><i class="fas fa-link"></i><span>Access External Record</span></a></div>`;
         }
 
         let mediaHtml = '';
@@ -507,12 +583,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="pm-click-overlay" title="Click to Expand"></div>
             `;
             if (data.videos.length > 1) {
-                playlistHtml = `<div class="pm-playlist-container"><div class="pm-playlist-minimal">` +
+                playlistHtml = `<div class="pm-playlist-minimal">` +
                     data.videos.map((vid, idx) => `
                         <button class="playlist-btn-min ${idx === 0 ? 'active' : ''}" data-vid-src="${vid.file}">
                             ${vid.label}
                         </button>
-                    `).join('') + `</div></div>`;
+                    `).join('') + `</div>`;
             }
         } else if (youtubeId) {
             mediaHtml = `
@@ -530,14 +606,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalBody.innerHTML = `
             <div class="pm-wrapper" id="pmWrapper">
-                
                 ${hasAnyMedia ? `
                 <div class="pm-left-panel" id="pmLeftPanel">
-                    <div class="pm-media-player" id="pmMediaPlayer">
-                        ${mediaHtml}
-                    </div>
-                    ${playlistHtml}
+                    <div class="pm-media-player" id="pmMediaPlayer">${mediaHtml}</div>
                     <div class="pm-meta-stage">
+                        ${playlistHtml}
                         ${roleTagsHtml ? `<div class="pm-role-tags">${roleTagsHtml}</div>` : ''}
                         <div class="pm-meta-grid">
                             <div class="pm-meta-item"><span class="pm-meta-label">ROLE</span><span class="pm-meta-value">${data.role || 'N/A'}</span></div>
@@ -562,7 +635,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>`;
 
-        // Modal Interaction Logic
         const wrapper = modalBody.querySelector('#pmWrapper');
         const leftPanel = modalBody.querySelector('#pmLeftPanel');
         const rightPanel = modalBody.querySelector('#pmRightPanel');
@@ -644,47 +716,114 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         projectModal.classList.add('active');
-        // Lock body scrolling specifically when modal is open
         document.documentElement.classList.add('locked');
         document.body.classList.add('locked');
     }
 
+    // ==========================================
+    // 5. THE ROLE GALLERY MODAL LOGIC
+    // ==========================================
+    window.openRoleModal = function(roleName) {
+        const roleModal = document.getElementById('roleModal');
+        const roleModalBody = document.getElementById('roleModalBody');
+        const roleDef = roleDefinitions[roleName];
+        if (!roleDef) return;
+
+        const projectsWithRole = Object.values(projectDetails).filter(p => p.published && p.roles && p.roles.includes(roleName));
+        const allRoles = Object.keys(roleDefinitions);
+        
+        const tabsHtml = `
+            <div class="role-modal-tabs">
+                ${allRoles.map(r => `
+                    <button class="role-tab-btn ${r === roleName ? 'active' : ''}" onclick="openRoleModal('${r}')">
+                        ${roleDefinitions[r].title}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        const cardsHtml = projectsWithRole.map(p => {
+            const contributionText = p.roleContributions && p.roleContributions[roleName] ? p.roleContributions[roleName] : (typeof p.myContribution === 'string' ? p.myContribution : '<p>No specific details provided.</p>');
+            let categoryLabel = (p.category || '').replace(' work', '').replace(' jams', ' Jam').toUpperCase();
+
+            return `
+                <div class="rpc-card open-modal" data-project="${p.id}" style="cursor: pointer;">
+                    <div class="rpc-card-header">
+                        <img src="${p.image}" alt="${p.title}" class="rpc-card-img" loading="lazy">
+                        <div class="rpc-card-info">
+                            <h4>${p.title}</h4>
+                            <span>${categoryLabel}</span>
+                        </div>
+                    </div>
+                    <div class="rpc-text-body">${contributionText}</div>
+                </div>`;
+        }).join('');
+
+        if (roleModalBody) {
+            roleModalBody.innerHTML = `
+                ${tabsHtml}
+                <div class="role-modal-header">
+                    <span class="pm-meta-label">${roleDef.title}</span>
+                    <p class="role-modal-desc">${roleDef.description}</p>
+                </div>
+                <div class="role-modal-projects">
+                    ${cardsHtml || '<p style="color: var(--gold-dim);">No archives found for this parameter.</p>'}
+                </div>`;
+        }
+
+        if (roleModal && !roleModal.classList.contains('active')) {
+            roleModal.classList.add('active');
+            document.documentElement.classList.add('locked');
+            document.body.classList.add('locked');
+        }
+    }
+
+
+    // ==========================================
+    // 6. GLOBAL EVENT LISTENERS & CLEANUP
+    // ==========================================
     function cleanupAndCloseModal() {
         const pModal = document.getElementById('projectModal');
-        if (pModal) pModal.classList.remove('active');
+        const rModal = document.getElementById('roleModal');
         
-        // Only unlock scrolling if the Welcome Gate is already gone
+        if (pModal) pModal.classList.remove('active');
+        if (rModal) rModal.classList.remove('active');
+        
         if (gateUnlocked) {
             document.documentElement.classList.remove('locked');
             document.body.classList.remove('locked');
         }
         
-        const mc = pModal && pModal.querySelector('.pm-wrapper');
-        if (mc) {
-            const videoPlayers = mc.querySelectorAll('video');
+        if (pModal) {
+            const videoPlayers = pModal.querySelectorAll('video');
             videoPlayers.forEach(vid => vid.pause());
-            const iframes = mc.querySelectorAll('iframe');
-            iframes.forEach(iframe => iframe.src = '');
         }
-        const mBody = document.getElementById('modalBody');
-        if (mBody) mBody.innerHTML = '';
     }
 
-    // Attach listeners for dynamic cards opening the modal
     document.body.addEventListener('click', function(e) {
         const clickedProject = e.target.closest('.open-modal');
         if (clickedProject) { 
             e.preventDefault();
+            const rModal = document.getElementById('roleModal');
+            if (rModal && rModal.classList.contains('active')) {
+                rModal.classList.remove('active'); // Close role modal before opening project modal
+            }
             openProjectModal(clickedProject.dataset.project);
         }
-        if (e.target.id === 'projectModal' || e.target.closest('.pm-close-btn')) {
+
+        const clickedRoleTrigger = e.target.closest('.sidebar-role-btn, .open-role-modal');
+        if (clickedRoleTrigger) {
+            e.preventDefault();
+            openRoleModal(clickedRoleTrigger.dataset.roleTarget);
+        }
+        
+        if (e.target.id === 'projectModal' || e.target.closest('.pm-close-btn') || e.target.id === 'roleModal') {
             cleanupAndCloseModal();
         }
     });
 
-
     // ==========================================
-    // 5. ASH PARTICLE SYSTEM INIT
+    // 7. ASH PARTICLE SYSTEM INIT
     // ==========================================
     const canvas = document.getElementById('ash-canvas');
     if (canvas) {
@@ -722,5 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial Render
+    renderProjectList('professional-work-list', professionalWorkIds);
+    renderProjectList('tech-design-list', techDesignWorkIds);
     renderPortfolio('all');
 });
