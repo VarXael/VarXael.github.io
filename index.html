@@ -2,316 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giuseppe Luigi Alfieri - Portfolio</title>
-    <link rel="shortcut icon" href="./assets/images/1.jpg" type="image/x-icon">
+    <title>G. ALFIERI // WIREFRAME AESTHETIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-    <main>
-    <aside class="sidebar" data-sidebar>
-        <div class="sidebar-profile-condensed">
-            <figure class="sidebar-avatar-box">
-                <img src="./assets/images/about.png" alt="Giuseppe Luigi Alfieri" width="80"> 
-            </figure>
-            
-            <div class="sidebar-action-buttons">
-                <a href="https://github.com/VarXael" target="_blank" class="sidebar-social-btn sidebar-github-btn">
-                    <i class="fab fa-github"></i> 
-                    <span>GitHub</span>
-                </a>
-                <a href="./cv.html" target="_blank" class="sidebar-cv-btn">
-                    <ion-icon name="document-text-outline"></ion-icon>
-                    <span>CV</span>
-                </a>
-            </div>
-            
-            <div class="sidebar-compact-contact">
-                <a href="#" class="contact-link-sidebar copy-email-btn" data-email="giuseppeluigi.alfieri@gmail.com">
-                    <ion-icon name="mail-outline"></ion-icon>
-                    <span class="email-text">giuseppeluigi.alfieri@gmail.com</span>
-                </a>
-            </div>
+    <div class="wireframe-canvas">
+        <div class="sacred-array">
+            <canvas id="generative-canvas"></canvas>
         </div>
-
-        <div class="separator"></div>
-        
-        <div class="sidebar-roles-legend">
-            <h3 class="h3 skills-sidebar-title">View by Discipline</h3>
-            <div class="sidebar-role-cluster">
-                <button class="sidebar-role-btn srb--game-designer" data-role-target="Game Designer">
-                    <span>Game Designer</span>
-                    <ion-icon name="arrow-forward-outline"></ion-icon>
-                </button>
-                <button class="sidebar-role-btn srb--technical-game-designer" data-role-target="Technical Game Designer">
-                    <span>Technical Game Designer</span>
-                    <ion-icon name="arrow-forward-outline"></ion-icon>
-                </button>
-                <button class="sidebar-role-btn srb--leadership" data-role-target="Leadership">
-                    <span>Leadership</span>
-                    <ion-icon name="arrow-forward-outline"></ion-icon>
-                </button>
-                <button class="sidebar-role-btn srb--game-programmer" data-role-target="Game Programmer">
-                    <span>Game Programmer</span>
-                    <ion-icon name="arrow-forward-outline"></ion-icon>
-                </button>
-            </div>
-        </div>
-
-        <div class="separator"></div>
-        
-        <div class="skills-container-sidebar">
-            <h3 class="h3 skills-sidebar-title">Tech Stack</h3>
-            <div class="skills-compact">
-                <div class="tech-category">
-                    <strong class="tech-font">LANGUAGES:</strong>
-                    <div class="tech-pill-box">
-                        <span class="tech-pill">C++</span>
-                        <span class="tech-pill">C#</span>
-                        <span class="tech-pill">Verse</span>
-                        <span class="tech-pill">Blueprints</span>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <strong class="tech-font">ENGINES:</strong>
-                    <div class="tech-pill-box">
-                        <span class="tech-pill">Unreal Engine</span>
-                        <span class="tech-pill">Unity</span>
-                        <span class="tech-pill">UEFN</span>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <strong class="tech-font">TOOLS:</strong>
-                    <div class="tech-pill-box">
-                        <span class="tech-pill">Git</span>
-                        <span class="tech-pill">Plastic SCM</span>
-                        <span class="tech-pill">Rider</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-    <div class="main-content">
-        <nav class="navbar">
-            <ul class="navbar-list">
-                <li class="navbar-item">
-                    <button class="navbar-link active" data-nav-link>About</button>
-                </li>
-                <li class="navbar-item">
-                    <button class="navbar-link" data-nav-link>Resume</button>
-                </li>
-                <li class="navbar-item">
-                    <button class="navbar-link" data-nav-link>Portfolio</button>
-                </li>
-            </ul>
-        </nav>
-
-        <article class="about active" data-page="about">
-            <header>
-                <h2 class="h2 article-title">About Me</h2>
-            </header>
-
-            <section class="about-text-intro">
-                <p class="about-lead">
-                    I design games where the systems tell the story.
-                </p>
-                <p>
-                    I’m a game designer who thinks systematically — I architect interconnected mechanics where every piece has a reason to exist, and where the design and the experience are inseparable. From a music-driven event framework to a game where scanning IS the entire gameplay loop, my work is about building systems that create meaning.
-                </p>
-                <p>
-                    Everything I design, I can build. I work in Unreal Engine and C++, and I move fluently between design documentation and implementation. When I’m on a team, I tend to become the person who brings clarity to the vision and structure to the process — not because I claim the role, but because it happens naturally through how I communicate and work.
-                </p>
-                <p>
-                    I’ve ported shipped titles to Nintendo Switch, led teams from concept to release, won awards for my university work, and I’m currently building a game where the world doesn’t exist until you scan it into memory.
-                </p>
-
-                <div class="about-roles">
-                    <h4 class="about-roles-title">What I Do</h4>
-                    <div class="about-roles-grid" id="about-roles-grid">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <div class="contact-prompt-about">
-                    <p>Interested in knowing more? <a href="#" class="contact-link-about copy-email-btn" data-email="giuseppeluigi.alfieri@gmail.com"><span class="email-text">giuseppeluigi.alfieri@gmail.com</span></a></p>
-                </div>
-            </section>
-            
-            <section class="professional-work">
-                <h3 class="h3 service-title">Professional Work Highlight</h3>
-                <ul class="project-list professional-work-list">
-                    <!-- Populated by JS -->
-                </ul>
-            </section>
-
-            <section class="tech-design-work">
-                <h3 class="h3 service-title">Tech Design Work Highlight</h3>
-                <ul class="project-list tech-design-list">
-                     <!-- Populated by JS -->
-                </ul>
-            </section>
-
-            <div class="modal-container" data-modal-container> 
-                <div class="overlay" data-overlay></div>
-                <section class="testimonials-modal">
-                    <button class="modal-close-btn" data-modal-close-btn>
-                        <ion-icon name="close-outline"></ion-icon>
-                    </button>
-                </section>
-            </div>
-
-            <section class="clients">
-                <h3 class="h3 clients-title">Experience With</h3>
-                <ul class="clients-list has-scrollbar">
-                    <li class="clients-item">
-                        <a target="_blank" href="https://untoldgames.com/" title="Untold Games">
-                            <img src="./assets/images/untold_games_cover.png" alt="Untold Games Logo">
-                        </a>
-                    </li>
-                    <li class="clients-item">
-                        <a target="_blank" href="https://www.udemy.com/user/creativity-unleashed/" title="Creativity Unleashed (Udemy)">
-                            <img src="./assets/images/CreativityUnleashed.png" alt="Creativity Unleashed Logo">
-                        </a>
-                    </li>
-                    <li class="clients-item">
-                        <a target="_blank" href="https://www.umu.se/en/" title="Umeå University">
-                            <img src="./assets/images/Umeå_University.png" alt="Umeå University Logo">
-                        </a>
-                    </li>
-                    <li class="clients-item">
-                        <a target="_blank" href="https://cineon.training/" title="Cineon Training">
-                            <img src="./assets/images/Cineon_Training.png" alt="Cineon Training Logo">
-                        </a>
-                    </li>
-                </ul>
-            </section>
-            </article>
-
-        <article class="resume" data-page="resume">
-            <header>
-                <h2 class="h2 article-title">Resume</h2>
-            </header>
-            <section class="timeline">
-                <div class="title-wrapper">
-                    <div class="icon-box">
-                        <ion-icon name="briefcase-outline"></ion-icon> 
-                    </div>
-                    <h3 class="h3">Experience</h3>
-                </div>
-                <ol class="timeline-list">
-                    <li class="timeline-item">
-                        <h4 class="h4 timeline-item-title">Untold Games - Technical Game Designer</h4>
-                        <span>2023 - Present</span>
-                        <p class="timeline-text">- Worked on a number of maps made in UEFN as Technical Game Designer.</p>
-                        <p class="timeline-text">- Online Tutoring.</p>
-                        <p class="timeline-text">- Game Programmer, currently working on porting different games to different consoles.</p>
-                    </li>
-                    <li class="timeline-item">
-                        <h4 class="h4 timeline-item-title">Capgemini SOS - Software Developer</h4>
-                        <span>April 2023 — May 2023</span>
-                        <p class="timeline-text">Participated and finished the school of software at Capgemini.</p>
-                    </li>
-                    <li class="timeline-item">
-                        <h4 class="h4 timeline-item-title">Creativity Unleashed: Unreal Engine Tutor</h4>
-                        <span>May 2021 — October 2021</span>
-                        <p class="timeline-text">Creation of a 16 hour course to introduce students to the Unreal Engine blueprints and common programming structures. The course is published on Udemy, check the portfolio section for the link!</p>
-                    </li>
-                    <li class="timeline-item">
-                        <h4 class="h4 timeline-item-title">Cineon Immersive Training: Unreal Engine Tutor</h4>
-                        <span>April 2020</span>
-                        <p class="timeline-text">- Created the table of interaction in "Task 2 - Content learning area" for the PPE training project.</p>
-                        <p class="timeline-text">- Production of the functionality for the cross referencing of scenarios.</p>
-                    </li>
-                </ol>
-            </section>
-            <section class="timeline">
-                <div class="title-wrapper">
-                    <div class="icon-box">
-                        <ion-icon name="book-outline"></ion-icon>
-                    </div>
-                    <h3 class="h3">Education</h3>
-                </div>
-                <ol class="timeline-list">
-                    <li class="timeline-item">
-                        <h4 class="h4 timeline-item-title">Master's Degree: Game Programming</h4>
-                        <span>2021 — 2023</span>
-                        <p class="timeline-text">University of Verona - Verona IT</p>
-                        <p class="timeline-text">C# - C++ - Unreal Engine - Unity Engine - Geometric/Trigonometric Knowledge - Game Production</p>
-                    </li>
-                    <li class="timeline-item">
-                        <h4 class="h4 timeline-item-title">Games Development: Design</h4>
-                        <span>2018 — 2021</span>
-                        <p class="timeline-text">Falmouth University - Penryn UK</p>
-                    </li>
-                    <li class="timeline-item">
-                        <h4 class="h4 timeline-item-title">High School Diploma</h4>
-                        <span>2012 — 2017</span>
-                        <p class="timeline-text">I.S.I.S. Albertini Nola - Nola IT</p>
-                        <p class="timeline-text">Scientific Focus</p>
-                    </li>
-                </ol>
-            </section>
-            </article>
-
-        <article class="portfolio" data-page="portfolio">
-            <header>
-                <h2 class="h2 article-title">Portfolio</h2>
-            </header>
-            <section class="projects">
-                <ul class="filter-list">
-                    <li class="filter-item"><button class="active" data-filter-btn>All</button></li>
-                    <li class="filter-item"><button data-filter-btn>Professional Work</button></li>
-                    <li class="filter-item"><button data-filter-btn>University Work</button></li>
-                    <li class="filter-item"><button data-filter-btn>Personal Work</button></li>
-                    <li class="filter-item"><button data-filter-btn>Game Jams</button></li>
-                </ul>
-                <div class="filter-select-box">
-                    <button class="filter-select" data-select>
-                        <div class="select-value" data-select-value>Select category</div>
-                        <div class="select-icon"><ion-icon name="chevron-down"></ion-icon></div>
-                    </button>
-                    <ul class="select-list">
-                        <li class="select-item"><button data-select-item>All</button></li>
-                        <li class="select-item"><button data-select-item>Professional Work</button></li>
-                        <li class="select-item"><button data-select-item>University Work</button></li>
-                        <li class="select-item"><button data-select-item>Personal Work</button></li>
-                        <li class="select-item"><button data-select-item>Game Jams</button></li>
-                    </ul>
-                </div>
-                <div id="portfolio-grid-container">
-                    <!-- JS will populate this -->
-                </div>
-            </section>
-        </article>
-
-        <!-- Original Project Modal -->
-        <div class="project-modal" id="projectModal">
-            <div class="modal-content">
-                <button class="modal-close" id="modalClose">×</button>
-                <div id="modalBody"></div>
-            </div>
-        </div>
-
-        <!-- NEW Role / Gallery Modal -->
-        <div class="role-modal" id="roleModal">
-            <div class="modal-content">
-                <button class="modal-close" id="roleModalClose">×</button>
-                <div id="roleModalBody"></div>
-            </div>
-        </div>
-
+        <div class="viewport-frame"></div>
+        <div class="corner-node node-tl"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
+        <div class="corner-node node-tr"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
+        <div class="corner-node node-bl"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
+        <div class="corner-node node-br"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
     </div>
-    </main>
+
+    <div class="ui-layer">
+        
+        <div class="header-center">
+            <h1 class="title-main">Giuseppe<br>Alfieri</h1>
+            <div class="title-sub">+ Systems Architect +</div>
+        </div>
+
+        <div class="profile-cell">
+            <div class="avatar-wire">
+                <img src="./assets/images/about.png" alt="Giuseppe">
+            </div>
+            <div class="disciplines-list">
+                <div class="discipline-item">Game Designer</div>
+                <div class="discipline-item">Tech Designer</div>
+                <div class="discipline-item">Leadership</div>
+                <div class="discipline-item">Programmer</div>
+            </div>
+        </div>
+
+        <div class="bio-cell">
+            <div>
+                <div class="bio-title">Overview_</div>
+                <p class="bio-text">
+                    I design games where the systems tell the story. From a music-driven event framework to environments where scanning forms physical geometry, my objective is the deployment of mechanics intrinsically linked to the player's survival and understanding of the world.
+                </p>
+            </div>
+            <div class="links-list">
+                <div class="link-item">View Projects</div>
+                <div class="link-item">Personnel File</div>
+                <div class="link-item">GitHub Network</div>
+            </div>
+        </div>
+
+        <div class="footer-center">
+            <button id="theme-toggle" class="theme-btn">[ INITIATE DARK_MODE ]</button>
+        </div>
+        
+    </div>
 
 <script src="./assets/js/script.js"></script>
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
