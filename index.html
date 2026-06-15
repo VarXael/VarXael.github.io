@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G. ALFIERI // WIREFRAME AESTHETIC</title>
+    <title>G. ALFIERI // SYSTEMS ARCHITECT</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
@@ -20,43 +20,148 @@
         <div class="corner-node node-br"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
     </div>
 
-    <div class="ui-layer">
-        
-        <div class="header-center">
-            <h1 class="title-main">Giuseppe<br>Alfieri</h1>
-            <div class="title-sub">+ Systems Architect +</div>
+    <!-- Navigation Header -->
+    <nav class="sys-nav">
+        <div class="sys-nav-left">
+            <span class="sys-logo">G. ALFIERI</span>
         </div>
-
-        <div class="profile-cell">
-            <div class="avatar-wire">
-                <img src="./assets/images/about.png" alt="Giuseppe">
-            </div>
-            <div class="disciplines-list">
-                <div class="discipline-item">Game Designer</div>
-                <div class="discipline-item">Tech Designer</div>
-                <div class="discipline-item">Leadership</div>
-                <div class="discipline-item">Programmer</div>
-            </div>
+        <div class="sys-nav-center">
+            <button class="nav-tab active" data-target="overview">[ // OVERVIEW ]</button>
+            <button class="nav-tab" data-target="archive">[ // ARCHIVE ]</button>
+            <button class="nav-tab" data-target="logs">[ // LOGS ]</button>
         </div>
-
-        <div class="bio-cell">
-            <div>
-                <div class="bio-title">Overview_</div>
-                <p class="bio-text">
-                    I design games where the systems tell the story. From a music-driven event framework to environments where scanning forms physical geometry, my objective is the deployment of mechanics intrinsically linked to the player's survival and understanding of the world.
-                </p>
-            </div>
-            <div class="links-list">
-                <div class="link-item">View Projects</div>
-                <div class="link-item">Personnel File</div>
-                <div class="link-item">GitHub Network</div>
-            </div>
-        </div>
-
-        <div class="footer-center">
+        <div class="sys-nav-right">
             <button id="theme-toggle" class="theme-btn">[ INITIATE DARK_MODE ]</button>
         </div>
+    </nav>
+
+    <main class="ui-layer">
         
+        <!-- SECTION: OVERVIEW -->
+        <section id="overview" class="sys-section active">
+            <div class="overview-grid">
+                <div class="header-center">
+                    <h1 class="title-main">Giuseppe<br>Alfieri</h1>
+                    <div class="title-sub">+ Systems Architect +</div>
+                </div>
+
+                <div class="profile-cell">
+                    <div class="avatar-wire">
+                        <img src="./assets/images/about.png" alt="Giuseppe">
+                    </div>
+                    <div class="disciplines-list">
+                        <div class="discipline-item">Game Designer</div>
+                        <div class="discipline-item">Tech Designer</div>
+                        <div class="discipline-item">Leadership</div>
+                        <div class="discipline-item">Programmer</div>
+                    </div>
+                </div>
+
+                <div class="bio-cell">
+                    <div>
+                        <div class="bio-title">Overview_</div>
+                        <p class="bio-text">
+                            I design games where the systems tell the story. I architect interconnected mechanics where every piece has a reason to exist, and where the design and the experience are inseparable.
+                            <br><br>
+                            Everything I design, I can build. I work in Unreal Engine and C++, and I move fluently between design documentation and implementation.
+                        </p>
+                    </div>
+                    <div class="links-list">
+                        <a href="https://github.com/VarXael" target="_blank" class="link-item">GitHub Network</a>
+                        <a href="mailto:giuseppeluigi.alfieri@gmail.com" class="link-item">Contact Protocol</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ARCHIVE (PORTFOLIO) -->
+        <section id="archive" class="sys-section">
+            <div class="section-header">
+                <h2 class="section-title">Project_Archive</h2>
+                <div class="section-line"></div>
+            </div>
+            
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">[ ALL ]</button>
+                <button class="filter-btn" data-filter="professional work">[ PROFESSIONAL ]</button>
+                <button class="filter-btn" data-filter="personal work">[ PERSONAL ]</button>
+                <button class="filter-btn" data-filter="university work">[ UNIVERSITY ]</button>
+            </div>
+
+            <div class="archive-grid" id="portfolio-grid-container">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- SECTION: LOGS (RESUME) -->
+        <section id="logs" class="sys-section">
+            <div class="section-header">
+                <h2 class="section-title">Personnel_Logs</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="logs-container">
+                <div class="log-block">
+                    <h3 class="log-header">> QUERY: EXPERIENCE</h3>
+                    <ul class="log-list">
+                        <li class="log-item">
+                            <div class="log-meta">[ 2023 - PRESENT ]</div>
+                            <div class="log-body">
+                                <div class="log-title">Technical Game Designer & Programmer // Untold Games</div>
+                                <div class="log-desc">- Worked on UEFN maps as Technical Game Designer.<br>- Porting different games to various consoles.</div>
+                            </div>
+                        </li>
+                        <li class="log-item">
+                            <div class="log-meta">[ 2023 ]</div>
+                            <div class="log-body">
+                                <div class="log-title">Software Developer // Capgemini SOS</div>
+                                <div class="log-desc">- Participated and finished the school of software at Capgemini.</div>
+                            </div>
+                        </li>
+                        <li class="log-item">
+                            <div class="log-meta">[ 2021 ]</div>
+                            <div class="log-body">
+                                <div class="log-title">Unreal Engine Tutor // Creativity Unleashed</div>
+                                <div class="log-desc">- Created a 16-hour course introducing students to UE blueprints and programming structures. Published on Udemy.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="log-block">
+                    <h3 class="log-header">> QUERY: EDUCATION</h3>
+                    <ul class="log-list">
+                        <li class="log-item">
+                            <div class="log-meta">[ 2021 - 2023 ]</div>
+                            <div class="log-body">
+                                <div class="log-title">Master's Degree: Game Programming // University of Verona</div>
+                                <div class="log-desc">- C#, C++, Unreal Engine, Unity, Game Production.</div>
+                            </div>
+                        </li>
+                        <li class="log-item">
+                            <div class="log-meta">[ 2018 - 2021 ]</div>
+                            <div class="log-body">
+                                <div class="log-title">Games Development: Design // Falmouth University</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Wireframe Modal -->
+    <div class="wf-modal" id="projectModal">
+        <div class="wf-modal-overlay"></div>
+        <div class="wf-modal-content">
+            <div class="wf-modal-border">
+                <button class="wf-modal-close" id="modalClose">[ X ]</button>
+                <div class="wf-modal-inner" id="modalBody">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
     </div>
 
 <script src="./assets/js/script.js"></script>
