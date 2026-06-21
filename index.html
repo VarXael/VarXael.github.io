@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-<body>
+<body class="dark-mode">
 
     <div class="wireframe-canvas">
         <div class="sacred-array">
@@ -26,12 +26,12 @@
             <span class="sys-logo">G. ALFIERI</span>
         </div>
         <div class="sys-nav-center">
-            <button class="nav-tab active" data-target="overview">[ // OVERVIEW ]</button>
-            <button class="nav-tab" data-target="archive">[ // ARCHIVE ]</button>
-            <button class="nav-tab" data-target="logs">[ // LOGS ]</button>
+            <button class="nav-tab active" data-target="overview">[ // ABOUT ]</button>
+            <button class="nav-tab" data-target="archive">[ // PROJECTS ]</button>
+            <button class="nav-tab" data-target="logs">[ // RESUME ]</button>
         </div>
         <div class="sys-nav-right">
-            <button id="theme-toggle" class="theme-btn">[ INITIATE DARK_MODE ]</button>
+            <button id="theme-toggle" class="theme-btn">[ INITIATE LIGHT_MODE ]</button>
         </div>
     </nav>
 
@@ -50,20 +50,47 @@
                         <img src="./assets/images/about.png" alt="Giuseppe">
                     </div>
                     <div class="disciplines-list">
-                        <div class="discipline-item">Game Designer</div>
-                        <div class="discipline-item">Tech Designer</div>
-                        <div class="discipline-item">Leadership</div>
-                        <div class="discipline-item">Programmer</div>
+                        <div class="discipline-item" data-role="Game Designer">Game Designer</div>
+                        <div class="discipline-item" data-role="Technical Game Designer">Tech Designer</div>
+                        <div class="discipline-item" data-role="Leadership">Leadership</div>
+                        <div class="discipline-item" data-role="Game Programmer">Programmer</div>
+                    </div>
+                    
+                    <div class="tech-stack-box">
+                        <div class="tech-cat">LANGUAGES</div>
+                        <div class="tech-items">[ C++ ] [ C# ] [ VERSE ] [ BLUEPRINTS ]</div>
+                        <div class="tech-cat">ENGINES</div>
+                        <div class="tech-items">[ UNREAL ENGINE ] [ UNITY ] [ UEFN ]</div>
+                        <div class="tech-cat">TOOLS</div>
+                        <div class="tech-items">[ GIT ] [ PLASTIC SCM ] [ RIDER ]</div>
+                    </div>
+                </div>
+
+                <div class="center-cell">
+                    <div class="role-description-box" id="role-display">
+                        > SELECT A DISCIPLINE TO VIEW SPECIFICATIONS
+                    </div>
+                    
+                    <div class="featured-grid" id="featured-grid-container">
+                        <!-- Populated by JS -->
+                    </div>
+                    
+                    <div class="clients-row">
+                        <img src="./assets/images/untold_games_cover.png" alt="Untold Games">
+                        <img src="./assets/images/CreativityUnleashed.png" alt="Creativity Unleashed">
+                        <img src="./assets/images/Umeå_University.png" alt="Umea University">
+                        <img src="./assets/images/Cineon_Training.png" alt="Cineon Training">
                     </div>
                 </div>
 
                 <div class="bio-cell">
                     <div>
-                        <div class="bio-title">Overview_</div>
+                        <div class="bio-title">About Me</div>
                         <p class="bio-text">
-                            I design games where the systems tell the story. I architect interconnected mechanics where every piece has a reason to exist, and where the design and the experience are inseparable.
-                            <br><br>
-                            Everything I design, I can build. I work in Unreal Engine and C++, and I move fluently between design documentation and implementation.
+                            I design games where the systems tell the story.<br><br>
+                            I’m a game designer who thinks systematically — I architect interconnected mechanics where every piece has a reason to exist, and where the design and the experience are inseparable. From a music-driven event framework to a game where scanning IS the entire gameplay loop, my work is about building systems that create meaning.<br><br>
+                            Everything I design, I can build. I work in Unreal Engine and C++, and I move fluently between design documentation and implementation. When I’m on a team, I tend to become the person who brings clarity to the vision and structure to the process — not because I claim the role, but because it happens naturally through how I communicate and work.<br><br>
+                            I’ve ported shipped titles to Nintendo Switch, led teams from concept to release, won awards for my university work, and I’m currently building a game where the world doesn’t exist until you scan it into memory.
                         </p>
                     </div>
                     <div class="links-list">
@@ -77,7 +104,7 @@
         <!-- SECTION: ARCHIVE (PORTFOLIO) -->
         <section id="archive" class="sys-section">
             <div class="section-header">
-                <h2 class="section-title">Project_Archive</h2>
+                <h2 class="section-title">Projects</h2>
                 <div class="section-line"></div>
             </div>
             
@@ -96,7 +123,7 @@
         <!-- SECTION: LOGS (RESUME) -->
         <section id="logs" class="sys-section">
             <div class="section-header">
-                <h2 class="section-title">Personnel_Logs</h2>
+                <h2 class="section-title">Resume</h2>
                 <div class="section-line"></div>
             </div>
 
@@ -125,6 +152,13 @@
                                 <div class="log-desc">- Created a 16-hour course introducing students to UE blueprints and programming structures. Published on Udemy.</div>
                             </div>
                         </li>
+                        <li class="log-item">
+                            <div class="log-meta">[ 2020 ]</div>
+                            <div class="log-body">
+                                <div class="log-title">Unreal Engine Tutor // Cineon Immersive Training</div>
+                                <div class="log-desc">- Created the table of interaction in "Task 2 - Content learning area" for the PPE training project.<br>- Production of the functionality for the cross referencing of scenarios.</div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
 
@@ -144,25 +178,28 @@
                                 <div class="log-title">Games Development: Design // Falmouth University</div>
                             </div>
                         </li>
+                        <li class="log-item">
+                            <div class="log-meta">[ 2012 - 2017 ]</div>
+                            <div class="log-body">
+                                <div class="log-title">High School Diploma // I.S.I.S. Albertini Nola</div>
+                                <div class="log-desc">- Scientific Focus</div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
         </section>
+        <!-- SECTION: PROJECT VIEW (MORPH) -->
+        <section id="project-view" class="sys-section">
+            <div class="section-header" style="display: flex; justify-content: flex-start; margin-bottom: 40px;">
+                <button class="theme-btn" id="project-back-btn">[ < RETURN ]</button>
+            </div>
+            <div id="project-view-content" class="project-view-layout">
+                <!-- Populated by JS -->
+            </div>
+        </section>
 
     </main>
-
-    <!-- Wireframe Modal -->
-    <div class="wf-modal" id="projectModal">
-        <div class="wf-modal-overlay"></div>
-        <div class="wf-modal-content">
-            <div class="wf-modal-border">
-                <button class="wf-modal-close" id="modalClose">[ X ]</button>
-                <div class="wf-modal-inner" id="modalBody">
-                    <!-- Populated by JS -->
-                </div>
-            </div>
-        </div>
-    </div>
 
 <script src="./assets/js/script.js"></script>
 </body>
