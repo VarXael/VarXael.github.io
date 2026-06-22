@@ -6,23 +6,25 @@
     <title>Business Card PNG Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Include the html2canvas library from a CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --card-width: 8.5cm;
             --card-height: 5.5cm;
-            --font-family: 'Poppins', sans-serif;
-            --bg-color: #1e1e1f;
-            --primary-text-color: #f1f1f1;
-            --accent-color: #00cc88;
+            --mono: 'Space Mono', monospace;
+            --sans: 'Inter', sans-serif;
+            --bg-color: #0a0b0d;
+            --primary-text-color: #e8e6e0;
+            --accent-color: #4fb8d4;
+            --faint: rgba(232,230,224,0.16);
         }
 
         /* --- Page & Button Setup --- */
         body {
-            font-family: var(--font-family);
-            background-color: #555;
+            font-family: var(--sans);
+            background-color: #050608;
             margin: 0;
             padding: 2rem;
             display: flex;
@@ -37,19 +39,19 @@
         }
 
         .download-button {
-            font-family: var(--font-family);
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: 600;
+            font-family: var(--mono);
+            background: none;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 14px 28px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease;
+            transition: 0.3s;
         }
-        .download-button:hover { transform: translateY(-2px); }
+        .download-button:hover { background: var(--accent-color); color: var(--bg-color); }
 
         /* --- Business Card Styling --- */
         .card {
@@ -57,10 +59,13 @@
             height: var(--card-height);
             background-color: var(--bg-color);
             color: var(--primary-text-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--faint);
             box-sizing: border-box;
             overflow: hidden;
+            position: relative;
+        }
+        .card::before{
+            content:"";position:absolute;inset:5px;border:1px solid rgba(232,230,224,0.06);pointer-events:none;
         }
 
         /* --- Front Side Specifics --- */
@@ -73,18 +78,18 @@
             padding: 20px 10px;
         }
 
-        .photo { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--accent-color); object-fit: cover; margin-bottom: 12px; }
-        .name { font-size: 16pt; font-weight: 700; margin: 0; line-height: 1.1; }
-        .title { font-size: 9.5pt; font-weight: 500; color: var(--accent-color); margin: 4px 0 12px 0; }
-        
-        .contact-info { 
-            display: inline-flex; 
-            flex-direction: column; 
+        .photo { width: 64px; height: 64px; border: 1px solid var(--accent-color); object-fit: cover; margin-bottom: 12px; filter: grayscale(1) contrast(1.05); }
+        .name { font-family: var(--mono); font-size: 15pt; font-weight: 700; margin: 0; line-height: 1.1; text-transform: uppercase; letter-spacing: 1px; }
+        .title { font-family: var(--mono); font-size: 8.5pt; font-weight: 400; color: var(--accent-color); margin: 6px 0 14px 0; letter-spacing: 3px; text-transform: uppercase; }
+
+        .contact-info {
+            display: inline-flex;
+            flex-direction: column;
             align-items: flex-start;
-            gap: 6px; 
+            gap: 7px;
         }
-        .contact-item { display: flex; align-items: center; gap: 8px; font-size: 8pt; }
-        .contact-item .icon { width: 13px; height: 13px; flex-shrink: 0; }
+        .contact-item { display: flex; align-items: center; gap: 8px; font-size: 8pt; font-family: var(--mono); }
+        .contact-item .icon { width: 13px; height: 13px; flex-shrink: 0; color: var(--accent-color); }
         .contact-item span { word-break: break-all; }
 
         /* --- Back Side Specifics --- */
@@ -95,9 +100,9 @@
             justify-content: center;
         }
 
-        .qr-code { width: 3.5cm; height: 3.5cm; border-radius: 8px; }
-        .website-url { margin-top: 8px; font-size: 9pt; font-weight: 500; letter-spacing: 0.5px; }
-        
+        .qr-code { width: 3.4cm; height: 3.4cm; border: 1px solid var(--faint); background: #fff; padding: 4px; }
+        .website-url { margin-top: 10px; font-family: var(--mono); font-size: 9pt; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+
     </style>
 </head>
 <body>

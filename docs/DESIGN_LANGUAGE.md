@@ -6,6 +6,16 @@
 > to the larger project Giuseppe is building. If you are an AI reading this to apply the
 > look to a new surface, read sections 1–4 and 10 first.
 
+> ⚑ **v1.5 — LOCKED DIRECTION (2026-06-22). This supersedes everything below.** After ~21
+> prototypes Giuseppe locked in **`prototype21.html`**: the operator-HUD / blueprint-terminal look
+> with the **Sasha Blue (`#4fb8d4`) + Amber (`#e0a23b`)** accents UN-retired, on near-black
+> `#0a0b0d` bone-white `#e8e6e0`. Type = **Space Mono** (labels) + **Inter** (prose) + **Cormorant
+> Garamond** (italic epigraphs). Layout = a single-page **state machine** (OVERVIEW / ARCHIVE /
+> RECORDS) whose panes morph between states over the animated "nervous system" canvas. The bone+gold
+> / Cinzel / Sephirot-constellation experiment (v0.4 below) was **NOT** chosen — read it as history.
+> This is now realised for real in `index.html` + `assets/css/style.css` + `assets/js/script.js`,
+> carrying the full ported dataset and all OLD features. CV + business cards re-skinned to match.
+
 Status of this doc: **v0.4 — RECALIBRATED toward "alien / timeless / inhuman."** Direction =
 ground-up rebuild keeping the data; project showcase = **Sephirot constellation**; dark-only.
 The Sasha Blue/Amber accent is **RETIRED** (too project-specific, too "tech product"). New accent

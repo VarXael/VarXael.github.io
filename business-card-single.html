@@ -6,24 +6,27 @@
     <title>Single-Sided Business Card PNG Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Include the html2canvas library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --card-width: 8.5cm;
             --card-height: 5.5cm;
-            --font-family: 'Poppins', sans-serif;
-            --bg-color: #1e1e1f;
-            --primary-text-color: #f1f1f1;
-            --accent-color: #00cc88;
-            --light-gray: #a9a9a9; 
+            --mono: 'Space Mono', monospace;
+            --sans: 'Inter', sans-serif;
+            --bg-color: #0a0b0d;
+            --primary-text-color: #e8e6e0;
+            --accent-color: #4fb8d4;
+            --amber: #e0a23b;
+            --faint: rgba(232,230,224,0.16);
+            --light-gray: rgba(232,230,224,0.5);
         }
 
         /* --- Page & Button Setup --- */
         body {
-            font-family: var(--font-family);
-            background-color: #555;
+            font-family: var(--sans);
+            background-color: #050608;
             margin: 0;
             padding: 2rem;
             display: flex;
@@ -33,19 +36,19 @@
         }
 
         .download-button {
-            font-family: var(--font-family);
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: 600;
+            font-family: var(--mono);
+            background: none;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 14px 28px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease;
+            transition: 0.3s;
         }
-        .download-button:hover { transform: translateY(-2px); }
+        .download-button:hover { background: var(--accent-color); color: var(--bg-color); }
 
         /* --- Final Card Layout --- */
         .card {
@@ -53,69 +56,80 @@
             height: var(--card-height);
             background-color: var(--bg-color);
             color: var(--primary-text-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--faint);
             box-sizing: border-box;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            padding: 10px 15px;
+            padding: 12px 16px;
+            position: relative;
+        }
+        .card::before{
+            content:"";position:absolute;inset:4px;border:1px solid rgba(232,230,224,0.05);pointer-events:none;
         }
 
         .header-section {
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--faint);
+            padding-bottom: 9px;
             flex-shrink: 0;
         }
 
         .photo {
             width: 48px;
             height: 48px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-color);
+            border: 1px solid var(--accent-color);
             object-fit: cover;
+            filter: grayscale(1) contrast(1.05);
             flex-shrink: 0;
         }
 
         .identity .name {
-            font-size: 13pt;
+            font-family: var(--mono);
+            font-size: 12.5pt;
             font-weight: 700;
             margin: 0;
             line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .identity .title {
-            font-size: 8pt;
-            font-weight: 500;
+            font-family: var(--mono);
+            font-size: 7.5pt;
+            font-weight: 400;
             color: var(--accent-color);
-            margin: 2px 0 0 0;
+            margin: 4px 0 0 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        
+
         .content-section {
             display: flex;
             justify-content: space-between;
             flex-grow: 1;
-            padding-top: 8px;
+            padding-top: 10px;
             align-items: flex-start;
         }
-        
+
         .contact-info {
             display: flex;
             flex-direction: column;
-            gap: 6px; /* Adjusted gap */
+            gap: 7px;
         }
         .contact-item {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 8pt;
+            font-family: var(--mono);
         }
         .contact-item .icon {
             width: 13px;
             height: 13px;
             flex-shrink: 0;
+            color: var(--accent-color);
         }
 
         .qr-section {
@@ -127,27 +141,32 @@
         .qr-code {
             width: 50px;
             height: 50px;
-            border-radius: 6px;
+            border: 1px solid var(--faint);
+            background: #fff;
+            padding: 2px;
         }
         .website-url {
-            font-size: 8pt;
+            font-size: 7.5pt;
+            font-family: var(--mono);
+            letter-spacing: 1px;
             color: var(--primary-text-color);
         }
-        
+
         .footer {
             flex-shrink: 0;
             text-align: center;
-            padding-top: 6px;
+            padding-top: 7px;
             margin-top: auto;
+            border-top: 1px dashed var(--faint);
         }
         .footer p {
-            font-size: 7.5pt;
-            font-weight: 500;
+            font-size: 7pt;
+            font-family: var(--mono);
             color: var(--light-gray);
             margin: 0;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
-        
+
     </style>
 </head>
 <body>
@@ -195,7 +214,7 @@
             const options = { 
                 scale: 4, 
                 useCORS: true, 
-                backgroundColor: '#1e1e1f' 
+                backgroundColor: '#0a0b0d'
             };
 
             html2canvas(cardElement, options).then(canvas => {

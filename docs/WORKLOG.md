@@ -6,6 +6,26 @@
 
 ---
 
+## CURRENT STATE (as of 2026-06-22) — BUILD SHIPPED
+
+**`prototype21.html` is the LOCKED style** (operator-HUD, Sasha Blue+Amber, Space Mono / Inter /
+Cormorant Garamond, single-page OVERVIEW/ARCHIVE/RECORDS state machine over the nervous-system
+canvas). It is now the real build:
+- `index.html` + `assets/css/style.css` + `assets/js/script.js` — rebuilt from prototype21, cleaned
+  of its Antigravity bugs, carrying the **full ported dataset (22 projects, 5 unpublished hidden)**
+  and all OLD features: rich preview pane (Overview/Story tabs, YouTube + local-video player with
+  playlist, magic-links, external links, role contributions), **discipline lens** (the 4 chips
+  filter/dim the archive + swap the preview to that role's contribution — replaces the old role
+  modal), copy-email, clickable client logos (incl. Cineon), CV link, Tech Stack, full résumé.
+- Framing copy rewritten in Giuseppe's own first-person voice (Pass 3, folded in).
+- `cv.html`, `business-card-single.html`, `business_card.html` re-skinned to the HUD palette.
+- `prototype21.html` kept at repo root as the reference snapshot. Verified in preview: 17 cards,
+  4 filters, all 3 states morph, discipline lens, video/magic-links, no console errors, mobile stacks.
+
+Everything below this line is pre-lock history (the bone+gold v0.4 direction was not chosen).
+
+---
+
 ## CURRENT STATE (as of 2026-06-21)
 
 Rebuilding Giuseppe's portfolio in an "architectural / blueprint-terminal" aesthetic

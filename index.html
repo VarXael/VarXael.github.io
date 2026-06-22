@@ -1,205 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G. ALFIERI // SYSTEMS ARCHITECT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G. Alfieri // Systems Architect</title>
+<meta name="description" content="Giuseppe Luigi Alfieri — game designer & technical game designer. I design games where the systems tell the story, and everything I design, I can build.">
+<link rel="shortcut icon" href="./assets/images/about.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/style.css">
 </head>
-<body class="dark-mode">
+<body class="state-overview">
+<canvas id="bg"></canvas>
 
-    <div class="wireframe-canvas">
-        <div class="sacred-array">
-            <canvas id="generative-canvas"></canvas>
+<!-- ---- OPERATOR HUD ---- -->
+<div class="hud">
+  <div class="frame"></div>
+  <svg class="corner tl" viewBox="0 0 100 100"><path d="M2 40 V2 H40"/><circle cx="2" cy="2" r="3"/><path d="M2 60 V98 H40" opacity=".4"/></svg>
+  <svg class="corner tr" viewBox="0 0 100 100"><path d="M98 40 V2 H60"/><circle cx="98" cy="2" r="3"/></svg>
+  <svg class="corner bl" viewBox="0 0 100 100"><path d="M2 60 V98 H40"/><circle cx="2" cy="98" r="3"/></svg>
+  <svg class="corner br" viewBox="0 0 100 100"><path d="M98 60 V98 H60"/><circle cx="98" cy="98" r="3"/><path d="M98 40 V2 H60" opacity=".4"/></svg>
+  <div class="tele t1">STRATA // <b>00</b> · SURFACE</div>
+  <div class="tele t2">OP_ID: <b>G.ALFIERI</b></div>
+  <div class="tele t3">CORE_LINK: <b id="tlink">STABLE</b></div>
+  <div class="tele t4">SYS: <b>SCHEMATIC v1.5</b></div>
+</div>
+<svg class="reticle" id="ret" viewBox="0 0 40 40"><circle cx="20" cy="20" r="10"/><path d="M20 0v8M20 32v8M0 20h8M32 20h8"/></svg>
+
+<!-- ---- TOPBAR ---- -->
+<div class="topbar">
+  <div class="brand">G.ALFIERI <small>//</small> ARCHITECT</div>
+  <nav class="nav" id="main-nav">
+    <button class="on" data-state="overview">[ OVERVIEW ]</button>
+    <button data-state="archive">[ ARCHIVE ]</button>
+    <button data-state="records">[ RECORDS ]</button>
+  </nav>
+  <div class="topbar-spacer"></div>
+</div>
+
+<div class="app-layout">
+
+  <!-- PANE 1: OVERVIEW -->
+  <div class="pane pane-overview">
+    <div class="overview-info">
+      <div class="eyebrow">Game &amp; Technical Designer</div>
+      <h1 class="name">Giuseppe<br>Alfieri</h1>
+      <p class="epigraph">"I design games where the systems tell the story — and the world doesn't exist until you scan it into memory."</p>
+      <p class="bio">
+        I'm a game designer who thinks in systems. I build interconnected mechanics where every piece
+        has a reason to exist, and the design and the experience are the same thing. And everything I
+        design, I can also build — I work in Unreal Engine and C++, and I move freely between a design
+        doc and the engine that runs it. I've ported shipped titles to Nintendo Switch, led teams from
+        concept to release, won awards for my university work, and right now I'm building a game where
+        scanning the world into memory is the whole point.
+      </p>
+
+      <div class="box-stack">
+        <div class="box">
+          <div class="box-title">DISCIPLINES <span class="box-hint">— select to filter the archive</span></div>
+          <div class="roles-grid">
+            <button class="chip" data-role="Game Designer">Game Designer</button>
+            <button class="chip" data-role="Technical Game Designer">Tech Designer</button>
+            <button class="chip" data-role="Game Programmer">Programmer</button>
+            <button class="chip" data-role="Leadership">Leadership</button>
+          </div>
         </div>
-        <div class="viewport-frame"></div>
-        <div class="corner-node node-tl"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
-        <div class="corner-node node-tr"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
-        <div class="corner-node node-bl"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
-        <div class="corner-node node-br"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" stroke-width="4"/><circle cx="50" cy="50" r="35" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke-width="2"/><line x1="0" y1="50" x2="100" y2="50" stroke-width="2"/></svg></div>
+
+        <div class="box">
+          <div class="box-title">TECH STACK</div>
+          <div class="tech-stack">
+            <div class="tech-row"><span class="tech-key">LANGUAGES</span><span class="tech-val">[ C++ ] [ C# ] [ VERSE ] [ BLUEPRINTS ]</span></div>
+            <div class="tech-row"><span class="tech-key">ENGINES</span><span class="tech-val">[ UNREAL ENGINE ] [ UNITY ] [ UEFN ]</span></div>
+            <div class="tech-row"><span class="tech-key">TOOLS</span><span class="tech-val">[ GIT ] [ PLASTIC SCM ] [ RIDER ]</span></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">EXPERIENCE WITH</div>
+          <div class="clients">
+            <a href="https://untoldgames.com/" target="_blank" rel="noopener" title="Untold Games"><img src="./assets/images/untold_games_cover.png" alt="Untold Games"></a>
+            <a href="https://www.udemy.com/user/creativity-unleashed/" target="_blank" rel="noopener" title="Creativity Unleashed"><img src="./assets/images/CreativityUnleashed.png" alt="Creativity Unleashed"></a>
+            <a href="https://www.umu.se/en/" target="_blank" rel="noopener" title="Umeå University"><img src="./assets/images/Umeå_University.png" alt="Umeå University"></a>
+            <a href="https://cineon.training/" target="_blank" rel="noopener" title="Cineon Training"><img src="./assets/images/Cineon_Training.png" alt="Cineon Training"></a>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">CONTACT PROTOCOL</div>
+          <div class="contact-links">
+            <button class="btn" id="copy-email">Copy Email</button>
+            <a href="https://github.com/VarXael" target="_blank" rel="noopener" class="btn">GitHub</a>
+            <a href="./cv.html" target="_blank" rel="noopener" class="btn">View CV</a>
+          </div>
+          <div id="copymsg">EMAIL COPIED TO CLIPBOARD</div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Navigation Header -->
-    <nav class="sys-nav">
-        <div class="sys-nav-left">
-            <span class="sys-logo">G. ALFIERI</span>
+  <!-- PANE 2: TERMINAL (project list) -->
+  <div class="pane pane-terminal">
+    <div class="terminal-inner">
+      <div class="terminal-header">
+        <div class="term-title">&gt; ACCESS ARCHIVES</div>
+        <div class="list-filters" id="arc-filters">
+          <button class="on" data-cat="PROFESSIONAL">PRO</button>
+          <button data-cat="PERSONAL">PERSONAL</button>
+          <button data-cat="UNIVERSITY">UNI</button>
+          <button data-cat="JAM">JAM</button>
         </div>
-        <div class="sys-nav-center">
-            <button class="nav-tab active" data-target="overview">[ // ABOUT ]</button>
-            <button class="nav-tab" data-target="archive">[ // PROJECTS ]</button>
-            <button class="nav-tab" data-target="logs">[ // RESUME ]</button>
+      </div>
+      <div class="lens-banner" id="lens-banner"></div>
+      <div class="proj-list" id="proj-list"><!-- JS --></div>
+    </div>
+  </div>
+
+  <!-- PANE 3: PREVIEW -->
+  <div class="pane pane-preview" id="preview-pane">
+    <div class="prev-inner">
+      <div class="prev-media" id="prev-media"><!-- JS --></div>
+
+      <div class="cmd-line" id="prev-cmd">&gt; INSPECT MODULE</div>
+      <h2 class="prev-title" id="prev-title">Project Title</h2>
+
+      <div class="prev-fields">
+        <div>CATEGORY<b id="prev-cat">—</b></div>
+        <div>YEAR<b id="prev-yr">—</b></div>
+        <div>ENGINE<b id="prev-eng">—</b></div>
+        <div>ROLE<b id="prev-role">—</b></div>
+      </div>
+      <div class="prev-context" id="prev-context"></div>
+
+      <div class="prev-tabs" id="prev-tabs"></div>
+
+      <div id="prev-overview">
+        <p class="prev-syn" id="prev-syn"></p>
+        <div class="prev-tools" id="prev-tools"></div>
+        <div class="prev-deep" id="prev-contrib"></div>
+        <div class="prev-links" id="prev-links"></div>
+      </div>
+
+      <div class="prev-story" id="prev-story" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- PANE 4: RECORDS (résumé) -->
+  <div class="pane pane-records">
+    <div class="records-layout">
+      <div class="log-block">
+        <h3 class="log-header">&gt; QUERY: EXPERIENCE</h3>
+
+        <div class="log-item">
+          <div class="log-meta">[ 2023 — PRESENT ]<span>Milan, IT / Remote</span></div>
+          <div class="log-body">
+            <div class="log-title">Technical Game Designer &amp; Programmer // Untold Games</div>
+            <div class="log-desc">
+              Ported shipped titles to Nintendo Switch (High on Life, Police Simulator) as a core
+              programmer — deep C++/Blueprint debugging and custom debug tooling. Lead systems
+              programmer in Verse on multiple released UEFN titles. Plus some online tutoring on the side.
+            </div>
+          </div>
         </div>
-        <div class="sys-nav-right">
-            <button id="theme-toggle" class="theme-btn">[ INITIATE LIGHT_MODE ]</button>
+
+        <div class="log-item">
+          <div class="log-meta">[ APR — MAY 2023 ]</div>
+          <div class="log-body">
+            <div class="log-title">Software Developer // Capgemini SOS</div>
+            <div class="log-desc">Completed Capgemini's School of Software.</div>
+          </div>
         </div>
-    </nav>
 
-    <main class="ui-layer">
-        
-        <!-- SECTION: OVERVIEW -->
-        <section id="overview" class="sys-section active">
-            <div class="overview-grid">
-                <div class="header-center">
-                    <h1 class="title-main">Giuseppe<br>Alfieri</h1>
-                    <div class="title-sub">+ Systems Architect +</div>
-                </div>
+        <div class="log-item">
+          <div class="log-meta">[ MAY — OCT 2021 ]</div>
+          <div class="log-body">
+            <div class="log-title">Unreal Engine Tutor // Creativity Unleashed</div>
+            <div class="log-desc">Authored a 16-hour Unreal Engine course teaching Blueprint fundamentals and engine architecture. Published on Udemy.</div>
+          </div>
+        </div>
 
-                <div class="profile-cell">
-                    <div class="avatar-wire">
-                        <img src="./assets/images/about.png" alt="Giuseppe">
-                    </div>
-                    <div class="disciplines-list">
-                        <div class="discipline-item" data-role="Game Designer">Game Designer</div>
-                        <div class="discipline-item" data-role="Technical Game Designer">Tech Designer</div>
-                        <div class="discipline-item" data-role="Leadership">Leadership</div>
-                        <div class="discipline-item" data-role="Game Programmer">Programmer</div>
-                    </div>
-                    
-                    <div class="tech-stack-box">
-                        <div class="tech-cat">LANGUAGES</div>
-                        <div class="tech-items">[ C++ ] [ C# ] [ VERSE ] [ BLUEPRINTS ]</div>
-                        <div class="tech-cat">ENGINES</div>
-                        <div class="tech-items">[ UNREAL ENGINE ] [ UNITY ] [ UEFN ]</div>
-                        <div class="tech-cat">TOOLS</div>
-                        <div class="tech-items">[ GIT ] [ PLASTIC SCM ] [ RIDER ]</div>
-                    </div>
-                </div>
+        <div class="log-item">
+          <div class="log-meta">[ APR 2020 ]</div>
+          <div class="log-body">
+            <div class="log-title">Unreal Engine Tutor // Cineon Immersive Training</div>
+            <div class="log-desc">Built the interaction table for the PPE training project and the cross-referencing logic between training scenarios.</div>
+          </div>
+        </div>
+      </div>
 
-                <div class="center-cell">
-                    <div class="role-description-box" id="role-display">
-                        > SELECT A DISCIPLINE TO VIEW SPECIFICATIONS
-                    </div>
-                    
-                    <div class="featured-grid" id="featured-grid-container">
-                        <!-- Populated by JS -->
-                    </div>
-                    
-                    <div class="clients-row">
-                        <img src="./assets/images/untold_games_cover.png" alt="Untold Games">
-                        <img src="./assets/images/CreativityUnleashed.png" alt="Creativity Unleashed">
-                        <img src="./assets/images/Umeå_University.png" alt="Umea University">
-                        <img src="./assets/images/Cineon_Training.png" alt="Cineon Training">
-                    </div>
-                </div>
+      <div class="log-block">
+        <h3 class="log-header">&gt; QUERY: EDUCATION</h3>
 
-                <div class="bio-cell">
-                    <div>
-                        <div class="bio-title">About Me</div>
-                        <p class="bio-text">
-                            I design games where the systems tell the story.<br><br>
-                            I’m a game designer who thinks systematically — I architect interconnected mechanics where every piece has a reason to exist, and where the design and the experience are inseparable. From a music-driven event framework to a game where scanning IS the entire gameplay loop, my work is about building systems that create meaning.<br><br>
-                            Everything I design, I can build. I work in Unreal Engine and C++, and I move fluently between design documentation and implementation. When I’m on a team, I tend to become the person who brings clarity to the vision and structure to the process — not because I claim the role, but because it happens naturally through how I communicate and work.<br><br>
-                            I’ve ported shipped titles to Nintendo Switch, led teams from concept to release, won awards for my university work, and I’m currently building a game where the world doesn’t exist until you scan it into memory.
-                        </p>
-                    </div>
-                    <div class="links-list">
-                        <a href="https://github.com/VarXael" target="_blank" class="link-item">GitHub Network</a>
-                        <a href="mailto:giuseppeluigi.alfieri@gmail.com" class="link-item">Contact Protocol</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="log-item">
+          <div class="log-meta">[ 2021 — 2023 ]<span>Verona, IT</span></div>
+          <div class="log-body">
+            <div class="log-title">MSc, Game Programming // University of Verona</div>
+            <div class="log-desc">C#, C++, Unreal Engine, Unity, geometry/trigonometry, game production.</div>
+          </div>
+        </div>
 
-        <!-- SECTION: ARCHIVE (PORTFOLIO) -->
-        <section id="archive" class="sys-section">
-            <div class="section-header">
-                <h2 class="section-title">Projects</h2>
-                <div class="section-line"></div>
-            </div>
-            
-            <div class="filter-bar">
-                <button class="filter-btn active" data-filter="all">[ ALL ]</button>
-                <button class="filter-btn" data-filter="professional work">[ PROFESSIONAL ]</button>
-                <button class="filter-btn" data-filter="personal work">[ PERSONAL ]</button>
-                <button class="filter-btn" data-filter="university work">[ UNIVERSITY ]</button>
-            </div>
+        <div class="log-item">
+          <div class="log-meta">[ 2018 — 2021 ]<span>Penryn, UK</span></div>
+          <div class="log-body">
+            <div class="log-title">BA (Hons) Games Development: Design // Falmouth University</div>
+            <div class="log-desc">Won Best 3rd-Year Videogame 2021 (Cycle).</div>
+          </div>
+        </div>
 
-            <div class="archive-grid" id="portfolio-grid-container">
-                <!-- Populated by JS -->
-            </div>
-        </section>
+        <div class="log-item">
+          <div class="log-meta">[ 2012 — 2017 ]<span>Nola, IT</span></div>
+          <div class="log-body">
+            <div class="log-title">High School Diploma // I.S.I.S. Albertini Nola</div>
+            <div class="log-desc">Scientific focus.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- SECTION: LOGS (RESUME) -->
-        <section id="logs" class="sys-section">
-            <div class="section-header">
-                <h2 class="section-title">Resume</h2>
-                <div class="section-line"></div>
-            </div>
-
-            <div class="logs-container">
-                <div class="log-block">
-                    <h3 class="log-header">> QUERY: EXPERIENCE</h3>
-                    <ul class="log-list">
-                        <li class="log-item">
-                            <div class="log-meta">[ 2023 - PRESENT ]</div>
-                            <div class="log-body">
-                                <div class="log-title">Technical Game Designer & Programmer // Untold Games</div>
-                                <div class="log-desc">- Worked on UEFN maps as Technical Game Designer.<br>- Porting different games to various consoles.</div>
-                            </div>
-                        </li>
-                        <li class="log-item">
-                            <div class="log-meta">[ 2023 ]</div>
-                            <div class="log-body">
-                                <div class="log-title">Software Developer // Capgemini SOS</div>
-                                <div class="log-desc">- Participated and finished the school of software at Capgemini.</div>
-                            </div>
-                        </li>
-                        <li class="log-item">
-                            <div class="log-meta">[ 2021 ]</div>
-                            <div class="log-body">
-                                <div class="log-title">Unreal Engine Tutor // Creativity Unleashed</div>
-                                <div class="log-desc">- Created a 16-hour course introducing students to UE blueprints and programming structures. Published on Udemy.</div>
-                            </div>
-                        </li>
-                        <li class="log-item">
-                            <div class="log-meta">[ 2020 ]</div>
-                            <div class="log-body">
-                                <div class="log-title">Unreal Engine Tutor // Cineon Immersive Training</div>
-                                <div class="log-desc">- Created the table of interaction in "Task 2 - Content learning area" for the PPE training project.<br>- Production of the functionality for the cross referencing of scenarios.</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="log-block">
-                    <h3 class="log-header">> QUERY: EDUCATION</h3>
-                    <ul class="log-list">
-                        <li class="log-item">
-                            <div class="log-meta">[ 2021 - 2023 ]</div>
-                            <div class="log-body">
-                                <div class="log-title">Master's Degree: Game Programming // University of Verona</div>
-                                <div class="log-desc">- C#, C++, Unreal Engine, Unity, Game Production.</div>
-                            </div>
-                        </li>
-                        <li class="log-item">
-                            <div class="log-meta">[ 2018 - 2021 ]</div>
-                            <div class="log-body">
-                                <div class="log-title">Games Development: Design // Falmouth University</div>
-                            </div>
-                        </li>
-                        <li class="log-item">
-                            <div class="log-meta">[ 2012 - 2017 ]</div>
-                            <div class="log-body">
-                                <div class="log-title">High School Diploma // I.S.I.S. Albertini Nola</div>
-                                <div class="log-desc">- Scientific Focus</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        <!-- SECTION: PROJECT VIEW (MORPH) -->
-        <section id="project-view" class="sys-section">
-            <div class="section-header" style="display: flex; justify-content: flex-start; margin-bottom: 40px;">
-                <button class="theme-btn" id="project-back-btn">[ < RETURN ]</button>
-            </div>
-            <div id="project-view-content" class="project-view-layout">
-                <!-- Populated by JS -->
-            </div>
-        </section>
-
-    </main>
+</div>
 
 <script src="./assets/js/script.js"></script>
 </body>
