@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STRATA // ARCHITECT — aesthetic prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   STRATA // ARCHITECT — prototype of the rebuilt aesthetic.
+   Self-contained. Dark by default (BLAME!). React, don't ship.
+   Palette: bone ink on near-black + Sasha blue (state) + amber (weight).
+   ============================================================ */
+:root{
+  --bg:#0a0b0d; --ink:#e8e6e0;
+  --dim:rgba(232,230,224,.46); --faint:rgba(232,230,224,.13);
+  --blue:#4fb8d4; --amber:#e0a23b;
+  --mono:'Space Mono',monospace; --sans:'Inter',sans-serif; --serif:'Cormorant Garamond',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--mono);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+canvas#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+
+/* ---- OPERATOR HUD (Armored Core restraint) ---- */
+.hud{position:fixed;inset:0;z-index:5;pointer-events:none}
+.frame{position:absolute;inset:22px;border:1px solid var(--faint)}
+.frame::before{content:"";position:absolute;inset:6px;border:1px solid rgba(232,230,224,.05)}
+.corner{position:absolute;width:42px;height:42px;stroke:var(--dim);fill:none}
+.corner.tl{top:14px;left:14px}.corner.tr{top:14px;right:14px}
+.corner.bl{bottom:14px;left:14px}.corner.br{bottom:14px;right:14px}
+.tele{position:absolute;font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+.tele.t1{top:30px;left:64px}.tele.t2{top:30px;right:64px;text-align:right}
+.tele.t3{bottom:30px;left:64px}.tele.t4{bottom:30px;right:64px;text-align:right}
+.tele b{color:var(--blue);font-weight:400}
+.reticle{position:fixed;z-index:5;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none;
+  stroke:var(--blue);fill:none;opacity:.5;transition:opacity .3s;mix-blend-mode:screen}
+
+/* ---- STAGE ---- */
+.stage{position:relative;z-index:3;padding:90px 56px 80px}
+.topbar{position:fixed;top:34px;left:56px;right:56px;z-index:6;display:flex;justify-content:space-between;
+  align-items:flex-end;border-bottom:1px dashed var(--faint);padding-bottom:10px}
+.brand{font-size:.78rem;letter-spacing:5px;font-weight:700}
+.brand small{color:var(--blue)}
+.nav{display:flex;gap:26px}
+.nav button{background:none;border:none;color:var(--dim);font-family:var(--mono);font-size:.7rem;
+  letter-spacing:3px;cursor:pointer;transition:.25s;text-transform:uppercase}
+.nav button:hover{color:var(--ink)}
+.nav button.on{color:var(--ink)}
+.nav button.on::after{content:"";display:block;height:2px;margin-top:5px;background:var(--blue)}
+
+/* ---- HERO / STRATUM ---- */
+.hero{min-height:62vh;display:grid;grid-template-columns:1fr auto;align-items:center;gap:40px}
+.stratum{font-family:var(--serif);font-size:13rem;line-height:.8;color:var(--faint);font-style:italic;
+  user-select:none;letter-spacing:-.04em}
+.hero-main{max-width:560px}
+.eyebrow{font-size:.68rem;letter-spacing:6px;color:var(--blue);text-transform:uppercase;margin-bottom:22px;
+  display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--blue)}
+.name{font-size:4.4rem;line-height:.92;text-transform:uppercase;letter-spacing:2px;font-weight:400}
+.epigraph{font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--dim);margin-top:24px;line-height:1.4}
+.descend{margin-top:46px;font-size:.66rem;letter-spacing:4px;color:var(--dim);text-transform:uppercase;
+  display:flex;align-items:center;gap:14px}
+.descend .tick{width:60px;height:1px;background:linear-gradient(90deg,var(--dim),transparent)}
+
+/* ---- ARCHIVE BOARD (tier-sized modules) ---- */
+.board-head{display:flex;align-items:baseline;gap:18px;margin:30px 0 26px}
+.board-head h2{font-size:.9rem;letter-spacing:4px;font-weight:700;text-transform:uppercase}
+.board-head .sub{font-size:.7rem;color:var(--dim);letter-spacing:2px}
+.board{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.mod{position:relative;border:1px solid var(--faint);background:rgba(232,230,224,.015);cursor:pointer;
+  overflow:hidden;transition:border-color .3s,transform .3s;display:flex;flex-direction:column}
+.mod:hover{border-color:var(--blue);transform:translateY(-3px)}
+.mod.hero{grid-column:span 4;min-height:300px}
+.mod.support{grid-column:span 2;min-height:300px}
+.mod.listed{grid-column:span 2;min-height:128px;flex-direction:row;align-items:center}
+.mod-media{position:relative;flex:1;overflow:hidden;background:#000}
+.mod-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(.85);
+  transition:filter .5s,transform .6s}
+.mod:hover .mod-media img{filter:grayscale(0) contrast(1) brightness(1);transform:scale(1.04)}
+.mod-media::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,11,13,.92),rgba(10,11,13,.1) 55%)}
+.mod.listed .mod-media{display:none}
+.scan{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;z-index:2}
+.mod:hover .scan{opacity:1}
+.scan i{position:absolute;width:14px;height:14px;border:1px solid var(--blue)}
+.scan i.a{top:8px;left:8px;border-right:0;border-bottom:0}
+.scan i.b{top:8px;right:8px;border-left:0;border-bottom:0}
+.scan i.c{bottom:8px;left:8px;border-right:0;border-top:0}
+.scan i.d{bottom:8px;right:8px;border-left:0;border-top:0}
+.mod-body{position:relative;z-index:3;padding:16px 18px}
+.mod.hero .mod-body,.mod.support .mod-body{margin-top:auto}
+.mod-idx{font-size:.62rem;letter-spacing:2px;color:var(--dim);display:flex;justify-content:space-between;margin-bottom:8px}
+.mod-idx .cat{color:var(--blue)}
+.mod-title{font-size:1.05rem;text-transform:uppercase;font-weight:700;letter-spacing:1px;line-height:1.1}
+.mod.hero .mod-title{font-size:1.7rem}
+.mod-roles{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{font-size:.58rem;border:1px solid var(--dim);padding:2px 7px;text-transform:uppercase;letter-spacing:1px;color:var(--dim)}
+.flag{position:absolute;top:0;right:0;z-index:4;background:var(--amber);color:#0a0b0d;font-size:.55rem;
+  letter-spacing:2px;padding:4px 9px;font-weight:700}
+.mod.listed .mod-body{padding:18px 20px}
+
+/* ---- UNFOLD DOSSIER (Blueprint Unfold) ---- */
+.unfold{position:fixed;inset:0;z-index:20;display:none;background:rgba(10,11,13,.78);backdrop-filter:blur(2px)}
+.unfold.open{display:block}
+.sheet{position:absolute;inset:48px;border:1px solid var(--blue);background:var(--bg);
+  display:grid;grid-template-columns:1.1fr 1fr;overflow:hidden}
+/* construction lines that draw themselves */
+.sheet::before,.sheet::after{content:"";position:absolute;background:var(--blue);z-index:30}
+.sheet::before{left:0;top:0;height:1px;width:100%;transform:scaleX(0);transform-origin:left;
+  animation:drawX .5s ease forwards}
+.sheet::after{left:0;top:0;width:1px;height:100%;transform:scaleY(0);transform-origin:top;
+  animation:drawY .5s .12s ease forwards}
+@keyframes drawX{to{transform:scaleX(1)}}
+@keyframes drawY{to{transform:scaleY(1)}}
+.sheet .reticle-lock{position:absolute;width:54px;height:54px;stroke:var(--amber);fill:none;z-index:31;
+  top:-2px;left:-2px;opacity:0;animation:lockIn .5s .25s ease forwards}
+@keyframes lockIn{from{opacity:0;transform:scale(1.6)}to{opacity:1;transform:scale(1)}}
+.sheet-media{position:relative;border-right:1px dashed var(--faint);overflow:hidden;background:#000}
+.sheet-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3) contrast(1.05)}
+.sheet-info{padding:46px 44px;overflow-y:auto;opacity:0;animation:fade .5s .35s ease forwards}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.sheet-info .eyebrow{margin-bottom:14px}
+.sheet-title{font-size:2.3rem;text-transform:uppercase;line-height:1;letter-spacing:1px;margin-bottom:14px}
+.fields{display:flex;gap:22px;font-size:.66rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;
+  border-bottom:1px dashed var(--faint);padding-bottom:18px;margin-bottom:22px}
+.fields b{color:var(--ink);font-weight:400;display:block;margin-top:4px}
+.synopsis{font-family:var(--sans);font-size:.95rem;line-height:1.7;color:var(--ink);margin-bottom:22px}
+.role-box{border-left:2px solid var(--blue);padding:4px 0 4px 18px;margin-bottom:18px;font-family:var(--sans);font-size:.85rem;line-height:1.6;color:var(--dim)}
+.role-box h4{font-family:var(--mono);font-size:.7rem;letter-spacing:2px;color:var(--blue);margin-bottom:8px;text-transform:uppercase}
+.close{position:absolute;top:-1px;right:-1px;z-index:40;background:var(--blue);color:#0a0b0d;border:none;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:2px;padding:9px 14px;cursor:pointer;font-weight:700}
+.cmd{font-size:.66rem;letter-spacing:2px;color:var(--blue);margin-bottom:18px}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}.stratum{display:none}.name{font-size:3rem}
+  .board{grid-template-columns:1fr}.mod.hero,.mod.support,.mod.listed{grid-column:span 1}
+  .sheet{grid-template-columns:1fr;inset:18px}.sheet-media{min-height:200px}
+}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<div class="hud">
+  <div class="frame"></div>
+  <svg class="corner tl" viewBox="0 0 100 100"><path d="M2 40 V2 H40"/><circle cx="2" cy="2" r="3"/><path d="M2 60 V98 H40" opacity=".4"/></svg>
+  <svg class="corner tr" viewBox="0 0 100 100"><path d="M98 40 V2 H60"/><circle cx="98" cy="2" r="3"/></svg>
+  <svg class="corner bl" viewBox="0 0 100 100"><path d="M2 60 V98 H40"/><circle cx="2" cy="98" r="3"/></svg>
+  <svg class="corner br" viewBox="0 0 100 100"><path d="M98 60 V98 H60"/><circle cx="98" cy="98" r="3"/><path d="M98 40 V2 H60" opacity=".4"/></svg>
+  <div class="tele t1">STRATA // <b>00</b> · SURFACE</div>
+  <div class="tele t2">OP_ID: <b>G.ALFIERI</b></div>
+  <div class="tele t3">CORE_LINK: <b id="tlink">STABLE</b></div>
+  <div class="tele t4">SYS: <b>SCHEMATIC v0.3</b></div>
+</div>
+<svg class="reticle" id="ret" viewBox="0 0 40 40"><circle cx="20" cy="20" r="10"/><path d="M20 0v8M20 32v8M0 20h8M32 20h8"/></svg>
+
+<div class="topbar">
+  <div class="brand">G.ALFIERI <small>//</small> ARCHITECT</div>
+  <nav class="nav">
+    <button class="on">[ STRATA ]</button>
+    <button>[ ARCHIVE ]</button>
+    <button>[ RECORDS ]</button>
+  </nav>
+</div>
+
+<main class="stage">
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">SYSTEMS ARCHITECT</div>
+      <h1 class="name">Giuseppe<br>Alfieri</h1>
+      <p class="epigraph">"I design games where the systems tell the story —<br>and the world doesn't exist until you scan it into memory."</p>
+      <div class="descend"><span class="tick"></span> DESCEND TO ARCHIVE</div>
+    </div>
+    <div class="stratum">00</div>
+  </section>
+
+  <div class="board-head">
+    <h2>&gt; ARCHIVE :: MODULES</h2>
+    <span class="sub">[ SIZED BY SIGNIFICANCE — HERO · SUPPORTING · LISTED ]</span>
+  </div>
+  <div class="board" id="board"></div>
+</main>
+
+<div class="unfold" id="unfold"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ---------- DATA (3 real projects, trimmed for the slice) ---------- */
+const DATA={
+ HighOnLife:{tier:'hero',idx:'MOD_01',cat:'PROFESSIONAL',title:'High on Life',img:'./assets/images/HighOnLife.png',
+   year:2025,engine:'UNREAL / C++',role:'Programmer & Tech Designer',flag:'HERO',
+   syn:"Nintendo Switch port of High on Life. Over 8 months I became the team's primary reference for the game's systems — deep C++/Blueprint debugging, internal tooling from scratch, critical subsystems rewritten for Switch stability.",
+   roles:['Game Programmer','Technical Game Designer'],
+   contrib:[['Deep-Level Debugging','Division-by-zero killing the collision matrix; Ubergraph memory leaks in the Game Instance causing random crashes on level transitions; Bink video reading the wrong path.'],
+            ['Systems Knowledge','Became the team’s system archaeologist — input, level streaming, enemy AI, UI architecture.']]},
+ ProjectCadence:{tier:'support',idx:'MOD_02',cat:'PERSONAL',title:'Cadence',img:'./assets/images/ProjectCadence.png',
+   year:2025,engine:'UNREAL / C++ / METASOUND',role:'Sole Systems Architect',flag:'',
+   syn:"A C++ Unreal plugin that uses Metasound to drive rhythm-based gameplay events. Parse an osu beatmap, map timestamps to actions, fire them in-game at exactly those moments. A reusable framework for any rhythm genre.",
+   roles:['Technical Game Designer','Game Designer'],
+   contrib:[['Core Architecture','C++ timeline driven by Metasound. Python parser extracts osu data into DataTables. The whole framework is a self-contained Engine Plugin.'],
+            ['Performance','Lightweight UObjects instead of Actors for note state — no spawn cost, designed for object pooling.']]},
+ ProjectSasha:{tier:'support',idx:'MOD_03',cat:'PERSONAL',title:'Sasha',img:'./assets/images/ProjectSasha.svg',
+   year:2025,engine:'UNREAL / C++',role:'Sole Creator',flag:'WIP',
+   syn:"A top-down exploration game where scanning IS the entire game. Knowledge is the resource, memory is the currency. You pilot an android through a brutalist megastructure that doesn't exist until you scan it into being.",
+   roles:['Game Designer','Technical Game Designer'],
+   contrib:[['Scanning Algorithms','BFS flood-fill waves constrained by radius — an organic reveal, not a cheap radial pop.'],
+            ['Memory Economy','A finite ‘Megabyte’ budget where every mechanical decision is a memory decision. Ghost-scan (volatile) vs full-scan (permanent, costly).']]},
+ Circle:{tier:'listed',idx:'MOD_04',cat:'PERSONAL',title:'Circle',img:'',year:2025,engine:'UNREAL / C++',role:'Sole Creator',flag:'',
+   syn:"A rhythm bullet-hell FPS built on the Cadence plugin. You race inside a hollow sphere while a boss fires in sync with the music. Proved Cadence could drive combat; exposed where it needed extending.",
+   roles:['Technical Game Designer'],contrib:[['Framework Validation','Built a 3D bullet-hell on Cadence, syncing enemy patterns to Metasound data. Validated cross-genre capability.']]},
+ Cycle:{tier:'listed',idx:'MOD_05',cat:'UNIVERSITY',title:'Cycle',img:'./assets/images/Cycle.png',year:2021,engine:'UNREAL',role:'Director / Sole Programmer',flag:'AWARD',
+   syn:"Best 3rd-Year Videogame at Falmouth 2021, shown at the G7 Summit. A surrealist puzzle-adventure built by 2 artists and me. I learned Unreal in August and built every system in the engine.",
+   roles:['Leadership','Game Programmer'],contrib:[['Seamless Transitions','Players are teleported between areas without ever noticing — everybody felt subtly disoriented, nobody knew why.']]}
+};
+
+/* ---------- BOARD ---------- */
+const board=document.getElementById('board');
+Object.entries(DATA).forEach(([id,p])=>{
+  const el=document.createElement('div');
+  el.className='mod '+p.tier;
+  const media=p.img?`<div class="mod-media"><img src="${p.img}" alt="${p.title}"></div>`:'';
+  const flag=p.flag?`<div class="flag">${p.flag}</div>`:'';
+  el.innerHTML=`${flag}<div class="scan"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div>
+    ${media}
+    <div class="mod-body">
+      <div class="mod-idx"><span>${p.idx}</span><span class="cat">[ ${p.cat} ]</span></div>
+      <div class="mod-title">${p.title}</div>
+      <div class="mod-roles">${p.roles.map(r=>`<span class="chip">${r}</span>`).join('')}</div>
+    </div>`;
+  el.addEventListener('click',()=>openSheet(p));
+  board.appendChild(el);
+});
+
+/* ---------- UNFOLD ---------- */
+const unfold=document.getElementById('unfold'), sheet=document.getElementById('sheet');
+function openSheet(p){
+  warpSpike(); spawnPulse();
+  const media=p.img?`<img src="${p.img}" alt="">`:'<div style="display:flex;height:100%;align-items:center;justify-content:center;color:var(--faint);font-size:.7rem;letter-spacing:3px">[ NO RENDER ]</div>';
+  sheet.innerHTML=`
+    <button class="close" onclick="closeSheet()">[ X RETURN ]</button>
+    <svg class="reticle-lock" viewBox="0 0 60 60"><circle cx="30" cy="30" r="16"/><path d="M30 4v10M30 46v10M4 30h10M46 30h10"/></svg>
+    <div class="sheet-media">${media}</div>
+    <div class="sheet-info">
+      <div class="cmd">&gt; INSPECT MODULE :: ${p.title.toUpperCase()}</div>
+      <div class="eyebrow">${p.idx} · ${p.cat}</div>
+      <h2 class="sheet-title">${p.title}</h2>
+      <div class="fields">
+        <div>YEAR<b>${p.year}</b></div><div>ENGINE<b>${p.engine}</b></div><div>ROLE<b>${p.role}</b></div>
+      </div>
+      <p class="synopsis">${p.syn}</p>
+      ${p.contrib.map(c=>`<div class="role-box"><h4>${c[0]}</h4>${c[1]}</div>`).join('')}
+    </div>`;
+  // force animation restart
+  sheet.style.animation='none'; void sheet.offsetWidth;
+  unfold.classList.add('open');
+}
+function closeSheet(){warpSpike();unfold.classList.remove('open');}
+unfold.addEventListener('click',e=>{if(e.target===unfold)closeSheet();});
+
+/* ============================================================
+   BACKGROUND — "the structure's nervous system"
+   Central breathing sigil-mandala + megastructure rails +
+   parallax + signal-blue energy pulses. Replaces the old
+   random particle web entirely.
+   ============================================================ */
+const cv=document.getElementById('bg'), g=cv.getContext('2d');
+let W,H,CX,CY,R, t=0, warp=0;
+let mx=0.5,my=0.5, pmx=0.5,pmy=0.5;
+const pulses=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;CX=W/2;CY=H*0.52;R=Math.min(W,H)*0.34;}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',e=>{mx=e.clientX/W;my=e.clientY/H;
+  const r=document.getElementById('ret');r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';});
+function warpSpike(){warp=1;document.getElementById('tlink').textContent='SYNC';
+  setTimeout(()=>document.getElementById('tlink').textContent='STABLE',900);}
+function spawnPulse(){pulses.push({r:R*0.18,life:1});}
+
+const RINGS=[0.42,0.66,0.85,1.0];      // ring radii (×R)
+const SPOKES=12;
+function poly(n,rad,rot,ox,oy){g.beginPath();for(let i=0;i<=n;i++){const a=rot+i/n*Math.PI*2;
+  g.lineTo(CX+ox+Math.cos(a)*rad,CY+oy+Math.sin(a)*rad);}g.stroke();}
+
+function draw(){
+  if(W!==innerWidth||H!==innerHeight)resize();   // self-heal if sized late
+  t+=1; warp*=0.94;
+  pmx+=(mx-pmx)*0.04; pmy+=(my-pmy)*0.04;
+  const px=(pmx-0.5)*40, py=(pmy-0.5)*40;       // parallax offset
+  const breath=Math.sin(t*0.012)*0.5+0.5;        // 0..1 slow breath
+  g.clearRect(0,0,W,H);
+  const ink=(a)=>`rgba(232,230,224,${a})`, blue=(a)=>`rgba(79,184,212,${a})`;
+
+  // 1. DEEP MEGASTRUCTURE RAILS (BLAME! depth) — sparse long lines, strong parallax
+  g.lineWidth=1;
+  for(let i=0;i<5;i++){
+    const yy=CY+(i-2)*140 - py*2.2;
+    g.strokeStyle=ink(0.03+0.015*Math.sin(t*0.008+i));
+    g.beginPath();g.moveTo(0,yy+ (i%2?40:-40));g.lineTo(W,yy);g.stroke();
+  }
+  // vanishing verticals
+  for(let i=-3;i<=3;i++){g.strokeStyle=ink(0.025);g.beginPath();
+    g.moveTo(CX+i*200-px*1.6,0);g.lineTo(CX+i*60-px*1.6,H);g.stroke();}
+
+  const rot=t*0.0016*(1+warp*6);
+  // 2. SIGIL RINGS (breathing)
+  RINGS.forEach((rk,i)=>{
+    const rad=R*rk*(1+breath*0.012*(i+1));
+    g.strokeStyle=ink(0.07+0.05*(i===1?1:0.4)+warp*0.15);
+    g.beginPath();g.arc(CX+px,CY+py,rad,0,Math.PI*2);g.stroke();
+  });
+  // 3. RADIAL SPOKES (dashed = technical)
+  g.save();g.setLineDash([2,10]);g.strokeStyle=ink(0.06+warp*0.1);
+  for(let i=0;i<SPOKES;i++){const a=rot+i/SPOKES*Math.PI*2;
+    g.beginPath();g.moveTo(CX+px+Math.cos(a)*R*0.42,CY+py+Math.sin(a)*R*0.42);
+    g.lineTo(CX+px+Math.cos(a)*R,CY+py+Math.sin(a)*R);g.stroke();}
+  g.restore();
+  // 4. INSCRIBED ESOTERIC POLYGONS (counter-rotating — sacred geometry)
+  g.strokeStyle=ink(0.08+warp*0.12);g.lineWidth=1;
+  poly(3,R*0.66, -rot*1.4, px,py);
+  poly(3,R*0.66, -rot*1.4+Math.PI, px,py);   // hexagram
+  g.strokeStyle=blue(0.10+warp*0.3);
+  poly(SPOKES,R*0.85, rot*0.8, px,py);
+  // 5. NODES at spoke/ring intersections (the "sephirot")
+  for(let i=0;i<SPOKES;i++){const a=rot+i/SPOKES*Math.PI*2;
+    const lit=i%3===0; const rr=R*(lit?0.85:0.66);
+    const x=CX+px+Math.cos(a)*rr,y=CY+py+Math.sin(a)*rr;
+    const pul=0.5+0.5*Math.sin(t*0.05+i);          // organic pulse
+    g.fillStyle=lit?blue(0.5+pul*0.4):ink(0.18+pul*0.15);
+    g.beginPath();g.arc(x,y,lit?2.4:1.4,0,Math.PI*2);g.fill();
+  }
+  // central node
+  g.fillStyle=blue(0.4+breath*0.4+warp*0.4);
+  g.beginPath();g.arc(CX+px,CY+py,2.6+breath*1.5,0,Math.PI*2);g.fill();
+
+  // 6. ENERGY PULSES along the geometry (signal propagating through veins)
+  for(let k=pulses.length-1;k>=0;k--){const p=pulses[k];p.r+=6;p.life-=0.012;
+    if(p.life<=0){pulses.splice(k,1);continue;}
+    g.strokeStyle=blue(p.life*0.6);g.lineWidth=1.5;
+    g.beginPath();g.arc(CX+px,CY+py,p.r,0,Math.PI*2);g.stroke();}
+
+  requestAnimationFrame(draw);
+}
+draw();
+// idle ambient pulse so the structure feels alive
+setInterval(()=>{if(pulses.length<3)spawnPulse();},4200);
+
+/* nav + descend are visual-only in this slice */
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');warpSpike();}));
+document.querySelector('.descend').addEventListener('click',()=>{
+  document.getElementById('board').scrollIntoView({behavior:'smooth'});warpSpike();});
+document.querySelector('.descend').style.cursor='pointer';
+</script>
+</body>
+</html>

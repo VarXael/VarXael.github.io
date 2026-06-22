@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE WORKS — constellation prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PROTOTYPE 2 — "alien / timeless" recalibration.
+   Bone-on-void, one faint sacred GOLD accent (light as colour).
+   Monumental inscription type (Cinzel) + manuscript serif (EB Garamond).
+   No HUD telemetry, no terminal brackets, no project-specific palette.
+   Centrepiece: the SEPHIROT CONSTELLATION — projects as nodes of light
+   on a Tree-of-Life, joined by their real lineage.
+   Keep prototype.html; this is a parallel exploration.
+   ============================================================ */
+:root{
+  --void:#070709; --bone:#e9e4d7;
+  --dim:rgba(233,228,215,.42); --faint:rgba(233,228,215,.10); --hair:rgba(233,228,215,.05);
+  --gold:#c9a96e; --gold-soft:rgba(201,169,110,.55);
+  --display:'Cinzel','Trajan Pro',Georgia,serif;
+  --text:'EB Garamond',Georgia,'Times New Roman',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--void);color:var(--bone);font-family:var(--text);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+canvas#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+
+/* minimal monument frame — a thin inset rule + 4 small ticks, nothing more */
+.frame{position:fixed;inset:20px;border:1px solid var(--hair);z-index:5;pointer-events:none}
+.tick{position:fixed;z-index:5;width:9px;height:9px;border:1px solid var(--dim);pointer-events:none}
+.tick.tl{top:16px;left:16px;border-right:0;border-bottom:0}
+.tick.tr{top:16px;right:16px;border-left:0;border-bottom:0}
+.tick.bl{bottom:16px;left:16px;border-right:0;border-top:0}
+.tick.br{bottom:16px;right:16px;border-left:0;border-top:0}
+
+/* header */
+.head{position:relative;z-index:4;text-align:center;padding:66px 24px 6px}
+.kicker{font-family:var(--display);font-size:.62rem;letter-spacing:.62em;color:var(--gold-soft);
+  text-transform:uppercase;margin-bottom:20px}
+.name{font-family:var(--display);font-weight:500;font-size:2.3rem;letter-spacing:.28em;text-transform:uppercase}
+.epigraph{font-family:var(--text);font-style:italic;font-size:1.18rem;color:var(--dim);margin-top:18px;line-height:1.5}
+
+/* constellation */
+.scene{position:relative;z-index:4;height:78vh;min-height:560px;margin:6px auto 0;max-width:1180px}
+.legend{position:absolute;top:6px;left:50%;transform:translateX(-50%);font-family:var(--display);
+  font-size:.58rem;letter-spacing:.45em;color:var(--dim);text-transform:uppercase;text-align:center}
+.paths{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.paths line{stroke:var(--faint);stroke-width:.18;transition:stroke .4s,stroke-width .4s,opacity .4s}
+.scene.focus .paths line{opacity:.25}
+.paths line.lit{stroke:var(--gold-soft);stroke-width:.34;opacity:1}
+
+.node{position:absolute;transform:translate(-50%,-50%);cursor:pointer;text-align:center;
+  transition:opacity .4s}
+.scene.focus .node{opacity:.22}
+.scene.focus .node.lit{opacity:1}
+.mark{position:relative;margin:0 auto;border-radius:50%;border:1px solid var(--dim);
+  background:radial-gradient(circle,var(--bone) 0%,transparent 72%);
+  transition:border-color .4s,box-shadow .5s,transform .5s}
+.mark::before{content:"";position:absolute;inset:-7px;border:1px solid var(--hair);border-radius:50%;
+  transition:inset .5s,border-color .5s}
+.node.hero  .mark{width:18px;height:18px}
+.node.support .mark{width:12px;height:12px}
+.node.listed .mark{width:8px;height:8px}
+.node:hover .mark,.node.lit .mark{border-color:var(--gold);
+  box-shadow:0 0 18px 2px rgba(201,169,110,.5);transform:scale(1.15)}
+.node:hover .mark::before,.node.lit .mark::before{inset:-11px;border-color:var(--gold-soft)}
+.label{font-family:var(--display);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  margin-top:11px;color:var(--dim);white-space:nowrap;transition:color .4s}
+.node:hover .label,.node.lit .label{color:var(--bone)}
+.meta{font-family:var(--text);font-style:italic;font-size:.72rem;color:var(--gold-soft);
+  margin-top:3px;opacity:0;transition:opacity .4s}
+.node:hover .meta,.node.lit .meta{opacity:1}
+
+/* dossier — the work, unfolding */
+.dossier{position:fixed;inset:0;z-index:20;display:none;background:rgba(7,7,9,.86)}
+.dossier.open{display:block}
+.sheet{position:absolute;inset:54px;border:1px solid var(--gold-soft);background:var(--void);
+  display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.sheet::before{content:"";position:absolute;left:0;top:0;width:100%;height:1px;background:var(--gold);
+  transform:scaleX(0);transform-origin:left;animation:dX .55s ease forwards;z-index:30}
+.sheet::after{content:"";position:absolute;left:0;top:0;height:100%;width:1px;background:var(--gold);
+  transform:scaleY(0);transform-origin:top;animation:dY .55s .12s ease forwards;z-index:30}
+@keyframes dX{to{transform:scaleX(1)}}@keyframes dY{to{transform:scaleY(1)}}
+.sigil-lock{position:absolute;top:-3px;left:-3px;width:60px;height:60px;stroke:var(--gold);fill:none;
+  z-index:31;opacity:0;animation:lock .55s .26s ease forwards}
+@keyframes lock{from{opacity:0;transform:scale(1.7) rotate(-18deg)}to{opacity:1;transform:none}}
+.s-media{position:relative;background:#000;overflow:hidden;border-right:1px solid var(--hair)}
+.s-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(.55) contrast(1.05) brightness(.92)}
+.s-media .noimg{display:flex;height:100%;align-items:center;justify-content:center;color:var(--faint);
+  font-family:var(--display);font-size:.62rem;letter-spacing:.4em}
+.s-body{padding:52px 48px;overflow-y:auto;opacity:0;animation:rise .55s .38s ease forwards}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.s-kick{font-family:var(--display);font-size:.58rem;letter-spacing:.4em;color:var(--gold-soft);
+  text-transform:uppercase;margin-bottom:16px}
+.s-title{font-family:var(--display);font-weight:500;font-size:2rem;letter-spacing:.12em;
+  text-transform:uppercase;line-height:1.05;margin-bottom:20px}
+.s-fields{display:flex;gap:26px;font-family:var(--display);font-size:.56rem;letter-spacing:.22em;
+  color:var(--dim);text-transform:uppercase;border-top:1px solid var(--hair);
+  border-bottom:1px solid var(--hair);padding:16px 0;margin-bottom:24px}
+.s-fields b{display:block;margin-top:6px;color:var(--bone);font-weight:400;font-size:.74rem;letter-spacing:.1em}
+.s-syn{font-size:1.05rem;line-height:1.66;color:var(--bone);margin-bottom:24px}
+.s-lineage{font-style:italic;color:var(--gold-soft);font-size:.95rem;margin-bottom:24px}
+.s-role{border-left:1px solid var(--gold-soft);padding:2px 0 2px 18px;margin-bottom:18px;
+  font-size:.96rem;line-height:1.55;color:var(--dim)}
+.s-role h4{font-family:var(--display);font-size:.6rem;letter-spacing:.28em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:8px}
+.close{position:absolute;top:-1px;right:-1px;z-index:40;background:var(--gold);color:var(--void);
+  border:none;font-family:var(--display);font-size:.58rem;letter-spacing:.28em;padding:11px 16px;
+  cursor:pointer;text-transform:uppercase}
+@media(max-width:880px){
+  .scene{height:auto;min-height:0;display:flex;flex-direction:column;gap:6px;padding:20px}
+  .paths{display:none}.node{position:relative;transform:none;display:flex;gap:14px;align-items:center;
+    text-align:left;border-bottom:1px solid var(--hair);padding:14px 0;opacity:1!important}
+  .scene.focus .node{opacity:1}.label{margin-top:0}.meta{opacity:.7}
+  .sheet{grid-template-columns:1fr;inset:16px}.s-media{min-height:180px}
+}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="frame"></div><i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+
+<header class="head">
+  <div class="kicker">Giuseppe Alfieri · Systems Architect</div>
+  <h1 class="name">The Works</h1>
+  <p class="epigraph">"The world does not exist until you scan it into memory."</p>
+</header>
+
+<section class="scene" id="scene">
+  <div class="legend">A Tree of Works · bound by lineage · attend one, the rest grows still</div>
+  <svg class="paths" id="paths" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+</section>
+
+<div class="dossier" id="dossier"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ---------- NODES (curated constellation; positions in % of the scene) ---------- */
+const N={
+ Sasha:{x:50,y:13,tier:'hero',title:'Sasha',year:'2025',cat:'Personal',role:'Sole Creator',img:'./assets/images/ProjectSasha.svg',
+   lineage:'The crown — where every system I believe in converges.',
+   syn:"A top-down exploration game where scanning IS the entire game. Knowledge is the resource, memory is the currency. You pilot an android through a brutalist megastructure that does not exist until you scan it into being.",
+   contrib:[['Scanning','BFS flood-fill waves constrained by radius — an organic reveal, not a cheap radial pop.'],['Memory Economy','A finite ‘Megabyte’ budget where every mechanical decision is a memory decision.']]},
+ Cadence:{x:50,y:36,tier:'hero',title:'Cadence',year:'2025',cat:'Personal',role:'Sole Systems Architect',img:'./assets/images/ProjectCadence.png',
+   lineage:'The root framework. Circle descends from it.',
+   syn:"A C++ Unreal plugin that uses Metasound to drive rhythm-based gameplay events. Parse a beatmap, map timestamps to actions, fire them in-game at exactly those moments. A reusable framework for any rhythm genre.",
+   contrib:[['Architecture','C++ timeline driven by Metasound; a self-contained Engine Plugin. Timing data fully separated from behaviour.'],['Performance','Lightweight UObjects instead of Actors — no spawn cost, built for object pooling.']]},
+ Circle:{x:25,y:48,tier:'support',title:'Circle',year:'2025',cat:'Personal',role:'Sole Creator',img:'',
+   lineage:'Built upon Cadence — its first proof under a new genre.',
+   syn:"A rhythm bullet-hell FPS built on the Cadence plugin. You race inside a hollow sphere while a boss fires in sync with the music. Proved Cadence could drive combat; exposed where it needed extending.",
+   contrib:[['Validation','Built a 3D bullet-hell on Cadence, syncing enemy patterns to Metasound data. Validated cross-genre capability.']]},
+ HighOnLife:{x:78,y:28,tier:'hero',title:'High on Life',year:'2025',cat:'Professional',role:'Programmer & Tech Designer',img:'./assets/images/HighOnLife.png',
+   lineage:'Untold Games — Nintendo Switch port.',
+   syn:"Over 8 months I became the team's primary reference for the game's systems — deep C++/Blueprint debugging, internal tooling from scratch, critical subsystems rewritten for Switch stability.",
+   contrib:[['Deep Debugging','A division-by-zero killing the entire collision matrix; Ubergraph memory leaks causing random crashes on level transitions.'],['System Archaeology','Became the team’s reference for input, streaming, enemy AI, UI.']]},
+ PoliceSim:{x:81,y:50,tier:'support',title:'Police Simulator',year:'2024',cat:'Professional',role:'Programmer & Tech Designer',img:'./assets/images/PoliceSimulator.png',
+   lineage:'Untold Games — a sibling Switch port to High on Life.',
+   syn:"Nintendo Switch port: deep-level bug fixing and tool development. Overhauled the Switch input system and built a full debug cheat menu from scratch with ImGui.",
+   contrib:[['Tooling','A full-featured ImGui debug menu giving QA crucial testing tools.']]},
+ Cycle:{x:21,y:27,tier:'hero',title:'Cycle',year:'2021',cat:'University',role:'Director & Sole Programmer',img:'./assets/images/Cycle.png',
+   lineage:'Best 3rd-Year at Falmouth · shown at the G7 Summit.',
+   syn:"A surrealist puzzle-adventure built by two artists and me. I learned Unreal in August and built every system in the engine — direction, production, levels, puzzles, all of it.",
+   contrib:[['Seamless Transitions','Players are teleported between areas without ever noticing — everyone felt subtly disoriented, nobody knew why.']]},
+ CardsWeaver:{x:20,y:62,tier:'support',title:"Card's Weaver",year:'2023',cat:'University',role:'Lead Game Designer',img:"./assets/images/Card's Weaver.png",
+   lineage:'University design lead — a card-driven system.',
+   syn:"A card-based game built at Verona. Led the core ruleset, card interactions, and the resource economy; guided three other designers from concept to a playable prototype.",
+   contrib:[['Core Systems','Designed card abilities, the central resource mechanic, and the gameplay loop.']]},
+ SoulDriven:{x:30,y:76,tier:'listed',title:'Soul Driven',year:'2023',cat:'University',role:'Systems Programmer',img:'./assets/images/work-6.jpg',
+   lineage:'University — architecture as the deliverable.',
+   syn:"Built the character class-switching system with the Strategy pattern — hot-swappable Soul classes, a parallel weapon hierarchy, and onboarding docs so anyone could add a class without touching core systems.",
+   contrib:[['Strategy Pattern','ISoulInterface + ScriptableObject stat tables; the Player swaps Souls at runtime with no conditional logic.']]},
+ CRTexe:{x:50,y:58,tier:'support',title:'CRT.exe',year:'2026',cat:'Leadership',role:'Project Lead',img:'./assets/images/CRTexe.svg',
+   lineage:'A jam led by designing the game around the team itself.',
+   syn:"Led a team of 8 through a jam by giving each person full ownership of one area — one mechanic, one hidden code, no dependencies. The structure of the game was the structure of the team.",
+   contrib:[['Team as System','Each area self-contained by design, enabling parallel independent development with no bottlenecks.']]},
+ Monk:{x:76,y:70,tier:'listed',title:'Monk Homebrew',year:'2023',cat:'Personal',role:'Game Designer',img:'./assets/images/Monk.png',
+   lineage:'Tabletop — rebuilding a class around one core idea.',
+   syn:"Rebuilt the D&D Monk around ‘Vessels of Ki’ — spectral objects that store memory and emotion, used to attack, defend, and pay costs. Eight existing subclasses slotted into the new identity, several becoming more coherent.",
+   contrib:[['Core Mechanic','A tactile, finite resource replacing abstract ki points — the design test was whether subclasses felt more at home, not more powerful.']]}
+};
+const LINKS=[['Sasha','Cadence'],['Cadence','Circle'],['Cadence','CRTexe'],['Sasha','Cycle'],
+ ['Sasha','HighOnLife'],['HighOnLife','PoliceSim'],['Cycle','CardsWeaver'],['CardsWeaver','SoulDriven'],
+ ['CRTexe','Cycle'],['CRTexe','Monk']];
+
+/* ---------- BUILD ---------- */
+const scene=document.getElementById('scene'), paths=document.getElementById('paths');
+LINKS.forEach(([a,b])=>{
+  const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1',N[a].x);l.setAttribute('y1',N[a].y);
+  l.setAttribute('x2',N[b].x);l.setAttribute('y2',N[b].y);
+  l.dataset.a=a;l.dataset.b=b;paths.appendChild(l);
+});
+Object.entries(N).forEach(([id,p])=>{
+  const n=document.createElement('div');
+  n.className='node '+p.tier; n.style.left=p.x+'%'; n.style.top=p.y+'%'; n.dataset.id=id;
+  n.innerHTML=`<div class="mark"></div><div class="label">${p.title}</div><div class="meta">${p.cat} · ${p.year}</div>`;
+  n.addEventListener('mouseenter',()=>focus(id));
+  n.addEventListener('mouseleave',blur);
+  n.addEventListener('click',()=>openSheet(p));
+  scene.appendChild(n);
+});
+function focus(id){
+  scene.classList.add('focus');
+  const neigh=new Set([id]);
+  paths.querySelectorAll('line').forEach(l=>{
+    const hit=l.dataset.a===id||l.dataset.b===id;
+    l.classList.toggle('lit',hit);
+    if(hit){neigh.add(l.dataset.a);neigh.add(l.dataset.b);}
+  });
+  scene.querySelectorAll('.node').forEach(n=>n.classList.toggle('lit',neigh.has(n.dataset.id)));
+}
+function blur(){scene.classList.remove('focus');
+  paths.querySelectorAll('line').forEach(l=>l.classList.remove('lit'));
+  scene.querySelectorAll('.node').forEach(n=>n.classList.remove('lit'));}
+
+/* ---------- DOSSIER ---------- */
+const dossier=document.getElementById('dossier'), sheet=document.getElementById('sheet');
+function openSheet(p){
+  resonate();
+  const media=p.img?`<img src="${p.img}" alt="">`:'<div class="noimg">[ UNRENDERED ]</div>';
+  sheet.innerHTML=`
+    <button class="close" onclick="closeSheet()">Return</button>
+    <svg class="sigil-lock" viewBox="0 0 60 60"><circle cx="30" cy="30" r="17"/><circle cx="30" cy="30" r="8"/><path d="M30 2v12M30 46v12M2 30h12M46 30h12"/></svg>
+    <div class="s-media">${media}</div>
+    <div class="s-body">
+      <div class="s-kick">${p.cat} · ${p.year}</div>
+      <h2 class="s-title">${p.title}</h2>
+      <div class="s-fields"><div>Year<b>${p.year}</b></div><div>Domain<b>${p.cat}</b></div><div>Role<b>${p.role}</b></div></div>
+      <p class="s-lineage">${p.lineage}</p>
+      <p class="s-syn">${p.syn}</p>
+      ${p.contrib.map(c=>`<div class="s-role"><h4>${c[0]}</h4>${c[1]}</div>`).join('')}
+    </div>`;
+  sheet.style.animation='none'; void sheet.offsetWidth; sheet.style.animation='';
+  dossier.classList.add('open');
+}
+function closeSheet(){resonate();dossier.classList.remove('open');}
+dossier.addEventListener('click',e=>{if(e.target===dossier)closeSheet();});
+
+/* ============================================================
+   BACKGROUND — slower, monumental, inhuman.
+   Concentric rings + counter-rotating sacred polygons, breathing,
+   a faint gold core, distant cosmic dust, slow parallax. A single
+   slow GOLD resonance ring on interaction (no "energy pulse").
+   ============================================================ */
+const cv=document.getElementById('bg'), x=cv.getContext('2d');
+let W,H,CX,CY,R,t=0,res=[];
+let mx=.5,my=.5,pmx=.5,pmy=.5;
+const dust=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;CX=W/2;CY=H*.5;R=Math.min(W,H)*.40;}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',e=>{mx=e.clientX/W;my=e.clientY/H;});
+for(let i=0;i<70;i++)dust.push({a:Math.random()*6.28,r:Math.random()*Math.max(W,H)*.7,
+  s:.02+Math.random()*.05,m:Math.random()});
+function resonate(){res.push({r:R*.2,life:1});}
+
+const RINGS=[.34,.55,.74,.92,1.06];
+function poly(n,rad,rot,ox,oy){x.beginPath();for(let i=0;i<=n;i++){const a=rot+i/n*6.2832;
+  x.lineTo(CX+ox+Math.cos(a)*rad,CY+oy+Math.sin(a)*rad);}x.stroke();}
+function draw(){
+  if(W!==innerWidth||H!==innerHeight)resize();
+  t++; pmx+=(mx-pmx)*.03; pmy+=(my-pmy)*.03;
+  const px=(pmx-.5)*34, py=(pmy-.5)*34;
+  const breath=Math.sin(t*.006)*.5+.5;
+  x.clearRect(0,0,W,H);
+  const bone=a=>`rgba(233,228,215,${a})`, gold=a=>`rgba(201,169,110,${a})`;
+
+  // cosmic dust (timeless depth), slow orbital drift
+  for(const d of dust){d.a+=d.s*.002;
+    const r=d.r*(1+Math.sin(t*.002+d.m*6)*.02);
+    const dx=CX+px*1.4+Math.cos(d.a)*r, dy=CY+py*1.4+Math.sin(d.a)*r*.66;
+    x.fillStyle=bone(.04+d.m*.06+breath*.02);
+    x.fillRect(dx,dy,1,1);
+  }
+  // faint vast horizon lines (BLAME! scale), heavy parallax
+  for(let i=0;i<4;i++){x.strokeStyle=bone(.018);x.beginPath();
+    const yy=CY+(i-1.5)*150-py*2.4; x.moveTo(0,yy+(i%2?30:-30));x.lineTo(W,yy);x.stroke();}
+
+  const rot=t*.0006;                 // very slow, monumental
+  RINGS.forEach((rk,i)=>{
+    const rad=R*rk*(1+breath*.01*(i+1));
+    x.lineWidth=1; x.strokeStyle=bone(.05+(i===1?.05:.02));
+    x.beginPath();x.arc(CX+px,CY+py,rad,0,6.2832);x.stroke();
+  });
+  // sacred polygons, counter-rotating (hexagram + triangle + 12-gon)
+  x.strokeStyle=bone(.07);
+  poly(3,R*.55,rot*1.3,px,py); poly(3,R*.55,rot*1.3+Math.PI,px,py);
+  x.strokeStyle=gold(.09); poly(12,R*.74,-rot,px,py);
+  x.strokeStyle=bone(.05); poly(9,R*.92,rot*.6,px,py);
+  // faint solid radii
+  x.strokeStyle=bone(.03);
+  for(let i=0;i<12;i++){const a=rot+i/12*6.2832;
+    x.beginPath();x.moveTo(CX+px+Math.cos(a)*R*.34,CY+py+Math.sin(a)*R*.34);
+    x.lineTo(CX+px+Math.cos(a)*R*1.06,CY+py+Math.sin(a)*R*1.06);x.stroke();}
+  // nodes on the geometry — faint, a few gold, slow organic pulse
+  for(let i=0;i<12;i++){const a=rot+i/12*6.2832; const lit=i%4===0;
+    const rr=R*(lit?.92:.74), pul=.5+.5*Math.sin(t*.02+i);
+    const nx=CX+px+Math.cos(a)*rr, ny=CY+py+Math.sin(a)*rr;
+    x.fillStyle=lit?gold(.3+pul*.4):bone(.14+pul*.1);
+    x.beginPath();x.arc(nx,ny,lit?2:1.2,0,6.2832);x.fill();}
+  // gold core, breathing
+  const cg=x.createRadialGradient(CX+px,CY+py,0,CX+px,CY+py,40+breath*22);
+  cg.addColorStop(0,gold(.22+breath*.18)); cg.addColorStop(1,'rgba(201,169,110,0)');
+  x.fillStyle=cg; x.beginPath();x.arc(CX+px,CY+py,40+breath*22,0,6.2832);x.fill();
+  x.fillStyle=gold(.5+breath*.3);x.beginPath();x.arc(CX+px,CY+py,2,0,6.2832);x.fill();
+  // slow resonance rings on interaction
+  for(let k=res.length-1;k>=0;k--){const p=res[k];p.r+=2.4;p.life-=.006;
+    if(p.life<=0){res.splice(k,1);continue;}
+    x.strokeStyle=gold(p.life*.4);x.lineWidth=1;
+    x.beginPath();x.arc(CX+px,CY+py,p.r,0,6.2832);x.stroke();}
+
+  requestAnimationFrame(draw);
+}
+draw();
+setInterval(()=>{if(res.length<2)resonate();},6000);
+</script>
+</body>
+</html>

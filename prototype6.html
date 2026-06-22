@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giuseppe Alfieri — Prototype 6: The Altar</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+<style>
+/* PROTOTYPE 6: THE ALTAR (Ethereal Brutalism + Accordion)
+   Solves the scrolling issue by placing all projects on screen immediately
+   as vertical slices. Hovering expands them. 
+*/
+:root {
+  --void: #050506;
+  --bone: #e3ded5;
+  --dim: rgba(227, 222, 213, 0.4);
+  --gold: #d4af37;
+  --gold-dim: rgba(212, 175, 55, 0.3);
+  --gold-glow: rgba(212, 175, 55, 0.1);
+  --display: 'Cinzel', serif;
+  --text: 'Inter', sans-serif;
+  --italic: 'Cormorant Garamond', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  background-color: var(--void); 
+  color: var(--bone); 
+  font-family: var(--text); 
+  overflow: hidden; /* No scrolling allowed */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Texture & Glow */
+.bg-glow {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 80vw; height: 80vh; background: radial-gradient(circle, var(--gold-glow) 0%, transparent 60%);
+  z-index: 0; pointer-events: none;
+}
+
+/* Header / Hero */
+header {
+  position: relative; z-index: 10;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 40px 60px 20px;
+}
+.hero-title {
+  font-family: var(--display); font-size: 3.5rem; font-weight: 500;
+  line-height: 0.9; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.hero-role {
+  font-family: var(--italic); font-size: 1.4rem; color: var(--gold);
+  margin-bottom: 8px;
+}
+.hero-desc {
+  max-width: 400px; font-size: 0.9rem; color: var(--dim); line-height: 1.5;
+  text-align: right;
+}
+
+/* Accordion Container */
+.accordion {
+  position: relative; z-index: 10;
+  flex: 1; display: flex;
+  padding: 0 60px 40px; gap: 4px;
+}
+
+/* Accordion Slice */
+.slice {
+  position: relative; flex: 1;
+  background: #111; overflow: hidden;
+  cursor: pointer;
+  transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.slice:hover {
+  flex: 8; /* Expands massively on hover */
+  border-color: var(--gold-dim);
+}
+
+.slice-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(1) brightness(0.4);
+  transition: filter 0.6s, transform 0.6s;
+  transform: scale(1.1);
+}
+.slice:hover .slice-bg {
+  filter: grayscale(0.2) brightness(0.8);
+  transform: scale(1);
+}
+
+/* Un-hovered Title (Vertical) */
+.slice-title-vert {
+  position: absolute; bottom: 30px; left: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  transform-origin: bottom center;
+  font-family: var(--display); font-size: 1.5rem; letter-spacing: 0.1em;
+  color: var(--bone); white-space: nowrap;
+  transition: opacity 0.3s;
+  text-transform: uppercase;
+}
+.slice:hover .slice-title-vert {
+  opacity: 0;
+}
+
+/* Hovered Content (Horizontal) */
+.slice-content {
+  position: absolute; bottom: 0; left: 0; width: 100%;
+  padding: 40px; background: linear-gradient(to top, var(--void) 0%, rgba(5,5,6,0.8) 50%, transparent 100%);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.4s 0.2s, transform 0.4s 0.2s;
+  pointer-events: none;
+}
+.slice:hover .slice-content {
+  opacity: 1; transform: translateY(0);
+}
+.slice-cat {
+  font-family: var(--italic); font-size: 1.2rem; color: var(--gold); margin-bottom: 8px;
+}
+.slice-title-horz {
+  font-family: var(--display); font-size: 3rem; line-height: 1; margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.slice-short {
+  font-size: 1rem; color: var(--bone); max-width: 500px;
+}
+
+/* Modal from Prototype 5 (User loved it) */
+.modal {
+  position: fixed; inset: 0; background: var(--void); z-index: 100;
+  display: flex; flex-direction: column; overflow-y: auto;
+  opacity: 0; pointer-events: none; transition: opacity 0.5s;
+}
+.modal.open { opacity: 1; pointer-events: auto; }
+.modal-close {
+  position: fixed; top: 40px; right: 60px; background: none; border: none;
+  color: var(--bone); font-family: var(--text); font-size: 0.8rem; letter-spacing: 0.2em;
+  text-transform: uppercase; cursor: pointer; z-index: 110;
+}
+.modal-hero {
+  width: 100%; height: 60vh; position: relative;
+}
+.modal-hero img {
+  width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5);
+}
+.modal-hero-overlay {
+  position: absolute; inset: 0; background: linear-gradient(to top, var(--void), transparent);
+}
+.modal-content {
+  padding: 60px; max-width: 1000px; margin: -100px auto 100px; position: relative; z-index: 10;
+}
+.modal-title { font-family: var(--display); font-size: 4rem; text-transform: uppercase; line-height: 1; margin-bottom: 20px; }
+.modal-meta { font-family: var(--italic); font-size: 1.5rem; color: var(--gold); margin-bottom: 40px; border-bottom: 1px solid var(--dim); padding-bottom: 20px; }
+.modal-text { font-size: 1.2rem; line-height: 1.8; color: var(--bone); margin-bottom: 40px; }
+
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<header>
+  <div>
+    <div class="hero-role">Systems Architect</div>
+    <h1 class="hero-title">Giuseppe<br>Alfieri</h1>
+  </div>
+  <p class="hero-desc">
+    I design games where the systems tell the story.
+    <br><br>
+    Hover to inspect the archive. Click to expand.
+  </p>
+</header>
+
+<div class="accordion" id="accordion">
+  <!-- Populated by JS -->
+</div>
+
+<div class="modal" id="modal">
+  <button class="modal-close" onclick="closeModal()">Close ✕</button>
+  <div class="modal-hero">
+    <img id="modal-img" src="" alt="">
+    <div class="modal-hero-overlay"></div>
+  </div>
+  <div class="modal-content">
+    <h2 class="modal-title" id="modal-title">Title</h2>
+    <div class="modal-meta" id="modal-meta">Role / Engine / Year</div>
+    <div class="modal-text" id="modal-text">Description</div>
+  </div>
+</div>
+
+<script>
+const projects = [
+  {
+    title: 'High on Life',
+    cat: 'Professional Work',
+    meta: 'Programmer / Unreal Engine / 2025',
+    img: './assets/images/HighOnLife.png',
+    short: 'Nintendo Switch port. Primary reference for the game\'s systems, debugging, and tooling.',
+    long: 'Nintendo Switch port. Over 8 months I became the team\'s primary reference for the game\'s systems — deep C++/Blueprint debugging, internal tooling from scratch, critical subsystems rewritten for Switch stability.'
+  },
+  {
+    title: 'Sasha',
+    cat: 'Personal Project',
+    meta: 'Sole Creator / Unreal Engine / 2025',
+    img: './assets/images/ProjectSasha.svg',
+    short: 'A top-down game where scanning IS the entire game. Knowledge is the resource.',
+    long: 'A top-down game where scanning IS the entire game. You pilot an android through a brutalist megastructure that doesn\'t exist until you scan it into being. Knowledge is the resource; every mechanical decision is a memory decision.'
+  },
+  {
+    title: 'Cadence',
+    cat: 'Systems Architecture',
+    meta: 'Tech Designer / Unreal & Metasound / 2025',
+    img: './assets/images/ProjectCadence.png',
+    short: 'A C++ Unreal plugin where music drives gameplay — a reusable rhythm framework.',
+    long: 'A C++ Unreal plugin where music drives gameplay. Parse a beatmap, map timestamps to actions, fire them in-game at exactly those moments — timing data fully separated from behaviour, so one beatmap can power any genre.'
+  },
+  {
+    title: 'Cycle',
+    cat: 'University',
+    meta: 'Director / Unreal Engine / 2021',
+    img: './assets/images/Cycle.png',
+    short: 'Best 3rd-Year at Falmouth. A surrealist puzzle-adventure.',
+    long: 'Best 3rd-Year at Falmouth, shown at the G7 Summit. A surrealist puzzle-adventure built by two artists and me. I learned Unreal in August and built every system in the engine.'
+  },
+  {
+    title: 'Battleship',
+    cat: 'Professional Work',
+    meta: 'Lead Creator / UEFN / 2023',
+    img: './assets/images/Battleship.jpeg',
+    short: 'A fast-paced strategy game from concept to launch on Fortnite.',
+    long: 'A fast-paced strategy game from concept to launch on Fortnite. Built the entire battleship custom system in Verse — combat grid, ship placement logic, real-time feedback — and led the game design from concept to launch.'
+  }
+];
+
+const acc = document.getElementById('accordion');
+projects.forEach((p, idx) => {
+  const slice = document.createElement('div');
+  slice.className = 'slice';
+  slice.onclick = () => openModal(idx);
+  
+  slice.innerHTML = `
+    <img class="slice-bg" src="${p.img}" alt="${p.title}">
+    <div class="slice-title-vert">${p.title}</div>
+    <div class="slice-content">
+      <div class="slice-cat">${p.cat}</div>
+      <div class="slice-title-horz">${p.title}</div>
+      <div class="slice-short">${p.short}</div>
+    </div>
+  `;
+  acc.appendChild(slice);
+});
+
+// Modal Logic
+const modal = document.getElementById('modal');
+function openModal(idx) {
+  const p = projects[idx];
+  document.getElementById('modal-img').src = p.img;
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-meta').textContent = p.meta;
+  document.getElementById('modal-text').textContent = p.long;
+  modal.classList.add('open');
+}
+function closeModal() {
+  modal.classList.remove('open');
+}
+</script>
+</body>
+</html>
