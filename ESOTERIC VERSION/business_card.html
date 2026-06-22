@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Card PNG Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Include the html2canvas library from a CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --card-width: 8.5cm;
+            --card-height: 5.5cm;
+            --font-family: 'Poppins', sans-serif;
+            --bg-color: #1e1e1f;
+            --primary-text-color: #f1f1f1;
+            --accent-color: #00cc88;
+        }
+
+        /* --- Page & Button Setup --- */
+        body {
+            font-family: var(--font-family);
+            background-color: #555;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .download-button {
+            font-family: var(--font-family);
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+        .download-button:hover { transform: translateY(-2px); }
+
+        /* --- Business Card Styling --- */
+        .card {
+            width: var(--card-width);
+            height: var(--card-height);
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* --- Front Side Specifics --- */
+        .card-front {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .photo { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--accent-color); object-fit: cover; margin-bottom: 12px; }
+        .name { font-size: 16pt; font-weight: 700; margin: 0; line-height: 1.1; }
+        .title { font-size: 9.5pt; font-weight: 500; color: var(--accent-color); margin: 4px 0 12px 0; }
+        
+        .contact-info { 
+            display: inline-flex; 
+            flex-direction: column; 
+            align-items: flex-start;
+            gap: 6px; 
+        }
+        .contact-item { display: flex; align-items: center; gap: 8px; font-size: 8pt; }
+        .contact-item .icon { width: 13px; height: 13px; flex-shrink: 0; }
+        .contact-item span { word-break: break-all; }
+
+        /* --- Back Side Specifics --- */
+        .card-back {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-code { width: 3.5cm; height: 3.5cm; border-radius: 8px; }
+        .website-url { margin-top: 8px; font-size: 9pt; font-weight: 500; letter-spacing: 0.5px; }
+        
+    </style>
+</head>
+<body>
+    
+    <div class="button-container">
+        <button id="download-front-btn" class="download-button">Download Front as PNG</button>
+        <button id="download-back-btn" class="download-button">Download Back as PNG</button>
+    </div>
+
+    <!-- Card Front -->
+    <div id="card-front" class="card card-front">
+        <img src="./assets/images/about.png" alt="Giuseppe Luigi Alfieri" class="photo">
+        <h1 class="name">Giuseppe Luigi Alfieri</h1>
+        <p class="title">Technical Game Designer</p>
+        <div class="contact-info">
+            <div class="contact-item">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                <span>+39 3927207595</span>
+            </div>
+            <div class="contact-item">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z" /></svg>
+                <span>giuseppeluigi.alfieri@gmail.com</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Back -->
+    <div id="card-back" class="card card-back">
+        <img src="./assets/images/qr-code.png" alt="QR Code for Portfolio" class="qr-code">
+        <p class="website-url">varxael.github.io</p>
+    </div>
+
+    <script>
+        function downloadCard(elementId, filename) {
+            const cardElement = document.getElementById(elementId);
+            const options = { scale: 4, useCORS: true, backgroundColor: null };
+            html2canvas(cardElement, options).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+        document.getElementById('download-front-btn').addEventListener('click', () => downloadCard('card-front', 'card_front.png'));
+        document.getElementById('download-back-btn').addEventListener('click', () => downloadCard('card-back', 'card_back.png'));
+    </script>
+
+</body>
+</html>

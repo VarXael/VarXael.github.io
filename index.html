@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G. Alfieri // Systems Architect</title>
-<meta name="description" content="Giuseppe Luigi Alfieri — game designer & technical game designer. I design games where the systems tell the story, and everything I design, I can build.">
+<meta name="description" content="Giuseppe Luigi Alfieri. Game designer and technical game designer. I design games where the systems tell the story, and everything I design, I can build.">
 <link rel="shortcut icon" href="./assets/images/about.png" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,24 +41,37 @@
 
 <div class="app-layout">
 
+  <!-- PANE 0: DISCIPLINE LENS (left morph / secret view) -->
+  <div class="pane pane-discipline">
+    <div class="disc-inner">
+      <button class="disc-back" id="disc-back">&lt; RETURN TO OVERVIEW</button>
+      <div class="disc-cmd" id="disc-cmd">&gt; LENS</div>
+      <div class="disc-rail" id="disc-rail"><!-- JS --></div>
+      <h2 class="disc-title" id="disc-title">Discipline</h2>
+      <p class="disc-desc" id="disc-desc"></p>
+      <div class="disc-count" id="disc-count"></div>
+      <div class="disc-projects" id="disc-projects"><!-- JS --></div>
+    </div>
+  </div>
+
   <!-- PANE 1: OVERVIEW -->
   <div class="pane pane-overview">
     <div class="overview-info">
       <div class="eyebrow">Game &amp; Technical Designer</div>
       <h1 class="name">Giuseppe<br>Alfieri</h1>
-      <p class="epigraph">"I design games where the systems tell the story — and the world doesn't exist until you scan it into memory."</p>
+      <p class="epigraph">"I design games where the systems tell the story. The world doesn't exist until you scan it into memory."</p>
       <p class="bio">
-        I'm a game designer who thinks in systems. I build interconnected mechanics where every piece
-        has a reason to exist, and the design and the experience are the same thing. And everything I
-        design, I can also build — I work in Unreal Engine and C++, and I move freely between a design
-        doc and the engine that runs it. I've ported shipped titles to Nintendo Switch, led teams from
-        concept to release, won awards for my university work, and right now I'm building a game where
-        scanning the world into memory is the whole point.
+        I am a system designer who bridges the gap between design philosophy and technicalexecution. 
+        I design mechanics by analyzing every interdependency, untangling convoluted systems until I have connected every single dot, together with the whole.
+        Everything I design, I can also build. I work in Unreal Engine and C++, and I move freely
+        between a design document and the engine that runs it. My experience includes leading teams from concept to release, 
+        porting shipped titles to Nintendo Switch 1 and 2, and winning awards for my university work.
+        Right now, I am aiming to create even bigger and better things.
       </p>
 
       <div class="box-stack">
         <div class="box">
-          <div class="box-title">DISCIPLINES <span class="box-hint">— select to filter the archive</span></div>
+          <div class="box-title">DISCIPLINES <span class="box-hint">// select to open the lens</span></div>
           <div class="roles-grid">
             <button class="chip" data-role="Game Designer">Game Designer</button>
             <button class="chip" data-role="Technical Game Designer">Tech Designer</button>
@@ -111,7 +124,6 @@
           <button data-cat="JAM">JAM</button>
         </div>
       </div>
-      <div class="lens-banner" id="lens-banner"></div>
       <div class="proj-list" id="proj-list"><!-- JS --></div>
     </div>
   </div>
@@ -125,10 +137,10 @@
       <h2 class="prev-title" id="prev-title">Project Title</h2>
 
       <div class="prev-fields">
-        <div>CATEGORY<b id="prev-cat">—</b></div>
-        <div>YEAR<b id="prev-yr">—</b></div>
-        <div>ENGINE<b id="prev-eng">—</b></div>
-        <div>ROLE<b id="prev-role">—</b></div>
+        <div>CATEGORY<b id="prev-cat">·</b></div>
+        <div>YEAR<b id="prev-yr">·</b></div>
+        <div>ENGINE<b id="prev-eng">·</b></div>
+        <div>ROLE<b id="prev-role">·</b></div>
       </div>
       <div class="prev-context" id="prev-context"></div>
 
@@ -152,19 +164,20 @@
         <h3 class="log-header">&gt; QUERY: EXPERIENCE</h3>
 
         <div class="log-item">
-          <div class="log-meta">[ 2023 — PRESENT ]<span>Milan, IT / Remote</span></div>
+          <div class="log-meta">[ 2023 &rsaquo; PRESENT ]<span>Milan, IT / Remote</span></div>
           <div class="log-body">
             <div class="log-title">Technical Game Designer &amp; Programmer // Untold Games</div>
             <div class="log-desc">
               Ported shipped titles to Nintendo Switch (High on Life, Police Simulator) as a core
-              programmer — deep C++/Blueprint debugging and custom debug tooling. Lead systems
-              programmer in Verse on multiple released UEFN titles. Plus some online tutoring on the side.
+              programmer, doing deep C++ and Blueprint debugging and building custom debug tooling.
+              Lead systems programmer in Verse on multiple released UEFN titles. Some online tutoring
+              on the side.
             </div>
           </div>
         </div>
 
         <div class="log-item">
-          <div class="log-meta">[ APR — MAY 2023 ]</div>
+          <div class="log-meta">[ APR &rsaquo; MAY 2023 ]</div>
           <div class="log-body">
             <div class="log-title">Software Developer // Capgemini SOS</div>
             <div class="log-desc">Completed Capgemini's School of Software.</div>
@@ -172,7 +185,7 @@
         </div>
 
         <div class="log-item">
-          <div class="log-meta">[ MAY — OCT 2021 ]</div>
+          <div class="log-meta">[ MAY &rsaquo; OCT 2021 ]</div>
           <div class="log-body">
             <div class="log-title">Unreal Engine Tutor // Creativity Unleashed</div>
             <div class="log-desc">Authored a 16-hour Unreal Engine course teaching Blueprint fundamentals and engine architecture. Published on Udemy.</div>
@@ -192,15 +205,15 @@
         <h3 class="log-header">&gt; QUERY: EDUCATION</h3>
 
         <div class="log-item">
-          <div class="log-meta">[ 2021 — 2023 ]<span>Verona, IT</span></div>
+          <div class="log-meta">[ 2021 &rsaquo; 2023 ]<span>Verona, IT</span></div>
           <div class="log-body">
             <div class="log-title">MSc, Game Programming // University of Verona</div>
-            <div class="log-desc">C#, C++, Unreal Engine, Unity, geometry/trigonometry, game production.</div>
+            <div class="log-desc">C#, C++, Unreal Engine, Unity, geometry and trigonometry, game production.</div>
           </div>
         </div>
 
         <div class="log-item">
-          <div class="log-meta">[ 2018 — 2021 ]<span>Penryn, UK</span></div>
+          <div class="log-meta">[ 2018 &rsaquo; 2021 ]<span>Penryn, UK</span></div>
           <div class="log-body">
             <div class="log-title">BA (Hons) Games Development: Design // Falmouth University</div>
             <div class="log-desc">Won Best 3rd-Year Videogame 2021 (Cycle).</div>
@@ -208,7 +221,7 @@
         </div>
 
         <div class="log-item">
-          <div class="log-meta">[ 2012 — 2017 ]<span>Nola, IT</span></div>
+          <div class="log-meta">[ 2012 &rsaquo; 2017 ]<span>Nola, IT</span></div>
           <div class="log-body">
             <div class="log-title">High School Diploma // I.S.I.S. Albertini Nola</div>
             <div class="log-desc">Scientific focus.</div>
