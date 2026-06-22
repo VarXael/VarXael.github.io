@@ -20,6 +20,14 @@ const roleDefinitions = {
   "Leadership":               { title: "Leadership",               description: "I bring teams together and carry a vision from concept to ship. On these projects I was the person people looked to for direction." },
   "Game Programmer":          { title: "Game Programmer",          description: "I write production code: C++, Blueprints, Verse. On these projects I implemented systems inside an existing design or codebase." }
 };
+/* each discipline owns a muted signal colour, so the eye can tell them apart */
+const roleColors = {
+  "Game Designer":           "#4fb8d4",  // blue (core)
+  "Technical Game Designer": "#e0a23b",  // amber
+  "Leadership":              "#b48ad6",  // lavender
+  "Game Programmer":         "#5fbf9f"   // mint
+};
+const roleColor = r => roleColors[r] || "#4fb8d4";
 const ROLE_ORDER = ["Game Designer", "Technical Game Designer", "Leadership", "Game Programmer"];
 const sortRoles = (roles) => {
   if (!roles) return [];
@@ -360,7 +368,7 @@ const navBtns = document.querySelectorAll('#main-nav button');
 const listContainer = document.getElementById('proj-list');
 const terminalPane = document.querySelector('.pane-terminal');
 const filterBtns = document.querySelectorAll('#arc-filters button');
-const disciplineChips = document.querySelectorAll('.chip[data-role]');
+const disciplineChips = document.querySelectorAll('.disc-link[data-role]');
 
 let currentState = 'overview';
 let activeProjectId = null;
@@ -372,8 +380,12 @@ function setState(state) {
   navBtns.forEach(btn => btn.classList.toggle('on', btn.dataset.state === state));
   document.body.className = `state-${state}`;
   warpSpike();
+  if (state !== 'discipline') { const w = $('disc-wires'); if (w) w.innerHTML = ''; }
 }
-navBtns.forEach(btn => btn.addEventListener('click', () => setState(btn.dataset.state)));
+navBtns.forEach(btn => btn.addEventListener('click', () => {
+  if (btn.dataset.state === 'discipline') openDiscipline(activeDiscipline || 'Game Designer');
+  else setState(btn.dataset.state);
+}));
 
 /* ---------- RENDER PROJECT LIST (terminal pane) ---------- */
 function renderList() {
@@ -433,7 +445,7 @@ function buildContribHTML(p) {
   if (p.roleContributions && Object.keys(p.roleContributions).length) {
     return sortRoles(Object.keys(p.roleContributions)).map((r, i) => {
       const idx = String(i + 1).padStart(2, '0');
-      return `<div class="role-box"><h4 class="role-head"><span class="role-idx">${idx}</span>${r}</h4>${p.roleContributions[r]}</div>`;
+      return `<div class="role-box" style="--rc:${roleColor(r)}"><h4 class="role-head"><span class="role-idx">${idx}</span>${r}</h4>${p.roleContributions[r]}</div>`;
     }).join('');
   }
   return '';
@@ -595,15 +607,27 @@ terminalPane.addEventListener('scroll', () => {
    ============================================================ */
 const discRail = $('disc-rail');
 const discProjects = $('disc-projects');
+const discFeedWrap = $('disc-feed-wrap');
+const discWires = $('disc-wires');
 
 function renderDiscipline(role) {
   activeDiscipline = role;
   const def = roleDefinitions[role];
   if (!def) return;
 
-  // rail tabs (all four disciplines)
-  discRail.innerHTML = ROLE_ORDER.map(r =>
-    `<button class="disc-tab ${r === role ? 'on' : ''}" data-role="${r}">${roleDefinitions[r].title}</button>`).join('');
+  // keep the overview chips in sync for continuity
+  disciplineChips.forEach(c => c.classList.toggle('on', c.dataset.role === role));
+
+  const rc = roleColor(role);
+  if (discWires) discWires.style.setProperty('--rc', rc);
+
+  // rail (vertical selector, vertically centred on the right)
+  discRail.innerHTML = ROLE_ORDER.map(r => {
+    const n = projectsForRole(r).length;
+    return `<button class="disc-tab ${r === role ? 'on' : ''}" data-role="${r}" style="--rc:${roleColor(r)}">
+      <span class="dt-dot"></span><span class="dt-name">${roleDefinitions[r].title}</span><span class="dt-n">${String(n).padStart(2, '0')}</span>
+    </button>`;
+  }).join('');
   discRail.querySelectorAll('.disc-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       if (tab.dataset.role === activeDiscipline) { setState('overview'); return; }
@@ -615,14 +639,15 @@ function renderDiscipline(role) {
   $('disc-desc').textContent = def.description;
 
   const list = projectsForRole(role);
-  $('disc-count').textContent = `${String(list.length).padStart(2, '0')} MODULE${list.length === 1 ? '' : 'S'} CARRY THIS TAG`;
+  $('disc-count').textContent = `${String(list.length).padStart(2, '0')} MODULE${list.length === 1 ? '' : 'S'} ROUTED`;
 
-  discProjects.innerHTML = list.map(p => {
+  discProjects.innerHTML = list.map((p, i) => {
     const contrib = (p.roleContributions && p.roleContributions[role]) || '';
     const catLabel = (CATS.find(c => c.match === p.category) || {}).label || p.category;
     const tools = (p.tools || []).map(t => `<span class="dp-tool">${t.name}</span>`).join('');
     return `
-      <div class="disc-card">
+      <div class="disc-card" style="--i:${i};--rc:${rc}">
+        <span class="dp-port" aria-hidden="true"></span>
         <div class="dp-head">
           <div class="dp-thumb"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
           <div class="dp-id">
@@ -631,6 +656,7 @@ function renderDiscipline(role) {
             <div class="dp-role">${p.role || ''}</div>
           </div>
         </div>
+        <div class="dp-tag">${def.title}</div>
         <div class="dp-body">${contrib || '<p class="dp-empty">Implementation details available on request.</p>'}</div>
         <div class="dp-foot">
           <div class="dp-tools">${tools}</div>
@@ -646,20 +672,81 @@ function renderDiscipline(role) {
     });
   });
 
-  const inner = document.querySelector('.disc-inner');
-  if (inner) inner.scrollTop = 0;
+  if (discFeedWrap) discFeedWrap.scrollTop = 0;
+  syncWires(950);
 }
+
+/* keep the amber emitter aligned with the active discipline in the rail */
+function positionEmitter() {
+  const side = document.querySelector('.disc-side');
+  const emitter = $('disc-emitter');
+  const active = discRail.querySelector('.disc-tab.on');
+  if (!side || !emitter || !active) return;
+  const sr = side.getBoundingClientRect(), ar = active.getBoundingClientRect();
+  emitter.style.top = (ar.top - sr.top + ar.height / 2) + 'px';
+}
+
+/* ---- live connector traces: emitter (right) fans out to each module port (left) ---- */
+function drawWires() {
+  const pane = document.querySelector('.pane-discipline');
+  const emitter = $('disc-emitter');
+  if (!pane || !discWires || !emitter) return;
+  if (currentState !== 'discipline') { discWires.innerHTML = ''; return; }
+  positionEmitter();
+
+  const pr = pane.getBoundingClientRect();
+  if (pr.width < 4) return;
+  discWires.setAttribute('viewBox', `0 0 ${pr.width} ${pr.height}`);
+
+  const er = emitter.getBoundingClientRect();
+  const sx = er.left - pr.left + er.width / 2;
+  const sy = er.top - pr.top + er.height / 2;
+
+  const topClip = 64, botClip = pr.height - 16;
+  let inner = '';
+  discProjects.querySelectorAll('.dp-port').forEach(port => {
+    const rr = port.getBoundingClientRect();
+    const tx = rr.left - pr.left + rr.width / 2;
+    const ty = rr.top - pr.top + rr.height / 2;
+    const live = ty > topClip && ty < botClip;
+    port.classList.toggle('live', live);
+    if (!live) return;
+    const dx = Math.abs(sx - tx);
+    const c1 = sx - dx * 0.5, c2 = tx + dx * 0.5;
+    inner += `<path class="wire" d="M ${sx} ${sy} C ${c1} ${sy}, ${c2} ${ty}, ${tx} ${ty}"/>`;
+    inner += `<circle class="wend" cx="${tx}" cy="${ty}" r="2.6"/>`;
+  });
+  inner += `<circle class="wsrc-glow" cx="${sx}" cy="${sy}" r="11"/><circle class="wsrc" cx="${sx}" cy="${sy}" r="4.5"/>`;
+  discWires.innerHTML = inner;
+}
+
+/* redraw across the morph transition so the cables track the moving layout */
+function syncWires(ms) {
+  const end = performance.now() + (ms || 0);
+  const tick = () => {
+    if (currentState !== 'discipline') return;
+    drawWires();
+    if (performance.now() < end) setTimeout(tick, 40);
+  };
+  tick();
+}
+
+if (discFeedWrap) discFeedWrap.addEventListener('scroll', drawWires, { passive: true });
+addEventListener('resize', () => { if (currentState === 'discipline') drawWires(); });
 
 function openDiscipline(role) {
   // On stacked mobile the lens page is hidden; keep the chips inert there.
   if (window.matchMedia('(max-width:860px)').matches) return;
-  renderDiscipline(role);
-  setState('discipline');
+  setState('discipline');   // flip currentState first so the wire loop runs
+  renderDiscipline(role);   // builds the DOM and kicks off syncWires()
 }
 disciplineChips.forEach(chip => chip.addEventListener('click', () => openDiscipline(chip.dataset.role)));
 
 const discBack = $('disc-back');
-if (discBack) discBack.addEventListener('click', () => setState('overview'));
+if (discBack) discBack.addEventListener('click', () => {
+  disciplineChips.forEach(c => c.classList.remove('on'));
+  setState('overview');
+});
 
 /* ---------- COPY EMAIL ---------- */
 const copyBtn = $('copy-email');
@@ -732,9 +819,12 @@ function draw() {
 
   let targetRMult = 1.0, targetCamX = 0;
   if (currentState === 'overview')        { targetCX = W * -0.05; targetRMult = 2.4; targetCamX = 0; }
-  else if (currentState === 'discipline') { targetCX = W * 1.05;  targetRMult = 2.4; targetCamX = -0.2; }
+  else if (currentState === 'discipline') { targetCX = W * 0.8;   targetRMult = 1.7; targetCamX = -0.15; }
   else if (currentState === 'archive')    { targetCX = archiveTargetCX(); targetRMult = 1.0; targetCamX = 0.2; }
   else                                    { targetCX = W * 0.5; targetRMult = 1.0; targetCamX = 0.4; }
+
+  // the lens page keeps a calm heartbeat: an occasional pulse, no spin boost
+  if (currentState === 'discipline' && t % 150 === 0 && pulses.length < 3) spawnPulse();
 
   animCX += (targetCX - animCX) * 0.03;
   animRMult += (targetRMult - animRMult) * 0.03;

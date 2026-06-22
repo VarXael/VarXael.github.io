@@ -33,6 +33,7 @@
   <div class="brand">G.ALFIERI <small>//</small> ARCHITECT</div>
   <nav class="nav" id="main-nav">
     <button class="on" data-state="overview">[ OVERVIEW ]</button>
+    <button class="nav-disc" data-state="discipline">[ DISCIPLINES ]</button>
     <button data-state="archive">[ ARCHIVE ]</button>
     <button data-state="records">[ RECORDS ]</button>
   </nav>
@@ -41,16 +42,34 @@
 
 <div class="app-layout">
 
-  <!-- PANE 0: DISCIPLINE LENS (left morph / secret view) -->
+  <!-- PANE 0: DISCIPLINE LENS (left morph / wiring harness) -->
   <div class="pane pane-discipline">
-    <div class="disc-inner">
-      <button class="disc-back" id="disc-back">&lt; RETURN TO OVERVIEW</button>
-      <div class="disc-cmd" id="disc-cmd">&gt; LENS</div>
-      <div class="disc-rail" id="disc-rail"><!-- JS --></div>
-      <h2 class="disc-title" id="disc-title">Discipline</h2>
-      <p class="disc-desc" id="disc-desc"></p>
-      <div class="disc-count" id="disc-count"></div>
-      <div class="disc-projects" id="disc-projects"><!-- JS --></div>
+    <svg class="disc-wires" id="disc-wires" preserveAspectRatio="none"></svg>
+    <div class="disc-stage">
+
+      <!-- LEFT: the routed project modules -->
+      <div class="disc-feed-wrap" id="disc-feed-wrap">
+        <div class="disc-feedhead">
+          <div class="disc-cmd" id="disc-cmd">&gt; LENS // SIGNAL ROUTING</div>
+          <div class="disc-count" id="disc-count"></div>
+        </div>
+        <div class="disc-projects" id="disc-projects"><!-- JS --></div>
+      </div>
+
+      <!-- RIGHT: the discipline selector + core readout (vertically centred) -->
+      <aside class="disc-side">
+        <button class="disc-back" id="disc-back">RETURN TO OVERVIEW &gt;</button>
+        <div class="disc-emitter" id="disc-emitter"><span></span></div>
+        <div class="disc-side-mid">
+          <div class="disc-railhead">&gt; DISCIPLINE</div>
+          <div class="disc-rail" id="disc-rail"><!-- JS --></div>
+          <div class="disc-core">
+            <h2 class="disc-title" id="disc-title">Discipline</h2>
+            <p class="disc-desc" id="disc-desc"></p>
+          </div>
+        </div>
+      </aside>
+
     </div>
   </div>
 
@@ -61,7 +80,7 @@
       <h1 class="name">Giuseppe<br>Alfieri</h1>
       <p class="epigraph">"I design games where the systems tell the story. The world doesn't exist until you scan it into memory."</p>
       <p class="bio">
-        I am a system designer who bridges the gap between design philosophy and technicalexecution. 
+        I am a system designer who bridges the gap between design philosophy and technical execution.
         I design mechanics by analyzing every interdependency, untangling convoluted systems until I have connected every single dot, together with the whole.
         Everything I design, I can also build. I work in Unreal Engine and C++, and I move freely
         between a design document and the engine that runs it. My experience includes leading teams from concept to release, 
@@ -70,13 +89,13 @@
       </p>
 
       <div class="box-stack">
-        <div class="box">
-          <div class="box-title">DISCIPLINES <span class="box-hint">// select to open the lens</span></div>
-          <div class="roles-grid">
-            <button class="chip" data-role="Game Designer">Game Designer</button>
-            <button class="chip" data-role="Technical Game Designer">Tech Designer</button>
-            <button class="chip" data-role="Game Programmer">Programmer</button>
-            <button class="chip" data-role="Leadership">Leadership</button>
+        <div class="box box--disc">
+          <div class="box-title">DISCIPLINES <span class="box-hint">// open the lens</span></div>
+          <div class="disc-launch">
+            <button class="disc-link" data-role="Game Designer" style="--rc:#4fb8d4"><span class="dl-dot"></span><span class="dl-name">Game Designer</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Technical Game Designer" style="--rc:#e0a23b"><span class="dl-dot"></span><span class="dl-name">Technical Game Designer</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Leadership" style="--rc:#b48ad6"><span class="dl-dot"></span><span class="dl-name">Leadership</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Game Programmer" style="--rc:#5fbf9f"><span class="dl-dot"></span><span class="dl-name">Game Programmer</span><span class="dl-go">&#x2192;</span></button>
           </div>
         </div>
 
