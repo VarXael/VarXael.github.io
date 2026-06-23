@@ -22,10 +22,10 @@ const roleDefinitions = {
 };
 /* each discipline owns a muted signal colour, so the eye can tell them apart */
 const roleColors = {
-  "Game Designer":           "#4fb8d4",  // blue (core)
-  "Technical Game Designer": "#e0a23b",  // amber
-  "Leadership":              "#b48ad6",  // lavender
-  "Game Programmer":         "#5fbf9f"   // mint
+  "Game Designer":           "#7fe3ff",  // bioluminescent cyan
+  "Technical Game Designer": "#ffd27a",  // warm amber glow
+  "Leadership":              "#e6a8ff",  // violet glow
+  "Game Programmer":         "#7dffd0"   // aqua-green glow
 };
 const roleColor = r => roleColors[r] || "#4fb8d4";
 const ROLE_ORDER = ["Game Designer", "Technical Game Designer", "Leadership", "Game Programmer"];
@@ -375,12 +375,13 @@ let activeProjectId = null;
 let activeDiscipline = null;
 
 /* ---------- STATE MACHINE ---------- */
+const STATE_DEPTH = { overview: '0M', discipline: '140M', archive: '900M', records: '2100M' };
 function setState(state) {
   currentState = state;
   navBtns.forEach(btn => btn.classList.toggle('on', btn.dataset.state === state));
   document.body.className = `state-${state}`;
+  const d = $('depth'); if (d) d.textContent = STATE_DEPTH[state] || '0M';
   warpSpike();
-  if (state !== 'discipline') { const w = $('disc-wires'); if (w) w.innerHTML = ''; }
 }
 navBtns.forEach(btn => btn.addEventListener('click', () => {
   if (btn.dataset.state === 'discipline') openDiscipline(activeDiscipline || 'Game Designer');
@@ -408,7 +409,7 @@ function renderList() {
       item.type = 'button';
       item.className = 'list-item';
       item.dataset.id = p.id;
-      const idxLabel = `MOD_${String(ORDERED_IDS.indexOf(p.id) + 1).padStart(2, '0')}`;
+      const idxLabel = `SPEC_${String(ORDERED_IDS.indexOf(p.id) + 1).padStart(2, '0')}`;
       item.innerHTML = `
         <div class="li-thumb"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
         <div class="li-text">
@@ -490,7 +491,7 @@ function setPreview(id) {
   wireMedia();
 
   // Header + fields
-  $('prev-cmd').textContent = `> INSPECT MODULE :: ${p.title.toUpperCase()}`;
+  $('prev-cmd').textContent = `◎ OBSERVE SPECIMEN :: ${p.title.toUpperCase()}`;
   $('prev-title').textContent = p.title;
   $('prev-cat').textContent = (CATS.find(c => c.match === p.category) || {}).label || p.category;
   $('prev-yr').textContent = p.year || '·';
@@ -608,24 +609,22 @@ terminalPane.addEventListener('scroll', () => {
 const discRail = $('disc-rail');
 const discProjects = $('disc-projects');
 const discFeedWrap = $('disc-feed-wrap');
-const discWires = $('disc-wires');
 
 function renderDiscipline(role) {
   activeDiscipline = role;
   const def = roleDefinitions[role];
   if (!def) return;
 
-  // keep the overview chips in sync for continuity
+  // keep the overview launchers in sync for continuity
   disciplineChips.forEach(c => c.classList.toggle('on', c.dataset.role === role));
 
   const rc = roleColor(role);
-  if (discWires) discWires.style.setProperty('--rc', rc);
 
-  // rail (vertical selector, vertically centred on the right)
+  // rail (vertical trait selector, vertically centred on the right)
   discRail.innerHTML = ROLE_ORDER.map(r => {
     const n = projectsForRole(r).length;
     return `<button class="disc-tab ${r === role ? 'on' : ''}" data-role="${r}" style="--rc:${roleColor(r)}">
-      <span class="dt-dot"></span><span class="dt-name">${roleDefinitions[r].title}</span><span class="dt-n">${String(n).padStart(2, '0')}</span>
+      <span class="dt-name">${roleDefinitions[r].title}</span><span class="dt-n">${String(n).padStart(2, '0')}</span>
     </button>`;
   }).join('');
   discRail.querySelectorAll('.disc-tab').forEach(tab => {
@@ -639,7 +638,7 @@ function renderDiscipline(role) {
   $('disc-desc').textContent = def.description;
 
   const list = projectsForRole(role);
-  $('disc-count').textContent = `${String(list.length).padStart(2, '0')} MODULE${list.length === 1 ? '' : 'S'} ROUTED`;
+  $('disc-count').textContent = `${String(list.length).padStart(2, '0')} SPECIMEN${list.length === 1 ? '' : 'S'} EXPRESS THIS TRAIT`;
 
   discProjects.innerHTML = list.map((p, i) => {
     const contrib = (p.roleContributions && p.roleContributions[role]) || '';
@@ -647,7 +646,6 @@ function renderDiscipline(role) {
     const tools = (p.tools || []).map(t => `<span class="dp-tool">${t.name}</span>`).join('');
     return `
       <div class="disc-card" style="--i:${i};--rc:${rc}">
-        <span class="dp-port" aria-hidden="true"></span>
         <div class="dp-head">
           <div class="dp-thumb"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
           <div class="dp-id">
@@ -660,7 +658,7 @@ function renderDiscipline(role) {
         <div class="dp-body">${contrib || '<p class="dp-empty">Implementation details available on request.</p>'}</div>
         <div class="dp-foot">
           <div class="dp-tools">${tools}</div>
-          <button class="dp-open" data-id="${p.id}">INSPECT FULL MODULE &#x2192;</button>
+          <button class="dp-open" data-id="${p.id}">OBSERVE SPECIMEN &#x2192;</button>
         </div>
       </div>`;
   }).join('');
@@ -673,72 +671,13 @@ function renderDiscipline(role) {
   });
 
   if (discFeedWrap) discFeedWrap.scrollTop = 0;
-  syncWires(950);
 }
-
-/* keep the amber emitter aligned with the active discipline in the rail */
-function positionEmitter() {
-  const side = document.querySelector('.disc-side');
-  const emitter = $('disc-emitter');
-  const active = discRail.querySelector('.disc-tab.on');
-  if (!side || !emitter || !active) return;
-  const sr = side.getBoundingClientRect(), ar = active.getBoundingClientRect();
-  emitter.style.top = (ar.top - sr.top + ar.height / 2) + 'px';
-}
-
-/* ---- live connector traces: emitter (right) fans out to each module port (left) ---- */
-function drawWires() {
-  const pane = document.querySelector('.pane-discipline');
-  const emitter = $('disc-emitter');
-  if (!pane || !discWires || !emitter) return;
-  if (currentState !== 'discipline') { discWires.innerHTML = ''; return; }
-  positionEmitter();
-
-  const pr = pane.getBoundingClientRect();
-  if (pr.width < 4) return;
-  discWires.setAttribute('viewBox', `0 0 ${pr.width} ${pr.height}`);
-
-  const er = emitter.getBoundingClientRect();
-  const sx = er.left - pr.left + er.width / 2;
-  const sy = er.top - pr.top + er.height / 2;
-
-  const topClip = 64, botClip = pr.height - 16;
-  let inner = '';
-  discProjects.querySelectorAll('.dp-port').forEach(port => {
-    const rr = port.getBoundingClientRect();
-    const tx = rr.left - pr.left + rr.width / 2;
-    const ty = rr.top - pr.top + rr.height / 2;
-    const live = ty > topClip && ty < botClip;
-    port.classList.toggle('live', live);
-    if (!live) return;
-    const dx = Math.abs(sx - tx);
-    const c1 = sx - dx * 0.5, c2 = tx + dx * 0.5;
-    inner += `<path class="wire" d="M ${sx} ${sy} C ${c1} ${sy}, ${c2} ${ty}, ${tx} ${ty}"/>`;
-    inner += `<circle class="wend" cx="${tx}" cy="${ty}" r="2.6"/>`;
-  });
-  inner += `<circle class="wsrc-glow" cx="${sx}" cy="${sy}" r="11"/><circle class="wsrc" cx="${sx}" cy="${sy}" r="4.5"/>`;
-  discWires.innerHTML = inner;
-}
-
-/* redraw across the morph transition so the cables track the moving layout */
-function syncWires(ms) {
-  const end = performance.now() + (ms || 0);
-  const tick = () => {
-    if (currentState !== 'discipline') return;
-    drawWires();
-    if (performance.now() < end) setTimeout(tick, 40);
-  };
-  tick();
-}
-
-if (discFeedWrap) discFeedWrap.addEventListener('scroll', drawWires, { passive: true });
-addEventListener('resize', () => { if (currentState === 'discipline') drawWires(); });
 
 function openDiscipline(role) {
-  // On stacked mobile the lens page is hidden; keep the chips inert there.
+  // On stacked mobile the lens page is hidden; keep the launchers inert there.
   if (window.matchMedia('(max-width:860px)').matches) return;
-  setState('discipline');   // flip currentState first so the wire loop runs
-  renderDiscipline(role);   // builds the DOM and kicks off syncWires()
+  setState('discipline');
+  renderDiscipline(role);
 }
 disciplineChips.forEach(chip => chip.addEventListener('click', () => openDiscipline(chip.dataset.role)));
 
@@ -772,10 +711,35 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 
 let targetCX = 0, animCX = 0, animRMult = 1.0;
 
+/* the living sea */
+const plankton = [], drifters = [];
+const HUES = [[180,230,255],[255,210,122],[230,168,255],[125,255,208]];
+const LUM = a => `rgba(180,230,255,${a})`;
+function planktonColor(huev, a) {
+  if (huev > 0.84) { const c = HUES[1 + (Math.floor(huev * 53) % 3)]; return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+  return LUM(a);
+}
+function seedSea() {
+  plankton.length = 0; drifters.length = 0;
+  const N = Math.min(150, Math.round((W * H) / 22000));
+  for (let i = 0; i < N; i++) plankton.push({
+    x: Math.random() * W, y: Math.random() * H, z: Math.random(),
+    r: 0.5 + Math.random() * 1.7, ph: Math.random() * Math.PI * 2,
+    vx: -0.05 + Math.random() * 0.1, vy: -0.04 - Math.random() * 0.16, hue: Math.random()
+  });
+  for (let i = 0; i < 4; i++) drifters.push({
+    x: Math.random() * W, y: Math.random() * H, s: 0.16 + Math.random() * 0.34,
+    rot: Math.random() * Math.PI, spin: (-1 + Math.random() * 2) * 0.0005,
+    vx: -0.04 + Math.random() * 0.08, vy: -0.03 - Math.random() * 0.05,
+    spikes: 6 + Math.floor(Math.random() * 5), seed: Math.random() * 99
+  });
+}
+
 function resize() {
   W = cv.width = innerWidth; H = cv.height = innerHeight;
-  CY = H * 0.52; R = Math.min(W, H) * 0.34;
-  if (!animCX) animCX = W / 2;
+  CY = H * 0.5; R = Math.min(W, H) * 0.32;
+  if (!animCX) animCX = W * 0.9;
+  seedSea();
 }
 addEventListener('resize', resize); resize();
 
@@ -787,21 +751,69 @@ addEventListener('mousemove', e => {
 });
 
 function warpSpike() {
-  warp = 1.2;
+  warp = 1.0;
+  spawnPulse();
   const tl = $('tlink');
-  if (tl) { tl.textContent = 'SYNC'; setTimeout(() => tl.textContent = 'STABLE', 900); }
+  if (tl) { tl.textContent = 'PULSE'; setTimeout(() => tl.textContent = 'ACTIVE', 900); }
 }
-function spawnPulse() { pulses.push({ r: R * 0.18, life: 1 }); }
+function spawnPulse() { pulses.push({ r: R * 0.25, life: 1 }); }
 
-const RINGS = [0.42, 0.66, 0.85, 1.0];
-const SPOKES = 12;
-function poly(n, rad, rot, ox, oy) {
-  g.beginPath();
-  for (let i = 0; i <= n; i++) {
-    const a = rot + i / n * Math.PI * 2;
-    g.lineTo(animCX + ox + Math.cos(a) * rad, CY + oy + Math.sin(a) * rad);
+/* a radiolaria: concentric shells, radial spikes, a bioluminescent core */
+function radiolaria(cx, cy, rad, rot, op) {
+  const rings = [1, 0.74, 0.5, 0.28];
+  rings.forEach((rk, i) => {
+    g.lineWidth = i === 1 ? 1.1 : 0.7;
+    if (i === 1) g.setLineDash([3, 8]); else g.setLineDash([]);
+    g.strokeStyle = LUM(op * (0.16 + 0.08 * (i === 1 ? 1 : 0.5)));
+    g.beginPath(); g.arc(cx, cy, rad * rk, 0, Math.PI * 2); g.stroke();
+  });
+  g.setLineDash([]);
+  const N = 12;
+  for (let i = 0; i < N; i++) {
+    const a = rot + i / N * Math.PI * 2;
+    const x1 = cx + Math.cos(a) * rad * 0.28, y1 = cy + Math.sin(a) * rad * 0.28;
+    const x2 = cx + Math.cos(a) * rad * 1.14, y2 = cy + Math.sin(a) * rad * 1.14;
+    const grad = g.createLinearGradient(x1, y1, x2, y2);
+    grad.addColorStop(0, LUM(0)); grad.addColorStop(0.5, LUM(op * 0.2)); grad.addColorStop(1, LUM(0));
+    g.strokeStyle = grad; g.lineWidth = 0.8;
+    g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke();
+    const pul = 0.5 + 0.5 * Math.sin(t * 0.04 + i);
+    g.fillStyle = LUM(op * (0.25 + 0.4 * pul));
+    g.beginPath(); g.arc(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad, 1.3, 0, Math.PI * 2); g.fill();
   }
-  g.stroke();
+  const cg = g.createRadialGradient(cx, cy, 0, cx, cy, rad * 0.55);
+  cg.addColorStop(0, LUM(op * 0.32)); cg.addColorStop(1, LUM(0));
+  g.fillStyle = cg; g.beginPath(); g.arc(cx, cy, rad * 0.55, 0, Math.PI * 2); g.fill();
+  g.fillStyle = LUM(op * 0.85); g.beginPath(); g.arc(cx, cy, 2.2, 0, Math.PI * 2); g.fill();
+}
+
+/* a small distant drifter (cheap, no gradients) */
+function drifter(cx, cy, rad, rot, op, N) {
+  g.lineWidth = 0.7;
+  g.strokeStyle = LUM(op * 0.12);
+  g.beginPath(); g.arc(cx, cy, rad, 0, Math.PI * 2); g.stroke();
+  g.beginPath(); g.arc(cx, cy, rad * 0.58, 0, Math.PI * 2); g.stroke();
+  for (let i = 0; i < N; i++) {
+    const a = rot + i / N * Math.PI * 2;
+    g.strokeStyle = LUM(op * 0.1);
+    g.beginPath();
+    g.moveTo(cx + Math.cos(a) * rad * 0.3, cy + Math.sin(a) * rad * 0.3);
+    g.lineTo(cx + Math.cos(a) * rad * 1.05, cy + Math.sin(a) * rad * 1.05);
+    g.stroke();
+  }
+  g.fillStyle = LUM(op * 0.3); g.beginPath(); g.arc(cx, cy, 1.3, 0, Math.PI * 2); g.fill();
+}
+
+/* soft light shafts sinking from above */
+function godrays(px) {
+  for (let i = 0; i < 3; i++) {
+    const sway = Math.sin(t * 0.004 + i * 2.1) * 36;
+    const x = W * (0.5 + i * 0.2) + sway + px * 0.4;
+    const grad = g.createLinearGradient(x, 0, x - 160, H);
+    grad.addColorStop(0, LUM(0.05)); grad.addColorStop(1, LUM(0));
+    g.fillStyle = grad;
+    g.beginPath(); g.moveTo(x - 40, 0); g.lineTo(x + 55, 0); g.lineTo(x - 130, H); g.lineTo(x - 225, H); g.closePath(); g.fill();
+  }
 }
 
 /* Derive the archive-state canvas centre from the actual terminal pane width
@@ -815,82 +827,61 @@ function archiveTargetCX() {
 
 function draw() {
   if (W !== innerWidth || H !== innerHeight) resize();
-  t += 1; warp *= 0.92;
+  t += 1; warp *= 0.93;
 
   let targetRMult = 1.0, targetCamX = 0;
-  if (currentState === 'overview')        { targetCX = W * -0.05; targetRMult = 2.4; targetCamX = 0; }
-  else if (currentState === 'discipline') { targetCX = W * 0.8;   targetRMult = 1.7; targetCamX = -0.15; }
-  else if (currentState === 'archive')    { targetCX = archiveTargetCX(); targetRMult = 1.0; targetCamX = 0.2; }
-  else                                    { targetCX = W * 0.5; targetRMult = 1.0; targetCamX = 0.4; }
+  if (currentState === 'overview')        { targetCX = W * 0.9;  targetRMult = 2.0; targetCamX = 0; }
+  else if (currentState === 'discipline') { targetCX = W * 0.86; targetRMult = 1.5; targetCamX = -0.1; }
+  else if (currentState === 'archive')    { targetCX = archiveTargetCX(); targetRMult = 1.25; targetCamX = 0.15; }
+  else                                    { targetCX = W * 0.5; targetRMult = 1.4; targetCamX = 0.3; }
 
-  // the lens page keeps a calm heartbeat: an occasional pulse, no spin boost
-  if (currentState === 'discipline' && t % 150 === 0 && pulses.length < 3) spawnPulse();
+  animCX += (targetCX - animCX) * 0.025;
+  animRMult += (targetRMult - animRMult) * 0.025;
+  const heroR = R * animRMult;
 
-  animCX += (targetCX - animCX) * 0.03;
-  animRMult += (targetRMult - animRMult) * 0.03;
-  const currentR = R * animRMult;
-
-  const px = (mx - 0.5 - targetCamX) * 40;
   pmx += (mx - pmx) * 0.04; pmy += (my - pmy) * 0.04;
-  const py = (pmy - 0.5) * 40;
-  const breath = Math.sin(t * 0.012) * 0.5 + 0.5;
+  const px = (pmx - 0.5 - targetCamX) * 46;
+  const py = (pmy - 0.5) * 46;
+  const bob = Math.sin(t * 0.012) * 14;
+
   g.clearRect(0, 0, W, H);
+  g.globalCompositeOperation = 'lighter';
 
-  const ink = a => `rgba(232,230,224,${a})`;
-  const blue = a => `rgba(79,184,212,${a})`;
+  godrays(px);
 
-  g.lineWidth = 1;
-  for (let i = 0; i < 5; i++) {
-    const yy = CY + (i - 2) * 140 - py * 2.2;
-    g.strokeStyle = ink(0.03 + 0.015 * Math.sin(t * 0.008 + i));
-    g.beginPath(); g.moveTo(0, yy + (i % 2 ? 40 : -40)); g.lineTo(W, yy); g.stroke();
-  }
-  for (let i = -3; i <= 3; i++) {
-    g.strokeStyle = ink(0.025); g.beginPath();
-    g.moveTo((W / 2) + i * 200 - px * 1.6, 0); g.lineTo((W / 2) + i * 60 - px * 1.6, H); g.stroke();
-  }
-
-  const rot = t * 0.0016 * (1 + warp * 6);
-  RINGS.forEach((rk, i) => {
-    const rad = currentR * rk * (1 + breath * 0.012 * (i + 1));
-    g.strokeStyle = ink(0.07 + 0.05 * (i === 1 ? 1 : 0.4) + warp * 0.15);
-    g.beginPath(); g.arc(animCX + px, CY + py, rad, 0, Math.PI * 2); g.stroke();
-  });
-
-  g.save(); g.setLineDash([2, 10]); g.strokeStyle = ink(0.06 + warp * 0.1);
-  for (let i = 0; i < SPOKES; i++) {
-    const a = rot + i / SPOKES * Math.PI * 2;
-    g.beginPath();
-    g.moveTo(animCX + px + Math.cos(a) * currentR * 0.42, CY + py + Math.sin(a) * currentR * 0.42);
-    g.lineTo(animCX + px + Math.cos(a) * currentR, CY + py + Math.sin(a) * currentR); g.stroke();
-  }
-  g.restore();
-
-  g.strokeStyle = ink(0.08 + warp * 0.12); g.lineWidth = 1;
-  poly(3, currentR * 0.66, -rot * 1.4, px, py);
-  poly(3, currentR * 0.66, -rot * 1.4 + Math.PI, px, py);
-  g.strokeStyle = blue(0.10 + warp * 0.3);
-  poly(SPOKES, currentR * 0.85, rot * 0.8, px, py);
-
-  for (let i = 0; i < SPOKES; i++) {
-    const a = rot + i / SPOKES * Math.PI * 2;
-    const lit = i % 3 === 0; const rr = currentR * (lit ? 0.85 : 0.66);
-    const x = animCX + px + Math.cos(a) * rr, y = CY + py + Math.sin(a) * rr;
-    const pul = 0.5 + 0.5 * Math.sin(t * 0.05 + i);
-    g.fillStyle = lit ? blue(0.5 + pul * 0.4) : ink(0.18 + pul * 0.15);
-    g.beginPath(); g.arc(x, y, lit ? 2.4 : 1.4, 0, Math.PI * 2); g.fill();
+  // bioluminescent plankton drifting up through the deep
+  for (const p of plankton) {
+    p.x += p.vx * (0.4 + p.z); p.y += p.vy * (0.4 + p.z);
+    if (p.y < -12) { p.y = H + 12; p.x = Math.random() * W; }
+    if (p.x < -12) p.x = W + 12; else if (p.x > W + 12) p.x = -12;
+    const par = p.z - 0.5;
+    const x = p.x + px * par * 1.6, y = p.y + py * par * 1.6;
+    const tw = 0.4 + 0.6 * Math.sin(t * 0.03 + p.ph);
+    g.fillStyle = planktonColor(p.hue, (0.1 + 0.45 * p.z) * tw);
+    g.beginPath(); g.arc(x, y, p.r * (0.6 + p.z), 0, Math.PI * 2); g.fill();
   }
 
-  g.fillStyle = blue(0.4 + breath * 0.4 + warp * 0.4);
-  g.beginPath(); g.arc(animCX + px, CY + py, 2.6 + breath * 1.5, 0, Math.PI * 2); g.fill();
+  // distant drifting creatures (parallax)
+  for (const d of drifters) {
+    d.x += d.vx; d.y += d.vy; d.rot += d.spin;
+    if (d.y < -260) d.y = H + 260;
+    if (d.x < -260) d.x = W + 260; else if (d.x > W + 260) d.x = -260;
+    drifter(d.x + px * 0.5, d.y + py * 0.5 + Math.sin(t * 0.01 + d.seed) * 8, R * d.s, d.rot, 0.55, d.spikes);
+  }
 
+  // the focal organism
+  radiolaria(animCX + px, CY + py + bob, heroR, t * 0.0009 * (1 + warp * 2), 1 + warp * 0.4);
+
+  // ripples from the core
   for (let k = pulses.length - 1; k >= 0; k--) {
-    const pp = pulses[k]; pp.r += 6; pp.life -= 0.012;
+    const pp = pulses[k]; pp.r += 2.4; pp.life -= 0.01;
     if (pp.life <= 0) { pulses.splice(k, 1); continue; }
-    g.strokeStyle = blue(pp.life * 0.6); g.lineWidth = 1.5;
-    g.beginPath(); g.arc(animCX + px, CY + py, pp.r, 0, Math.PI * 2); g.stroke();
+    g.strokeStyle = LUM(pp.life * 0.4); g.lineWidth = 1;
+    g.beginPath(); g.arc(animCX + px, CY + py + bob, pp.r, 0, Math.PI * 2); g.stroke();
   }
+
+  g.globalCompositeOperation = 'source-over';
   requestAnimationFrame(draw);
 }
 draw();
-setInterval(() => { if (pulses.length < 3) spawnPulse(); }, 4200);
+setInterval(() => { if (pulses.length < 2) spawnPulse(); }, 5200);

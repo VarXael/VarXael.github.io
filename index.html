@@ -3,68 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G. Alfieri // Systems Architect</title>
+<title>Giuseppe Alfieri // Game &amp; Technical Designer</title>
 <meta name="description" content="Giuseppe Luigi Alfieri. Game designer and technical game designer. I design games where the systems tell the story, and everything I design, I can build.">
 <link rel="shortcut icon" href="./assets/images/about.png" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body class="state-overview">
 <canvas id="bg"></canvas>
 
-<!-- ---- OPERATOR HUD ---- -->
+<!-- ---- SUBMERSIBLE VIEWPORT ---- -->
 <div class="hud">
   <div class="frame"></div>
-  <svg class="corner tl" viewBox="0 0 100 100"><path d="M2 40 V2 H40"/><circle cx="2" cy="2" r="3"/><path d="M2 60 V98 H40" opacity=".4"/></svg>
-  <svg class="corner tr" viewBox="0 0 100 100"><path d="M98 40 V2 H60"/><circle cx="98" cy="2" r="3"/></svg>
-  <svg class="corner bl" viewBox="0 0 100 100"><path d="M2 60 V98 H40"/><circle cx="2" cy="98" r="3"/></svg>
-  <svg class="corner br" viewBox="0 0 100 100"><path d="M98 60 V98 H60"/><circle cx="98" cy="98" r="3"/><path d="M98 40 V2 H60" opacity=".4"/></svg>
-  <div class="tele t1">STRATA // <b>00</b> · SURFACE</div>
-  <div class="tele t2">OP_ID: <b>G.ALFIERI</b></div>
-  <div class="tele t3">CORE_LINK: <b id="tlink">STABLE</b></div>
-  <div class="tele t4">SYS: <b>SCHEMATIC v1.5</b></div>
+  <div class="tele t1">DEPTH <b id="depth">0M</b> · PHOTIC ZONE</div>
+  <div class="tele t2">SPECIMEN: <b>G.ALFIERI</b></div>
+  <div class="tele t3">BIOLUM: <b id="tlink">ACTIVE</b></div>
+  <div class="tele t4">ORGANISM <b>v2.0</b></div>
 </div>
-<svg class="reticle" id="ret" viewBox="0 0 40 40"><circle cx="20" cy="20" r="10"/><path d="M20 0v8M20 32v8M0 20h8M32 20h8"/></svg>
+<div class="reticle" id="ret"></div>
 
 <!-- ---- TOPBAR ---- -->
 <div class="topbar">
-  <div class="brand">G.ALFIERI <small>//</small> ARCHITECT</div>
+  <div class="brand">G.ALFIERI <small>//</small> SPECIMEN</div>
   <nav class="nav" id="main-nav">
-    <button class="on" data-state="overview">[ OVERVIEW ]</button>
-    <button class="nav-disc" data-state="discipline">[ DISCIPLINES ]</button>
-    <button data-state="archive">[ ARCHIVE ]</button>
-    <button data-state="records">[ RECORDS ]</button>
+    <button class="on" data-state="overview">ORGANISM</button>
+    <button class="nav-disc" data-state="discipline">TRAITS</button>
+    <button data-state="archive">DEPTHS</button>
+    <button data-state="records">LINEAGE</button>
   </nav>
   <div class="topbar-spacer"></div>
 </div>
 
 <div class="app-layout">
 
-  <!-- PANE 0: DISCIPLINE LENS (left morph / wiring harness) -->
+  <!-- PANE 0: TRAIT LENS (left morph) -->
   <div class="pane pane-discipline">
-    <svg class="disc-wires" id="disc-wires" preserveAspectRatio="none"></svg>
     <div class="disc-stage">
 
-      <!-- LEFT: the routed project modules -->
+      <!-- LEFT: the specimens expressing this trait -->
       <div class="disc-feed-wrap" id="disc-feed-wrap">
         <div class="disc-feedhead">
-          <div class="disc-cmd" id="disc-cmd">&gt; LENS // SIGNAL ROUTING</div>
+          <div class="disc-cmd" id="disc-cmd">&#9678; TRAIT EXPRESSION</div>
           <div class="disc-count" id="disc-count"></div>
         </div>
         <div class="disc-projects" id="disc-projects"><!-- JS --></div>
       </div>
 
-      <!-- RIGHT: the discipline selector + core readout (vertically centred) -->
+      <!-- RIGHT: the trait selector + readout (vertically centred) -->
       <aside class="disc-side">
-        <button class="disc-back" id="disc-back">RETURN TO OVERVIEW &gt;</button>
-        <div class="disc-emitter" id="disc-emitter"><span></span></div>
+        <button class="disc-back" id="disc-back">&#8593; RESURFACE</button>
         <div class="disc-side-mid">
-          <div class="disc-railhead">&gt; DISCIPLINE</div>
+          <div class="disc-railhead">&#9678; TRAIT</div>
           <div class="disc-rail" id="disc-rail"><!-- JS --></div>
           <div class="disc-core">
-            <h2 class="disc-title" id="disc-title">Discipline</h2>
+            <h2 class="disc-title" id="disc-title">Trait</h2>
             <p class="disc-desc" id="disc-desc"></p>
           </div>
         </div>
@@ -73,7 +67,7 @@
     </div>
   </div>
 
-  <!-- PANE 1: OVERVIEW -->
+  <!-- PANE 1: ORGANISM (about + featured) -->
   <div class="pane pane-overview">
     <div class="overview-info">
       <div class="eyebrow">Game &amp; Technical Designer</div>
@@ -83,33 +77,33 @@
         I am a system designer who bridges the gap between design philosophy and technical execution.
         I design mechanics by analyzing every interdependency, untangling convoluted systems until I have connected every single dot, together with the whole.
         Everything I design, I can also build. I work in Unreal Engine and C++, and I move freely
-        between a design document and the engine that runs it. My experience includes leading teams from concept to release, 
+        between a design document and the engine that runs it. My experience includes leading teams from concept to release,
         porting shipped titles to Nintendo Switch 1 and 2, and winning awards for my university work.
         Right now, I am aiming to create even bigger and better things.
       </p>
 
       <div class="box-stack">
         <div class="box box--disc">
-          <div class="box-title">DISCIPLINES <span class="box-hint">// open the lens</span></div>
+          <div class="box-title">TRAITS <span class="box-hint">// dive into one</span></div>
           <div class="disc-launch">
-            <button class="disc-link" data-role="Game Designer" style="--rc:#4fb8d4"><span class="dl-dot"></span><span class="dl-name">Game Designer</span><span class="dl-go">&#x2192;</span></button>
-            <button class="disc-link" data-role="Technical Game Designer" style="--rc:#e0a23b"><span class="dl-dot"></span><span class="dl-name">Technical Game Designer</span><span class="dl-go">&#x2192;</span></button>
-            <button class="disc-link" data-role="Leadership" style="--rc:#b48ad6"><span class="dl-dot"></span><span class="dl-name">Leadership</span><span class="dl-go">&#x2192;</span></button>
-            <button class="disc-link" data-role="Game Programmer" style="--rc:#5fbf9f"><span class="dl-dot"></span><span class="dl-name">Game Programmer</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Game Designer" style="--rc:#7fe3ff"><span class="dl-dot"></span><span class="dl-name">Game Designer</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Technical Game Designer" style="--rc:#ffd27a"><span class="dl-dot"></span><span class="dl-name">Technical Game Designer</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Leadership" style="--rc:#e6a8ff"><span class="dl-dot"></span><span class="dl-name">Leadership</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Game Programmer" style="--rc:#7dffd0"><span class="dl-dot"></span><span class="dl-name">Game Programmer</span><span class="dl-go">&#x2192;</span></button>
           </div>
         </div>
 
         <div class="box">
-          <div class="box-title">TECH STACK</div>
+          <div class="box-title">TOOLSET</div>
           <div class="tech-stack">
-            <div class="tech-row"><span class="tech-key">LANGUAGES</span><span class="tech-val">[ C++ ] [ C# ] [ VERSE ] [ BLUEPRINTS ]</span></div>
-            <div class="tech-row"><span class="tech-key">ENGINES</span><span class="tech-val">[ UNREAL ENGINE ] [ UNITY ] [ UEFN ]</span></div>
-            <div class="tech-row"><span class="tech-key">TOOLS</span><span class="tech-val">[ GIT ] [ PLASTIC SCM ] [ RIDER ]</span></div>
+            <div class="tech-row"><span class="tech-key">LANGUAGES</span><span class="tech-val">C++ · C# · Verse · Blueprints</span></div>
+            <div class="tech-row"><span class="tech-key">ENGINES</span><span class="tech-val">Unreal Engine · Unity · UEFN</span></div>
+            <div class="tech-row"><span class="tech-key">TOOLS</span><span class="tech-val">Git · Plastic SCM · Rider</span></div>
           </div>
         </div>
 
         <div class="box">
-          <div class="box-title">EXPERIENCE WITH</div>
+          <div class="box-title">ECOSYSTEM</div>
           <div class="clients">
             <a href="https://untoldgames.com/" target="_blank" rel="noopener" title="Untold Games"><img src="./assets/images/untold_games_cover.png" alt="Untold Games"></a>
             <a href="https://www.udemy.com/user/creativity-unleashed/" target="_blank" rel="noopener" title="Creativity Unleashed"><img src="./assets/images/CreativityUnleashed.png" alt="Creativity Unleashed"></a>
@@ -119,7 +113,7 @@
         </div>
 
         <div class="box">
-          <div class="box-title">CONTACT PROTOCOL</div>
+          <div class="box-title">SIGNAL</div>
           <div class="contact-links">
             <button class="btn" id="copy-email">Copy Email</button>
             <a href="https://github.com/VarXael" target="_blank" rel="noopener" class="btn">GitHub</a>
@@ -131,11 +125,11 @@
     </div>
   </div>
 
-  <!-- PANE 2: TERMINAL (project list) -->
+  <!-- PANE 2: DEPTHS (specimen list) -->
   <div class="pane pane-terminal">
     <div class="terminal-inner">
       <div class="terminal-header">
-        <div class="term-title">&gt; ACCESS ARCHIVES</div>
+        <div class="term-title">&#9678; THE DEPTHS</div>
         <div class="list-filters" id="arc-filters">
           <button class="on" data-cat="PROFESSIONAL">PRO</button>
           <button data-cat="PERSONAL">PERSONAL</button>
@@ -147,13 +141,13 @@
     </div>
   </div>
 
-  <!-- PANE 3: PREVIEW -->
+  <!-- PANE 3: SPECIMEN OBSERVATION -->
   <div class="pane pane-preview" id="preview-pane">
     <div class="prev-inner">
       <div class="prev-media" id="prev-media"><!-- JS --></div>
 
-      <div class="cmd-line" id="prev-cmd">&gt; INSPECT MODULE</div>
-      <h2 class="prev-title" id="prev-title">Project Title</h2>
+      <div class="cmd-line" id="prev-cmd">&#9678; OBSERVE SPECIMEN</div>
+      <h2 class="prev-title" id="prev-title">Specimen</h2>
 
       <div class="prev-fields">
         <div>CATEGORY<b id="prev-cat">·</b></div>
@@ -176,11 +170,11 @@
     </div>
   </div>
 
-  <!-- PANE 4: RECORDS (résumé) -->
+  <!-- PANE 4: LINEAGE (résumé) -->
   <div class="pane pane-records">
     <div class="records-layout">
       <div class="log-block">
-        <h3 class="log-header">&gt; QUERY: EXPERIENCE</h3>
+        <h3 class="log-header">&#9678; LINEAGE · EXPERIENCE</h3>
 
         <div class="log-item">
           <div class="log-meta">[ 2023 &rsaquo; PRESENT ]<span>Milan, IT / Remote</span></div>
@@ -221,7 +215,7 @@
       </div>
 
       <div class="log-block">
-        <h3 class="log-header">&gt; QUERY: EDUCATION</h3>
+        <h3 class="log-header">&#9678; LINEAGE · FORMATION</h3>
 
         <div class="log-item">
           <div class="log-meta">[ 2021 &rsaquo; 2023 ]<span>Verona, IT</span></div>
