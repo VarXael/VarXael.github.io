@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK 2 · The Observatory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  html,body{height:100%;overflow:hidden}
+  .console{position:fixed;inset:0;z-index:5;display:grid;grid-template-columns:340px 1fr;gap:34px;padding:48px 54px;max-width:1320px;margin:0 auto}
+  /* left identity column */
+  .ident{display:flex;flex-direction:column;justify-content:center;gap:18px}
+  .ident .name{font-size:2.5rem}
+  .ident .epigraph{font-size:1.05rem}
+  .ident .bio{font-size:.92rem;color:var(--dim);line-height:1.7}
+  .ident .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+  .menu{display:flex;flex-direction:column;gap:4px;margin-top:14px}
+  .menu button{display:flex;align-items:center;gap:13px;background:none;border:none;border-left:1px solid var(--lum-faint);
+    color:var(--dim);font-family:var(--head);font-size:.62rem;letter-spacing:3px;text-transform:uppercase;padding:13px 0 13px 16px;transition:.35s;position:relative;text-align:left}
+  .menu button::before{content:"";position:absolute;left:-3px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:var(--lum);box-shadow:0 0 8px var(--lum);opacity:.4;transition:.35s}
+  .menu button:hover{color:var(--ink);border-left-color:var(--lum-soft)}
+  .menu button.on{color:var(--lum);border-left-color:var(--lum)}
+  .menu button.on::before{opacity:1;transform:translateY(-50%) scale(1.8)}
+  .menu .mn{font-family:var(--head);font-size:.46rem;opacity:.5;margin-left:auto}
+  /* right viewport (the porthole) */
+  .port{position:relative;border:1px solid var(--lum-faint);border-radius:18px;background:linear-gradient(160deg,rgba(8,26,34,.4),rgba(3,9,13,.5));
+    backdrop-filter:blur(3px);overflow:hidden;box-shadow:inset 0 0 90px rgba(180,230,255,.04)}
+  .port::before,.port::after{content:"";position:absolute;width:18px;height:18px;border:1px solid var(--lum-soft);z-index:3;pointer-events:none}
+  .port::before{top:14px;left:14px;border-right:0;border-bottom:0}
+  .port::after{bottom:14px;right:14px;border-left:0;border-top:0}
+  .port-head{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--lum-faint)}
+  .port-title{font-family:var(--head);font-size:.62rem;letter-spacing:4px;color:var(--lum);text-transform:uppercase;text-shadow:0 0 12px rgba(180,230,255,.4)}
+  .port-sub{font-family:var(--head);font-size:.48rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+  .port-body{position:absolute;top:57px;left:0;right:0;bottom:0;overflow-y:auto;padding:26px}
+  .view{animation:fade .5s var(--ease)}
+  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+  @media(max-width:880px){ html,body{overflow:auto} .console{position:static;grid-template-columns:1fr;height:auto;padding:70px 24px} .port{height:70vh} }
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas><div class="depth-fog" id="fog" style="opacity:.3"></div><div class="vignette"></div>
+<div class="mock-tag">02 · The Observatory</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+
+<div class="console">
+  <aside class="ident">
+    <div class="eyebrow">Game &amp; Technical Designer</div>
+    <h1 class="name">Giuseppe<br>Alfieri</h1>
+    <p class="epigraph">"The world doesn't exist until you scan it into memory."</p>
+    <p class="bio">A systems designer who bridges design philosophy and technical execution. Everything I design, I can also build.</p>
+    <div class="actions"><button class="btn">Copy Email</button><a class="btn" href="#">GitHub</a><a class="btn" href="#">CV</a></div>
+    <nav class="menu" id="menu">
+      <button class="on" data-view="work">The Work <span class="mn" id="mn-work"></span></button>
+      <button data-view="traits">Traits <span class="mn">04</span></button>
+      <button data-view="lineage">Lineage <span class="mn">03</span></button>
+    </nav>
+  </aside>
+
+  <main class="port">
+    <div class="port-head"><div class="port-title" id="pt">◎ The Work</div><div class="port-sub" id="ps">OBSERVATION DECK</div></div>
+    <div class="port-body" id="port"></div>
+  </main>
+</div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+  document.getElementById('mn-work').textContent = String(DATA.length).padStart(2,'0');
+  const port=document.getElementById('port'), pt=document.getElementById('pt'), ps=document.getElementById('ps');
+  const tc=traitCounts();
+  const views={
+    work(){ return `<div class="filters" id="filters"></div><div class="grid">${DATA.map(cardHTML).join('')}</div>`; },
+    traits(){ return `<div class="traits-row">${Object.keys(RC).map(r=>`<div class="trait" style="--rc:${RC[r]}"><div class="tname">${r}</div><div class="tn">${String(tc[r]).padStart(2,'0')} SPECIMENS EXPRESS THIS</div></div>`).join('')}</div>`; },
+    lineage(){ return LINEAGE.map(l=>`<div class="tl-item"><div class="tl-when">[ ${l.when} ]</div><div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join(''); }
+  };
+  const titles={work:['◎ The Work','OBSERVATION DECK'],traits:['◎ Traits','DISCIPLINE LENS'],lineage:['◎ Lineage','ORIGIN RECORD']};
+  function show(v){
+    pt.textContent=titles[v][0]; ps.textContent=titles[v][1];
+    port.innerHTML=`<div class="view">${views[v]()}</div>`;
+    if(v==='work'){
+      const filters=['ALL',...CATS];
+      document.getElementById('filters').innerHTML=filters.map((f,i)=>`<button class="chip ${i===0?'on':''}" data-cat="${f}">${f==='PROFESSIONAL'?'PRO':f==='UNIVERSITY'?'UNI':f}</button>`).join('');
+      document.querySelectorAll('#filters .chip').forEach(b=>b.addEventListener('click',()=>{
+        document.querySelectorAll('#filters .chip').forEach(x=>x.classList.toggle('on',x===b));
+        port.querySelectorAll('.card').forEach(c=>c.classList.toggle('dim', b.dataset.cat!=='ALL'&&c.dataset.cat!==b.dataset.cat));
+      }));
+      wireCards(port);
+    }
+  }
+  document.querySelectorAll('#menu button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#menu button').forEach(x=>x.classList.toggle('on',x===b));
+    show(b.dataset.view);
+  }));
+  show('work');
+</script>
+</body>
+</html>
