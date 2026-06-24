@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-<body>
+<body class="state-overview">
 <canvas id="bg"></canvas>
 <div class="depth-fog" id="depth-fog"></div>
 <div class="caustics"></div>
@@ -20,163 +20,217 @@
 <!-- ---- SUBMERSIBLE VIEWPORT ---- -->
 <div class="hud">
   <div class="frame"></div>
-  <div class="tele t1">DEPTH <b id="depth">0M</b></div>
-  <div class="tele t2">BIOLUM <b id="tlink">ACTIVE</b></div>
-  <div class="brand">G.ALFIERI <small>//</small> SPECIMEN</div>
-  <div class="hud-hint" id="hud-hint">SCROLL / DRAG TO DESCEND</div>
+  <div class="tele t1">DEPTH <b id="depth">0M</b> · PHOTIC ZONE</div>
+  <div class="tele t2">SPECIMEN: <b>G.ALFIERI</b></div>
+  <div class="tele t3">BIOLUM: <b id="tlink">ACTIVE</b></div>
+  <div class="tele t4">ORGANISM <b>v2.0</b></div>
 </div>
 <div class="reticle" id="ret"></div>
 
-<!-- ---- TRAIT SPECTRUM (illuminate by trait) ---- -->
-<aside class="spectrum" id="spectrum"><!-- JS --></aside>
-<div class="spectrum-hint" id="spectrum-hint"></div>
-
-<!-- ---- SONAR DEPTH MAP ---- -->
-<nav class="sonar" id="sonar"><!-- JS --></nav>
-
-<div class="world-viewport">
-  <div class="world" id="world">
-
-    <!-- ZONE: SURFACE (the organism) -->
-    <section class="zone zone-surface" data-zone="surface" data-label="SURFACE">
-      <div class="organism">
-        <div class="eyebrow">Game &amp; Technical Designer</div>
-        <h1 class="name">Giuseppe<br>Alfieri</h1>
-        <p class="epigraph">"I design games where the systems tell the story. The world doesn't exist until you scan it into memory."</p>
-        <p class="bio">
-          I am a system designer who bridges the gap between design philosophy and technical execution.
-          I design mechanics by analyzing every interdependency, untangling convoluted systems until I have connected every single dot, together with the whole.
-          Everything I design, I can also build. I work in Unreal Engine and C++, and I move freely
-          between a design document and the engine that runs it. My experience includes leading teams from concept to release,
-          porting shipped titles to Nintendo Switch 1 and 2, and winning awards for my university work.
-          Right now, I am aiming to create even bigger and better things.
-        </p>
-
-        <div class="org-meta">
-          <div class="box">
-            <div class="box-title">TOOLSET</div>
-            <div class="tech-stack">
-              <div class="tech-row"><span class="tech-key">LANGUAGES</span><span class="tech-val">C++ · C# · Verse · Blueprints</span></div>
-              <div class="tech-row"><span class="tech-key">ENGINES</span><span class="tech-val">Unreal Engine · Unity · UEFN</span></div>
-              <div class="tech-row"><span class="tech-key">TOOLS</span><span class="tech-val">Git · Plastic SCM · Rider</span></div>
-            </div>
-          </div>
-          <div class="box">
-            <div class="box-title">ECOSYSTEM</div>
-            <div class="clients">
-              <a href="https://untoldgames.com/" target="_blank" rel="noopener" title="Untold Games"><img src="./assets/images/untold_games_cover.png" alt="Untold Games"></a>
-              <a href="https://www.udemy.com/user/creativity-unleashed/" target="_blank" rel="noopener" title="Creativity Unleashed"><img src="./assets/images/CreativityUnleashed.png" alt="Creativity Unleashed"></a>
-              <a href="https://www.umu.se/en/" target="_blank" rel="noopener" title="Umeå University"><img src="./assets/images/Umeå_University.png" alt="Umeå University"></a>
-              <a href="https://cineon.training/" target="_blank" rel="noopener" title="Cineon Training"><img src="./assets/images/Cineon_Training.png" alt="Cineon Training"></a>
-            </div>
-          </div>
-          <div class="box">
-            <div class="box-title">SIGNAL</div>
-            <div class="contact-links">
-              <button class="btn" id="copy-email">Copy Email</button>
-              <a href="https://github.com/VarXael" target="_blank" rel="noopener" class="btn">GitHub</a>
-              <a href="./cv.html" target="_blank" rel="noopener" class="btn">View CV</a>
-            </div>
-            <div id="copymsg">EMAIL COPIED TO CLIPBOARD</div>
-          </div>
-        </div>
-        <div class="dive-hint">SINK TO EXPLORE &#8595;</div>
-      </div>
-    </section>
-
-    <!-- ZONE: category reefs (specimens injected by JS) -->
-    <section class="zone zone-reef" data-zone="professional" data-label="PROFESSIONAL">
-      <div class="zone-head"><span class="zone-idx">01</span><h2 class="zone-title">Professional</h2><span class="zone-sub">shipped &amp; client work</span></div>
-      <div class="bloom-field" data-cat="PROFESSIONAL"></div>
-    </section>
-    <section class="zone zone-reef" data-zone="personal" data-label="PERSONAL">
-      <div class="zone-head"><span class="zone-idx">02</span><h2 class="zone-title">Personal</h2><span class="zone-sub">experiments &amp; obsessions</span></div>
-      <div class="bloom-field" data-cat="PERSONAL"></div>
-    </section>
-    <section class="zone zone-reef" data-zone="university" data-label="UNIVERSITY">
-      <div class="zone-head"><span class="zone-idx">03</span><h2 class="zone-title">University</h2><span class="zone-sub">where it took form</span></div>
-      <div class="bloom-field" data-cat="UNIVERSITY"></div>
-    </section>
-    <section class="zone zone-reef" data-zone="jam" data-label="GAME JAM">
-      <div class="zone-head"><span class="zone-idx">04</span><h2 class="zone-title">Game Jam</h2><span class="zone-sub">fast, feral, finished</span></div>
-      <div class="bloom-field" data-cat="JAM"></div>
-    </section>
-
-    <!-- ZONE: LINEAGE (origins) -->
-    <section class="zone zone-lineage" data-zone="lineage" data-label="LINEAGE">
-      <div class="zone-head"><span class="zone-idx">&#8734;</span><h2 class="zone-title">Lineage</h2><span class="zone-sub">origins &amp; evolution</span></div>
-      <div class="strand">
-        <div class="log-block">
-          <h3 class="log-header">EXPERIENCE</h3>
-          <div class="log-item">
-            <div class="log-meta">[ 2023 &rsaquo; PRESENT ]<span>Milan, IT / Remote</span></div>
-            <div class="log-body">
-              <div class="log-title">Technical Game Designer &amp; Programmer // Untold Games</div>
-              <div class="log-desc">Ported shipped titles to Nintendo Switch (High on Life, Police Simulator) as a core programmer, doing deep C++ and Blueprint debugging and building custom debug tooling. Lead systems programmer in Verse on multiple released UEFN titles. Some online tutoring on the side.</div>
-            </div>
-          </div>
-          <div class="log-item">
-            <div class="log-meta">[ APR &rsaquo; MAY 2023 ]</div>
-            <div class="log-body">
-              <div class="log-title">Software Developer // Capgemini SOS</div>
-              <div class="log-desc">Completed Capgemini's School of Software.</div>
-            </div>
-          </div>
-          <div class="log-item">
-            <div class="log-meta">[ MAY &rsaquo; OCT 2021 ]</div>
-            <div class="log-body">
-              <div class="log-title">Unreal Engine Tutor // Creativity Unleashed</div>
-              <div class="log-desc">Authored a 16-hour Unreal Engine course teaching Blueprint fundamentals and engine architecture. Published on Udemy.</div>
-            </div>
-          </div>
-          <div class="log-item">
-            <div class="log-meta">[ APR 2020 ]</div>
-            <div class="log-body">
-              <div class="log-title">Unreal Engine Tutor // Cineon Immersive Training</div>
-              <div class="log-desc">Built the interaction table for the PPE training project and the cross-referencing logic between training scenarios.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="log-block">
-          <h3 class="log-header">FORMATION</h3>
-          <div class="log-item">
-            <div class="log-meta">[ 2021 &rsaquo; 2023 ]<span>Verona, IT</span></div>
-            <div class="log-body">
-              <div class="log-title">MSc, Game Programming // University of Verona</div>
-              <div class="log-desc">C#, C++, Unreal Engine, Unity, geometry and trigonometry, game production.</div>
-            </div>
-          </div>
-          <div class="log-item">
-            <div class="log-meta">[ 2018 &rsaquo; 2021 ]<span>Penryn, UK</span></div>
-            <div class="log-body">
-              <div class="log-title">BA (Hons) Games Development: Design // Falmouth University</div>
-              <div class="log-desc">Won Best 3rd-Year Videogame 2021 (Cycle).</div>
-            </div>
-          </div>
-          <div class="log-item">
-            <div class="log-meta">[ 2012 &rsaquo; 2017 ]<span>Nola, IT</span></div>
-            <div class="log-body">
-              <div class="log-title">High School Diploma // I.S.I.S. Albertini Nola</div>
-              <div class="log-desc">Scientific focus.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </div>
+<!-- ---- TOPBAR ---- -->
+<div class="topbar">
+  <div class="brand">G.ALFIERI <small>//</small> SPECIMEN</div>
+  <nav class="nav" id="main-nav">
+    <button class="on" data-state="overview">ORGANISM</button>
+    <button class="nav-disc" data-state="discipline">TRAITS</button>
+    <button data-state="archive">DEPTHS</button>
+    <button data-state="records">LINEAGE</button>
+  </nav>
+  <div class="topbar-spacer"></div>
 </div>
 
-<!-- ---- BLOOM: specimen observation ---- -->
+<div class="app-layout">
+
+  <!-- PANE 0: TRAIT LENS (left morph) -->
+  <div class="pane pane-discipline">
+    <div class="disc-stage">
+
+      <!-- LEFT: the specimens expressing this trait -->
+      <div class="disc-feed-wrap" id="disc-feed-wrap">
+        <div class="disc-feedhead">
+          <div class="disc-cmd" id="disc-cmd">&#9678; TRAIT EXPRESSION</div>
+          <div class="disc-count" id="disc-count"></div>
+        </div>
+        <div class="disc-projects" id="disc-projects"><!-- JS --></div>
+      </div>
+
+      <!-- RIGHT: the trait selector + readout (vertically centred) -->
+      <aside class="disc-side">
+        <button class="disc-back" id="disc-back">&#8593; RESURFACE</button>
+        <div class="disc-side-mid">
+          <div class="disc-railhead">&#9678; TRAIT</div>
+          <div class="disc-rail" id="disc-rail"><!-- JS --></div>
+          <div class="disc-core">
+            <h2 class="disc-title" id="disc-title">Trait</h2>
+            <p class="disc-desc" id="disc-desc"></p>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- PANE 1: ORGANISM (about + featured) -->
+  <div class="pane pane-overview">
+    <div class="overview-info">
+      <div class="eyebrow">Game &amp; Technical Designer</div>
+      <h1 class="name">Giuseppe<br>Alfieri</h1>
+      <p class="epigraph">"I design games where the systems tell the story. The world doesn't exist until you scan it into memory."</p>
+      <p class="bio">
+        I am a system designer who bridges the gap between design philosophy and technical execution.
+        I design mechanics by analyzing every interdependency, untangling convoluted systems until I have connected every single dot, together with the whole.
+        Everything I design, I can also build. I work in Unreal Engine and C++, and I move freely
+        between a design document and the engine that runs it. My experience includes leading teams from concept to release,
+        porting shipped titles to Nintendo Switch 1 and 2, and winning awards for my university work.
+        Right now, I am aiming to create even bigger and better things.
+      </p>
+
+      <div class="box-stack">
+        <div class="box box--disc">
+          <div class="box-title">TRAITS <span class="box-hint">// dive into one</span></div>
+          <div class="disc-launch">
+            <button class="disc-link" data-role="Game Designer" style="--rc:#7fe3ff"><span class="dl-dot"></span><span class="dl-name">Game Designer</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Technical Game Designer" style="--rc:#ffd27a"><span class="dl-dot"></span><span class="dl-name">Technical Game Designer</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Leadership" style="--rc:#e6a8ff"><span class="dl-dot"></span><span class="dl-name">Leadership</span><span class="dl-go">&#x2192;</span></button>
+            <button class="disc-link" data-role="Game Programmer" style="--rc:#7dffd0"><span class="dl-dot"></span><span class="dl-name">Game Programmer</span><span class="dl-go">&#x2192;</span></button>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">TOOLSET</div>
+          <div class="tech-stack">
+            <div class="tech-row"><span class="tech-key">LANGUAGES</span><span class="tech-val">C++ · C# · Verse · Blueprints</span></div>
+            <div class="tech-row"><span class="tech-key">ENGINES</span><span class="tech-val">Unreal Engine · Unity · UEFN</span></div>
+            <div class="tech-row"><span class="tech-key">TOOLS</span><span class="tech-val">Git · Plastic SCM · Rider</span></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">ECOSYSTEM</div>
+          <div class="clients">
+            <a href="https://untoldgames.com/" target="_blank" rel="noopener" title="Untold Games"><img src="./assets/images/untold_games_cover.png" alt="Untold Games"></a>
+            <a href="https://www.udemy.com/user/creativity-unleashed/" target="_blank" rel="noopener" title="Creativity Unleashed"><img src="./assets/images/CreativityUnleashed.png" alt="Creativity Unleashed"></a>
+            <a href="https://www.umu.se/en/" target="_blank" rel="noopener" title="Umeå University"><img src="./assets/images/Umeå_University.png" alt="Umeå University"></a>
+            <a href="https://cineon.training/" target="_blank" rel="noopener" title="Cineon Training"><img src="./assets/images/Cineon_Training.png" alt="Cineon Training"></a>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">SIGNAL</div>
+          <div class="contact-links">
+            <button class="btn" id="copy-email">Copy Email</button>
+            <a href="https://github.com/VarXael" target="_blank" rel="noopener" class="btn">GitHub</a>
+            <a href="./cv.html" target="_blank" rel="noopener" class="btn">View CV</a>
+          </div>
+          <div id="copymsg">EMAIL COPIED TO CLIPBOARD</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANE 2: DEPTHS (specimen list) -->
+  <div class="pane pane-terminal">
+    <div class="terminal-inner">
+      <div class="terminal-header">
+        <div class="term-title">&#9678; THE DEPTHS</div>
+        <div class="list-filters" id="arc-filters">
+          <button class="on" data-cat="PROFESSIONAL">PRO</button>
+          <button data-cat="PERSONAL">PERSONAL</button>
+          <button data-cat="UNIVERSITY">UNI</button>
+          <button data-cat="JAM">JAM</button>
+        </div>
+      </div>
+      <div class="proj-list" id="proj-list"><!-- JS --></div>
+    </div>
+  </div>
+
+  <!-- PANE 4: LINEAGE (résumé) -->
+  <div class="pane pane-records">
+    <div class="records-layout">
+      <div class="log-block">
+        <h3 class="log-header">&#9678; LINEAGE · EXPERIENCE</h3>
+
+        <div class="log-item">
+          <div class="log-meta">[ 2023 &rsaquo; PRESENT ]<span>Milan, IT / Remote</span></div>
+          <div class="log-body">
+            <div class="log-title">Technical Game Designer &amp; Programmer // Untold Games</div>
+            <div class="log-desc">
+              Ported shipped titles to Nintendo Switch (High on Life, Police Simulator) as a core
+              programmer, doing deep C++ and Blueprint debugging and building custom debug tooling.
+              Lead systems programmer in Verse on multiple released UEFN titles. Some online tutoring
+              on the side.
+            </div>
+          </div>
+        </div>
+
+        <div class="log-item">
+          <div class="log-meta">[ APR &rsaquo; MAY 2023 ]</div>
+          <div class="log-body">
+            <div class="log-title">Software Developer // Capgemini SOS</div>
+            <div class="log-desc">Completed Capgemini's School of Software.</div>
+          </div>
+        </div>
+
+        <div class="log-item">
+          <div class="log-meta">[ MAY &rsaquo; OCT 2021 ]</div>
+          <div class="log-body">
+            <div class="log-title">Unreal Engine Tutor // Creativity Unleashed</div>
+            <div class="log-desc">Authored a 16-hour Unreal Engine course teaching Blueprint fundamentals and engine architecture. Published on Udemy.</div>
+          </div>
+        </div>
+
+        <div class="log-item">
+          <div class="log-meta">[ APR 2020 ]</div>
+          <div class="log-body">
+            <div class="log-title">Unreal Engine Tutor // Cineon Immersive Training</div>
+            <div class="log-desc">Built the interaction table for the PPE training project and the cross-referencing logic between training scenarios.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="log-block">
+        <h3 class="log-header">&#9678; LINEAGE · FORMATION</h3>
+
+        <div class="log-item">
+          <div class="log-meta">[ 2021 &rsaquo; 2023 ]<span>Verona, IT</span></div>
+          <div class="log-body">
+            <div class="log-title">MSc, Game Programming // University of Verona</div>
+            <div class="log-desc">C#, C++, Unreal Engine, Unity, geometry and trigonometry, game production.</div>
+          </div>
+        </div>
+
+        <div class="log-item">
+          <div class="log-meta">[ 2018 &rsaquo; 2021 ]<span>Penryn, UK</span></div>
+          <div class="log-body">
+            <div class="log-title">BA (Hons) Games Development: Design // Falmouth University</div>
+            <div class="log-desc">Won Best 3rd-Year Videogame 2021 (Cycle).</div>
+          </div>
+        </div>
+
+        <div class="log-item">
+          <div class="log-meta">[ 2012 &rsaquo; 2017 ]<span>Nola, IT</span></div>
+          <div class="log-body">
+            <div class="log-title">High School Diploma // I.S.I.S. Albertini Nola</div>
+            <div class="log-desc">Scientific focus.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ---- BLOOM: specimen observation membrane ---- -->
 <div class="bloom" id="bloom" aria-hidden="true">
   <div class="bloom-scrim" id="bloom-scrim"></div>
   <div class="bloom-membrane">
     <button class="bloom-close" id="bloom-close">RELEASE SPECIMEN &#10005;</button>
     <div class="bloom-inner">
       <div class="prev-media" id="prev-media"><!-- JS --></div>
+
       <div class="cmd-line" id="prev-cmd">&#9678; OBSERVE SPECIMEN</div>
       <h2 class="prev-title" id="prev-title">Specimen</h2>
+
       <div class="prev-fields">
         <div>CATEGORY<b id="prev-cat">·</b></div>
         <div>YEAR<b id="prev-yr">·</b></div>
@@ -184,19 +238,21 @@
         <div>ROLE<b id="prev-role">·</b></div>
       </div>
       <div class="prev-context" id="prev-context"></div>
+
       <div class="prev-tabs" id="prev-tabs"></div>
+
       <div id="prev-overview">
         <p class="prev-syn" id="prev-syn"></p>
         <div class="prev-tools" id="prev-tools"></div>
         <div class="prev-deep" id="prev-contrib"></div>
         <div class="prev-links" id="prev-links"></div>
       </div>
+
       <div class="prev-story" id="prev-story" style="display:none"></div>
     </div>
   </div>
 </div>
 
 <script src="./assets/js/script.js"></script>
-<script src="./assets/js/descent.js"></script>
 </body>
 </html>
