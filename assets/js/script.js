@@ -366,63 +366,104 @@ function projectsForRole(role) {
 /* ---------- DOM REFS ---------- */
 const navBtns = document.querySelectorAll('#main-nav button');
 const listContainer = document.getElementById('proj-list');
-const terminalPane = document.querySelector('.pane-terminal');
 const filterBtns = document.querySelectorAll('#arc-filters button');
 const disciplineChips = document.querySelectorAll('.disc-link[data-role]');
+const layers = [...document.querySelectorAll('.layer')];
 
 let currentState = 'overview';
 let activeProjectId = null;
 let activeDiscipline = null;
+let activeFilter = 'ALL';
 
-/* ---------- STATE MACHINE ---------- */
+const SLUG = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+/* ============================================================
+   LAYER / DEPTH ENGINE
+   The descent SPINE is the ordered set of layers you sink through with
+   scroll/drag/keys. 'discipline' is an alternate view of the work at the
+   same depth, reached as a lens via the nav/launchers (not the spine).
+   Modular: reorder/remap SPINE + LAYER_DEPTH to change navigation wholesale.
+   ============================================================ */
+const SPINE = ['overview', 'archive', 'records'];
+const LAYER_DEPTH = { overview: 0, archive: 1, discipline: 1, records: 2 };
 const STATE_DEPTH = { overview: '0M', discipline: '140M', archive: '900M', records: '2100M' };
-/* the water darkens the deeper you go; the CSS transition animates this on its own,
-   so it never depends on the canvas loop (which a hidden tab would throttle). */
-const STATE_FOG = { overview: 0.08, discipline: 0.30, archive: 0.52, records: 0.72 };
+/* the water darkens the deeper you go; set on the element so the CSS transition
+   animates it independently of the canvas loop (which a hidden tab throttles). */
+const STATE_FOG = { overview: 0.08, discipline: 0.34, archive: 0.5, records: 0.72 };
+
+function applyDepth(state) {
+  const active = LAYER_DEPTH[state] ?? 0;
+  layers.forEach(L => {
+    const id = L.dataset.layer;
+    L.classList.remove('is-focus', 'is-above', 'is-below', 'is-below-2', 'is-hidden');
+    if (id === state) { L.classList.add('is-focus'); return; }
+    if (id === 'discipline') { L.classList.add('is-hidden'); return; }   // a lens, hidden unless active
+    const delta = (LAYER_DEPTH[id] ?? 0) - active;
+    if (delta === 0) L.classList.add('is-hidden');          // sibling at same depth
+    else if (delta < 0) L.classList.add('is-above');
+    else if (delta === 1) L.classList.add('is-below');
+    else L.classList.add('is-below-2');
+  });
+}
+
 function setState(state) {
   currentState = state;
   navBtns.forEach(btn => btn.classList.toggle('on', btn.dataset.state === state));
-  document.body.className = `state-${state}`;
+  document.body.classList.remove('state-overview', 'state-archive', 'state-discipline', 'state-records');
+  document.body.classList.add('state-' + state);
+  document.body.classList.toggle('descended', state !== 'overview');
+  applyDepth(state);
   const d = $('depth'); if (d) d.textContent = STATE_DEPTH[state] || '0M';
   const fog = $('depth-fog'); if (fog) fog.style.opacity = STATE_FOG[state] ?? 0.08;
-  warpSpike();
+  const rb = $('resurface'); if (rb) rb.hidden = (state === 'overview');
+  updateGauge(state);
+  if (typeof warpSpike === 'function') warpSpike();
 }
 navBtns.forEach(btn => btn.addEventListener('click', () => {
   if (btn.dataset.state === 'discipline') openDiscipline(activeDiscipline || 'Game Designer');
   else setState(btn.dataset.state);
 }));
+document.querySelectorAll('.dive-cue[data-state]').forEach(b =>
+  b.addEventListener('click', () => setState(b.dataset.state)));
 
-/* ---------- RENDER PROJECT LIST (terminal pane) ---------- */
+/* ---------- RENDER PROJECT GRID (the scannable DEPTHS layer) ---------- */
+function creatureGlyph(rc) {
+  let spokes = '';
+  for (let i = 0; i < 8; i++) {
+    const a = i / 8 * 6.2832;
+    spokes += `<line x1="${(20 + Math.cos(a) * 7).toFixed(1)}" y1="${(20 + Math.sin(a) * 7).toFixed(1)}" x2="${(20 + Math.cos(a) * 16).toFixed(1)}" y2="${(20 + Math.sin(a) * 16).toFixed(1)}" opacity=".4"/>`;
+  }
+  return `<svg class="pc-glyph" viewBox="0 0 40 40" aria-hidden="true">
+    <g fill="none" stroke="${rc}" stroke-width="1">
+      <circle cx="20" cy="20" r="13" opacity=".5"/>
+      <circle cx="20" cy="20" r="7" opacity=".7" stroke-dasharray="2 4"/>${spokes}
+    </g><circle cx="20" cy="20" r="2.4" fill="${rc}"/></svg>`;
+}
+
 function renderList() {
   buildOrderedIds();
   listContainer.innerHTML = '';
-
-  CATS.forEach(cat => {
-    const items = projectsForCat(cat.match);
-    if (items.length === 0) return;
-
-    const divi = document.createElement('div');
-    divi.className = 'list-divider';
-    divi.id = 'cat-' + cat.key;
-    divi.dataset.cat = cat.key;
-    divi.textContent = `// ${cat.label}`;
-    listContainer.appendChild(divi);
-
-    items.forEach(p => {
-      const item = document.createElement('button');
-      item.type = 'button';
-      item.className = 'list-item';
-      item.dataset.id = p.id;
-      const idxLabel = `SPEC_${String(ORDERED_IDS.indexOf(p.id) + 1).padStart(2, '0')}`;
-      item.innerHTML = `
-        <div class="li-thumb"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
-        <div class="li-text">
-          <div class="li-meta">${idxLabel} · ${p.year || ''}</div>
-          <div class="li-title">${p.title}</div>
-        </div>`;
-      item.addEventListener('click', () => openBloom(p.id));
-      listContainer.appendChild(item);
-    });
+  ORDERED_IDS.forEach(id => {
+    const p = projectDetails[id];
+    const rc = roleColor((p.roles || [])[0] || 'Game Designer');
+    const cat = CATS.find(c => c.match === p.category) || {};
+    const dots = (p.roles || []).map(r => `<span class="pc-role" style="color:${roleColor(r)}"></span>`).join('');
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'proj-card';
+    card.dataset.id = p.id;
+    card.dataset.cat = cat.key || '';
+    card.dataset.roles = (p.roles || []).map(SLUG).join(' ');
+    card.style.setProperty('--rc', rc);
+    card.innerHTML = `
+      <div class="pc-thumb"><img src="${p.image}" alt="${p.title}" loading="lazy">${creatureGlyph(rc)}</div>
+      <div class="pc-body">
+        <div class="pc-meta">${cat.label || p.category} · ${p.year || ''}</div>
+        <div class="pc-title">${p.title}</div>
+        <div class="pc-roles">${dots}</div>
+      </div>`;
+    card.addEventListener('click', () => openBloom(p.id));
+    listContainer.appendChild(card);
   });
 }
 
@@ -532,27 +573,32 @@ function setPreview(id) {
   }).join('');
 
   // scroll the membrane to top on change
-  const inner = document.querySelector('.bloom-inner');
+  const inner = document.querySelector('.specimen-inner');
   if (inner) inner.scrollTop = 0;
 }
 
-/* ---------- BLOOM MODAL (specimen observation membrane) ---------- */
-const bloom = $('bloom');
-function openBloom(id) {
+/* ---------- SPECIMEN DIVE (the deepest layer: diegetic project detail) ---------- */
+const specimen = $('specimen');
+function openBloom(id) {              // name kept; this now dives into the specimen layer
   setPreview(id);
-  bloom.classList.add('open');
-  bloom.setAttribute('aria-hidden', 'false');
-  warpSpike();
+  specimen.classList.add('open');
+  specimen.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('diving');
+  const rb = $('resurface'); if (rb) rb.hidden = false;
+  const d = $('depth'); if (d) d.textContent = '2400M';
+  if (typeof warpSpike === 'function') warpSpike();
 }
-function closeBloom() {
-  bloom.classList.remove('open');
-  bloom.setAttribute('aria-hidden', 'true');
+function closeBloom() {               // resurface from the specimen back to the work
+  specimen.classList.remove('open');
+  specimen.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('diving');
   const v = $('prev-video'); if (v) v.pause();
+  const rb = $('resurface'); if (rb) rb.hidden = (currentState === 'overview');
+  const d = $('depth'); if (d) d.textContent = STATE_DEPTH[currentState] || '0M';
 }
-$('bloom-close').addEventListener('click', closeBloom);
-$('bloom-scrim').addEventListener('click', closeBloom);
+$('specimen-back').addEventListener('click', closeBloom);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && bloom.classList.contains('open')) closeBloom();
+  if (e.key === 'Escape' && specimen.classList.contains('open')) closeBloom();
 });
 
 function wireTabs() {
@@ -606,20 +652,18 @@ document.addEventListener('click', e => {
   }
 });
 
-/* ---------- ARCHIVE CATEGORY FILTERS (scroll-to + scroll-spy) ---------- */
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const el = document.getElementById('cat-' + btn.dataset.cat);
-    if (el) terminalPane.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' });
+/* ---------- DEPTHS CATEGORY FILTER (a lens: dim non-matches, never hide) ---------- */
+function applyLens() {
+  listContainer.querySelectorAll('.proj-card').forEach(c => {
+    const match = activeFilter === 'ALL' || c.dataset.cat === activeFilter;
+    c.classList.toggle('dim', !match);
   });
-});
-terminalPane.addEventListener('scroll', () => {
-  if (currentState !== 'archive') return;
-  const dividers = [...document.querySelectorAll('.list-divider')];
-  let current = dividers[0];
-  for (const d of dividers) if (d.offsetTop - terminalPane.scrollTop <= 160) current = d;
-  if (current) filterBtns.forEach(b => b.classList.toggle('on', b.dataset.cat === current.dataset.cat));
-});
+}
+filterBtns.forEach(btn => btn.addEventListener('click', () => {
+  activeFilter = btn.dataset.cat;
+  filterBtns.forEach(b => b.classList.toggle('on', b === btn));
+  applyLens();
+}));
 
 /* ============================================================
    DISCIPLINE LENS (left-morph page)
@@ -689,8 +733,6 @@ function renderDiscipline(role) {
 }
 
 function openDiscipline(role) {
-  // On stacked mobile the lens page is hidden; keep the launchers inert there.
-  if (window.matchMedia('(max-width:860px)').matches) return;
   setState('discipline');
   renderDiscipline(role);
 }
@@ -712,8 +754,86 @@ if (copyBtn) copyBtn.addEventListener('click', () => {
   }).catch(() => {});
 });
 
-/* ---------- INIT ---------- */
+/* ============================================================
+   DESCENT ENGINE — sink / dive / resurface + the depth gauge
+   ============================================================ */
+const abyssEl = $('abyss');
+const gaugeEl = $('gauge');
+const GAUGE_STOPS = [
+  { state: 'overview', label: 'SURFACE' },
+  { state: 'archive', label: 'THE WORK' },
+  { state: 'records', label: 'LINEAGE' },
+];
+function buildGauge() {
+  if (!gaugeEl) return;
+  gaugeEl.innerHTML = GAUGE_STOPS.map(s =>
+    `<button class="gnode" data-state="${s.state}"><span class="gtick"></span><span class="glabel">${s.label}</span></button>`).join('');
+  gaugeEl.querySelectorAll('.gnode').forEach(n => n.addEventListener('click', () => setState(n.dataset.state)));
+}
+function updateGauge(state) {
+  if (!gaugeEl) return;
+  const eff = state === 'discipline' ? 'archive' : state;
+  gaugeEl.querySelectorAll('.gnode').forEach(n => n.classList.toggle('on', n.dataset.state === eff));
+}
+
+let stepLock = false;
+function step(dir) {
+  if (document.body.classList.contains('diving')) return;
+  let i = SPINE.indexOf(currentState);
+  if (i === -1) i = SPINE.indexOf('archive');     // discipline maps to the work's depth
+  const ni = Math.max(0, Math.min(SPINE.length - 1, i + dir));
+  if (ni === i) return;
+  stepLock = true;
+  setState(SPINE[ni]);
+  setTimeout(() => { stepLock = false; }, 950);
+}
+
+// Wheel: let the focused layer's own content scroll; only sink/rise at its boundary.
+if (abyssEl) abyssEl.addEventListener('wheel', e => {
+  if (stepLock || document.body.classList.contains('diving')) return;
+  const inner = document.querySelector('.layer.is-focus .layer-inner');
+  if (inner && inner.scrollHeight > inner.clientHeight + 4) {
+    const atTop = inner.scrollTop <= 2;
+    const atBottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 2;
+    if ((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) return;  // content scrolls first
+  }
+  if (Math.abs(e.deltaY) < 8) return;
+  step(e.deltaY > 0 ? 1 : -1);
+}, { passive: true });
+
+// Drag to sink (ignore drags that begin on something interactive).
+let dragY = null;
+if (abyssEl) abyssEl.addEventListener('pointerdown', e => {
+  if (e.target.closest('button,a,input,video,.proj-card,.disc-card')) return;
+  dragY = e.clientY;
+});
+addEventListener('pointerup', e => {
+  if (dragY === null) return;
+  const dy = e.clientY - dragY; dragY = null;
+  if (Math.abs(dy) > 80 && !document.body.classList.contains('diving')) step(dy < 0 ? 1 : -1);
+});
+
+// Keys
+addEventListener('keydown', e => {
+  if (document.body.classList.contains('diving')) return;
+  if (['ArrowDown', 'PageDown'].includes(e.key)) { step(1); e.preventDefault(); }
+  else if (['ArrowUp', 'PageUp'].includes(e.key)) { step(-1); e.preventDefault(); }
+  else if (e.key === 'Home') setState('overview');
+  else if (e.key === 'End') setState('records');
+});
+
+// The persistent resurface control: out of a dive, else one layer up.
+const resurfaceBtn = $('resurface');
+if (resurfaceBtn) resurfaceBtn.addEventListener('click', () => {
+  if (document.body.classList.contains('diving')) closeBloom();
+  else step(-1);
+});
+
+/* ---------- INIT (the depth state is set at the very end, after the
+   canvas vars exist, since setState -> warpSpike touches them) ---------- */
+buildGauge();
 renderList();
+applyLens();
 
 /* ============================================================
    BACKGROUND CANVAS :: the nervous system (cleaned from p21)
@@ -922,3 +1042,6 @@ function draw() {
 function schedule() { document.hidden ? setTimeout(draw, 250) : requestAnimationFrame(draw); }
 draw();
 setInterval(() => { if (pulses.length < 2) spawnPulse(); }, 5200);
+
+/* ---------- set the initial depth layer (now that the canvas vars exist) ---------- */
+setState('overview');
