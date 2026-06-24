@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK · The Living Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  html,body{height:100%;overflow:hidden}
+  .viewport{position:fixed;inset:0;z-index:5;cursor:grab;overflow:hidden}
+  .viewport.grabbing{cursor:grabbing}
+  .world{position:absolute;top:0;left:0;width:1600px;height:1200px;transform-origin:0 0;transition:transform 1.1s var(--ease)}
+  .world.free{transition:none}
+  .edges{position:absolute;inset:0;width:1600px;height:1200px;overflow:visible;pointer-events:none}
+  .edge{stroke:var(--lum-faint);stroke-width:1;transition:.5s}
+  .edge.lit{stroke:var(--rc);stroke-width:2;filter:drop-shadow(0 0 4px var(--rc))}
+  .edge.dim{stroke:rgba(180,230,255,.04)}
+  .node{position:absolute;transform:translate(-50%,-50%);background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:7px;transition:.4s;text-align:center}
+  .node .orb{border-radius:50%;border:1px solid var(--rc,var(--lum-soft));background:radial-gradient(circle,color-mix(in srgb,var(--rc,#b4e6ff) 22%,rgba(3,9,13,.7)),rgba(3,9,13,.85));
+    box-shadow:0 0 18px color-mix(in srgb,var(--rc,#b4e6ff) 30%,transparent);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:.4s}
+  .node .lbl{font-family:var(--head);font-size:.5rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);max-width:130px;line-height:1.3;transition:.4s}
+  .node .sub{font-family:var(--head);font-size:.4rem;letter-spacing:1px;color:var(--rc,var(--lum));opacity:.85}
+  .node:hover{transform:translate(-50%,-50%) scale(1.08)}
+  .node:hover .orb{box-shadow:0 0 30px color-mix(in srgb,var(--rc,#b4e6ff) 55%,transparent)}
+  .node.dim{opacity:.2;filter:saturate(.3)}
+  /* project orb */
+  .node.proj .orb{width:96px;height:96px}
+  .node.proj .orb img{width:100%;height:100%;object-fit:cover;opacity:.7;filter:grayscale(.4)}
+  .node.proj:hover .orb img{opacity:1;filter:none}
+  /* trait hub */
+  .node.trait .orb{width:64px;height:64px}
+  .node.trait .lbl{color:var(--rc)}
+  .node.trait.active .orb{box-shadow:0 0 34px var(--rc);border-color:var(--rc)}
+  /* core */
+  .node.core .orb{width:150px;height:150px;border-color:var(--lum)}
+  .node.core .lbl{font-size:.66rem;letter-spacing:2px;color:var(--lum-bright)}
+  .node.aux .orb{width:72px;height:72px}
+
+  /* intro overlay */
+  .intro{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;
+    background:radial-gradient(circle at 50% 45%,rgba(3,9,13,0),rgba(3,9,13,.55));transition:opacity 1s var(--ease)}
+  .intro.gone{opacity:0;pointer-events:none}
+  .intro .name{font-size:clamp(2.4rem,7vw,4.4rem);margin:8px 0}
+  .intro .epigraph{font-size:1.2rem;max-width:520px;border:0;padding:0;text-align:center}
+  .intro .enter{margin-top:18px}
+  /* HUD */
+  .hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;padding:18px 30px;pointer-events:none;opacity:0;transition:.8s}
+  .hud.show{opacity:1}
+  .hud .brand{font-family:var(--head);font-size:.62rem;letter-spacing:4px;font-weight:700}
+  .tele{font-family:var(--head);font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase}.tele b{color:var(--lum)}
+  /* discipline legend (filters) */
+  .legend{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:30;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;opacity:0;transition:.8s;pointer-events:none}
+  .legend.show{opacity:1;pointer-events:auto}
+  .legend button{display:flex;align-items:center;gap:8px;background:rgba(3,9,13,.6);border:1px solid var(--lum-faint);color:var(--dim);
+    font-family:var(--head);font-size:.46rem;letter-spacing:1px;text-transform:uppercase;padding:8px 13px;border-radius:16px;backdrop-filter:blur(4px);transition:.3s}
+  .legend button .d{width:8px;height:8px;border-radius:50%;background:var(--rc);box-shadow:0 0 8px var(--rc)}
+  .legend button:hover{color:var(--ink)} .legend button.on{color:var(--rc);border-color:var(--rc)}
+  .recenter{position:fixed;right:26px;bottom:26px;z-index:30;opacity:0;transition:.8s}.recenter.show{opacity:1}
+  .hint{position:fixed;left:50%;top:74px;transform:translateX(-50%);z-index:30;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;opacity:0;transition:.8s}
+  .hint.show{opacity:.7}
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas><div class="depth-fog" style="opacity:.26"></div><div class="vignette"></div>
+<div class="mock-tag">★ The Living Map</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+
+<div class="viewport" id="viewport">
+  <div class="world" id="world">
+    <svg class="edges" id="edges" viewBox="0 0 1600 1200"></svg>
+  </div>
+</div>
+
+<div class="intro" id="intro">
+  <div class="eyebrow">Game &amp; Technical Designer</div>
+  <h1 class="name">Giuseppe<br>Alfieri</h1>
+  <p class="epigraph">"I design games where the systems tell the story. The world doesn't exist until you scan it into memory."</p>
+  <button class="btn enter" id="enter">Enter the organism ↓</button>
+</div>
+
+<header class="hud" id="hud"><div class="brand">G.ALFIERI <small style="color:var(--lum)">//</small> SPECIMEN</div>
+  <span class="tele">ORGANISM <b>v2.0</b> · <span id="status">DRIFTING</span></span></header>
+<div class="hint" id="hint">drag to swim · scroll to zoom · click a node to read</div>
+<nav class="legend" id="legend"></nav>
+<button class="btn recenter" id="recenter">◎ Recenter</button>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+  const W=1600,H=1200, CX=800, CY=600;
+  const world=document.getElementById('world'), edges=document.getElementById('edges'), vp=document.getElementById('viewport');
+  const roles=Object.keys(RC);
+  // trait hubs on an inner ring
+  const hubPos={}; roles.forEach((r,i)=>{ const a=-Math.PI/2 + i/roles.length*Math.PI*2; hubPos[r]={x:CX+Math.cos(a)*215,y:CY+Math.sin(a)*215}; });
+  // project nodes on an outer ring
+  const projPos={}; DATA.forEach((p,i)=>{ const a=-Math.PI/2 + i/DATA.length*Math.PI*2 + .35; projPos[p.id]={x:CX+Math.cos(a)*470,y:CY+Math.sin(a)*470}; });
+  const auxPos={ lineage:{x:CX, y:CY+560} };
+
+  // build edges: project -> each of its traits; trait -> core (faint)
+  let eh='';
+  DATA.forEach(p=>{ const pr=projPos[p.id]; (p.roleArr||[p.role]).forEach(()=>{}); });
+  function projRoles(p){ return [p.role]; }  // mock: one primary role each
+  DATA.forEach(p=>{ const pr=projPos[p.id]; projRoles(p).forEach(r=>{ const h=hubPos[r]; eh+=`<line class="edge" data-role="${r}" style="--rc:${RC[r]}" x1="${pr.x}" y1="${pr.y}" x2="${h.x}" y2="${h.y}"/>`; }); });
+  roles.forEach(r=>{ const h=hubPos[r]; eh+=`<line class="edge faint" data-role="${r}" style="--rc:${RC[r]}" x1="${h.x}" y1="${h.y}" x2="${CX}" y2="${CY}"/>`; });
+  eh+=`<line class="edge" x1="${CX}" y1="${CY}" x2="${auxPos.lineage.x}" y2="${auxPos.lineage.y}"/>`;
+  edges.innerHTML=eh;
+
+  // nodes
+  function node(cls,x,y,html,rc){ const b=document.createElement('button'); b.className='node '+cls; b.style.left=x+'px'; b.style.top=y+'px'; if(rc)b.style.setProperty('--rc',rc); b.innerHTML=html; world.appendChild(b); return b; }
+  node('core',CX,CY,`<div class="orb">${glyphSVG('#b4e6ff').replace('class="glyph"','style="width:70px;height:70px"')}</div><div class="lbl">Giuseppe Alfieri</div><div class="sub" style="--rc:#b4e6ff">THE CORE · YOU</div>`,'#b4e6ff');
+  roles.forEach(r=>{ const h=hubPos[r]; const n=node('trait',h.x,h.y,`<div class="orb"></div><div class="lbl">${r}</div><div class="sub">${String(traitCounts()[r]).padStart(2,'0')}</div>`,RC[r]); n.dataset.role=r; n.addEventListener('click',()=>toggleTrait(r)); });
+  DATA.forEach(p=>{ const pr=projPos[p.id]; const rc=roleColor(p.role); const n=node('proj',pr.x,pr.y,`<div class="orb"><img src="${p.img}" alt="${p.title}"></div><div class="lbl">${p.title}</div><div class="sub">${p.year}</div>`,rc); n.dataset.id=p.id; n.dataset.role=p.role; n.addEventListener('click',()=>openDetail(p.id)); });
+  const ln=node('aux',auxPos.lineage.x,auxPos.lineage.y,`<div class="orb">${glyphSVG('#7dffd0').replace('class="glyph"','style="width:40px;height:40px"')}</div><div class="lbl">Lineage</div><div class="sub" style="--rc:#7dffd0">ORIGINS</div>`,'#7dffd0');
+  ln.addEventListener('click',openLineage);
+
+  // legend (filters)
+  document.getElementById('legend').innerHTML=roles.map(r=>`<button data-role="${r}" style="--rc:${RC[r]}"><span class="d"></span>${r}</button>`).join('');
+  document.querySelectorAll('.legend button').forEach(b=>b.addEventListener('click',()=>toggleTrait(b.dataset.role)));
+
+  let activeTrait=null;
+  function toggleTrait(r){
+    activeTrait = activeTrait===r ? null : r;
+    document.querySelectorAll('.legend button').forEach(b=>b.classList.toggle('on',b.dataset.role===activeTrait));
+    document.querySelectorAll('.node.trait').forEach(n=>n.classList.toggle('active',n.dataset.role===activeTrait));
+    document.querySelectorAll('.edge').forEach(e=>{ e.classList.remove('lit','dim'); if(activeTrait){ if(e.dataset.role===activeTrait) e.classList.add('lit'); else e.classList.add('dim'); } });
+    document.querySelectorAll('.node.proj').forEach(n=>n.classList.toggle('dim', activeTrait && n.dataset.role!==activeTrait));
+    document.getElementById('status').textContent = activeTrait ? ('TRACING · '+activeTrait.toUpperCase()) : 'DRIFTING';
+  }
+
+  function openLineage(){
+    const html=`<div class="pinner"><div class="pmeta" style="--rc:#7dffd0">◎ LINEAGE · ORIGINS</div><div class="ptitle">Where it started</div>${LINEAGE.map(l=>`<div class="tl-item"><div class="tl-when">[ ${l.when} ]</div><div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join('')}</div>`;
+    let d=document.querySelector('.detail.custom'); if(!d){ d=document.createElement('div'); d.className='detail custom'; document.body.appendChild(d); d.addEventListener('click',e=>{ if(e.target===d||e.target.classList.contains('scrim')||e.target.classList.contains('pclose')) d.classList.remove('open'); }); }
+    d.innerHTML=`<div class="scrim"></div><div class="panel" style="--rc:#7dffd0"><button class="pclose">RELEASE ✕</button>${html}</div>`;
+    requestAnimationFrame(()=>d.classList.add('open'));
+  }
+
+  /* ---- pan / zoom ---- */
+  let tx=0,ty=0,scale=1, dragging=false, sx,sy, moved=false;
+  function apply(){ world.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`; }
+  function centerOn(wx,wy,sc,animate){
+    world.classList.toggle('free',!animate); scale=sc; tx=innerWidth/2 - wx*sc; ty=innerHeight/2 - wy*sc; apply();
+    if(!animate) requestAnimationFrame(()=>world.classList.remove('free'));
+  }
+  // start zoomed into the core (intro)
+  centerOn(CX,CY,2.3,false);
+
+  vp.addEventListener('pointerdown',e=>{ if(e.target.closest('.node'))return; dragging=true;moved=false;sx=e.clientX;sy=e.clientY;vp.classList.add('grabbing');world.classList.add('free'); });
+  addEventListener('pointermove',e=>{ if(!dragging)return; tx+=e.clientX-sx; ty+=e.clientY-sy; sx=e.clientX; sy=e.clientY; if(Math.abs(e.clientX-sx)>0)moved=true; apply(); });
+  addEventListener('pointerup',()=>{ dragging=false;vp.classList.remove('grabbing'); });
+  vp.addEventListener('wheel',e=>{ e.preventDefault(); world.classList.add('free'); const f=e.deltaY<0?1.12:1/1.12; const ns=Math.max(.5,Math.min(3,scale*f));
+    const wx=(e.clientX-tx)/scale, wy=(e.clientY-ty)/scale; scale=ns; tx=e.clientX-wx*scale; ty=e.clientY-wy*scale; apply(); },{passive:false});
+
+  document.getElementById('recenter').addEventListener('click',()=>centerOn(CX,CY,.78,true));
+  document.getElementById('enter').addEventListener('click',()=>{
+    document.getElementById('intro').classList.add('gone');
+    ['hud','legend','recenter','hint'].forEach(id=>document.getElementById(id).classList.add('show'));
+    centerOn(CX,CY,.78,true);   // pull back to reveal the whole organism
+  });
+</script>
+</body>
+</html>
