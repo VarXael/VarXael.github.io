@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK · Descent A · Depth Zones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  body{overflow-x:hidden}
+  .zone-tint{position:fixed;inset:0;z-index:1;pointer-events:none;transition:background-color 1.2s linear;mix-blend-mode:multiply}
+  .wrap{position:relative;z-index:5}
+  .hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;padding:18px 30px;pointer-events:none}
+  .hud .brand{font-family:var(--head);font-size:.62rem;letter-spacing:4px;font-weight:700}
+  .tele{font-family:var(--head);font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+  .tele b{color:var(--lum);text-shadow:0 0 8px rgba(180,230,255,.5)}
+  /* threshold title cards */
+  .threshold{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:0 8vw}
+  .threshold .zname{--rc:var(--lum);font-family:var(--head);font-size:clamp(2rem,6vw,4.4rem);font-weight:700;text-transform:uppercase;letter-spacing:-1px;
+    color:var(--rc);text-shadow:0 0 50px color-mix(in srgb,var(--rc) 55%,transparent)}
+  .threshold .zdepth{font-family:var(--head);font-size:.62rem;letter-spacing:6px;color:var(--dim);text-transform:uppercase}
+  .threshold .zvibe{font-family:var(--body);font-style:italic;font-size:1.15rem;color:var(--lum-soft);max-width:480px;line-height:1.5}
+  .threshold .line{width:1px;height:60px;background:linear-gradient(var(--lum-soft),transparent);margin-top:10px;animation:grow 2.5s ease-in-out infinite}
+  @keyframes grow{0%,100%{opacity:.3;height:40px}50%{opacity:1;height:70px}}
+  .content{max-width:1180px;margin:0 auto;padding:6vh 9vw 16vh}
+  .content.lit .ci{opacity:1;transform:none}
+  .ci{opacity:0;transform:translateY(36px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .hero .name{font-size:3rem;margin:16px 0}
+  .hero .epigraph{font-size:1.2rem;max-width:540px;margin-bottom:24px}
+  .hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .chead{display:flex;align-items:baseline;gap:16px;margin-bottom:24px}
+  .chead .ceyebrow{--rc:var(--lum);font-family:var(--head);font-size:.6rem;letter-spacing:4px;color:var(--rc);text-transform:uppercase;text-shadow:0 0 12px color-mix(in srgb,var(--rc) 45%,transparent)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+  .traits-row{margin-bottom:40px}
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas><div class="depth-fog" id="fog"></div><div class="zone-tint" id="tint"></div><div class="vignette"></div>
+<div class="mock-tag">A · Depth Zones</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+<header class="hud"><div class="brand">G.ALFIERI <small style="color:var(--lum)">//</small> SPECIMEN</div>
+  <div style="display:flex;gap:20px"><span class="tele">DEPTH <b id="depth">0M</b></span><span class="tele">ZONE <b id="zone">SUNLIGHT</b></span></div></header>
+
+<div class="wrap" id="wrap"></div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+  const ZONES=[
+    {key:'SUNLIGHT', name:'Sunlight Zone', depth:'0 – 200M', vibe:'Where the light still reaches. This is me.', rc:'#7fe3ff', tint:'rgba(10,40,55,0)'},
+    {key:'TWILIGHT', name:'Twilight Zone', depth:'200 – 1000M', vibe:'Shipped work and obsessions, drifting in the blue dark.', rc:'#b4e6ff', tint:'rgba(6,26,42,.55)'},
+    {key:'MIDNIGHT', name:'Midnight Zone', depth:'1000 – 4000M', vibe:'Experiments and beginnings. No sunlight here, only what glows.', rc:'#e6a8ff', tint:'rgba(22,8,40,.6)'},
+    {key:'TRENCH', name:'The Trench', depth:'4000M +', vibe:'The foundation. Where it all started.', rc:'#7dffd0', tint:'rgba(2,14,14,.7)'},
+  ];
+  const tc=traitCounts();
+  const proPers=DATA.filter(p=>p.cat==='PROFESSIONAL'||p.cat==='PERSONAL');
+  const uniJam=DATA.filter(p=>p.cat==='UNIVERSITY'||p.cat==='JAM');
+  const heroHTML=`<div class="ci hero"><div class="eyebrow">Game &amp; Technical Designer</div>
+    <h1 class="name">Giuseppe<br>Alfieri</h1>
+    <p class="epigraph">"The world doesn't exist until you scan it into memory."</p>
+    <p class="bio" style="max-width:600px">A systems designer who bridges design philosophy and technical execution. Everything I design, I can also build.</p>
+    <div class="actions"><button class="btn">Copy Email</button><a class="btn" href="#">GitHub</a><a class="btn" href="#">View CV</a></div></div>`;
+  const workHTML=(label,rc,items)=>`<div class="ci"><div class="chead"><span class="ceyebrow" style="--rc:${rc}">${label}</span></div><div class="grid">${items.map(cardHTML).join('')}</div></div>`;
+  const traitsHTML=`<div class="ci"><div class="chead"><span class="ceyebrow" style="--rc:#e6a8ff">Disciplines</span></div><div class="traits-row">${Object.keys(RC).map(r=>`<div class="trait" style="--rc:${RC[r]}"><div class="tname">${r}</div><div class="tn">${String(tc[r]).padStart(2,'0')} SPECIMENS</div></div>`).join('')}</div></div>`;
+  const lineageHTML=`<div class="ci"><div class="chead"><span class="ceyebrow" style="--rc:#7dffd0">Lineage · Origins</span></div>${LINEAGE.map(l=>`<div class="tl-item"><div class="tl-when">[ ${l.when} ]</div><div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join('')}</div>`;
+  const zoneContent=[ heroHTML, workHTML('The Work · Shipped &amp; Personal','#b4e6ff',proPers), workHTML('Deep Cuts · University &amp; Jams','#e6a8ff',uniJam)+traitsHTML, lineageHTML ];
+
+  document.getElementById('wrap').innerHTML = ZONES.map((z,i)=>`
+    <section class="threshold" data-zone="${i}"><div class="zname" style="--rc:${z.rc}">${z.name}</div><div class="zdepth">${z.depth}</div><div class="zvibe">${z.vibe}</div><div class="line"></div></section>
+    <section class="content" data-zone="${i}">${zoneContent[i]}</section>`).join('');
+  wireCards();
+
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('lit');}),{threshold:.12});
+  document.querySelectorAll('.content').forEach(s=>io.observe(s));
+
+  const tint=document.getElementById('tint'),depth=document.getElementById('depth'),zoneEl=document.getElementById('zone'),fog=document.getElementById('fog');
+  const sections=[...document.querySelectorAll('section')];
+  function onScroll(){
+    const max=document.documentElement.scrollHeight-innerHeight, f=max>0?Math.min(1,scrollY/max):0;
+    depth.textContent=Math.round(f*4800)+'M';
+    fog.style.opacity=(0.06+f*0.5).toFixed(3);
+    // current zone = the last threshold/content whose top passed mid-screen
+    let zi=0; sections.forEach(s=>{ if(s.getBoundingClientRect().top<innerHeight*0.45) zi=+s.dataset.zone; });
+    const z=ZONES[zi]; tint.style.backgroundColor=z.tint; zoneEl.textContent=z.key;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+</script>
+</body>
+</html>

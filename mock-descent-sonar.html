@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK · Descent B · The Dive Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  body{overflow-x:hidden}
+  .wrap{position:relative;z-index:5}
+  /* instrument frame */
+  .frame{position:fixed;inset:14px;border:1px solid var(--lum-faint);border-radius:16px;z-index:20;pointer-events:none;box-shadow:inset 0 0 90px rgba(180,230,255,.03)}
+  .frame span{position:absolute;width:16px;height:16px;border:1px solid var(--lum-soft)}
+  .frame .tl{top:-1px;left:-1px;border-right:0;border-bottom:0}.frame .tr{top:-1px;right:-1px;border-left:0;border-bottom:0}
+  .frame .bl{bottom:-1px;left:-1px;border-right:0;border-top:0}.frame .br{bottom:-1px;right:-1px;border-left:0;border-top:0}
+  .hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;padding:30px 44px;pointer-events:none}
+  .hud .brand{font-family:var(--head);font-size:.62rem;letter-spacing:4px;font-weight:700}
+  .reads{display:flex;gap:24px}.tele{font-family:var(--head);font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+  .tele b{color:var(--lum);text-shadow:0 0 8px rgba(180,230,255,.5)}
+  /* sonar */
+  .sonar{position:fixed;left:34px;bottom:34px;z-index:25;width:128px;height:128px;border-radius:50%;border:1px solid var(--lum-faint);
+    background:radial-gradient(circle,rgba(180,230,255,.05),transparent 70%);overflow:hidden}
+  .sonar::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(180,230,255,.28),transparent 38%);animation:sweep 3.4s linear infinite}
+  .sonar .ring{position:absolute;inset:18%;border:1px solid var(--lum-faint);border-radius:50%}
+  .sonar .ring2{position:absolute;inset:36%;border:1px solid var(--lum-faint);border-radius:50%}
+  .sonar .blip{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--prog);box-shadow:0 0 8px var(--prog);transform:translate(-50%,-50%)}
+  .sonar .slabel{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-family:var(--head);font-size:.42rem;letter-spacing:2px;color:var(--dim)}
+  @keyframes sweep{to{transform:rotate(360deg)}}
+  /* depth column right */
+  .col{position:fixed;right:34px;top:50%;transform:translateY(-50%);z-index:25;height:54vh;width:2px;background:var(--lum-faint)}
+  .col .me{position:absolute;right:-4px;width:10px;height:10px;border-radius:50%;background:var(--lum);box-shadow:0 0 12px var(--lum);transform:translateY(-50%);top:0;transition:top .15s linear}
+  .col .mk{position:absolute;right:8px;font-family:var(--head);font-size:.42rem;letter-spacing:1px;color:var(--dim);transform:translateY(-50%);white-space:nowrap;text-align:right;width:90px;right:8px}
+  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:14vh 8vw;max-width:1140px;margin:0 auto}
+  .hero .name{font-size:3rem;margin:16px 0}.hero .epigraph{font-size:1.2rem;max-width:540px;margin-bottom:24px}
+  .hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .contact{font-family:var(--head);font-size:.56rem;letter-spacing:4px;color:var(--prog);text-transform:uppercase;margin-bottom:20px;opacity:0;transform:translateX(-14px);transition:.7s var(--ease)}
+  section.lit .contact{opacity:1;transform:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+  .grid .card{opacity:0;transform:scale(.92);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  section.lit .grid .card{opacity:1;transform:none}
+  section.lit .grid .card:nth-child(2){transition-delay:.08s}section.lit .grid .card:nth-child(3){transition-delay:.16s}
+  section.lit .grid .card:nth-child(4){transition-delay:.24s}section.lit .grid .card:nth-child(5){transition-delay:.32s}section.lit .grid .card:nth-child(6){transition-delay:.4s}
+  .traits-row{margin-top:4px}
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas><div class="depth-fog" id="fog"></div><div class="vignette"></div>
+<div class="frame"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+<div class="mock-tag">B · The Dive Log</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+<header class="hud"><div class="brand">SUBMERSIBLE <small style="color:var(--lum)">//</small> G.ALFIERI</div>
+  <div class="reads"><span class="tele">DEPTH <b id="depth">0M</b></span><span class="tele">PRESSURE <b id="press">1.0 ATM</b></span><span class="tele">BIOLUM <b>ACTIVE</b></span></div></header>
+
+<div class="sonar"><div class="ring"></div><div class="ring2"></div><div class="blip" id="blip" style="left:50%;top:50%"></div><div class="slabel" id="slabel">SCANNING</div></div>
+<div class="col" id="col"><div class="me" id="me"></div></div>
+
+<div class="wrap" id="wrap"></div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+  const tc=traitCounts();
+  const proPers=DATA.filter(p=>p.cat==='PROFESSIONAL'||p.cat==='PERSONAL');
+  const uniJam=DATA.filter(p=>p.cat==='UNIVERSITY'||p.cat==='JAM');
+  const stops=[
+    {label:'SURFACE', html:`<div class="hero"><div class="eyebrow">Game &amp; Technical Designer</div><h1 class="name">Giuseppe<br>Alfieri</h1><p class="epigraph">"The world doesn't exist until you scan it into memory."</p><p class="bio" style="max-width:600px">A systems designer who bridges design philosophy and technical execution. Everything I design, I can also build.</p><div class="actions"><button class="btn">Copy Email</button><a class="btn" href="#">GitHub</a><a class="btn" href="#">View CV</a></div></div>`},
+    {label:'CONTACT · SHIPPED & PERSONAL', html:`<div class="contact">◎ Contact resolved · ${proPers.length} specimens</div><div class="grid">${proPers.map(cardHTML).join('')}</div>`},
+    {label:'CONTACT · UNIVERSITY & JAMS', html:`<div class="contact">◎ Contact resolved · ${uniJam.length} specimens</div><div class="grid">${uniJam.map(cardHTML).join('')}</div>`},
+    {label:'TRAITS', html:`<div class="contact" style="color:var(--lum)">◎ Discipline scan</div><div class="traits-row">${Object.keys(RC).map(r=>`<div class="trait" style="--rc:${RC[r]}"><div class="tname">${r}</div><div class="tn">${String(tc[r]).padStart(2,'0')} SPECIMENS</div></div>`).join('')}</div>`},
+    {label:'ORIGINS', html:`<div class="contact" style="color:var(--lum)">◎ Origin record</div>${LINEAGE.map(l=>`<div class="tl-item"><div class="tl-when">[ ${l.when} ]</div><div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join('')}`},
+  ];
+  document.getElementById('wrap').innerHTML=stops.map(s=>`<section>${s.html}</section>`).join('');
+  wireCards();
+  // depth column markers
+  const col=document.getElementById('col');
+  stops.forEach((s,i)=>{ const m=document.createElement('div'); m.className='mk'; m.style.top=(i/(stops.length-1)*100)+'%'; m.textContent=s.label.split(' · ')[0]; col.appendChild(m); });
+
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('lit');}}),{threshold:.2});
+  const secs=[...document.querySelectorAll('section')]; secs.forEach(s=>io.observe(s));
+
+  const depth=document.getElementById('depth'),press=document.getElementById('press'),fog=document.getElementById('fog'),me=document.getElementById('me'),slabel=document.getElementById('slabel');
+  function onScroll(){
+    const max=document.documentElement.scrollHeight-innerHeight, f=max>0?Math.min(1,scrollY/max):0;
+    const m=Math.round(f*3800); depth.textContent=m+'M'; press.textContent=(1+m/100*9.8/10).toFixed(0)+' ATM';
+    fog.style.opacity=(0.07+f*0.55).toFixed(3); me.style.top=(f*100)+'%';
+    let cur=0; secs.forEach((s,i)=>{ if(s.getBoundingClientRect().top<innerHeight*0.45) cur=i; });
+    slabel.textContent = cur===0 ? 'SCANNING' : 'CONTACT';
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+</script>
+</body>
+</html>
