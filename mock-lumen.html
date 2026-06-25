@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXPERIMENT · Lumen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  html,body{height:100%;overflow:hidden;cursor:none}
+  #c{position:fixed;inset:0;z-index:5;display:block}
+  .hint{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:10;font-family:var(--head);font-size:.5rem;letter-spacing:3px;
+    color:var(--dim);text-transform:uppercase;pointer-events:none;animation:pulse 3s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+</style>
+</head>
+<body style="background:#010406">
+<div class="mock-tag">✦ Experiment · Lumen</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+<canvas id="c"></canvas>
+<div class="hint">move to reveal the dark · click to pulse sonar</div>
+<script>
+'use strict';
+const cv=document.getElementById('c'), g=cv.getContext('2d');
+let W,H,t=0,mx=innerWidth/2,my=innerHeight/2, lx=mx, ly=my;
+const LIGHT=210;                       // reveal radius around the cursor
+const plankton=[], creatures=[], pulses=[];
+const labels=[
+  {x:.5,y:.34,s:34,txt:'GIUSEPPE ALFIERI',head:1},
+  {x:.22,y:.6,s:13,txt:'PROJECT SASHA'},{x:.78,y:.28,s:13,txt:'HIGH ON LIFE'},
+  {x:.7,y:.72,s:13,txt:'PROJECT CADENCE'},{x:.32,y:.8,s:13,txt:'CYCLE'},
+  {x:.85,y:.55,s:13,txt:'CRT.EXE'},{x:.15,y:.32,s:13,txt:'BATTLESHIP'},
+  {x:.5,y:.46,s:11,txt:'the world does not exist until you scan it',head:2},
+];
+function seed(){
+  plankton.length=0;creatures.length=0;
+  const N=Math.min(420,Math.round(W*H/4200));
+  for(let i=0;i<N;i++)plankton.push({x:Math.random()*W,y:Math.random()*H,r:.4+Math.random()*2.1,ph:Math.random()*6.28,
+    vx:-.06+Math.random()*.12,vy:-.05-Math.random()*.18,hue:Math.random()});
+  for(let i=0;i<7;i++)creatures.push({x:Math.random()*W,y:Math.random()*H,s:.1+Math.random()*.34,rot:Math.random()*6.28,
+    spin:(-1+Math.random()*2)*.0006,vx:-.05+Math.random()*.1,vy:-.04-Math.random()*.05,seed:Math.random()*99,spikes:7+(i%5)});
+}
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;seed();}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+addEventListener('pointerdown',e=>{pulses.push({x:e.clientX,y:e.clientY,r:8,life:1});});
+const HUES=[[180,230,255],[255,210,122],[230,168,255],[125,255,208]];
+// reveal amount at point (px,py): 0..1 from the light + any sonar bands
+function reveal(px,py){
+  let a=Math.max(0,1-Math.hypot(px-lx,py-ly)/LIGHT); a*=a;
+  for(const p of pulses){ const d=Math.abs(Math.hypot(px-p.x,py-p.y)-p.r); if(d<70) a=Math.max(a,(1-d/70)*p.life); }
+  return Math.min(1,a);
+}
+function col(hue,a){ if(hue>.82){const c=HUES[1+(Math.floor(hue*53)%3)];return `rgba(${c[0]},${c[1]},${c[2]},${a})`;} return `rgba(180,230,255,${a})`; }
+function radiolaria(cx,cy,rad,rot,op,N){
+  g.lineWidth=.8;g.strokeStyle=`rgba(180,230,255,${op*.5})`;
+  [1,.62,.32].forEach(rk=>{g.beginPath();g.arc(cx,cy,rad*rk,0,6.28);g.stroke();});
+  for(let i=0;i<N;i++){const a=rot+i/N*6.28;g.beginPath();g.moveTo(cx+Math.cos(a)*rad*.3,cy+Math.sin(a)*rad*.3);g.lineTo(cx+Math.cos(a)*rad*1.08,cy+Math.sin(a)*rad*1.08);g.stroke();
+    g.fillStyle=`rgba(180,230,255,${op*.9})`;g.beginPath();g.arc(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad,1.4,0,6.28);g.fill();}
+  g.fillStyle=`rgba(223,244,255,${op})`;g.beginPath();g.arc(cx,cy,2.4,0,6.28);g.fill();
+}
+function frame(){
+  if(W!==innerWidth||H!==innerHeight)resize();
+  t++; lx+=(mx-lx)*.16; ly+=(my-ly)*.16;
+  g.fillStyle='rgba(1,4,6,.32)';g.fillRect(0,0,W,H);          // trails fade into dark
+  g.globalCompositeOperation='lighter';
+  // plankton
+  for(const p of plankton){ p.x+=p.vx;p.y+=p.vy; if(p.y<-8){p.y=H+8;p.x=Math.random()*W;} if(p.x<-8)p.x=W+8;else if(p.x>W+8)p.x=-8;
+    const a=reveal(p.x,p.y); if(a<.02)continue; const tw=.5+.5*Math.sin(t*.04+p.ph);
+    g.fillStyle=col(p.hue,a*(.35+.55*tw));g.beginPath();g.arc(p.x,p.y,p.r,0,6.28);g.fill(); }
+  // creatures
+  const baseR=Math.min(W,H)*.32;
+  for(const c of creatures){ c.x+=c.vx;c.y+=c.vy;c.rot+=c.spin; if(c.y<-300)c.y=H+300; if(c.x<-300)c.x=W+300;else if(c.x>W+300)c.x=-300;
+    const a=reveal(c.x,c.y); if(a<.02)continue; radiolaria(c.x,c.y+Math.sin(t*.01+c.seed)*8,baseR*c.s,c.rot,a,c.spikes); }
+  // labels (revealed text)
+  g.textAlign='center';
+  for(const L of labels){ const x=L.x*W,y=L.y*H, a=reveal(x,y); if(a<.03)continue;
+    g.font=`${L.head===1?'700 ':'300 '}${L.s}px ${L.head?"'Syncopate'":"'Work Sans'"}`;
+    g.fillStyle=L.head===1?`rgba(223,244,255,${a})`:`rgba(180,230,255,${a*.85})`;
+    if(L.head!==2){g.font=`${L.head===1?'700 ':'400 '}${L.s}px 'Syncopate'`;} else {g.font=`italic 300 ${L.s}px 'Work Sans'`;g.fillStyle=`rgba(180,230,255,${a*.7})`;}
+    g.fillText(L.txt,x,y); }
+  // sonar pulses
+  for(let i=pulses.length-1;i>=0;i--){const p=pulses[i];p.r+=7;p.life-=.012;if(p.life<=0){pulses.splice(i,1);continue;}
+    g.strokeStyle=`rgba(180,230,255,${p.life*.5})`;g.lineWidth=2;g.beginPath();g.arc(p.x,p.y,p.r,0,6.28);g.stroke();}
+  // the light itself (your bioluminescence)
+  const gl=g.createRadialGradient(lx,ly,0,lx,ly,LIGHT*.8);gl.addColorStop(0,'rgba(180,230,255,.10)');gl.addColorStop(1,'rgba(180,230,255,0)');
+  g.fillStyle=gl;g.beginPath();g.arc(lx,ly,LIGHT*.8,0,6.28);g.fill();
+  radiolaria(lx,ly,12,t*.02,.95,9);
+  g.globalCompositeOperation='source-over';
+  document.hidden?setTimeout(frame,200):requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>

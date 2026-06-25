@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK · Functional · Giuseppe Alfieri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  html{scroll-behavior:smooth}
+  body{overflow-x:hidden}
+  .wrap{position:relative;z-index:5;max-width:1180px;margin:0 auto;padding:0 6vw}
+  /* sticky nav */
+  .topbar{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:18px 0;
+    margin-bottom:10px;backdrop-filter:blur(6px);border-bottom:1px solid var(--lum-faint)}
+  .topbar .brand{font-family:var(--head);font-size:.62rem;letter-spacing:4px;font-weight:700}
+  .topbar nav{display:flex;gap:26px}
+  .topbar nav a{font-family:var(--head);font-size:.56rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;transition:.3s;position:relative}
+  .topbar nav a:hover,.topbar nav a.on{color:var(--lum);text-shadow:0 0 12px rgba(180,230,255,.5)}
+  /* hero */
+  .hero{min-height:82vh;display:flex;flex-direction:column;justify-content:center;padding:40px 0}
+  .hero .name{font-size:clamp(2.6rem,7vw,4.2rem);margin:18px 0}
+  .hero .epigraph{font-size:1.3rem;max-width:580px;margin-bottom:26px}
+  .hero .bio{max-width:620px;margin-bottom:28px;font-size:1.02rem}
+  .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+  .scrollcue{margin-top:46px;font-family:var(--head);font-size:.52rem;letter-spacing:4px;color:var(--lum);text-transform:uppercase;animation:b 2.4s ease-in-out infinite}
+  @keyframes b{0%,100%{opacity:.5;transform:translateY(0)}50%{opacity:1;transform:translateY(7px)}}
+  section{padding:9vh 0;scroll-margin-top:70px}
+  .shead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px;border-bottom:1px solid var(--lum-faint);padding-bottom:14px}
+  .shead h2{font-family:var(--head);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-.5px;color:var(--lum-bright);text-shadow:0 0 26px rgba(180,230,255,.3)}
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(244px,1fr));gap:18px}
+  .traits-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  footer{padding:8vh 0 10vh;text-align:center;color:var(--dim)}
+  footer .name{font-family:var(--head);font-size:1rem;letter-spacing:2px;color:var(--lum);margin-bottom:14px}
+  @media(max-width:760px){ .topbar nav{gap:14px} .topbar nav a{font-size:.5rem;letter-spacing:1px} }
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas><div class="depth-fog" style="opacity:.18"></div><div class="vignette"></div>
+<div class="mock-tag">✓ Functional · works right now</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">G.ALFIERI <small style="color:var(--lum)">//</small> SPECIMEN</div>
+    <nav id="nav"><a href="#work">Work</a><a href="#traits">Traits</a><a href="#lineage">Lineage</a><a href="./cv.html">CV</a></nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="eyebrow">Game &amp; Technical Designer</div>
+    <h1 class="name">Giuseppe<br>Alfieri</h1>
+    <p class="epigraph">"I design games where the systems tell the story. The world doesn't exist until you scan it into memory."</p>
+    <p class="bio">A systems designer who bridges design philosophy and technical execution. Everything I design, I can also build. I work in Unreal Engine and C++, I move freely between a design doc and the engine that runs it, I have led teams to release and ported shipped titles to Nintendo Switch.</p>
+    <div class="actions"><button class="btn" id="copy">Copy Email</button><a class="btn" href="#">GitHub</a><a class="btn" href="./cv.html">View CV</a></div>
+    <div class="scrollcue">↓ The Work</div>
+  </section>
+
+  <section id="work">
+    <div class="shead"><h2>The Work</h2><div class="filters" id="filters"></div></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="traits">
+    <div class="shead"><h2>Disciplines</h2></div>
+    <div class="traits-row" id="traits-row"></div>
+  </section>
+
+  <section id="lineage">
+    <div class="shead"><h2>Lineage</h2></div>
+    <div id="lineage-list"></div>
+  </section>
+
+  <footer>
+    <div class="name">GIUSEPPE ALFIERI</div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn" onclick="document.getElementById('copy').click()">Copy Email</button><a class="btn" href="#">GitHub</a><a class="btn" href="./cv.html">CV</a></div>
+  </footer>
+</div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+  document.getElementById('grid').innerHTML=DATA.map(cardHTML).join(''); wireCards();
+  const filters=['ALL',...CATS];
+  document.getElementById('filters').innerHTML=filters.map((f,i)=>`<button class="chip ${i===0?'on':''}" data-cat="${f}">${f==='PROFESSIONAL'?'PRO':f==='UNIVERSITY'?'UNI':f}</button>`).join('');
+  document.querySelectorAll('#filters .chip').forEach(b=>b.addEventListener('click',()=>{ document.querySelectorAll('#filters .chip').forEach(x=>x.classList.toggle('on',x===b));
+    document.querySelectorAll('#grid .card').forEach(c=>c.classList.toggle('dim', b.dataset.cat!=='ALL'&&c.dataset.cat!==b.dataset.cat)); }));
+  const tc=traitCounts();
+  document.getElementById('traits-row').innerHTML=Object.keys(RC).map(r=>`<div class="trait" style="--rc:${RC[r]}"><div class="tname">${r}</div><div class="tn">${String(tc[r]).padStart(2,'0')} SPECIMENS</div></div>`).join('');
+  document.getElementById('lineage-list').innerHTML=LINEAGE.map(l=>`<div class="tl-item"><div class="tl-when">[ ${l.when} ]</div><div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join('');
+  document.getElementById('copy').addEventListener('click',e=>{ navigator.clipboard?.writeText('giuseppeluigi.alfieri@gmail.com'); e.target.textContent='Copied ✓'; setTimeout(()=>e.target.textContent='Copy Email',1800); });
+  // scroll-spy nav
+  const secs=['work','traits','lineage'].map(id=>document.getElementById(id));
+  const links=[...document.querySelectorAll('#nav a')];
+  addEventListener('scroll',()=>{ let cur=''; secs.forEach(s=>{ if(s.getBoundingClientRect().top<140) cur=s.id; }); links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur)); },{passive:true});
+</script>
+</body>
+</html>

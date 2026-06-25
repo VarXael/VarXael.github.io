@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXPERIMENT · Bloom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  html,body{height:100%;overflow:hidden;cursor:crosshair}
+  #c{position:fixed;inset:0;z-index:5;display:block}
+  .hint{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:10;font-family:var(--head);font-size:.5rem;letter-spacing:3px;
+    color:var(--dim);text-transform:uppercase;pointer-events:none}
+  .hint b{color:var(--lum)}
+  .title{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);z-index:8;text-align:center;pointer-events:none;transition:opacity 1.2s}
+  .title.gone{opacity:0}
+  .title .n{font-family:var(--head);font-weight:700;font-size:clamp(2rem,6vw,4rem);letter-spacing:-1px;color:rgba(223,244,255,.22)}
+  .title .s{font-family:var(--head);font-size:.56rem;letter-spacing:5px;color:rgba(180,230,255,.4);text-transform:uppercase;margin-top:10px}
+</style>
+</head>
+<body style="background:#02070a">
+<div class="mock-tag">✦ Experiment · Bloom</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+<canvas id="c"></canvas>
+<div class="title" id="title"><div class="n">GIUSEPPE ALFIERI</div><div class="s">move to gather · click to scatter</div></div>
+<div class="hint"><b>hold</b> to draw the swarm · <b>click</b> to send a shockwave</div>
+<script>
+'use strict';
+const cv=document.getElementById('c'), g=cv.getContext('2d');
+let W,H,t=0,mx=-999,my=-999,down=false;
+const N=190, boids=[], shocks=[];
+const PAL=[[127,227,255],[255,210,122],[230,168,255],[125,255,208],[180,230,255]];
+function seed(){ boids.length=0;
+  for(let i=0;i<N;i++){const c=PAL[i%PAL.length];
+    boids.push({x:Math.random()*W,y:Math.random()*H,vx:-.5+Math.random(),vy:-.5+Math.random(),c,sz:.8+Math.random()*1.8,
+      px:Math.random()*W,py:Math.random()*H});}
+}
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;seed();}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY; document.getElementById('title').classList.add('gone');});
+addEventListener('pointerdown',e=>{down=true;mx=e.clientX;my=e.clientY;shocks.push({x:e.clientX,y:e.clientY,r:10,life:1});});
+addEventListener('pointerup',()=>down=false);
+addEventListener('mouseleave',()=>{mx=-999;my=-999;});
+
+function step(){
+  for(let i=0;i<N;i++){
+    const b=boids[i]; let ax=0,ay=0, cx=0,cy=0,nx=0,ny=0,sx=0,sy=0,n=0;
+    // sample a subset of neighbours for flocking (cheap)
+    for(let k=0;k<14;k++){ const o=boids[(i*7+k*13+1)%N]; const dx=o.x-b.x,dy=o.y-b.y,d=dx*dx+dy*dy;
+      if(d<9000&&d>0){ cx+=o.x;cy+=o.y; nx+=o.vx;ny+=o.vy; if(d<900){sx-=dx;sy-=dy;} n++; } }
+    if(n){ ax+=((cx/n-b.x))*.0009 + (nx/n-b.vx)*.03 + sx*.0012; ay+=((cy/n-b.y))*.0009 + (ny/n-b.vy)*.03 + sy*.0012; }
+    // cursor attraction (gather) — stronger while holding
+    const dx=mx-b.x,dy=my-b.y,dm=Math.hypot(dx,dy);
+    if(mx>-900&&dm<320){ const f=(down?.06:.02)*(1-dm/320); ax+=dx/dm*f* (dm<60?-2:1); ay+=dy/dm*f*(dm<60?-2:1); }
+    // shockwaves push outward
+    for(const s of shocks){ const ex=b.x-s.x,ey=b.y-s.y,ed=Math.hypot(ex,ey); if(Math.abs(ed-s.r)<60){ ax+=ex/ed*1.6*s.life; ay+=ey/ed*1.6*s.life; } }
+    b.vx=(b.vx+ax)*.96; b.vy=(b.vy+ay)*.96;
+    const sp=Math.hypot(b.vx,b.vy), max=down?5:3.4; if(sp>max){b.vx=b.vx/sp*max;b.vy=b.vy/sp*max;}
+    b.px=b.x;b.py=b.y; b.x+=b.vx;b.y+=b.vy;
+    if(b.x<-20)b.x=W+20;else if(b.x>W+20)b.x=-20; if(b.y<-20)b.y=H+20;else if(b.y>H+20)b.y=-20;
+  }
+}
+function frame(){
+  if(W!==innerWidth||H!==innerHeight)resize();
+  t++; step();
+  g.fillStyle='rgba(2,7,10,.22)';g.fillRect(0,0,W,H);
+  g.globalCompositeOperation='lighter';
+  for(const b of boids){ const sp=Math.hypot(b.vx,b.vy), ex=.3+sp/4;     // excited = brighter
+    g.strokeStyle=`rgba(${b.c[0]},${b.c[1]},${b.c[2]},${.12+ex*.2})`; g.lineWidth=b.sz;
+    g.beginPath();g.moveTo(b.px,b.py);g.lineTo(b.x,b.y);g.stroke();
+    g.fillStyle=`rgba(${b.c[0]},${b.c[1]},${b.c[2]},${.25+ex*.5})`;
+    g.beginPath();g.arc(b.x,b.y,b.sz*(.9+ex),0,6.28);g.fill(); }
+  for(let i=shocks.length-1;i>=0;i--){const s=shocks[i];s.r+=9;s.life-=.02;if(s.life<=0){shocks.splice(i,1);continue;}
+    g.strokeStyle=`rgba(180,230,255,${s.life*.4})`;g.lineWidth=2;g.beginPath();g.arc(s.x,s.y,s.r,0,6.28);g.stroke();}
+  if(mx>-900){const gl=g.createRadialGradient(mx,my,0,mx,my,90);gl.addColorStop(0,'rgba(180,230,255,.07)');gl.addColorStop(1,'rgba(180,230,255,0)');g.fillStyle=gl;g.beginPath();g.arc(mx,my,90,0,6.28);g.fill();}
+  g.globalCompositeOperation='source-over';
+  document.hidden?setTimeout(frame,200):requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
