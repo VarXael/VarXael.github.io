@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radiolaria Style · OS Surface</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#04090d;--ink:#e9f4fb;--dim:rgba(233,244,251,.55);--lum:#b4e6ff;--head:'Syncopate',sans-serif;--body:'Work Sans',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--body);color:var(--ink);background:radial-gradient(120% 100% at 70% 40%,#07151d 0%,#04090d 60%)}
+  #bg{position:fixed;inset:0;z-index:0;opacity:.45}
+  .mock-tag,.mock-back{position:fixed;top:16px;z-index:40;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:rgba(180,230,255,.85);
+    text-transform:uppercase;background:rgba(6,20,28,.5);border:1px solid rgba(150,210,240,.18);padding:7px 12px;border-radius:16px}
+  .mock-tag{left:16px}.mock-back{right:16px;color:var(--dim)}
+  .os{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;padding:62px 6vw 5vh}
+  .top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(150,210,240,.15);padding-bottom:16px}
+  .top .h{font-family:var(--head);font-weight:700;font-size:1.1rem;letter-spacing:2px;text-shadow:0 0 24px rgba(140,210,255,.3)}
+  .top .h small{color:var(--lum);font-weight:400}
+  .top .r{font-family:var(--head);font-size:.5rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+  .top .r b{color:var(--lum)}
+  .body{flex:1;display:grid;grid-template-columns:320px 1fr;gap:44px;min-height:0;padding-top:30px}
+  /* left: module list */
+  .rail{display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+  .rl{font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
+  .mod{--rc:var(--lum);text-align:left;background:none;border:none;border-left:1px solid color-mix(in srgb,var(--rc) 30%,transparent);
+    padding:13px 0 13px 16px;cursor:pointer;transition:.3s;position:relative}
+  .mod::before{content:"";position:absolute;left:-4px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--rc);box-shadow:0 0 10px var(--rc);opacity:.5;transition:.3s}
+  .mod .mn{font-family:var(--body);font-weight:600;font-size:1rem;color:var(--ink)}
+  .mod .ms{font-family:var(--head);font-size:.46rem;letter-spacing:2px;color:var(--rc);text-transform:uppercase;margin-top:4px}
+  .mod:hover{border-left-color:var(--rc)} .mod.on{border-left-color:var(--rc)} .mod.on::before{opacity:1;transform:scale(1.4)}
+  .mod.on .mn{color:var(--rc)}
+  /* right: readout + diagram */
+  .main{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;min-height:0}
+  .readout .title{font-family:var(--head);font-weight:700;font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:-.5px;text-shadow:0 0 30px rgba(140,210,255,.25)}
+  .readout .sub{font-family:var(--head);font-size:.56rem;letter-spacing:4px;color:var(--rc,var(--lum));text-transform:uppercase;margin:12px 0 26px}
+  .facet{margin-bottom:20px;padding-left:18px;position:relative}
+  .facet::before{content:"";position:absolute;left:0;top:6px;width:7px;height:7px;border-radius:50%;background:var(--rc,var(--lum));box-shadow:0 0 10px var(--rc,var(--lum))}
+  .facet h3{font-family:var(--head);font-size:.64rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px}
+  .facet p{font-size:.88rem;line-height:1.65;color:var(--dim);max-width:420px}
+  .stats{display:flex;gap:26px;margin-top:8px}
+  .stat .v{font-family:var(--head);font-size:1.4rem;color:var(--rc,var(--lum));text-shadow:0 0 20px color-mix(in srgb,var(--rc,var(--lum)) 50%,transparent)}
+  .stat .k{font-family:var(--head);font-size:.44rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:5px}
+  #scope{width:100%;max-width:360px;aspect-ratio:1;justify-self:center}
+  @media(max-width:980px){ .body{grid-template-columns:1fr} .main{grid-template-columns:1fr} #scope{display:none} }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="mock-tag">◇ Radiolaria style · OS Surface</div><a class="mock-back" href="./styles.html">↑ Style chooser</a>
+<div class="os">
+  <div class="top"><div class="h">VARXEL OS <small>//</small> OPERATIONS</div><div class="r">SYSTEMS <b>NOMINAL</b> · 4 MODULES · BIOLUM <b>ACTIVE</b></div></div>
+  <div class="body">
+    <div class="rail"><div class="rl">◎ Modules</div><div id="mods"></div></div>
+    <div class="main">
+      <div class="readout">
+        <div class="title" id="m-title">—</div>
+        <div class="sub" id="m-sub">—</div>
+        <div class="facet"><h3>Purpose</h3><p id="m-purpose">—</p></div>
+        <div class="facet"><h3>Status</h3><p id="m-status">—</p></div>
+        <div class="stats" id="m-stats"></div>
+      </div>
+      <canvas id="scope"></canvas>
+    </div>
+  </div>
+</div>
+<script>
+  const MODS=[
+    {id:'job_hunter',name:'Job Hunter',rc:'#ffc478',state:'ACTIVE',purpose:'Multi-source discovery, a free-model relevance triage, Vault capture of raw postings, and a per-job cockpit that drafts a tailored CV and cover letter.',status:'Running end to end. 134 postings triaged this week; 12 flagged as strong matches.',stats:[['134','TRIAGED'],['12','FLAGGED'],['$0.31','SPENT']]},
+    {id:'fl0w',name:'Fl0w',rc:'#7fe3ff',state:'ACTIVE',purpose:'The shared design system. One canonical theme + component library that every other module imports, so the look never drifts as it spreads.',status:'Serving the theme at /fl0w. Component database in progress.',stats:[['1','SOURCE'],['38','TOKENS'],['9','COMPONENTS']]},
+    {id:'synapse',name:'Synapse',rc:'#78ffcd',state:'ACTIVE',purpose:'A read-only living map of the Factory: every document an orb, every dependency an edge, every commit a traceable path from root to the files it touched.',status:'Rebuilding around a collapsible folder tree. Read-only engine kept.',stats:[['32','NODES'],['120','EDGES'],['7','COMMITS']]},
+    {id:'portfolio',name:'Portfolio',rc:'#e096ff',state:'IN PROGRESS',purpose:'The public portfolio. A presentation surface that depends on Fl0w and deploys to GitHub Pages as a generated artifact.',status:'Style search underway. Depends on Fl0w once the look is locked.',stats:[['06','SPECIMENS'],['04','TRAITS'],['—','LIVE']]},
+  ];
+  let i=0;
+  document.getElementById('mods').innerHTML=MODS.map((m,k)=>`<button class="mod ${k?'':'on'}" data-i="${k}" style="--rc:${m.rc}"><div class="mn">${m.name}</div><div class="ms">${m.state}</div></button>`).join('');
+  document.querySelectorAll('.mod').forEach(b=>b.onclick=()=>{i=+b.dataset.i;document.querySelectorAll('.mod').forEach(x=>x.classList.toggle('on',x===b));render();});
+  // radiolaria
+  const sc=document.getElementById('scope'),g=sc.getContext('2d');let SW=360,t=0,col=[127,227,255];
+  function rs(){const s=sc.clientWidth||360;sc.width=sc.height=s*devicePixelRatio;g.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);SW=s;}
+  addEventListener('resize',rs);setTimeout(rs,60);rs();
+  const hexrgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  function draw(){t++;const cx=SW/2,cy=SW/2,R=SW*.38,[r,gn,b]=col,L=a=>`rgba(${r},${gn},${b},${a})`;
+    g.clearRect(0,0,SW,SW);g.globalCompositeOperation='lighter';
+    [1,.74,.5,.3].forEach((rk,k)=>{g.lineWidth=k===1?1.3:.7;g.setLineDash(k===1?[3,9]:[]);g.strokeStyle=L(.22);g.beginPath();g.arc(cx,cy,R*rk,0,6.28);g.stroke();});g.setLineDash([]);
+    for(let k=0;k<14;k++){const a=t*.003+k/14*6.28,x1=cx+Math.cos(a)*R*.32,y1=cy+Math.sin(a)*R*.32,x2=cx+Math.cos(a)*R*1.1,y2=cy+Math.sin(a)*R*1.1;
+      const gr=g.createLinearGradient(x1,y1,x2,y2);gr.addColorStop(0,L(0));gr.addColorStop(.5,L(.25));gr.addColorStop(1,L(0));g.strokeStyle=gr;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();
+      const pul=.5+.5*Math.sin(t*.05+k);g.fillStyle=L(.3+.5*pul);g.beginPath();g.arc(cx+Math.cos(a)*R,cy+Math.sin(a)*R,1.7,0,6.28);g.fill();}
+    const cg=g.createRadialGradient(cx,cy,0,cx,cy,R*.55);cg.addColorStop(0,'rgba(255,255,255,.9)');cg.addColorStop(.3,L(.55));cg.addColorStop(1,L(0));g.fillStyle=cg;g.beginPath();g.arc(cx,cy,R*.55,0,6.28);g.fill();
+    g.globalCompositeOperation='source-over';document.hidden?setTimeout(draw,120):requestAnimationFrame(draw);}
+  draw();
+  // bg plankton
+  (function bg(){const c=document.getElementById('bg'),x=c.getContext('2d');let W,H,t=0,pk=[];function r(){W=c.width=innerWidth;H=c.height=innerHeight;pk=[];for(let k=0;k<80;k++)pk.push({x:Math.random()*W,y:Math.random()*H,r:.5+Math.random()*1.5,vy:-.04-Math.random()*.1,ph:Math.random()*6.28});}addEventListener('resize',r);r();(function f(){t++;x.clearRect(0,0,W,H);x.globalCompositeOperation='lighter';for(const p of pk){p.y+=p.vy;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}const tw=.4+.6*Math.sin(t*.03+p.ph);x.fillStyle=`rgba(180,230,255,${.28*tw})`;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill();}x.globalCompositeOperation='source-over';document.hidden?setTimeout(f,200):requestAnimationFrame(f);})();})();
+  function render(){const m=MODS[i];col=hexrgb(m.rc);document.documentElement.style.setProperty('--rc',m.rc);
+    document.getElementById('m-title').textContent=m.name;
+    document.getElementById('m-sub').textContent=m.state+' · MODULE';document.getElementById('m-sub').style.color=m.rc;
+    document.getElementById('m-purpose').textContent=m.purpose;document.getElementById('m-status').textContent=m.status;
+    document.querySelectorAll('.facet').forEach(f=>f.style.setProperty('--rc',m.rc));
+    document.getElementById('m-stats').innerHTML=m.stats.map(s=>`<div class="stat" style="--rc:${m.rc}"><div class="v">${s[0]}</div><div class="k">${s[1]}</div></div>`).join('');}
+  render();
+</script>
+</body>
+</html>

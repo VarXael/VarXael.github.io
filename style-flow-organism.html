@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>flOw Style · Organism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#eaf6ff;--dim:rgba(234,246,255,.62);--head:'Syncopate',sans-serif;--body:'Work Sans',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--body);color:var(--ink);cursor:none;
+    background:radial-gradient(130% 110% at 50% -10%,#0a3346 0%,#06222f 32%,#03131c 64%,#020a10 100%)}
+  #c{position:fixed;inset:0;z-index:1;display:block}
+  .veil{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(80% 70% at 50% 40%,transparent 40%,rgba(2,8,14,.5))}
+  .mock-tag,.mock-back{position:fixed;top:18px;z-index:40;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:rgba(180,230,255,.8);
+    text-transform:uppercase;background:rgba(4,18,26,.5);border:1px solid rgba(150,210,240,.18);padding:7px 12px;border-radius:18px;backdrop-filter:blur(4px)}
+  .mock-tag{left:18px}.mock-back{right:18px;color:var(--dim)}
+  .intro{position:fixed;left:8vw;top:50%;transform:translateY(-50%);z-index:10;max-width:440px;transition:opacity 1s}
+  .intro.dim{opacity:.16}
+  .eyebrow{font-family:var(--head);font-size:.56rem;letter-spacing:5px;color:#9fe6ff;text-transform:uppercase;margin-bottom:18px}
+  .name{font-family:var(--head);font-weight:700;font-size:clamp(2.4rem,6vw,4rem);line-height:1.06;letter-spacing:-1px;text-shadow:0 0 50px rgba(120,210,255,.4)}
+  .epigraph{font-style:italic;font-size:1.2rem;color:#bfe9ff;line-height:1.5;margin-top:22px;max-width:380px}
+  .hint{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:10;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;animation:b 3s ease-in-out infinite}
+  @keyframes b{0%,100%{opacity:.3}50%{opacity:.8}}
+  .bubble{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s}
+  .bubble.open{opacity:1;pointer-events:auto}
+  .bubble .scrim{position:absolute;inset:0;background:rgba(3,16,24,.55);backdrop-filter:blur(8px)}
+  .bubble .card{position:relative;width:min(560px,90vw);padding:40px 44px;border-radius:30px;text-align:center;
+    background:radial-gradient(120% 120% at 50% 0%,color-mix(in srgb,var(--rc) 22%,rgba(6,28,40,.92)),rgba(3,14,22,.96));
+    border:1px solid color-mix(in srgb,var(--rc) 40%,transparent);box-shadow:0 0 90px color-mix(in srgb,var(--rc) 30%,transparent);transform:scale(.92);transition:transform .5s cubic-bezier(.22,1,.36,1)}
+  .bubble.open .card{transform:scale(1)}
+  .bubble .meta{font-family:var(--head);font-size:.52rem;letter-spacing:3px;color:var(--rc);text-transform:uppercase;margin-bottom:14px}
+  .bubble h2{font-family:var(--head);font-size:1.7rem;text-transform:uppercase;letter-spacing:-.5px;margin-bottom:18px;text-shadow:0 0 30px color-mix(in srgb,var(--rc) 50%,transparent)}
+  .bubble p{font-size:1.05rem;line-height:1.7;color:#d6efff}
+  .bubble .x{margin-top:26px;font-family:var(--head);font-size:.5rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas><div class="veil"></div>
+<div class="mock-tag">∿ flOw style · Organism</div><a class="mock-back" href="./styles.html">↑ Style chooser</a>
+<div class="intro" id="intro">
+  <div class="eyebrow">Game &amp; Technical Designer</div>
+  <h1 class="name">Giuseppe<br>Alfieri</h1>
+  <p class="epigraph">"I design games where the systems tell the story."</p>
+</div>
+<div class="hint">drift toward a light to observe it</div>
+<div class="bubble" id="bubble"></div>
+
+<script src="./mock-data.js"></script>
+<script>
+  const cv=document.getElementById('c'), g=cv.getContext('2d');
+  let W,H,t=0,mx=innerWidth*.7,my=innerHeight*.5, hx=mx,hy=my;
+  const COLORS={'Game Designer':[127,227,255],'Technical Game Designer':[255,196,120],'Leadership':[224,150,255],'Game Programmer':[120,255,205]};
+  const rc=p=>COLORS[p.role]||[150,220,255];
+  const orbs=DATA.map((p,i)=>({p,c:rc(p),ang:i/DATA.length*6.28,baseR:30+(p.cat==='PROFESSIONAL'?10:0),x:0,y:0,seed:Math.random()*99,ph:Math.random()*6.28}));
+  const plankton=[];
+  function seed(){ plankton.length=0; const N=Math.min(120,Math.round(W*H/26000));
+    for(let i=0;i<N;i++)plankton.push({x:Math.random()*W,y:Math.random()*H,r:.6+Math.random()*1.8,vx:-.1+Math.random()*.2,vy:-.05-Math.random()*.12,ph:Math.random()*6.28}); }
+  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;seed();}
+  addEventListener('resize',resize);resize();
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function glow(x,y,r,col,a){ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,`rgba(${col[0]},${col[1]},${col[2]},${a})`); gr.addColorStop(1,`rgba(${col[0]},${col[1]},${col[2]},0)`); g.fillStyle=gr; g.beginPath();g.arc(x,y,r,0,6.28);g.fill(); }
+  let hover=null;
+  function frame(){
+    if(W!==innerWidth||H!==innerHeight)resize(); t++;
+    hx+=(mx-hx)*.05; hy+=(my-hy)*.05;
+    g.clearRect(0,0,W,H); g.globalCompositeOperation='lighter';
+    for(const p of plankton){ p.x+=p.vx;p.y+=p.vy; if(p.y<-6){p.y=H+6;p.x=Math.random()*W;} if(p.x<-6)p.x=W+6;else if(p.x>W+6)p.x=-6;
+      const tw=.4+.6*Math.sin(t*.03+p.ph); glow(p.x,p.y,p.r*5,[150,220,255],.05*tw); g.fillStyle=`rgba(200,235,255,${.4*tw})`;g.beginPath();g.arc(p.x,p.y,p.r,0,6.28);g.fill(); }
+    const cxp=W*.36+Math.sin(t*.006)*30, cyp=H*.5+Math.cos(t*.008)*24;
+    for(let i=0;i<6;i++){ const a=t*.01+i*1.04; glow(cxp+Math.cos(a)*(34+i*4),cyp+Math.sin(a)*(34+i*4),46,[150,225,255],.10); }
+    glow(cxp,cyp,120,[150,225,255],.10); g.fillStyle='rgba(220,242,255,.9)';g.beginPath();g.arc(cxp,cyp,4,0,6.28);g.fill();
+    hover=null;
+    orbs.forEach(o=>{
+      o.ang+=0.0009+0.0004*Math.sin(o.seed);
+      const orbitR=Math.min(W,H)*0.32;
+      let tx=W*.62+Math.cos(o.ang+o.seed)*orbitR*(0.7+0.3*Math.sin(t*.004+o.seed)), ty=H*.5+Math.sin(o.ang+o.seed)*orbitR*0.6;
+      const dxc=hx-tx,dyc=hy-ty,dc=Math.hypot(dxc,dyc); if(dc<160){tx+=dxc*.15;ty+=dyc*.15;}
+      o.x+=(tx-o.x)*.04; o.y+=(ty-o.y)*.04;
+      const d=Math.hypot(hx-o.x,hy-o.y), near=d<o.baseR+34;
+      if(near&&(!hover||d<hover.d)) hover={o,d};
+      const pulse=.5+.5*Math.sin(t*.03+o.ph), a=near?.5:.28+.12*pulse;
+      glow(o.x,o.y,o.baseR*2.4,o.c,a);
+      g.fillStyle=`rgba(${o.c[0]},${o.c[1]},${o.c[2]},${near?1:.8})`; g.beginPath();g.arc(o.x,o.y,o.baseR*(near?.5:.4),0,6.28);g.fill();
+      g.fillStyle='rgba(240,250,255,.9)';g.beginPath();g.arc(o.x,o.y,3,0,6.28);g.fill();
+      g.strokeStyle=`rgba(${o.c[0]},${o.c[1]},${o.c[2]},${near?.25:.06})`;g.lineWidth=1;g.beginPath();g.moveTo(cxp,cyp);g.lineTo(o.x,o.y);g.stroke();
+    });
+    if(hover){ g.globalCompositeOperation='source-over'; g.textAlign='center'; g.font="400 13px 'Syncopate'";
+      g.fillStyle='rgba(235,248,255,.95)'; g.fillText(hover.o.p.title.toUpperCase(), hover.o.x, hover.o.y - hover.o.baseR - 18);
+      g.font="300 11px 'Work Sans'"; g.fillStyle='rgba(180,225,255,.7)'; g.fillText(hover.o.p.cat+' · '+hover.o.p.year, hover.o.x, hover.o.y - hover.o.baseR - 2); g.globalCompositeOperation='lighter'; }
+    glow(hx,hy,70,[160,225,255],.08);
+    g.globalCompositeOperation='source-over';
+    document.hidden?setTimeout(frame,180):requestAnimationFrame(frame);
+  }
+  addEventListener('pointerdown',()=>{ if(hover) openBubble(hover.o.p); });
+  function openBubble(p){ const c=rc(p); const b=document.getElementById('bubble');
+    b.innerHTML=`<div class="scrim"></div><div class="card" style="--rc:rgb(${c[0]},${c[1]},${c[2]})"><div class="meta">◎ ${p.cat} · ${p.year} · ${p.role}</div><h2>${p.title}</h2><p>${p.blurb}</p><div class="x">click anywhere to release</div></div>`;
+    requestAnimationFrame(()=>b.classList.add('open')); document.getElementById('intro').classList.add('dim'); }
+  document.getElementById('bubble').addEventListener('click',()=>{ document.getElementById('bubble').classList.remove('open'); document.getElementById('intro').classList.remove('dim'); });
+  frame();
+</script>
+</body>
+</html>
