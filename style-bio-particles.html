@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bio · Particles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--dim:rgba(223,242,251,.55);--gold:#e8c074;--head:'Syncopate',sans-serif;--body:'Work Sans',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--body);color:#dff2fb;cursor:none;background:radial-gradient(120% 100% at 50% 40%,#06141f 0%,#02080e 55%,#010406 100%)}
+  #c{position:fixed;inset:0;z-index:1}
+  .tag,.back{position:fixed;top:18px;z-index:40;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:rgba(180,230,255,.85);text-transform:uppercase;background:rgba(4,14,22,.45);border:1px solid rgba(150,210,240,.18);padding:7px 12px;border-radius:18px;backdrop-filter:blur(4px)}
+  .tag{left:18px}.back{right:18px;color:var(--dim)}
+  .lower{position:fixed;left:0;right:0;bottom:40px;z-index:10;text-align:center;pointer-events:none}
+  .lower .e{font-family:var(--head);font-size:.5rem;letter-spacing:5px;color:var(--gold);text-transform:uppercase}
+  .lower .s{font-style:italic;color:#bfe3ff;margin-top:10px;font-size:1.05rem;opacity:.8}
+  .menu{position:fixed;left:0;right:0;bottom:96px;z-index:10;display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+  .menu button{pointer-events:auto;font-family:var(--head);font-size:.5rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;background:none;border:none;cursor:pointer;transition:.3s;padding:6px}
+  .menu button:hover,.menu button.on{color:#9fe6ff;text-shadow:0 0 14px rgba(127,227,255,.6)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="tag">✶ Bio · Particles</div><a class="back" href="./styles.html">↑ Style chooser</a>
+<div class="menu" id="menu"></div>
+<div class="lower"><div class="e">Game &amp; Technical Designer</div><div class="s">the water remembers its shape</div></div>
+<script>
+  const cv=document.getElementById('c'),g=cv.getContext('2d');let W,H,t=0,mx=-999,my=-999;
+  const off=document.createElement('canvas'),og=off.getContext('2d');
+  const N=1500,ps=[];const COLS=[[127,227,255],[125,255,208],[180,235,255],[160,210,255]];
+  function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;off.width=W;off.height=H;build();}
+  function init(){ps.length=0;for(let i=0;i<N;i++)ps.push({x:Math.random()*W,y:Math.random()*H,vx:0,vy:0,tx:null,ty:null,c:COLS[i%COLS.length],r:.6+Math.random()*1.4});}
+  // sample target points from text/shape into the offscreen canvas
+  let targets=[];
+  function sampleText(txt,size){og.clearRect(0,0,W,H);og.fillStyle='#fff';og.textAlign='center';og.textBaseline='middle';og.font=`700 ${size}px 'Syncopate'`;
+    if(Array.isArray(txt)){txt.forEach((l,i)=>og.fillText(l,W/2,H/2+(i-(txt.length-1)/2)*size*1.15));}else og.fillText(txt,W/2,H/2);
+    const d=og.getImageData(0,0,W,H).data,pts=[];for(let y=0;y<H;y+=5)for(let x=0;x<W;x+=5){if(d[(y*W+x)*4+3]>128)pts.push([x,y]);}return pts;}
+  function ring(){const pts=[],cx=W/2,cy=H/2,R=Math.min(W,H)*.3;for(let k=0;k<4;k++){const rr=R*(.4+k*.2);for(let a=0;a<6.28;a+=6.28/ (60+k*20))pts.push([cx+Math.cos(a)*rr,cy+Math.sin(a)*rr]);}for(let k=0;k<24;k++){const a=k/24*6.28;for(let r=R*.4;r<R;r+=8)pts.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);}return pts;}
+  let mode='flow';
+  function setTargets(pts){targets=pts;if(!pts){ps.forEach(p=>{p.tx=null;p.ty=null;});return;}for(let i=0;i<N;i++){const tp=pts[i%pts.length];ps[i].tx=tp[0]+(Math.random()-.5)*4;ps[i].ty=tp[1]+(Math.random()-.5)*4;}}
+  function build(){}
+  const MODES=[{k:'NAME',f:()=>setTargets(sampleText(['GIUSEPPE','ALFIERI'],Math.min(W*.11,150)))},{k:'SPECIMEN',f:()=>setTargets(ring())},{k:'FLOW',f:()=>setTargets(null)}];
+  function frame(){if(W!==innerWidth||H!==innerHeight)rs();t++;
+    g.fillStyle='rgba(2,7,12,.16)';g.fillRect(0,0,W,H);g.globalCompositeOperation='lighter';
+    for(const p of ps){
+      if(p.tx!=null){const dx=p.tx-p.x,dy=p.ty-p.y;p.vx+=dx*.012;p.vy+=dy*.012;p.vx*=.86;p.vy*=.86;}
+      else{const a=Math.sin(p.y*.004+t*.01)*1.4+Math.cos(p.x*.004-t*.008)*1.4;p.vx+=Math.cos(a)*.12;p.vy+=Math.sin(a)*.12+.02;p.vx*=.95;p.vy*=.95;}
+      // cursor disturbs the water
+      const dxm=p.x-mx,dym=p.y-my,dm=Math.hypot(dxm,dym);if(dm<110){const f=(1-dm/110)*1.8;p.vx+=dxm/dm*f;p.vy+=dym/dm*f;}
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.tx==null){if(p.x<-5)p.x=W+5;else if(p.x>W+5)p.x=-5;if(p.y>H+5)p.y=-5;else if(p.y<-5)p.y=H+5;}
+      const sp=Math.hypot(p.vx,p.vy),a=.25+Math.min(.55,sp*.18);
+      const gr=g.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);gr.addColorStop(0,`rgba(${p.c[0]},${p.c[1]},${p.c[2]},${a})`);gr.addColorStop(1,`rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);g.fillStyle=gr;g.beginPath();g.arc(p.x,p.y,p.r*4,0,6.28);g.fill();
+      g.fillStyle=`rgba(240,250,255,${a*.9})`;g.beginPath();g.arc(p.x,p.y,p.r,0,6.28);g.fill();
+    }
+    g.globalCompositeOperation='source-over';document.hidden?setTimeout(frame,160):requestAnimationFrame(frame);}
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  addEventListener('resize',rs);
+  document.getElementById('menu').innerHTML=MODES.map((m,i)=>`<button data-i="${i}" class="${i===0?'on':''}">${m.k}</button>`).join('');
+  document.querySelectorAll('#menu button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#menu button').forEach(x=>x.classList.toggle('on',x===b));MODES[+b.dataset.i].f();});
+  rs();init();MODES[0].f();frame();
+  // gentle auto-cycle so it's alive on its own
+  let mi=0;setInterval(()=>{mi=(mi+1)%MODES.length;const btns=document.querySelectorAll('#menu button');btns.forEach((x,k)=>x.classList.toggle('on',k===mi));MODES[mi].f();},7000);
+</script>
+</body>
+</html>
