@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bio · Sonar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#dff2ea;--dim:rgba(223,242,234,.55);--son:#6ff0c0;--son2:#7fe3ff;--gold:#e8c074;--head:'Syncopate',sans-serif;--body:'Work Sans',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--body);color:var(--ink);cursor:crosshair;background:radial-gradient(120% 100% at 50% 50%,#04130f 0%,#02090b 60%,#010406 100%)}
+  #c{position:fixed;inset:0;z-index:1}
+  .tag,.back{position:fixed;top:18px;z-index:40;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--son);text-transform:uppercase;background:rgba(4,16,14,.5);border:1px solid rgba(111,240,192,.2);padding:7px 12px;border-radius:3px}
+  .tag{left:18px}.back{right:18px;color:var(--dim)}
+  /* identity, top-left, terminal style */
+  .id{position:fixed;left:42px;top:64px;z-index:10;max-width:300px}
+  .id .e{font-family:var(--head);font-size:.5rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+  .id .n{font-family:var(--head);font-weight:700;font-size:1.7rem;letter-spacing:1px;line-height:1.1;color:#eafff7;text-shadow:0 0 30px rgba(111,240,192,.4)}
+  .id .s{font-size:.85rem;color:var(--dim);line-height:1.6;margin-top:12px}
+  .readout{position:fixed;right:42px;top:50%;transform:translateY(-50%);z-index:10;width:min(320px,80vw);border:1px solid rgba(111,240,192,.25);border-radius:4px;
+    background:linear-gradient(160deg,rgba(8,28,24,.5),rgba(2,10,9,.6));backdrop-filter:blur(7px);padding:24px 26px}
+  .readout .rh{font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--son);text-transform:uppercase;margin-bottom:14px;display:flex;justify-content:space-between}
+  .readout .rt{font-family:var(--head);font-size:1.05rem;letter-spacing:.5px;color:#eafff7;margin-bottom:6px}
+  .readout .rm{font-family:var(--head);font-size:.46rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+  .readout .rb{font-size:.88rem;line-height:1.65;color:var(--dim)}
+  .readout .rx{margin-top:16px;font-family:var(--head);font-size:.46rem;letter-spacing:2px;color:var(--son);text-transform:uppercase}
+  .hint{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:10;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="tag">◌ Bio · Sonar</div><a class="back" href="./styles.html">↑ Style chooser</a>
+<div class="id"><div class="e">◎ Contact Operator</div><div class="n">Giuseppe<br>Alfieri</div><div class="s">Game &amp; technical designer. Six contacts on the scope. Wait for the sweep, or click a blip to resolve it.</div></div>
+<div class="readout" id="ro"><div class="rh"><span>◎ Contact</span><span id="rc">—</span></div><div class="rt" id="rt">Awaiting selection</div><div class="rm" id="rm">—</div><div class="rb" id="rb">Click a blip on the scope, or let the sweep pass over one.</div><div class="rx" id="rx"></div></div>
+<div class="hint">the sweep reveals · click to resolve</div>
+<script src="./mock-data.js"></script>
+<script>
+  const COL={'Game Designer':[127,227,255],'Technical Game Designer':[255,210,122],'Leadership':[230,168,255],'Game Programmer':[125,255,208]};
+  const rc=r=>COL[r]||[111,240,192];
+  const cv=document.getElementById('c'),g=cv.getContext('2d');let W,H,t=0,sweep=0,mx=-9,my=-9;
+  // plot contacts: angle by index, radius by recency (newer = closer to centre)
+  const yrs=DATA.map(p=>p.year),ymin=Math.min(...yrs),ymax=Math.max(...yrs);
+  const contacts=DATA.map((p,i)=>({p,c:rc(p.role),ang:-Math.PI/2+i/DATA.length*6.28+0.3,rr:0.42+0.5*(1-(p.year-ymin)/((ymax-ymin)||1)),lit:0,x:0,y:0}));
+  function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;}addEventListener('resize',rs);rs();
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  let sel=null;
+  addEventListener('pointerdown',e=>{let best=null,bd=40;contacts.forEach(o=>{const d=Math.hypot(e.clientX-o.x,e.clientY-o.y);if(d<bd){bd=d;best=o;}});if(best)resolve(best);});
+  function resolve(o){sel=o;o.lit=1;const p=o.p;document.getElementById('rc').textContent='0'+(contacts.indexOf(o)+1);document.getElementById('rt').textContent=p.title;
+    const rm=document.getElementById('rm');rm.textContent=`${p.cat} · ${p.year} · ${p.role}`;rm.style.color=`rgb(${o.c[0]},${o.c[1]},${o.c[2]})`;
+    document.getElementById('rb').textContent=p.blurb;document.getElementById('rx').textContent='◎ bearing '+Math.round((o.ang+Math.PI/2)*57.3)+'° · range '+Math.round(o.rr*100);
+    const ro=document.getElementById('ro');ro.style.borderColor=`rgba(${o.c[0]},${o.c[1]},${o.c[2]},.5)`;ro.style.boxShadow=`0 0 40px rgba(${o.c[0]},${o.c[1]},${o.c[2]},.12)`;}
+  const S=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`,SON=[111,240,192];
+  function frame(){t++;sweep+=0.012;const cx=W/2,cy=H/2,Rm=Math.min(W,H)*0.42;
+    g.fillStyle='rgba(2,9,11,.18)';g.fillRect(0,0,W,H);g.globalCompositeOperation='lighter';
+    // range rings (contour) + bearing spokes
+    g.lineWidth=1;for(let k=1;k<=5;k++){g.strokeStyle=S(SON,.08);g.beginPath();g.arc(cx,cy,Rm*k/5,0,6.28);g.stroke();}
+    for(let k=0;k<12;k++){const a=k/12*6.28;g.strokeStyle=S(SON,.05);g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(a)*Rm,cy+Math.sin(a)*Rm);g.stroke();}
+    // faint topographic contour noise
+    for(let k=0;k<3;k++){g.strokeStyle=S(SON,.04);g.beginPath();for(let a=0;a<6.3;a+=.12){const r=Rm*(.3+k*.22)+Math.sin(a*4+t*.01+k)*12;const x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;a===0?g.moveTo(x,y):g.lineTo(x,y);}g.closePath();g.stroke();}
+    // sweep beam
+    const sa=sweep%(6.28);const grd=g.createConicGradient?null:null;
+    g.save();g.translate(cx,cy);g.rotate(sa);const lg=g.createLinearGradient(0,0,Rm,0);lg.addColorStop(0,S(SON,.25));lg.addColorStop(1,S(SON,0));
+    for(let w=0;w<0.5;w+=0.06){g.strokeStyle=lg;g.globalAlpha=1-w*1.6;g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(-w)*Rm,Math.sin(-w)*Rm);g.stroke();}g.globalAlpha=1;g.restore();
+    // contacts
+    contacts.forEach(o=>{o.x=cx+Math.cos(o.ang)*Rm*o.rr;o.y=cy+Math.sin(o.ang)*Rm*o.rr;
+      let da=((o.ang-sa)%6.28+6.28)%6.28;if(da<0.12)o.lit=1;o.lit*=0.965;
+      const hov=Math.hypot(mx-o.x,my-o.y)<26;const k=Math.max(o.lit,hov?.7:.18,sel===o?.5:0);
+      let gr=g.createRadialGradient(o.x,o.y,0,o.x,o.y,26);gr.addColorStop(0,S(o.c,.5*k));gr.addColorStop(1,S(o.c,0));g.fillStyle=gr;g.beginPath();g.arc(o.x,o.y,26,0,6.28);g.fill();
+      g.fillStyle=`rgba(245,255,251,${.5+.5*k})`;g.beginPath();g.arc(o.x,o.y,2.4,0,6.28);g.fill();
+      if(sel===o){g.strokeStyle=S(o.c,.6);g.lineWidth=1;g.beginPath();g.arc(o.x,o.y,12,0,6.28);g.stroke();}
+      if(k>.35){g.globalCompositeOperation='source-over';g.textAlign='center';g.font="400 9px 'Syncopate'";g.fillStyle=`rgba(223,255,244,${k})`;g.fillText(o.p.title.toUpperCase(),o.x,o.y-18);g.globalCompositeOperation='lighter';}});
+    // centre
+    g.fillStyle=S([245,255,251],.8);g.beginPath();g.arc(cx,cy,3,0,6.28);g.fill();
+    g.globalCompositeOperation='source-over';document.hidden?setTimeout(frame,180):requestAnimationFrame(frame);}
+  frame();
+</script>
+</body>
+</html>
