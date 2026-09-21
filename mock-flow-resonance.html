@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK · Flow · Resonance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  /* ============================================================
+     CREATIVE 1 — "FLOW · RESONANCE"
+     Explores the dimension none of the other mocks touch: flOw's
+     dynamic audio. Austin Wintory's score responds to the player.
+     Here the sea HUMS. A generative ambient drone (Web Audio API).
+     The bioluminescence pulses with the audio frequencies.
+     - Hold the mouse down to SING: your pressure raises the pitch
+       and the water brightens. Release and it settles back to a
+       low drone. The creature IS the sound wave.
+     - A ring of harmonic partials orbits the cursor. Each partial
+       is a small resonant dot at a different interval of the base
+       frequency. Together they shimmer like a vibrating string.
+     - Tap to ping: a sonar ring propagates outward, and distant
+       content echoes back (lights up faintly, then fades).
+     - The whole field is a spectrum analyzer made of plankton:
+       their brightness tracks the live audio waveform.
+     This is a chaotic experiment to find new elements, not a
+     portfolio. Throwaway concept code.
+     ============================================================ */
+  html,body{height:100%;overflow:hidden;cursor:none;user-select:none}
+  body{background:var(--abyss)}
+
+  canvas#res{position:fixed;inset:0;z-index:5;width:100%;height:100%;display:block}
+
+  /* the only chrome: a frequency whisper */
+  .whisper{position:fixed;bottom:22px;left:24px;z-index:30;font-family:var(--head);
+    font-size:.5rem;letter-spacing:3px;color:var(--lum-soft);text-transform:uppercase;
+    opacity:.5;pointer-events:none;transition:.4s}
+  .whisper b{color:var(--lum);font-weight:700;text-shadow:0 0 10px rgba(180,230,255,.6)}
+  .whisper.singing{opacity:1}
+
+  .hint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30;font-family:var(--head);
+    font-size:.46rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;opacity:0;
+    transition:1s;pointer-events:none}
+  .hint.show{opacity:.55}
+
+  /* faint resonant title that shimmers with the audio — a mood piece marker */
+  .marker{position:fixed;left:50%;top:14%;transform:translateX(-50%);z-index:6;text-align:center;
+    pointer-events:none;mix-blend-mode:screen}
+  .marker .mname{font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:-1px;
+    color:var(--lum-bright);font-size:clamp(2rem,6vw,3.4rem);line-height:1.05;
+    text-shadow:0 0 30px rgba(180,230,255,.3);opacity:.4;transition:opacity .4s}
+  .marker .msub{font-family:var(--head);font-size:.5rem;letter-spacing:5px;color:var(--lum);
+    text-transform:uppercase;margin-top:10px;opacity:.3}
+  .marker.singing .mname,.marker.singing .msub{opacity:.85}
+
+  /* audio toggle — must exist so browser permits audio (gesture) */
+  .enable{position:fixed;left:50%;top:50%;transform:translateX(-50%);z-index:40;
+    font-family:var(--head);font-size:.5rem;letter-spacing:3px;text-transform:uppercase;
+    color:var(--lum);background:rgba(3,9,13,.7);border:1px solid var(--lum-faint);
+    padding:16px 28px;border-radius:24px;cursor:none;transition:.4s;backdrop-filter:blur(6px)}
+  .enable:hover{border-color:var(--lum);box-shadow:0 0 26px rgba(180,230,255,.3)}
+  .enable.gone{opacity:0;pointer-events:none}
+
+  @media(pointer:coarse){ html,body{cursor:auto} .enable{cursor:pointer} }
+  @media(prefers-reduced-motion:reduce){ .marker,.whisper{transition:none} }
+</style>
+</head>
+<body>
+<canvas id="res"></canvas>
+<div class="depth-fog" style="opacity:.14"></div>
+<div class="vignette"></div>
+
+<div class="mock-tag">★ Flow · Resonance</div>
+<a class="mock-back" href="./mock.html">↑ All mockups</a>
+
+<div class="marker" id="marker">
+  <div class="mname">Resonance</div>
+  <div class="msub">a sea that hums</div>
+</div>
+
+<button class="enable" id="enable">◎ ATTUNE · enable sound</button>
+<div class="whisper" id="whisper">FREQ <b id="freqNum">120</b> HZ · <b id="gainNum">--</b> dB</div>
+<div class="hint" id="hint">hold to sing · tap to ping</div>
+
+<script>
+  /* ============================================================
+     RESONANCE — generative ambient drone + audio-reactive visuals.
+     No shared mock-data; this is a pure mood piece. Web Audio only.
+     ============================================================ */
+  const cv = document.getElementById('res');
+  const g = cv.getContext('2d');
+  let W,H, mx=innerWidth/2, my=innerHeight/2, t=0;
+  function resize(){ W=cv.width=innerWidth; H=cv.height=innerHeight; }
+  addEventListener('resize',resize); resize();
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  addEventListener('touchmove',e=>{if(e.touches[0]){mx=e.touches[0].clientX;my=e.touches[0].clientY;}},{passive:true});
+
+  /* ---------- audio ---------- */
+  let actx=null, drone=null, gain=null, analyser=null, data=null, partials=[];
+  let singing=false, baseFreq=120, targetGain=0.06, curGain=0.06;
+  const reduceMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function attune(){
+    if(actx) return;
+    actx = new (window.AudioContext||window.webkitAudioContext)();
+    // master chain: drone -> gain -> analyser -> destination
+    gain = actx.createGain(); gain.gain.value = 0.06;
+    analyser = actx.createAnalyser(); analyser.fftSize = 256; data = new Uint8Array(analyser.frequencyBinCount);
+    gain.connect(analyser); analyser.connect(actx.destination);
+
+    // base drone: two slightly detuned oscillators for warmth
+    drone = actx.createOscillator(); drone.type='sine'; drone.frequency.value=baseFreq;
+    const drone2 = actx.createOscillator(); drone2.type='sine'; drone2.frequency.value=baseFreq*1.005;
+    const dg = actx.createGain(); dg.gain.value=0.5;
+    drone.connect(dg); drone2.connect(dg); dg.connect(gain);
+    drone.start(); drone2.start();
+
+    // harmonic partials orbiting (visual + faint audio)
+    const intervals = [1.5, 2, 2.5, 3, 4, 0.75];  // a loose just-intonation cluster
+    partials = intervals.map((iv,i)=>{
+      const o = actx.createOscillator(); o.type='sine'; o.frequency.value = baseFreq*iv;
+      const pg = actx.createGain(); pg.gain.value = 0.04 + (i%2)*0.02;
+      o.connect(pg); pg.connect(gain); o.start();
+      return { osc:o, gain:pg, iv, phase: i*0.6, vol: 0.04 + (i%2)*0.02 };
+    });
+
+    document.getElementById('enable').classList.add('gone');
+    document.getElementById('hint').classList.add('show');
+    setTimeout(()=>document.getElementById('hint').classList.remove('show'), 5000);
+  }
+  document.getElementById('enable').addEventListener('click', attune);
+
+  /* sing: hold to raise pitch + brighten */
+  function startSing(){
+    if(!actx) return;
+    singing=true;
+    if(actx.state==='suspended') actx.resume();
+    targetGain = 0.14;
+    document.getElementById('marker').classList.add('singing');
+    document.getElementById('whisper').classList.add('singing');
+  }
+  function stopSing(){
+    singing=false;
+    targetGain = 0.06;
+    // ease base back down
+    document.getElementById('marker').classList.remove('singing');
+    document.getElementById('whisper').classList.remove('singing');
+  }
+  addEventListener('mousedown', startSing);
+  addEventListener('mouseup', stopSing);
+  addEventListener('touchstart', startSing, {passive:true});
+  addEventListener('touchend', stopSing);
+
+  // pitch follows the cursor Y (up = higher), smoothed
+  function updateAudio(){
+    if(!actx) return;
+    // target freq from cursor height
+    const targetFreq = 80 + (1 - my/H) * 320;   // 80..400 Hz
+    baseFreq += (targetFreq - baseFreq) * 0.04;
+    drone.frequency.setTargetAtTime(baseFreq, actx.currentTime, 0.1);
+    // partials follow with their intervals
+    partials.forEach(p=> p.osc.frequency.setTargetAtTime(baseFreq*p.iv, actx.currentTime, 0.1));
+    // gain smoothing
+    curGain += (targetGain - curGain) * 0.08;
+    gain.gain.setTargetAtTime(singing ? curGain*1.4 : curGain, actx.currentTime, 0.1);
+    // tremolo while singing
+    if(singing){
+      const trem = 1 + 0.18*Math.sin(t*0.12);
+      gain.gain.setTargetAtTime(curGain*trem, actx.currentTime, 0.02);
+    }
+    // readout
+    document.getElementById('freqNum').textContent = Math.round(baseFreq);
+    document.getElementById('gainNum').textContent = singing ? '-9' : '-22';
+  }
+
+  /* tap to ping */
+  const pings = [];
+  addEventListener('click', e=>{
+    if(!actx) return;
+    // a short high ping that decays
+    const o = actx.createOscillator(); o.type='sine';
+    o.frequency.value = baseFreq * 4;
+    const og = actx.createGain(); og.gain.value = 0.0001;
+    o.connect(og); og.connect(analyser); o.start();
+    og.gain.exponentialRampToValueAtTime(0.12, actx.currentTime+0.01);
+    og.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime+0.9);
+    o.stop(actx.currentTime+1);
+    // visual ring
+    pings.push({ x:e.clientX, y:e.clientY, r:0, life:120 });
+  });
+
+  /* ---------- plankton: brightness tracks the audio spectrum ---------- */
+  const plankton = [];
+  function seedPlankton(){
+    plankton.length=0;
+    const N = Math.min(220, Math.round(W*H/16000));
+    for(let i=0;i<N;i++) plankton.push({
+      x:Math.random()*W, y:Math.random()*H, z:Math.random(),
+      r:0.6+Math.random()*1.8, ph:Math.random()*6.28,
+      vy:-0.04-Math.random()*0.2, vx:-0.04+Math.random()*0.08,
+      bin: Math.floor(Math.random()*48)  // which spectrum bin drives it
+    });
+  }
+  seedPlankton();
+
+  function frame(){
+    if(W!==innerWidth||H!==innerHeight){resize();seedPlankton();}
+    t++;
+    updateAudio();
+    if(analyser) analyser.getByteFrequencyData(data);
+
+    g.clearRect(0,0,W,H);
+    g.globalCompositeOperation='lighter';
+
+    // spectrum bar at the bottom — a bioluminescent equalizer
+    if(data){
+      const bins = data.length;
+      const bw = W/bins;
+      for(let i=0;i<bins;i++){
+        const v = data[i]/255;
+        const a = v*0.5;
+        g.fillStyle = `rgba(180,230,255,${a})`;
+        const bh = v * H * 0.18;
+        g.fillRect(i*bw, H-bh, bw*0.7, bh);
+      }
+    }
+
+    // plankton driven by their assigned bin (or ambient if no audio)
+    for(const p of plankton){
+      p.x += p.vx*(0.4+p.z); p.y += p.vy*(0.4+p.z);
+      if(p.y < -14){ p.y = H+14; p.x = Math.random()*W; }
+      if(p.x < -14) p.x = W+14; else if(p.x > W+14) p.x = -14;
+      let amp = 0.4;
+      if(data && p.bin < data.length){ amp = 0.3 + (data[p.bin]/255)*0.7; }
+      const tw = amp * (0.5 + 0.5*Math.sin(t*0.03 + p.ph));
+      g.fillStyle = `rgba(180,230,255,${(0.06+0.4*p.z)*tw})`;
+      g.beginPath(); g.arc(p.x, p.y, p.r*(0.6+p.z), 0, 6.2832); g.fill();
+    }
+
+    // pings — propagating sonar rings
+    for(let i=pings.length-1;i>=0;i--){
+      const p = pings[i]; p.r += 4; p.life--;
+      if(p.life<=0){ pings.splice(i,1); continue; }
+      const a = (p.life/120) * 0.5;
+      g.strokeStyle = `rgba(180,230,255,${a})`;
+      g.lineWidth = 1.5;
+      g.beginPath(); g.arc(p.x, p.y, p.r, 0, 6.2832); g.stroke();
+      g.strokeStyle = `rgba(180,230,255,${a*0.4})`;
+      g.beginPath(); g.arc(p.x, p.y, p.r*0.6, 0, 6.2832); g.stroke();
+    }
+
+    // the cursor = a vibrating string node with harmonic partials orbiting
+    // base node glows brighter while singing
+    const sang = singing ? 0.9 : 0.5;
+    const cr = 70 + (singing ? 30 : 0);
+    const grd = g.createRadialGradient(mx,my,0,mx,my,cr);
+    grd.addColorStop(0, `rgba(180,230,255,${0.18*sang})`);
+    grd.addColorStop(1, 'rgba(180,230,255,0)');
+    g.fillStyle = grd; g.beginPath(); g.arc(mx,my,cr,0,6.2832); g.fill();
+
+    // harmonic partials orbiting — each at a different interval, shimmering
+    if(partials.length){
+      partials.forEach((p,i)=>{
+        const orbit = 38 + i*9;
+        const a = -Math.PI/2 + i/partials.length*Math.PI*2 + t*0.011*Math.sign(1 - i%2);
+        const px = mx + Math.cos(a)*orbit, py = my + Math.sin(a)*orbit;
+        const shim = 0.5 + 0.5*Math.sin(t*0.06 + p.phase);
+        const amp = singing ? 0.85 : 0.4;
+        g.fillStyle = `rgba(180,230,255,${amp*shim})`;
+        g.beginPath(); g.arc(px, py, 2 + (singing?1:0), 0, 6.2832); g.fill();
+        // faint connecting filament to the core
+        g.strokeStyle = `rgba(180,230,255,${0.06*shim})`;
+        g.lineWidth = 1;
+        g.beginPath(); g.moveTo(mx,my); g.lineTo(px,py); g.stroke();
+        // outer ring of the partial
+        g.strokeStyle = `rgba(180,230,255,${0.12*shim})`;
+        g.beginPath(); g.arc(px,py, 6 + (singing?2:0), 0, 6.2832); g.stroke();
+      });
+    }
+    // core dot
+    g.fillStyle = `rgba(223,244,255,${sang})`;
+    g.beginPath(); g.arc(mx,my, 3 + (singing?1:0), 0, 6.2832); g.fill();
+
+    // godrays that sway; brightness modulated by singing
+    const rayA = singing ? 0.14 : 0.08;
+    for(let i=0;i<5;i++){
+      const x = W*(0.15 + i*0.18) + Math.sin(t*0.003+i)*40;
+      const rg = g.createLinearGradient(x,0,x,H*0.7);
+      rg.addColorStop(0, `rgba(180,230,255,${rayA})`);
+      rg.addColorStop(1, 'rgba(180,230,255,0)');
+      g.fillStyle = rg;
+      g.beginPath();
+      g.moveTo(x-40,0); g.lineTo(x+40,0); g.lineTo(x+12,H*0.7); g.lineTo(x-12,H*0.7); g.closePath(); g.fill();
+    }
+
+    g.globalCompositeOperation = 'source-over';
+    if(reduceMotion){ setTimeout(frame, 120); }
+    else document.hidden ? setTimeout(frame,220) : requestAnimationFrame(frame);
+  }
+  frame();
+</script>
+</body>
+</html>

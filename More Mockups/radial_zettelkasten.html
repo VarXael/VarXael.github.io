@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Graph | Obsidian OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #01040f; color: #fff;
+            font-family: 'Inter', sans-serif; overflow: hidden;
+            display: flex;
+        }
+
+        canvas { position: absolute; top: 0; left: 0; z-index: 0; }
+
+        .panel {
+            width: 320px; height: 100vh;
+            background: rgba(1, 4, 15, 0.7);
+            backdrop-filter: blur(15px); border-right: 1px solid rgba(170, 221, 255, 0.1);
+            z-index: 10; padding: 2rem; display: flex; flex-direction: column;
+        }
+
+        .panel-right {
+            border-right: none; border-left: 1px solid rgba(170, 221, 255, 0.1);
+            margin-left: auto; width: 400px;
+        }
+
+        .header {
+            font-family: 'Jura', sans-serif; font-size: 1.2rem; letter-spacing: 2px;
+            color: #aaddff; border-bottom: 1px solid rgba(170, 221, 255, 0.2);
+            padding-bottom: 10px; margin-bottom: 20px;
+        }
+
+        .file-item {
+            padding: 8px 0; font-size: 0.85rem; color: #88aadd;
+            cursor: pointer; display: flex; align-items: center; gap: 10px;
+        }
+        .file-item::before { content: '○'; font-size: 0.6rem; }
+        .file-item:hover, .file-item.active { color: #fff; }
+        .file-item.active::before { content: '●'; color: #aaddff; }
+
+        .markdown-content h1 { font-family: 'Jura', sans-serif; font-size: 2rem; margin-bottom: 1rem; }
+        .markdown-content p { font-size: 0.9rem; line-height: 1.7; color: #aaddff; opacity: 0.8; margin-bottom: 1rem; }
+        
+        .tag {
+            display: inline-block; padding: 4px 10px; border-radius: 20px;
+            border: 1px solid rgba(170, 221, 255, 0.3); font-size: 0.7rem;
+            margin-right: 5px; color: #aaddff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="local-graph"></canvas>
+
+    <div class="panel">
+        <div class="header">DIRECTORY</div>
+        <div class="file-item">Concept: Fluid Dynamics</div>
+        <div class="file-item active">fl0w Mechanics</div>
+        <div class="file-item">Mathematical Beauty</div>
+        <div class="file-item">Bezier Rendering Techniques</div>
+        <div class="file-item">Micro-geometric UI</div>
+    </div>
+
+    <div class="panel panel-right">
+        <div class="header">LOCAL GRAPH VIEW</div>
+        <div class="markdown-content" style="margin-top: auto; margin-bottom: auto;">
+            <h1>fl0w Mechanics</h1>
+            <div>
+                <span class="tag">#game-design</span>
+                <span class="tag">#simulation</span>
+            </div>
+            <br>
+            <p>The core concept revolves around mapping organic movement not through rigid skeletal animation, but through mathematical arrays preserving historical coordinate data.</p>
+            <p>By applying a high friction coefficient and drawing bezier curves through the historical points, we simulate a high-viscosity fluid environment.</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('local-graph');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let time = 0;
+        const linkedNotes = 6; // Number of petals
+
+        function animate() {
+            ctx.fillStyle = '#01040f'; // Solid background to clear
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.003;
+            // Center the graph in the middle of the screen (between panels)
+            const cx = w / 2; 
+            const cy = h / 2;
+
+            let breath = Math.sin(time * 3) * 10;
+            let baseRadius = 200 + breath;
+
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(time);
+
+            // Active Note (Center Core)
+            ctx.shadowBlur = 30; ctx.shadowColor = '#aaddff';
+            ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff'; ctx.fill();
+
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(170, 221, 255, 0.2)';
+            ctx.beginPath(); ctx.arc(0, 0, 40, 0, Math.PI*2); ctx.stroke();
+
+            // Linked Notes (Petals)
+            for (let i = 0; i < linkedNotes; i++) {
+                let angle = (i * Math.PI * 2) / linkedNotes;
+                ctx.save();
+                ctx.rotate(angle);
+
+                // Petal link
+                ctx.beginPath(); ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(baseRadius * 0.5, baseRadius * 0.8, baseRadius * -0.5, baseRadius * 0.8, 0, baseRadius);
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.4)';
+                ctx.lineWidth = 1; ctx.stroke();
+
+                // Linked Note Node
+                ctx.beginPath(); ctx.arc(0, baseRadius, 10, 0, Math.PI*2);
+                ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+                
+                ctx.beginPath(); ctx.arc(0, baseRadius, 3, 0, Math.PI*2);
+                ctx.fillStyle = '#aaddff'; ctx.fill();
+
+                ctx.restore();
+            }
+
+            ctx.restore();
+
+            // Draw central label text fixed to center (not rotating)
+            ctx.font = "14px Inter";
+            ctx.fillStyle = "#fff";
+            ctx.textAlign = "center";
+            ctx.fillText("fl0w Mechanics", cx, cy - 35);
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

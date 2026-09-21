@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radial Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;400;600&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --abyss-deep: #000011;
+            --abyss-light: #001533;
+            --glow-white: #ffffff;
+            --glow-cyan: #aaddff;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, var(--abyss-light) 0%, var(--abyss-deep) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--glow-white);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+        }
+
+        .ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 3rem; box-sizing: border-box;
+        }
+
+        .brand-name {
+            font-family: 'Jura', sans-serif;
+            font-size: 2.5rem; font-weight: 300; letter-spacing: 0.3em;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            margin: 0; line-height: 1;
+        }
+
+        .brand-title {
+            font-size: 0.8rem; letter-spacing: 5px; color: var(--glow-cyan);
+            text-transform: uppercase; margin-top: 10px; opacity: 0.8;
+        }
+
+        .orb-label {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            font-family: 'Jura', sans-serif;
+            font-size: 0.85rem; letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #000, 0 0 20px #000;
+            pointer-events: auto; cursor: pointer;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        
+        .orb-label:hover {
+            color: var(--glow-cyan);
+            text-shadow: 0 0 15px var(--glow-cyan), 0 0 30px var(--glow-cyan);
+        }
+
+        .nav-footer {
+            display: flex; justify-content: flex-end; gap: 2rem; pointer-events: auto;
+        }
+        
+        .nav-link {
+            font-size: 0.75rem; letter-spacing: 2px; color: rgba(255,255,255,0.5);
+            text-decoration: none; transition: color 0.3s;
+        }
+        .nav-link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <canvas id="radial-canvas"></canvas>
+    
+    <div class="ui-layer">
+        <header>
+            <h1 class="brand-name">KIRA CHEN</h1>
+            <div class="brand-title">Creative Technologist</div>
+        </header>
+
+        <!-- Dynamic labels will be injected here by JS to follow the orbs -->
+        <div id="labels-container"></div>
+
+        <footer class="nav-footer">
+            <a href="#" class="nav-link">LINKEDIN</a>
+            <a href="#" class="nav-link">GITHUB</a>
+            <a href="#" class="nav-link">RESUME</a>
+        </footer>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('radial-canvas');
+        const ctx = canvas.getContext('2d');
+        const labelsContainer = document.getElementById('labels-container');
+        let w, h;
+
+        const categories = ["Projects", "About", "Experiments", "Archives", "Contact"];
+        const labels = [];
+
+        function initLabels() {
+            labelsContainer.innerHTML = '';
+            categories.forEach(cat => {
+                const el = document.createElement('div');
+                el.className = 'orb-label';
+                el.innerText = cat;
+                labelsContainer.appendChild(el);
+                labels.push(el);
+            });
+        }
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            if(labels.length === 0) initLabels();
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let time = 0;
+        let mouse = { x: w/2, y: h/2 };
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 17, 0.3)'; // Smooth trail clear
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.005;
+            const cx = w / 2;
+            const cy = h / 2;
+
+            let breath = Math.sin(time * 2) * 20;
+            let baseRadius = 250 + breath;
+
+            ctx.save();
+            ctx.translate(cx, cy);
+            
+            // Mouse parallax subtle rotation
+            let targetRotation = time * 0.5;
+            ctx.rotate(targetRotation);
+
+            // 1. Central Core
+            ctx.shadowBlur = 40;
+            ctx.shadowColor = '#ffffff';
+            ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff'; ctx.fill();
+
+            // Inner rings
+            ctx.shadowBlur = 10;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.arc(0, 0, 40 + breath*0.2, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([2, 6]);
+            ctx.beginPath(); ctx.arc(0, 0, 70 + breath*0.5, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 2. Petals and Orbs
+            const numPetals = categories.length;
+            for (let i = 0; i < numPetals; i++) {
+                let angle = (i * Math.PI * 2) / numPetals;
+                
+                ctx.save();
+                ctx.rotate(angle);
+
+                // Sweeping petal loop
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(baseRadius * 0.4, baseRadius * 0.9, baseRadius * -0.4, baseRadius * 0.9, 0, baseRadius);
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.3)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Distinct Orb at the end
+                ctx.beginPath(); ctx.arc(0, baseRadius, 15, 0, Math.PI*2);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'; ctx.stroke();
+                
+                ctx.beginPath(); ctx.arc(0, baseRadius, 6, 0, Math.PI*2);
+                ctx.fillStyle = '#fff'; ctx.fill();
+
+                // Calculate absolute position for HTML labels
+                // We need to account for both the individual rotation and the global rotation
+                let globalAngle = angle + targetRotation;
+                let absX = cx + Math.cos(globalAngle) * (baseRadius + 40);
+                let absY = cy + Math.sin(globalAngle) * (baseRadius + 40);
+                
+                // Update HTML label position
+                if(labels[i]) {
+                    labels[i].style.left = `${absX}px`;
+                    labels[i].style.top = `${absY}px`;
+                }
+
+                ctx.restore();
+            }
+
+            ctx.restore();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

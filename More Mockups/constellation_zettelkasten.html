@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Graph | Obsidian OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #000208;
+            font-family: 'Space Mono', monospace; color: #fff;
+            overflow: hidden;
+        }
+
+        canvas { position: fixed; top: 0; left: 0; z-index: 0; }
+
+        .toolbar {
+            position: absolute; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 2rem; display: flex; justify-content: space-between;
+            z-index: 10; pointer-events: none;
+            background: linear-gradient(to bottom, rgba(0,2,8,0.8), transparent);
+        }
+
+        .stat-box { pointer-events: auto; }
+        .stat-val { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .stat-label { font-size: 0.7rem; color: #4a7b8c; text-transform: uppercase; letter-spacing: 2px; }
+
+        .search-bar {
+            pointer-events: auto; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(170, 221, 255, 0.3); border-radius: 30px;
+            padding: 8px 20px; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+            color: #fff; width: 300px; backdrop-filter: blur(5px);
+        }
+
+        .controls {
+            position: absolute; bottom: 2rem; right: 2rem;
+            display: flex; gap: 10px; z-index: 10; pointer-events: auto;
+        }
+        .btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 1px solid rgba(170, 221, 255, 0.3); background: rgba(0,0,0,0.5);
+            color: #fff; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.2s; backdrop-filter: blur(5px);
+        }
+        .btn:hover { background: rgba(170, 221, 255, 0.2); }
+    </style>
+</head>
+<body>
+    <canvas id="global-graph"></canvas>
+
+    <div class="toolbar">
+        <div class="stat-box">
+            <div class="stat-val">1,402</div>
+            <div class="stat-label">TOTAL NODES</div>
+        </div>
+        <input type="text" class="search-bar" placeholder="Search the abyss...">
+        <div class="stat-box" style="text-align: right;">
+            <div class="stat-val" style="color: #66aaff">4,891</div>
+            <div class="stat-label">CONNECTIONS</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="btn">+</div>
+        <div class="btn">-</div>
+        <div class="btn">⌖</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('global-graph');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class ZettelNode {
+            constructor() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.vx = (Math.random() - 0.5) * 0.1; // Very slow drift
+                this.vy = (Math.random() - 0.5) * 0.1;
+                // Size varies based on "importance" / number of links
+                this.importance = Math.random();
+                this.radius = this.importance * 6 + 2; 
+                this.hasOuterRing = this.importance > 0.7; // Only big nodes get rings
+            }
+
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0) this.x = w; if(this.x > w) this.x = 0;
+                if(this.y < 0) this.y = h; if(this.y > h) this.y = 0;
+            }
+
+            draw() {
+                // Main dot
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+                ctx.fillStyle = this.importance > 0.9 ? '#aaddff' : '#ffffff';
+                ctx.fill();
+
+                if (this.hasOuterRing) {
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI*2);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                    ctx.lineWidth = 1; ctx.stroke();
+                }
+            }
+        }
+
+        // Generate 100 nodes for the global view
+        const nodes = Array.from({length: 100}, () => new ZettelNode());
+        let time = 0;
+
+        function animate() {
+            // Dark, slightly transparent clear to leave very faint motion trails
+            ctx.fillStyle = 'rgba(0, 2, 8, 0.5)';
+            ctx.fillRect(0, 0, w, h);
+            time += 0.005;
+
+            // Pan the camera slowly to simulate exploring the graph
+            ctx.save();
+            let panX = Math.sin(time) * 100;
+            let panY = Math.cos(time * 0.8) * 100;
+            ctx.translate(panX, panY);
+
+            for(let i = 0; i < nodes.length; i++) {
+                nodes[i].update();
+                
+                // Only connect a subset to keep it looking clean and deliberate
+                for(let j = i + 1; j < nodes.length; j += 3) { 
+                    let dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+
+                    // Connect if close enough
+                    if (dist < 180) {
+                        let opacity = (1 - (dist / 180)) * 0.4;
+                        ctx.strokeStyle = `rgba(170, 221, 255, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        
+                        // Control point creates the sweeping bezier look
+                        let cpX = (nodes[i].x + nodes[j].x)/2 + Math.sin(time*2 + i)*50;
+                        let cpY = (nodes[i].y + nodes[j].y)/2 + Math.cos(time*2 + j)*50;
+                        
+                        ctx.quadraticCurveTo(cpX, cpY, nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+
+                        // Add the fl0w aesthetic tiny ring on the curve occasionally
+                        if (i % 5 === 0) {
+                            let t = 0.5;
+                            let midX = (1-t)*(1-t)*nodes[i].x + 2*(1-t)*t*cpX + t*t*nodes[j].x;
+                            let midY = (1-t)*(1-t)*nodes[i].y + 2*(1-t)*t*cpY + t*t*nodes[j].y;
+                            
+                            ctx.beginPath(); ctx.arc(midX, midY, 2, 0, Math.PI*2);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 1.5})`; 
+                            ctx.stroke();
+                        }
+                    }
+                }
+                nodes[i].draw();
+            }
+            
+            ctx.restore();
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

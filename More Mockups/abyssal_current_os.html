@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Abyssal Current</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #020610; /* Deepest ocean blue/black */
+            font-family: 'Montserrat', sans-serif;
+            color: #fff; overflow: hidden;
+            cursor: crosshair; /* Precision feel */
+        }
+
+        canvas { position: fixed; top: 0; left: 0; z-index: 0; }
+
+        /* The Organism (UI Spine) */
+        .organism-ui {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 20px; pointer-events: none;
+        }
+
+        /* The head/core of the OS */
+        .core {
+            width: 60px; height: 60px;
+            background: rgba(100, 255, 255, 0.1);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6), inset 0 0 10px #00ffff;
+            animation: pulse-core 4s infinite alternate;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .core::after {
+            content: ''; width: 20px; height: 20px; background: #fff; border-radius: 50%;
+            box-shadow: 0 0 20px #fff;
+        }
+
+        @keyframes pulse-core {
+            0% { transform: scale(0.9); box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
+            100% { transform: scale(1.1); box-shadow: 0 0 60px rgba(0, 255, 255, 0.8); }
+        }
+
+        /* The Ribs (Menu Items) */
+        .rib {
+            pointer-events: auto;
+            padding: 10px 40px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            font-weight: 200; font-size: 1.2rem; letter-spacing: 6px;
+            text-transform: uppercase; color: rgba(255, 255, 255, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .rib:hover {
+            color: #fff;
+            border-bottom: 1px solid #00ffff;
+            text-shadow: 0 0 15px #00ffff;
+            transform: scale(1.1);
+        }
+
+        /* Connective tissue between ribs */
+        .rib::before {
+            content: ''; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 20px; background: rgba(0,255,255,0.2);
+        }
+
+    </style>
+</head>
+<body>
+    <canvas id="fluid-canvas"></canvas>
+
+    <div class="organism-ui" id="ui-container">
+        <div class="core"></div>
+        <div class="rib">Memories</div>
+        <div class="rib">Currents</div>
+        <div class="rib">Anomalies</div>
+        <div class="rib">System</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fluid-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Fluid Kinetic Ripples
+        let ripples = [];
+        let lastMouse = {x: w/2, y: h/2};
+        let isDragging = false;
+
+        window.addEventListener('mousedown', () => isDragging = true);
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('mousemove', (e) => {
+            let dx = e.clientX - lastMouse.x;
+            let dy = e.clientY - lastMouse.y;
+            let speed = Math.hypot(dx, dy);
+            
+            // Only spawn ripples if moving fast enough (creating a current)
+            if (speed > 5) {
+                ripples.push({
+                    x: e.clientX, y: e.clientY,
+                    radius: 2, maxRadius: Math.random() * 50 + 50,
+                    opacity: 0.5,
+                    color: speed > 20 ? '0, 255, 255' : '100, 150, 255' // Faster = brighter cyan
+                });
+            }
+            lastMouse = {x: e.clientX, y: e.clientY};
+
+            // Organic UI sway based on mouse position (like water current pushing the organism)
+            const ui = document.getElementById('ui-container');
+            const swayX = (e.clientX - w/2) * 0.05;
+            const swayY = (e.clientY - h/2) * 0.05;
+            ui.style.transform = `translate(calc(-50% + ${swayX}px), calc(-50% + ${swayY}px)) rotate(${swayX * 0.1}deg)`;
+        });
+
+        // Ambient Swimmers (Fl0w style background organisms)
+        class Swimmer {
+            constructor() {
+                this.x = Math.random() * w; this.y = Math.random() * h;
+                this.vx = (Math.random() - 0.5); this.vy = (Math.random() - 0.5);
+                this.history = [];
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0) this.x = w; if(this.x > w) this.x = 0;
+                if(this.y < 0) this.y = h; if(this.y > h) this.y = 0;
+
+                this.history.push({x: this.x, y: this.y});
+                if(this.history.length > 20) this.history.shift();
+            }
+            draw() {
+                if(this.history.length < 2) return;
+                ctx.beginPath();
+                ctx.moveTo(this.history[0].x, this.history[0].y);
+                for(let i=1; i<this.history.length; i++) {
+                    ctx.lineTo(this.history[i].x, this.history[i].y);
+                }
+                ctx.strokeStyle = 'rgba(0, 255, 255, 0.1)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+        const swimmers = Array.from({length: 15}, () => new Swimmer());
+
+        function animate() {
+            // Very dark clear for long trails
+            ctx.fillStyle = 'rgba(2, 6, 16, 0.2)'; 
+            ctx.fillRect(0, 0, w, h);
+
+            // Draw Background organisms
+            swimmers.forEach(s => { s.update(); s.draw(); });
+
+            // Draw Kinetic Ripples
+            ctx.globalCompositeOperation = 'lighter';
+            for (let i = ripples.length - 1; i >= 0; i--) {
+                let r = ripples[i];
+                ctx.beginPath();
+                ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(${r.color}, ${r.opacity})`;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                r.radius += 2; // Ripple expands
+                r.opacity -= 0.01; // Ripple fades
+
+                if (r.opacity <= 0 || r.radius >= r.maxRadius) {
+                    ripples.splice(i, 1);
+                }
+            }
+            ctx.globalCompositeOperation = 'source-over';
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

@@ -1,6 +1,12 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "static", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "8731"], "port": 8731 }
+    { "name": "static", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "8731"], "port": 8731 },
+    {
+      "name": "varxel-os",
+      "runtimeExecutable": "D:/Game Development Projects/auto-job/VarXel_OS/venv/Scripts/python.exe",
+      "runtimeArgs": ["D:/Game Development Projects/auto-job/VarXel_OS/app.py"],
+      "port": 5000
+    }
   ]
 }

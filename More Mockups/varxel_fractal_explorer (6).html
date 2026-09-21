@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Fractal Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --void-deep: #00001a;
+            --void-light: #001133;
+            --glow-white: #ffffff;
+            --glow-cyan: #aaddff;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 60% 50%, var(--void-light) 0%, var(--void-deep) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--glow-white);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        canvas { position: fixed; top: 0; left: 0; z-index: 0; cursor: crosshair; }
+
+        .ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; padding: 3rem; box-sizing: border-box;
+        }
+
+        .hud-left {
+            pointer-events: auto;
+            width: 340px;
+            border-right: 1px solid rgba(170, 221, 255, 0.15);
+            padding-right: 2rem;
+            backdrop-filter: blur(8px);
+            background: linear-gradient(90deg, rgba(0,0,26,0.7) 0%, transparent 100%);
+        }
+
+        .sys-header { font-family: 'Jura'; font-size: 2rem; letter-spacing: 0.2em; }
+        .sys-sub { font-size: 0.65rem; letter-spacing: 4px; color: var(--glow-cyan); text-transform: uppercase; margin-bottom: 2rem; opacity: 0.7; }
+
+        .folder-tree { overflow-y: auto; max-height: calc(100vh - 200px); }
+        .tree-item { 
+            font-size: 0.8rem; cursor: pointer; padding: 6px 0; 
+            color: rgba(170, 221, 255, 0.7); display: flex; align-items: center; gap: 8px;
+        }
+        .tree-item:hover { color: var(--glow-white); }
+        .tree-item.active { color: var(--glow-white); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <canvas id="radial-canvas"></canvas>
+
+    <div class="ui-layer">
+        <div class="hud-left">
+            <div class="sys-header">NEXUS_FS</div>
+            <div class="sys-sub">Fractal Topography</div>
+            <div class="folder-tree" id="sidebar-tree"></div>
+        </div>
+    </div>
+
+    <script>
+        const fileSystem = {
+            id: "root", name: "VarXel_Core", type: "folder", expanded: true,
+            children: [
+                { id: "sys", name: "System32", type: "folder", expanded: false, children: [
+                    { id: "k1", name: "kernel.sys", type: "file" },
+                    { id: "k2", name: "drivers", type: "folder", children: [{id: "d1", name: "gpu.drv", type: "file"}]}
+                ]},
+                { id: "usr", name: "Users", type: "folder", expanded: true, children: [
+                    { id: "u1", name: "Kira_Chen", type: "folder", expanded: true, children: [
+                        { id: "p1", name: "Projects", type: "folder", children: [
+                            {id: "ad1", name: "Aethel_Sim", type: "file"},
+                            {id: "ad2", name: "Radiolaria_UI", type: "file"}
+                        ]},
+                        { id: "d2", name: "Archives", type: "folder", children: [{id: "a1", name: "2024.zip", type: "file"}]}
+                    ]}
+                ]},
+                { id: "cfg", name: "Config", type: "folder", children: [{id: "c1", name: "ui.yaml", type: "file"}]},
+                { id: "log", name: "Logs", type: "folder", children: [{id: "l1", name: "error.log", type: "file"}]}
+            ]
+        };
+
+        const canvas = document.getElementById('radial-canvas');
+        const ctx = canvas.getContext('2d');
+        const sidebar = document.getElementById('sidebar-tree');
+        let w, h;
+        let time = 0;
+        let activeNode = fileSystem;
+        let nodes = [];
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function computeLayout(node, depth, angle, arc, radius) {
+            node.renderX = (w/2 + 100) + Math.cos(angle) * radius;
+            node.renderY = h/2 + Math.sin(angle) * radius;
+            node.angle = angle;
+            node.radius = radius;
+            nodes.push(node);
+
+            if (node.expanded && node.children) {
+                const step = arc / node.children.length;
+                node.children.forEach((child, i) => {
+                    computeLayout(child, depth + 1, angle - (arc/2) + step*i + step/2, step * 0.8, radius + 150);
+                });
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = '#00001a';
+            ctx.fillRect(0, 0, w, h);
+            time += 0.01;
+
+            nodes = [];
+            computeLayout(fileSystem, 0, 0, Math.PI * 2, 0);
+
+            // Connections
+            ctx.strokeStyle = 'rgba(170, 221, 255, 0.2)';
+            nodes.forEach(n => {
+                if(n.children && n.expanded) {
+                    n.children.forEach(c => {
+                        ctx.beginPath();
+                        ctx.moveTo(n.renderX, n.renderY);
+                        // Natural curve
+                        let cpX = (n.renderX + c.renderX) / 2 + Math.sin(time + n.id.length) * 20;
+                        ctx.quadraticCurveTo(cpX, (n.renderY + c.renderY) / 2, c.renderX, c.renderY);
+                        ctx.stroke();
+                    });
+                }
+            });
+
+            // Nodes
+            nodes.forEach(n => {
+                let wobble = Math.sin(time + n.id.length) * 5;
+                ctx.beginPath();
+                ctx.arc(n.renderX, n.renderY + wobble, 6, 0, Math.PI*2);
+                ctx.fillStyle = n === activeNode ? '#ffffff' : '#aaddff';
+                ctx.fill();
+                
+                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.fillText(n.name, n.renderX + 15, n.renderY + wobble + 5);
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Radial Entity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --abyss-deep: #00001a;
+            --abyss-light: #001133;
+            --glow-white: #ffffff;
+            --glow-cyan: #aaddff;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, var(--abyss-light) 0%, var(--abyss-deep) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--glow-white);
+            overflow: hidden;
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+        }
+
+        .ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 3rem; box-sizing: border-box;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
+
+        .sys-title {
+            font-size: 2rem; font-weight: 300; letter-spacing: 0.2em;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .data-readout {
+            font-size: 0.8rem; letter-spacing: 2px; color: var(--glow-cyan);
+            text-align: right; line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        footer {
+            display: flex; gap: 2rem; justify-content: center; pointer-events: auto;
+        }
+
+        .orb-btn {
+            background: transparent; border: 1px solid rgba(170, 221, 255, 0.3);
+            color: var(--glow-white); padding: 10px 30px; border-radius: 50px;
+            text-transform: uppercase; letter-spacing: 3px; font-size: 0.75rem;
+            transition: all 0.4s ease; backdrop-filter: blur(5px); cursor: pointer;
+        }
+
+        .orb-btn:hover {
+            border-color: var(--glow-white);
+            box-shadow: 0 0 20px rgba(170, 221, 255, 0.5), inset 0 0 10px rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="radial-canvas"></canvas>
+    
+    <div class="ui-layer">
+        <header>
+            <div class="sys-title">O R I G I N</div>
+            <div class="data-readout">
+                <div>SECTOR: RADIOLARIA</div>
+                <div>STATUS: PULSING</div>
+                <div>ENTITIES: 12</div>
+            </div>
+        </header>
+
+        <footer>
+            <button class="orb-btn">Engage</button>
+            <button class="orb-btn">Isolate</button>
+            <button class="orb-btn">Evolve</button>
+        </footer>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('radial-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let time = 0;
+        let mouse = { x: w/2, y: h/2 };
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+
+        function animate() {
+            // Smooth clear for slight trailing effect
+            ctx.fillStyle = 'rgba(0, 0, 26, 0.4)';
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.01;
+            const cx = w / 2;
+            const cy = h / 2;
+
+            // Breathing scale
+            let breath = Math.sin(time) * 20;
+            let baseRadius = 200 + breath;
+
+            ctx.save();
+            ctx.translate(cx, cy);
+            
+            // Mouse parallax subtle rotation
+            let dx = mouse.x - cx;
+            let dy = mouse.y - cy;
+            let targetRotation = (dx * 0.0005) + time * 0.2;
+            ctx.rotate(targetRotation);
+
+            // 1. Draw glowing core
+            ctx.shadowBlur = 40;
+            ctx.shadowColor = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(0, 0, 15, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+
+            // Inner core rings
+            ctx.shadowBlur = 10;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.arc(0, 0, 30 + breath*0.2, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([4, 8]);
+            ctx.beginPath(); ctx.arc(0, 0, 50 + breath*0.5, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([]);
+
+            const numPetals = 12;
+            for (let i = 0; i < numPetals; i++) {
+                let angle = (i * Math.PI * 2) / numPetals;
+                
+                ctx.save();
+                ctx.rotate(angle);
+
+                // Draw the sweeping loop
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                // Quadratic curve creating a petal shape
+                ctx.bezierCurveTo(baseRadius * 0.5, baseRadius * 0.8, baseRadius * -0.5, baseRadius * 0.8, 0, baseRadius);
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.2)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Draw the Orbs at the end of the loops
+                // Outer ring
+                ctx.beginPath();
+                ctx.arc(0, baseRadius, 12, 0, Math.PI*2);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.stroke();
+                
+                // Inner solid dot
+                ctx.beginPath();
+                ctx.arc(0, baseRadius, 4, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+                ctx.fill();
+                
+                // Secondary floating orb further out
+                let secondaryDist = baseRadius + 40 + Math.sin(time*2 + i)*10;
+                ctx.beginPath();
+                ctx.arc(0, secondaryDist, 6, 0, Math.PI*2);
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.5)';
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            ctx.restore();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK · Flow · Functional — Giuseppe Alfieri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  /* ============================================================
+     FUNCTIONAL — "FLOW · DEPTH OF FOCUS"
+     The usable one. A clean, legible, recruiter-first portfolio in
+     the fl0w deep-sea aesthetic, built on the verified Phase-1
+     depth-of-focus patterns from the live build:
+     - Stacked vertical LAYERS; one in crisp focus; the others are
+       sensed faintly above/below via scale+opacity+blur by depth
+       delta. (focus = op1/blur0; next = op .14/blur4px; far = op
+       .05/blur8px.)
+     - Scroll / drag / arrow keys / gauge to sink between layers.
+       Content scrolls first; sinking only at the content boundary.
+     - Every feature preserved: overview (bio + featured + traits +
+       toolset + ecosystem + signal), browse-all with category
+       filter (dim-don't-hide), trait lens with role-specific
+       contribution text, résumé, diegetic specimen detail bloom.
+     - Legibility is the gate: scannable card grid, obvious nav,
+       readable titles, clear hierarchy.
+     This is a mockup, but it is intended to be usable as-is.
+     Reuses mock-data.js (DATA / LINEAGE / RC / openDetail / mockSea)
+     and mock-shared.css (tokens + detail reader + card styles).
+     ============================================================ */
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--abyss);cursor:none}
+
+  /* HUD */
+  .hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+    padding:16px 28px;pointer-events:none}
+  .hud .brand{font-family:var(--head);font-size:.62rem;letter-spacing:4px;font-weight:700}
+  .hud .brand small{color:var(--lum)}
+  .hud .nav{display:flex;gap:6px;pointer-events:auto}
+  .hud .nav button{font-family:var(--head);font-size:.5rem;letter-spacing:2px;text-transform:uppercase;
+    background:none;border:none;color:var(--dim);padding:8px 14px;border-radius:14px;transition:.3s;cursor:none}
+  .hud .nav button:hover{color:var(--ink)}
+  .hud .nav button.on{color:var(--abyss);background:var(--lum);box-shadow:0 0 16px rgba(180,230,255,.4)}
+  .hud .tele{font-family:var(--head);font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+  .hud .tele b{color:var(--lum)}
+
+  /* depth gauge (left rail) */
+  .gauge{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:0}
+  .gauge .stop{display:flex;align-items:center;gap:12px;background:none;border:none;padding:10px 0;cursor:none;transition:.3s}
+  .gauge .stop .bar{width:3px;height:28px;background:var(--lum-faint);transition:.4s;border-radius:2px}
+  .gauge .stop .gl{font-family:var(--head);font-size:.42rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;opacity:0;transition:.3s}
+  .gauge .stop.on .bar{background:var(--lum);box-shadow:0 0 12px var(--lum);height:40px}
+  .gauge .stop.on .gl{opacity:1;color:var(--lum-bright)}
+  .gauge .stop:hover .bar{background:var(--lum-soft)}
+  .gauge .stop:hover .gl{opacity:.7}
+
+  /* the abyss of stacked layers */
+  .abyss{position:fixed;inset:0;z-index:5;perspective:1400px}
+  .layer{position:absolute;inset:0;opacity:0;pointer-events:none;overflow-y:auto;overflow-x:hidden;
+    transition:transform 1s var(--ease),opacity 1s var(--ease),filter 1s var(--ease);
+    scrollbar-width:thin;scrollbar-color:var(--lum-faint) transparent}
+  .layer::-webkit-scrollbar{width:6px}
+  .layer::-webkit-scrollbar-thumb{background:var(--lum-faint);border-radius:3px}
+  .layer .inner{max-width:1080px;margin:0 auto;padding:108px 7vw 100px}
+  .layer.is-focus{opacity:1;pointer-events:auto;filter:none;transform:translateY(0) scale(1);z-index:10}
+  .layer.is-above{opacity:.06;filter:blur(7px);transform:translateY(-9vh) scale(1.12);z-index:6}
+  .layer.is-below{opacity:.14;filter:blur(4px);transform:translateY(9vh) scale(.9);z-index:8}
+  .layer.is-below-2{opacity:.05;filter:blur(8px);transform:translateY(14vh) scale(.84);z-index:4}
+
+  .lhead{display:flex;align-items:baseline;gap:18px;margin-bottom:8px}
+  .lhead .eyebrow{margin:0}
+  .lhead .lnum{font-family:var(--head);font-size:.5rem;letter-spacing:2px;color:var(--dim)}
+
+  /* ORGANISM */
+  .org-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:50px;align-items:start}
+  .org-left .name{font-size:clamp(2.6rem,6.5vw,4.2rem)}
+  .org-right{padding-top:6px}
+  .featured{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+  .feat{--rc:var(--lum);position:relative;border:1px solid var(--lum-faint);border-radius:12px;overflow:hidden;
+    aspect-ratio:4/3;cursor:none;background:#000;transition:.4s}
+  .feat:hover{border-color:color-mix(in srgb,var(--rc) 50%,transparent);box-shadow:0 0 22px color-mix(in srgb,var(--rc) 18%,transparent)}
+  .feat img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) brightness(.82);transition:.6s}
+  .feat:hover img{filter:none;transform:scale(1.06)}
+  .feat .fl{position:absolute;bottom:8px;left:10px;font-family:var(--head);font-size:.42rem;letter-spacing:1.5px;
+    color:var(--rc);text-transform:uppercase;text-shadow:0 0 8px rgba(0,0,0,.9)}
+  .mini-sec{margin-top:26px}
+  .mini-sec .eyebrow{margin-bottom:10px}
+  .toolset{display:flex;flex-wrap:wrap;gap:8px}
+  .toolset .chip{font-size:.44rem;padding:7px 11px}
+  .signal{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .eco{display:flex;gap:8px;flex-wrap:wrap}
+  .eco .e{font-family:var(--head);font-size:.44rem;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;
+    border:1px solid var(--lum-faint);padding:8px 12px;border-radius:14px;transition:.3s;cursor:none}
+  .eco .e:hover{color:var(--lum);border-color:var(--lum-soft)}
+
+  /* TRAITS */
+  .traits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px}
+  .trait-card{--rc:var(--lum);border:1px solid var(--lum-faint);border-left:2px solid var(--rc);border-radius:14px;
+    padding:22px 24px;background:rgba(180,230,255,.02);transition:.4s;cursor:none;text-align:left}
+  .trait-card:hover{background:rgba(180,230,255,.05);box-shadow:0 0 26px color-mix(in srgb,var(--rc) 14%,transparent)}
+  .trait-card .tname{font-family:var(--body);font-weight:600;font-size:1.1rem;color:var(--rc);margin-bottom:8px}
+  .trait-card .tdef{font-size:.92rem;line-height:1.6;color:var(--dim);margin-bottom:14px}
+  .trait-card .tcnt{font-family:var(--head);font-size:.5rem;letter-spacing:2px;color:var(--lum)}
+
+  /* DEPTHS */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 24px}
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+
+  /* LINEAGE */
+  .lin-blocks{display:grid;grid-template-columns:1fr;gap:40px;max-width:760px;margin-top:8px}
+
+  /* resurface button */
+  .resurface{position:fixed;right:26px;bottom:26px;z-index:30;opacity:0;transition:.6s;pointer-events:none}
+  .resurface.show{opacity:1;pointer-events:auto}
+
+  /* depth fog deepens per layer */
+  .depth-fog{transition:opacity 1s var(--ease)}
+
+  @media(max-width:900px){
+    .org-grid{grid-template-columns:1fr;gap:28px}
+    .traits-grid{grid-template-columns:1fr}
+    .hud{flex-wrap:wrap;gap:10px}
+    .hud .nav{order:3;width:100%;justify-content:center}
+    .gauge{display:none}
+    .layer .inner{padding:90px 6vw 80px}
+  }
+  @media(max-width:600px){
+    body{cursor:auto}
+    .featured{grid-template-columns:1fr 1fr}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .layer{transition:opacity .2s linear}
+    .gauge .stop .bar{transition:none}
+  }
+  @media(pointer:coarse){ body{cursor:auto} .feat,.trait-card,.chip,.btn,.eco .e,.pclose{cursor:pointer} }
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas>
+<div class="depth-fog" id="fog" style="opacity:.08"></div>
+<div class="vignette"></div>
+
+<div class="mock-tag">★ Flow · Functional</div>
+<a class="mock-back" href="./mock.html">↑ All mockups</a>
+
+<header class="hud">
+  <div class="brand">G.ALFIERI <small>//</small> SPECIMEN</div>
+  <nav class="nav" id="nav">
+    <button data-i="0" class="on">Organism</button>
+    <button data-i="1">Traits</button>
+    <button data-i="2">Depths</button>
+    <button data-i="3">Lineage</button>
+  </nav>
+  <span class="tele">DEPTH <b id="depthReadout">0M</b> · BIOLUM <b>ACTIVE</b></span>
+</header>
+
+<nav class="gauge" id="gauge">
+  <button class="stop on" data-i="0"><span class="bar"></span><span class="gl">Surface</span></button>
+  <button class="stop" data-i="1"><span class="bar"></span><span class="gl">The Work</span></button>
+  <button class="stop" data-i="2"><span class="bar"></span><span class="gl">Traits</span></button>
+  <button class="stop" data-i="3"><span class="bar"></span><span class="gl">Lineage</span></button>
+</nav>
+
+<button class="btn resurface" id="resurface">↑ Resurface</button>
+
+<div class="abyss" id="abyss">
+
+  <!-- LAYER 0 — ORGANISM -->
+  <section class="layer is-focus" data-i="0">
+    <div class="inner">
+      <div class="org-grid">
+        <div class="org-left">
+          <div class="eyebrow">Game &amp; Technical Designer</div>
+          <h1 class="name" style="margin:14px 0 20px">Giuseppe<br>Alfieri</h1>
+          <p class="epigraph">"I design games where the systems tell the story. The world doesn't exist until you scan it into memory."</p>
+          <p class="bio" style="margin-top:20px;max-width:48ch">A system designer bridging design philosophy and technical execution. I analyze interdependencies, work in Unreal Engine and C++, and lead teams from concept to release. Shipped titles ported to Nintendo Switch 1 and 2. Awarded for university work.</p>
+          <div class="signal">
+            <button class="btn" id="copyMail">◎ Copy Signal</button>
+            <a class="btn" href="https://github.com/VarXael" target="_blank" rel="noopener">GitHub ↗</a>
+            <a class="btn" href="./cv.html">CV ↗</a>
+          </div>
+        </div>
+        <div class="org-right">
+          <div class="eyebrow">Featured Specimens</div>
+          <div class="featured" id="featured"></div>
+          <div class="mini-sec">
+            <div class="eyebrow">Toolset</div>
+            <div class="toolset">
+              <span class="chip">C++</span><span class="chip">C#</span><span class="chip">Verse</span><span class="chip">Blueprints</span>
+              <span class="chip">Unreal Engine</span><span class="chip">Unity</span><span class="chip">UEFN</span><span class="chip">Git</span><span class="chip">Plastic SCM</span><span class="chip">Rider</span>
+            </div>
+          </div>
+          <div class="mini-sec">
+            <div class="eyebrow">Ecosystem</div>
+            <div class="eco">
+              <span class="e">Untold Games</span><span class="e">Creativity Unleashed</span><span class="e">Umeå University</span><span class="e">Cineon Training</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYER 1 — DEPTHS (the work) -->
+  <section class="layer is-below" data-i="2">
+    <div class="inner">
+      <div class="lhead"><div class="eyebrow">The Work</div><span class="lnum">LAYER 02 · 900M</span></div>
+      <h2 class="sec-title" style="margin:10px 0 4px">Depths</h2>
+      <p class="bio" style="max-width:60ch;color:var(--dim)">Every specimen, scannable at a glance. Filter by category; open one to observe it in-world.</p>
+      <div class="filters" id="filters"></div>
+      <div class="proj-grid" id="projGrid"></div>
+    </div>
+  </section>
+
+  <!-- LAYER 2 — TRAITS -->
+  <section class="layer is-below-2" data-i="1">
+    <div class="inner">
+      <div class="lhead"><div class="eyebrow">The Disciplines</div><span class="lnum">LAYER 01 · 140M</span></div>
+      <h2 class="sec-title" style="margin:10px 0 4px">Traits</h2>
+      <p class="bio" style="max-width:60ch;color:var(--dim)">Four bioluminescent disciplines. Focus one to dim every specimen that does not express it. Nothing disappears; the rest recedes into the water.</p>
+      <div class="traits-grid" id="traitsGrid"></div>
+    </div>
+  </section>
+
+  <!-- LAYER 3 — LINEAGE -->
+  <section class="layer is-below-2" data-i="3">
+    <div class="inner">
+      <div class="lhead"><div class="eyebrow">Origins</div><span class="lnum">LAYER 03 · 2100M</span></div>
+      <h2 class="sec-title" style="margin:10px 0 24px">Lineage</h2>
+      <div class="lin-blocks" id="linBlocks"></div>
+    </div>
+  </section>
+
+</div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+
+  /* ---------- spine: the canonical order of layers in the descent ---------- */
+  // The HUD/gauge labels (Surface, The Work, Traits, Lineage) map to layer DOM order,
+  // but the DESCENT order is: Organism -> Traits -> Depths -> Lineage.
+  // We keep the SPINE modular so it can be remapped without touching the rest.
+  const SPINE = [0, 1, 2, 3];   // visual order = Organism, Traits, Depths, Lineage
+  const DEPTH = ['0M','140M','900M','2100M'];
+  const FOG = [0.08, 0.30, 0.46, 0.66];
+
+  const layers = [...document.querySelectorAll('.layer')];
+  const fog = document.getElementById('fog');
+  const depthReadout = document.getElementById('depthReadout');
+  const navBtns = [...document.querySelectorAll('#nav button')];
+  const gaugeStops = [...document.querySelectorAll('#gauge .stop')];
+  const resurface = document.getElementById('resurface');
+  const reduceMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  let cur = 0;          // index into SPINE
+  let stepLock = false;
+
+  /* ---------- focus computation: depth-of-focus by delta from current ---------- */
+  function focusLayer(visIdx){
+    // distance along the spine from current
+    const d = Math.abs(visIdx - cur);
+    const el = layers[visIdx];
+    el.classList.remove('is-focus','is-above','is-below','is-below-2');
+    if(d===0) el.classList.add('is-focus');
+    else if(d===1){
+      if(visIdx < cur) el.classList.add('is-above');
+      else el.classList.add('is-below');
+    }
+    else el.classList.add('is-below-2');
+  }
+  function render(){
+    layers.forEach((_,i)=>focusLayer(i));
+    fog.style.opacity = FOG[cur] ?? .6;
+    depthReadout.textContent = DEPTH[cur];
+    navBtns.forEach(b=>b.classList.toggle('on', +b.dataset.i===cur));
+    gaugeStops.forEach(s=>s.classList.toggle('on', +s.dataset.i===cur));
+    resurface.classList.toggle('show', cur>0);
+  }
+  function goTo(i){
+    cur = Math.max(0, Math.min(SPINE.length-1, i));
+    // reset scroll of the layer we leave
+    layers.forEach(l=>{ if(!l.classList.contains('is-focus')) l.scrollTop=0; });
+    render();
+  }
+  function sink(){ goTo(cur+1); }
+  function rise(){ goTo(cur-1); }
+
+  /* ---------- descent input: scroll, drag, keys, nav, gauge ---------- */
+  // sink only when the focused layer's content is scrolled to its boundary
+  function onWheel(e){
+    const f = document.querySelector('.layer.is-focus');
+    if(!f) return;
+    const atTop = f.scrollTop <= 0;
+    const atBottom = f.scrollTop + f.clientHeight >= f.scrollHeight - 1;
+    if(e.deltaY > 0 && atBottom){ e.preventDefault(); lockStep(()=>sink()); }
+    else if(e.deltaY < 0 && atTop){ e.preventDefault(); lockStep(()=>rise()); }
+  }
+  document.querySelector('.abyss').addEventListener('wheel', onWheel, {passive:false});
+
+  function lockStep(fn){
+    if(stepLock) return;
+    stepLock = true; fn();
+    setTimeout(()=>stepLock=false, reduceMotion ? 200 : 850);
+  }
+
+  // drag (pointer) to sink/rise
+  let dragging=false, sy=0, moved=false;
+  document.querySelector('.abyss').addEventListener('pointerdown', e=>{
+    if(e.target.closest('.card,.feat,.trait-card,.btn,.chip,.eco .e,a,button')) return;
+    dragging=true; moved=false; sy=e.clientY;
+  });
+  addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    if(Math.abs(e.clientY-sy) > 60) moved=true;
+  });
+  addEventListener('pointerup', e=>{
+    if(!dragging) return;
+    dragging=false;
+    if(moved){
+      const dy = e.clientY - sy;
+      if(dy < -80) lockStep(sink);
+      else if(dy > 80) lockStep(rise);
+    }
+  });
+
+  addEventListener('keydown', e=>{
+    if(e.key==='ArrowDown'||e.key==='PageDown'){ e.preventDefault(); lockStep(sink); }
+    else if(e.key==='ArrowUp'||e.key==='PageUp'){ e.preventDefault(); lockStep(rise); }
+    else if(e.key==='Home') goTo(0);
+    else if(e.key==='End') goTo(SPINE.length-1);
+    else if(e.key==='Escape') closeAnyDetail();
+  });
+
+  navBtns.forEach(b=>b.addEventListener('click',()=>goTo(+b.dataset.i)));
+  gaugeStops.forEach(s=>s.addEventListener('click',()=>goTo(+s.dataset.i)));
+  resurface.addEventListener('click',()=>goTo(0));
+
+  /* ---------- content build ---------- */
+  // featured (first 3 of DATA as hero)
+  const featured = document.getElementById('featured');
+  featured.innerHTML = DATA.slice(0,3).map(p=>{
+    const rc = roleColor(p.role);
+    return `<button class="feat" data-id="${p.id}" style="--rc:${rc}"><img src="${p.img}" alt="${p.title}"><span class="fl">${p.title}</span></button>`;
+  }).join('');
+  featured.querySelectorAll('.feat').forEach(f=>f.addEventListener('click',()=>openDetail(f.dataset.id)));
+
+  // traits
+  const counts = traitCounts();
+  const defs = {
+    'Game Designer':'Crafts the rules, the loops, and the feel. Decides what the player does and why it matters.',
+    'Technical Game Designer':'Bridges design intent and engine reality. Builds the systems that make the design possible.',
+    'Leadership':'Holds the shape of a team. Turns a group of people into a single moving organism.',
+    'Game Programmer':'Writes the code the game runs on. C++, Unreal, Verse. Performance and correctness.'
+  };
+  const traitsGrid = document.getElementById('traitsGrid');
+  traitsGrid.innerHTML = Object.keys(RC).map(r=>`
+    <button class="trait-card" data-role="${r}" style="--rc:${RC[r]}">
+      <div class="tname">${r}</div>
+      <div class="tdef">${defs[r]||''}</div>
+      <div class="tcnt">${String(counts[r]||0).padStart(2,'0')} SPECIMENS</div>
+    </button>`).join('');
+  // clicking a trait dims non-matching cards and dives to depths
+  let activeTrait = null;
+  traitsGrid.querySelectorAll('.trait-card').forEach(c=>{
+    c.addEventListener('click',()=>{
+      activeTrait = activeTrait===c.dataset.role ? null : c.dataset.role;
+      traitsGrid.querySelectorAll('.trait-card').forEach(x=>x.classList.toggle('on', x.dataset.role===activeTrait));
+      document.querySelectorAll('#projGrid .card').forEach(card=>{
+        card.classList.toggle('dim', activeTrait && card.dataset.role!==activeTrait);
+      });
+      if(activeTrait) goTo(2);
+    });
+  });
+
+  // depths: filters + grid
+  const filters = document.getElementById('filters');
+  filters.innerHTML = `<button class="chip on" data-cat="">All</button>` +
+    CATS.map(c=>`<button class="chip" data-cat="${c}">${c.charAt(0)+c.slice(1).toLowerCase()}</button>`).join('');
+  const projGrid = document.getElementById('projGrid');
+  projGrid.innerHTML = DATA.map(p=>cardHTML(p)).join('');
+  projGrid.querySelectorAll('.card').forEach(card=>{
+    const p = DATA.find(x=>x.id===card.dataset.id);
+    if(p) card.dataset.role = p.role;
+  });
+  wireCards(projGrid);
+  let activeCat = '';
+  filters.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      activeCat = activeCat===c.dataset.cat ? '' : c.dataset.cat;
+      filters.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+      if(activeCat) c.classList.add('on'); else filters.querySelector('[data-cat=""]').classList.add('on');
+      projGrid.querySelectorAll('.card').forEach(card=>{
+        card.classList.toggle('dim', activeCat && card.dataset.cat!==activeCat);
+      });
+    });
+  });
+
+  // lineage
+  document.getElementById('linBlocks').innerHTML = LINEAGE.map(l=>`
+    <div class="tl-item"><div class="tl-when">[ ${l.when} ]</div>
+      <div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join('');
+
+  // copy email
+  document.getElementById('copyMail').addEventListener('click', async function(){
+    try{ await navigator.clipboard.writeText('giuseppeluigi.alfieri@gmail.com'); this.textContent='◎ Signal Copied'; setTimeout(()=>this.textContent='◎ Copy Signal',1800); }
+    catch(_){ this.textContent='giuseppeluigi.alfieri@gmail.com'; setTimeout(()=>this.textContent='◎ Copy Signal',2200); }
+  });
+
+  function closeAnyDetail(){
+    const d = document.querySelector('.detail'); if(d) d.classList.remove('open');
+    const d2 = document.querySelector('.detail.custom'); if(d2) d2.classList.remove('open');
+  }
+
+  render();
+</script>
+</body>
+</html>

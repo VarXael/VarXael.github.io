@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abyssal Graph | Obsidian OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;400;600&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #000000;
+            --glass-bg: rgba(5, 5, 5, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-main: #ffffff;
+            --text-dim: #888888;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-void); color: var(--text-main);
+            font-family: 'Inter', sans-serif; overflow: hidden;
+            display: flex;
+        }
+
+        canvas { position: absolute; top: 0; left: 0; z-index: 0; }
+
+        .panel {
+            width: 320px; height: 100vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            z-index: 10; padding: 2.5rem 2rem; display: flex; flex-direction: column;
+        }
+
+        .panel-left {
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .panel-right {
+            border-left: 1px solid var(--glass-border);
+            margin-left: auto; width: 420px;
+        }
+
+        .header {
+            font-family: 'Jura', sans-serif; font-size: 1.1rem; letter-spacing: 4px;
+            color: var(--text-main); border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 12px; margin-bottom: 25px; text-transform: uppercase;
+        }
+
+        .file-item {
+            padding: 10px 0; font-size: 0.85rem; color: var(--text-dim);
+            cursor: pointer; display: flex; align-items: center; gap: 12px;
+            transition: color 0.3s; font-weight: 300;
+        }
+        
+        /* Hollow circle for unselected, solid for selected (fl0w style) */
+        .file-item::before { 
+            content: ''; display: block; width: 6px; height: 6px; 
+            border: 1px solid var(--text-dim); border-radius: 50%; 
+        }
+        .file-item:hover { color: var(--text-main); }
+        .file-item.active { color: var(--text-main); font-weight: 400; }
+        .file-item.active::before { 
+            background: var(--text-main); border-color: var(--text-main);
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .markdown-content { margin: auto 0; }
+        .markdown-content h1 { 
+            font-family: 'Jura', sans-serif; font-size: 2.2rem; font-weight: 300; 
+            margin-bottom: 1rem; letter-spacing: 1px;
+        }
+        .markdown-content p { 
+            font-size: 0.9rem; line-height: 1.8; color: #aaaaaa; 
+            font-weight: 200; margin-bottom: 1.5rem; 
+        }
+        
+        .tag {
+            display: inline-block; padding: 4px 12px; border-radius: 4px;
+            border: 1px solid var(--glass-border); font-size: 0.7rem;
+            margin-right: 8px; color: var(--text-dim); letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="constellation-graph"></canvas>
+
+    <div class="panel panel-left">
+        <div class="header">DIRECTORY</div>
+        <div class="file-item">Void Architecture</div>
+        <div class="file-item active">Bezier Sweeps & Curves</div>
+        <div class="file-item">Monochrome UI Patterns</div>
+        <div class="file-item">Data Constellations</div>
+        <div class="file-item">Kinetic Interactions</div>
+    </div>
+
+    <div class="panel panel-right">
+        <div class="header">ACTIVE NODE</div>
+        <div class="markdown-content">
+            <h1>Bezier Sweeps & Curves</h1>
+            <div style="margin-bottom: 2rem;">
+                <span class="tag">#geometry</span>
+                <span class="tag">#fl0w</span>
+            </div>
+            <p>Unlike radial systems which depend on strict rotational symmetry, a constellation relies on free-floating anchor points.</p>
+            <p>To prevent the network from looking rigid or mechanical, connections are rendered using quadratic bezier curves, where the control point is offset by time. This creates a sweeping, organic tension between the data nodes.</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('constellation-graph');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class ConstellationNode {
+            constructor(isActive = false) {
+                this.isActive = isActive; // Is this the currently selected note?
+                
+                // Active node stays relatively central, others drift freely
+                if (this.isActive) {
+                    this.x = w / 2;
+                    this.y = h / 2;
+                    this.vx = (Math.random() - 0.5) * 0.1; 
+                    this.vy = (Math.random() - 0.5) * 0.1;
+                    this.radius = 8;
+                } else {
+                    // Spread other nodes out across the screen
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.vx = (Math.random() - 0.5) * 0.4;
+                    this.vy = (Math.random() - 0.5) * 0.4;
+                    this.radius = Math.random() * 2 + 3;
+                }
+            }
+
+            update() {
+                this.x += this.vx; 
+                this.y += this.vy;
+                
+                // Wrap around edges gracefully
+                if(this.x < -50) this.x = w + 50;
+                if(this.x > w + 50) this.x = -50;
+                if(this.y < -50) this.y = h + 50;
+                if(this.y > h + 50) this.y = -50;
+
+                // Keep active node somewhat contained to the center view
+                if (this.isActive) {
+                    let cx = w/2; let cy = h/2;
+                    this.vx += (cx - this.x) * 0.0001;
+                    this.vy += (cy - this.y) * 0.0001;
+                }
+            }
+
+            draw() {
+                // Outer Ring
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.isActive ? this.radius + 12 : this.radius + 6, 0, Math.PI*2);
+                ctx.strokeStyle = this.isActive ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = this.isActive ? 1.5 : 1;
+                ctx.stroke();
+
+                // Inner Solid Orb
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+                ctx.fillStyle = this.isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.8)';
+                if (this.isActive) {
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = '#ffffff';
+                }
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset
+            }
+        }
+
+        // Create 1 active node and 25 background nodes
+        const nodes = [new ConstellationNode(true)];
+        for(let i = 0; i < 25; i++) {
+            nodes.push(new ConstellationNode(false));
+        }
+
+        let time = 0;
+
+        function animate() {
+            // Pure black clear, high opacity for crisp lines without long trails
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.01;
+
+            // Update all nodes first
+            nodes.forEach(n => n.update());
+
+            for(let i = 0; i < nodes.length; i++) {
+                for(let j = i + 1; j < nodes.length; j++) {
+                    let dx = nodes[i].x - nodes[j].x;
+                    let dy = nodes[i].y - nodes[j].y;
+                    let dist = Math.hypot(dx, dy);
+
+                    // Active node has a larger connection radius
+                    let maxDist = (nodes[i].isActive || nodes[j].isActive) ? 450 : 250;
+
+                    if (dist < maxDist) {
+                        let opacity = 1 - (dist / maxDist);
+                        let isConnectedToActive = nodes[i].isActive || nodes[j].isActive;
+                        
+                        // Brighter lines for the active network
+                        ctx.strokeStyle = isConnectedToActive 
+                            ? `rgba(255, 255, 255, ${opacity * 0.5})` 
+                            : `rgba(255, 255, 255, ${opacity * 0.15})`;
+                        ctx.lineWidth = isConnectedToActive ? 1.2 : 0.8;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        
+                        // The sweeping bezier control point
+                        let cpX = (nodes[i].x + nodes[j].x)/2 + Math.sin(time + i)*120;
+                        let cpY = (nodes[i].y + nodes[j].y)/2 + Math.cos(time + j)*120;
+                        
+                        ctx.quadraticCurveTo(cpX, cpY, nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                        
+                        // The signature hollow rings on the curves
+                        let midX = (nodes[i].x + nodes[j].x)/2;
+                        let midY = (nodes[i].y + nodes[j].y)/2;
+                        
+                        // Only draw rings on major connections to keep it clean
+                        if (isConnectedToActive || i % 3 === 0) {
+                            ctx.beginPath();
+                            ctx.arc(midX, midY, isConnectedToActive ? 3 : 2, 0, Math.PI*2);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.8})`;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // Draw nodes on top of lines
+            nodes.forEach(n => n.draw());
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

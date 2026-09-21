@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREATIVE · The Current</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  html,body{height:100%;overflow:hidden}
+  .ocean{position:fixed;inset:0;z-index:5;overflow:hidden;cursor:ew-resize}
+  .track{position:absolute;top:0;left:0;height:100%;display:flex;align-items:center;will-change:transform}
+  .station{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 7vw;flex-shrink:0}
+  .station.hero{width:80vw}.station.work{padding:0 4vw}.station.traits{width:62vw}.station.origins{width:74vw}
+  .hero .name{font-size:clamp(2.6rem,7vw,4.4rem);margin:18px 0}
+  .hero .epigraph{font-size:1.25rem;max-width:520px;margin-bottom:24px}
+  .hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .seyebrow{font-family:var(--head);font-size:.6rem;letter-spacing:4px;color:var(--lum);text-transform:uppercase;margin-bottom:24px;display:inline-block;text-shadow:0 0 12px rgba(180,230,255,.4)}
+  .reef{display:flex;gap:22px;align-items:center}
+  .reef .card{width:250px;flex-shrink:0}
+  .reef .card:nth-child(odd){transform:translateY(-26px)}
+  .reef .card:nth-child(even){transform:translateY(26px)}
+  .traits-col{display:flex;flex-direction:column;gap:12px;max-width:420px}
+  .origins{max-width:620px}
+  /* parallax decorative layer */
+  .para{position:fixed;inset:0;z-index:4;pointer-events:none;will-change:transform}
+  .para .big{position:absolute;font-family:var(--head);font-weight:700;color:rgba(180,230,255,.03);font-size:30vh;letter-spacing:-10px;top:50%;transform:translateY(-50%)}
+  /* HUD */
+  .hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;padding:18px 30px;pointer-events:none}
+  .hud .brand{font-family:var(--head);font-size:.62rem;letter-spacing:4px;font-weight:700}
+  .tele{font-family:var(--head);font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase}.tele b{color:var(--lum)}
+  /* distance rail (horizontal) */
+  .rail{position:fixed;left:8vw;right:8vw;bottom:26px;height:2px;background:var(--lum-faint);z-index:25}
+  .rail .fill{position:absolute;left:0;top:-1px;height:4px;background:linear-gradient(90deg,var(--lum),var(--prog));box-shadow:0 0 12px var(--lum);width:0%}
+  .rail .mk{position:absolute;top:10px;font-family:var(--head);font-size:.44rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;transform:translateX(-50%);transition:.3s}
+  .rail .mk.on{color:var(--lum)}
+  .cue{position:fixed;right:30px;bottom:46px;z-index:30;font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--lum);text-transform:uppercase;animation:dr 2.6s ease-in-out infinite}
+  @keyframes dr{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(8px);opacity:1}}
+  body.moved .cue{opacity:0;transition:.5s}
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas><div class="depth-fog" style="opacity:.2"></div>
+<div class="para" id="para"></div>
+<div class="vignette"></div>
+<div class="mock-tag">≈ Creative · The Current</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+<header class="hud"><div class="brand">G.ALFIERI <small style="color:var(--lum)">//</small> SPECIMEN</div>
+  <span class="tele">DRIFT <b id="dist">0M</b> · WEST</span></header>
+
+<div class="ocean" id="ocean"><div class="track" id="track"></div></div>
+<div class="rail"><div class="fill" id="fill"></div></div>
+<div class="cue" id="cue">drift →</div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+  const tc=traitCounts();
+  const track=document.getElementById('track');
+  track.innerHTML=`
+    <section class="station hero">
+      <div class="eyebrow">Game &amp; Technical Designer</div>
+      <h1 class="name">Giuseppe<br>Alfieri</h1>
+      <p class="epigraph">"I design games where the systems tell the story."</p>
+      <p class="bio" style="max-width:560px">A systems designer who bridges design philosophy and technical execution. Everything I design, I can also build.</p>
+      <div class="actions"><button class="btn">Copy Email</button><a class="btn" href="#">GitHub</a><a class="btn" href="./cv.html">View CV</a></div>
+    </section>
+    <section class="station work"><div><div class="seyebrow">The Work · drift through the reef</div><div class="reef">${DATA.map(cardHTML).join('')}</div></div></section>
+    <section class="station traits"><div><div class="seyebrow">Disciplines</div><div class="traits-col">${Object.keys(RC).map(r=>`<div class="trait" style="--rc:${RC[r]}"><div class="tname">${r}</div><div class="tn">${String(tc[r]).padStart(2,'0')} SPECIMENS</div></div>`).join('')}</div></div></section>
+    <section class="station origins"><div><div class="seyebrow">Lineage · the far deep</div><div class="origins">${LINEAGE.map(l=>`<div class="tl-item"><div class="tl-when">[ ${l.when} ]</div><div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join('')}</div></div></section>`;
+  wireCards();
+  document.getElementById('para').innerHTML=`<div class="big" style="left:60vw">≈</div><div class="big" style="left:160vw">01</div><div class="big" style="left:250vw">02</div>`;
+
+  const ocean=document.getElementById('ocean'), para=document.getElementById('para'), fill=document.getElementById('fill');
+  let sx=0, maxX=0;
+  function recalc(){ maxX=Math.max(0, track.scrollWidth - innerWidth); }
+  addEventListener('resize',recalc); setTimeout(recalc,80); recalc();
+  // station rail markers
+  const stations=[...document.querySelectorAll('.station')], labels=['SURFACE','THE WORK','TRAITS','ORIGINS'];
+  const rail=document.querySelector('.rail');
+  function placeMarkers(){ rail.querySelectorAll('.mk').forEach(n=>n.remove()); stations.forEach((s,i)=>{ const m=document.createElement('div'); m.className='mk'; m.textContent=labels[i]; m.style.left=(maxX>0?(s.offsetLeft/maxX*100):0)+'%'; rail.appendChild(m); }); }
+  setTimeout(placeMarkers,120);
+  function apply(){ track.style.transform=`translateX(${-sx}px)`; para.style.transform=`translateX(${-sx*0.4}px)`;
+    const f=maxX>0?sx/maxX:0; fill.style.width=(f*100)+'%'; document.getElementById('dist').textContent=Math.round(f*2400)+'M';
+    const mks=[...rail.querySelectorAll('.mk')]; let cur=0; stations.forEach((s,i)=>{ if(s.offsetLeft-sx < innerWidth*0.4) cur=i; }); mks.forEach((m,i)=>m.classList.toggle('on',i===cur));
+  }
+  function move(d){ sx=Math.max(0,Math.min(maxX,sx+d)); if(sx>30)document.body.classList.add('moved'); apply(); }
+  ocean.addEventListener('wheel',e=>{ e.preventDefault(); move((e.deltaY+e.deltaX)*1.1); },{passive:false});
+  let drag=false,lx=0; ocean.addEventListener('pointerdown',e=>{ if(e.target.closest('.card,button,a'))return; drag=true;lx=e.clientX; });
+  addEventListener('pointermove',e=>{ if(!drag)return; move(lx-e.clientX); lx=e.clientX; });
+  addEventListener('pointerup',()=>drag=false);
+  addEventListener('keydown',e=>{ if(e.key==='ArrowRight')move(innerWidth*.6); else if(e.key==='ArrowLeft')move(-innerWidth*.6); });
+  apply();
+</script>
+</body>
+</html>

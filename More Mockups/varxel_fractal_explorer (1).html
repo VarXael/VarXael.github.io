@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Fractal Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --void-deep: #00001a;
+            --void-light: #001133;
+            --glow-white: #ffffff;
+            --glow-cyan: #aaddff;
+            --hud-line: rgba(170, 221, 255, 0.15);
+            --hud-hover: rgba(170, 221, 255, 0.4);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 60% 50%, var(--void-light) 0%, var(--void-deep) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--glow-white);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+            cursor: crosshair;
+        }
+
+        .ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; padding: 3rem; box-sizing: border-box;
+        }
+
+        /* Left Side: Directory HUD */
+        .hud-left {
+            pointer-events: auto;
+            display: flex; flex-direction: column;
+            width: 340px;
+            border-right: 1px solid var(--hud-line);
+            padding-right: 2rem;
+            background: linear-gradient(90deg, rgba(0,0,26,0.8) 0%, transparent 100%);
+            /* Blur backdrop to ensure text is readable over canvas */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .sys-header {
+            font-family: 'Jura', sans-serif;
+            font-size: 2rem; font-weight: 300; letter-spacing: 0.2em;
+            color: var(--glow-white);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            margin-bottom: 5px; line-height: 1;
+        }
+
+        .sys-sub {
+            font-size: 0.65rem; letter-spacing: 4px; color: var(--glow-cyan);
+            text-transform: uppercase; margin-bottom: 2rem; opacity: 0.7;
+        }
+
+        /* Collapsible Tree Styling */
+        .folder-tree {
+            display: flex; flex-direction: column; gap: 4px;
+            overflow-y: auto; overflow-x: hidden;
+            scrollbar-width: thin; scrollbar-color: var(--hud-hover) transparent;
+        }
+        
+        .folder-tree::-webkit-scrollbar { width: 4px; }
+        .folder-tree::-webkit-scrollbar-thumb { background: var(--hud-hover); border-radius: 4px; }
+
+        .tree-item-container {
+            display: flex; flex-direction: column;
+        }
+
+        .tree-item {
+            font-size: 0.8rem; letter-spacing: 1px; color: rgba(170, 221, 255, 0.7);
+            cursor: pointer; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 0; border-radius: 4px;
+        }
+
+        .tree-item:hover { color: var(--glow-white); background: rgba(170, 221, 255, 0.05); }
+        
+        .tree-item.active {
+            color: var(--glow-white); font-weight: 600;
+            text-shadow: 0 0 10px rgba(170, 221, 255, 0.5);
+        }
+
+        /* Connecting lines for the tree view */
+        .tree-icon {
+            font-size: 0.6rem; width: 12px; text-align: center;
+            color: var(--glow-cyan); opacity: 0.8;
+        }
+        
+        .tree-icon.file { font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <canvas id="radial-canvas"></canvas>
+
+    <div class="ui-layer">
+        <div class="hud-left">
+            <div>
+                <div class="sys-header">NEXUS_FS</div>
+                <div class="sys-sub">Fractal Topography</div>
+            </div>
+            
+            <div class="folder-tree" id="sidebar-tree"></div>
+
+            <div style="margin-top: auto;">
+                <div style="font-size: 0.65rem; color: var(--hud-line); letter-spacing: 2px; border-top: 1px solid var(--hud-line); padding-top: 15px;">
+                    CAMERA: [<span id="cam-coords">0.0, 0.0</span>]<br>
+                    NODES RENDERED: <span id="node-count">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock File System with recursive structure
+        const fileSystem = {
+            id: "root", name: "VarXel_Core", type: "folder", expanded: true, depth: 0,
+            children: [
+                { id: "sys", name: "System32", type: "folder", expanded: false,
+                    children: [
+                        { id: "k1", name: "kernel.sys", type: "file", size: "12MB" },
+                        { id: "k2", name: "boot.ini", type: "file", size: "4KB" },
+                        { id: "k3", name: "drivers", type: "folder", expanded: false, children: [
+                            { id: "d_net", name: "net.drv", type: "file", size: "1MB" },
+                            { id: "d_gpu", name: "gpu.drv", type: "file", size: "8MB" }
+                        ]}
+                    ]
+                },
+                { id: "usr", name: "Users", type: "folder", expanded: false,
+                    children: [
+                        { id: "u1", name: "Kira_Chen", type: "folder", expanded: false, children: [
+                            { id: "d1", name: "Projects", type: "folder", expanded: false, children: [
+                                { id: "p1", name: "Aethel_Dynamics.exe", type: "file", size: "1.2GB" },
+                                { id: "p2", name: "Radiolaria_UI.zip", type: "file", size: "450MB" },
+                                { id: "p3", name: "mockups", type: "folder", expanded: false, children: [
+                                    { id: "m1", name: "v1.html", type: "file" },
+                                    { id: "m2", name: "v2.html", type: "file" }
+                                ]}
+                            ]},
+                            { id: "d2", name: "Archives", type: "folder", expanded: false, children: [] }
+                        ]},
+                        { id: "u2", name: "Guest", type: "folder", expanded: false, children: [] }
+                    ]
+                },
+                { id: "cfg", name: "Config", type: "folder", expanded: false,
+                    children: [
+                        { id: "c1", name: "ui_theme.yaml", type: "file", size: "128KB" },
+                        { id: "c2", name: "network.conf", type: "file", size: "16KB" }
+                    ]
+                },
+                { id: "log", name: "Logs", type: "folder", expanded: false,
+                    children: [
+                        { id: "l1", name: "error.log", type: "file", size: "2MB" },
+                        { id: "l2", name: "access.log", type: "file", size: "14MB" },
+                        { id: "l3", name: "sys_dump.bin", type: "file", size: "4GB" }
+                    ]
+                },
+                { id: "bin", name: "Binaries", type: "folder", expanded: false, children: [] }
+            ]
+        };
+
+        // --- Core State & Canvas Setup ---
+        const canvas = document.getElementById('radial-canvas');
+        const ctx = canvas.getContext('2d');
+        const sidebarTree = document.getElementById('sidebar-tree');
+        let w, h;
+
+        // Virtual Camera for panning across the fractal graph
+        let camera = { x: 0, y: 0 };
+        let targetCamera = { x: 0, y: 0 };
+        let activeNode = fileSystem; // The node currently focused
+        let flatNodes = []; // Flat array for easy hit detection
+        let time = 0;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            // Recenter target based on screen size shift (only if layout is ready)
+            if (activeNode && activeNode.renderX !== undefined) {
+                centerCameraOn(activeNode);
+            }
+        }
+        window.addEventListener('resize', resize);
+        
+        // Initialize mouse with safe window fallback
+        let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+        let canvasMouse = { x: 0, y: 0 }; // Mouse adjusted for camera
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; 
+            mouse.y = e.clientY;
+        });
+
+        function toggleFolder(node) {
+            if (node.type !== 'folder') return;
+            node.expanded = !node.expanded;
+            activeNode = node;
+            
+            updateGraphLayout();
+            renderSidebar();
+            centerCameraOn(node);
+        }
+
+        // Recursive rendering for the HTML sidebar
+        function createTreeHTML(node, depth) {
+            const container = document.createElement('div');
+            container.className = 'tree-item-container';
+
+            const item = document.createElement('div');
+            item.className = `tree-item ${activeNode === node ? 'active' : ''}`;
+            item.style.paddingLeft = `${depth * 15}px`;
+
+            // Icons
+            const icon = document.createElement('span');
+            if (node.type === 'folder') {
+                icon.className = 'tree-icon';
+                icon.innerText = node.expanded ? '▼' : '▶';
+            } else {
+                icon.className = 'tree-icon file';
+                icon.innerText = '●';
+            }
+            
+            const text = document.createElement('span');
+            text.innerText = node.name;
+
+            item.appendChild(icon);
+            item.appendChild(text);
+            
+            item.onclick = (e) => {
+                e.stopPropagation();
+                if(node.type === 'folder') toggleFolder(node);
+                else {
+                    activeNode = node;
+                    renderSidebar();
+                    centerCameraOn(node);
+                }
+            };
+            
+            container.appendChild(item);
+
+            if (node.type === 'folder' && node.expanded && node.children) {
+                node.children.forEach(child => {
+                    container.appendChild(createTreeHTML(child, depth + 1));
+                });
+            }
+
+            return container;
+        }
+
+        function renderSidebar() {
+            sidebarTree.innerHTML = '';
+            sidebarTree.appendChild(createTreeHTML(fileSystem, 0));
+        }
+
+        // Calculate spatial positions of all visible nodes to draw lines and allow panning
+        function calculateNodePositions(node, x, y, depth, incomingAngle) {
+            node.renderX = x;
+            node.renderY = y;
+            node.depth = depth;
+            
+            // Add to flat array for rendering and hit detection
+            flatNodes.push(node);
+
+            if (node.type === 'folder' && node.expanded && node.children && node.children.length > 0) {
+                const count = node.children.length;
+                
+                // Base radius shrinks slightly as depth increases to prevent massive overlap
+                const radius = 220 * Math.pow(0.85, depth); 
+                
+                // If it's the root, fan out 360 degrees. Otherwise, fan out forward (140 degrees)
+                const isRoot = depth === 0;
+                const spreadAngle = isRoot ? Math.PI * 2 : Math.PI * 0.8;
+                
+                // Determine starting angle
+                let startAngle = incomingAngle - spreadAngle / 2;
+                if (isRoot) startAngle = 0;
+
+                node.children.forEach((child, i) => {
+                    // Calculate angle for this child
+                    let angle;
+                    if (count === 1) {
+                        angle = incomingAngle; // Straight line if only one child
+                    } else if (isRoot) {
+                        angle = (Math.PI * 2) * (i / count);
+                    } else {
+                        // Distribute evenly across the spread
+                        angle = startAngle + (spreadAngle * (i / (count - 1)));
+                    }
+
+                    let childX = x + Math.cos(angle) * radius;
+                    let childY = y + Math.sin(angle) * radius;
+                    
+                    // Store the angle used to reach the child so we can draw the petal correctly
+                    child.angleFromParent = angle;
+                    child.distanceFromParent = radius;
+
+                    calculateNodePositions(child, childX, childY, depth + 1, angle);
+                });
+            }
+        }
+
+        function updateGraphLayout() {
+            flatNodes = [];
+            // Root starts at 0,0 conceptually. Camera translates this to screen space.
+            calculateNodePositions(fileSystem, 0, 0, 0, 0);
+            document.getElementById('node-count').innerText = flatNodes.length;
+        }
+
+        function centerCameraOn(node) {
+            if(!node || node.renderX === undefined || node.renderY === undefined) return;
+            // Target is the node's position, but offset to account for the left sidebar
+            // so the node appears in the center of the available canvas space.
+            const sidebarWidth = 340;
+            const availableWidth = w - sidebarWidth;
+            targetCamera.x = node.renderX - (sidebarWidth + availableWidth / 2);
+            targetCamera.y = node.renderY - (h / 2);
+        }
+
+        // Initialize structure safely in the correct order
+        resize();
+        updateGraphLayout();
+        centerCameraOn(activeNode);
+        renderSidebar();
+
+        // Canvas click detection
+        canvas.addEventListener('mousedown', (e) => {
+            // Adjust mouse to world space
+            const worldX = e.clientX + camera.x;
+            const worldY = e.clientY + camera.y;
+
+            // Find closest node
+            let closest = null;
+            let minDist = 30; // Click radius
+
+            flatNodes.forEach(node => {
+                let dist = Math.hypot(worldX - node.renderX, worldY - node.renderY);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = node;
+                }
+            });
+
+            if (closest) {
+                if(closest.type === 'folder') toggleFolder(closest);
+                else {
+                    activeNode = closest;
+                    renderSidebar();
+                    centerCameraOn(closest);
+                }
+            }
+        });
+
+        function drawPetal(parent, child, breath) {
+            ctx.save();
+            ctx.translate(parent.renderX, parent.renderY);
+            
+            // Rotate to face the child
+            // The previous bezier curve logic went "up" (Y-axis), so we rotate by angle - 90deg
+            ctx.rotate(child.angleFromParent - Math.PI/2);
+            
+            let dist = child.distanceFromParent;
+            
+            // Draw sweeping loop
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            // The signature fl0w sweeping bezier curve
+            ctx.bezierCurveTo(dist * 0.4, dist * 0.8, dist * -0.4, dist * 0.8, 0, dist);
+            
+            ctx.strokeStyle = 'rgba(170, 221, 255, 0.25)';
+            // Highlight path to active node or if child is active
+            if (child === activeNode || parent === activeNode) {
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.6)';
+                ctx.lineWidth = 2;
+            } else {
+                ctx.lineWidth = 1;
+            }
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+
+        function drawNode(node, breath) {
+            ctx.save();
+            ctx.translate(node.renderX, node.renderY);
+
+            let isHovered = Math.hypot((mouse.x + camera.x) - node.renderX, (mouse.y + camera.y) - node.renderY) < 20;
+            let isActive = node === activeNode;
+
+            if (node.id === 'root') {
+                // Massive glowing core for root
+                ctx.shadowBlur = isActive ? 40 : 20;
+                ctx.shadowColor = '#ffffff';
+                ctx.beginPath(); ctx.arc(0, 0, 18 + breath*2, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff'; ctx.fill();
+
+                ctx.shadowBlur = 10;
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.4)';
+                ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.arc(0, 0, 40 + breath*5, 0, Math.PI*2); ctx.stroke();
+                ctx.setLineDash([4, 12]);
+                ctx.beginPath(); ctx.arc(0, 0, 60 + breath*8, 0, Math.PI*2); ctx.stroke();
+                
+            } else if (node.type === 'folder') {
+                // Hollow ring for folders
+                ctx.beginPath();
+                ctx.arc(0, 0, 12, 0, Math.PI*2);
+                ctx.strokeStyle = isActive || isHovered ? '#ffffff' : 'rgba(255, 255, 255, 0.6)';
+                ctx.lineWidth = isActive ? 2 : 1;
+                if(isActive || isHovered) { ctx.shadowBlur = 15; ctx.shadowColor = '#fff'; }
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+                
+                // Inner dot indicates if it can be expanded
+                ctx.beginPath();
+                ctx.arc(0, 0, 3, 0, Math.PI*2);
+                ctx.fillStyle = node.expanded ? '#aaddff' : '#ffffff';
+                ctx.fill();
+
+                // Outer structural ring if expanded
+                if(node.expanded) {
+                    ctx.setLineDash([2, 6]);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 22 + breath*2, 0, Math.PI*2);
+                    ctx.strokeStyle = 'rgba(170, 221, 255, 0.3)';
+                    ctx.stroke();
+                }
+            } else {
+                // Solid bright orb for files
+                ctx.beginPath();
+                ctx.arc(0, 0, 8, 0, Math.PI*2);
+                ctx.fillStyle = isActive || isHovered ? '#ffffff' : '#aaddff';
+                if(isActive || isHovered) { ctx.shadowBlur = 15; ctx.shadowColor = '#aaddff'; }
+                ctx.fill();
+            }
+
+            ctx.restore();
+            
+            // Draw Label (using canvas for smooth panning sync)
+            ctx.save();
+            ctx.translate(node.renderX, node.renderY);
+            
+            ctx.font = isActive ? "600 12px 'Jura'" : "300 10px 'Jura'";
+            ctx.fillStyle = isActive ? "#ffffff" : "rgba(170, 221, 255, 0.8)";
+            ctx.textAlign = "center";
+            ctx.shadowBlur = isActive ? 10 : 0;
+            ctx.shadowColor = '#000000';
+            
+            // Offset label below the orb
+            let labelOffset = node.id === 'root' ? 85 : 25;
+            ctx.fillText(node.name.toUpperCase(), 0, labelOffset);
+            
+            // Sub-label for meta data
+            if (isActive || isHovered) {
+                ctx.font = "300 8px 'Space Grotesk'";
+                ctx.fillStyle = "rgba(170, 221, 255, 0.5)";
+                let meta = node.type === 'folder' ? '[DIR]' : `[FILE: ${node.size || '0KB'}]`;
+                ctx.fillText(meta, 0, labelOffset + 12);
+            }
+            
+            ctx.restore();
+        }
+
+        function animate() {
+            // Smooth clear for trail effect
+            ctx.fillStyle = 'rgba(0, 0, 26, 0.4)';
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.02;
+            let breath = Math.sin(time) * 1.5;
+
+            // Interpolate camera for smooth panning
+            camera.x += (targetCamera.x - camera.x) * 0.08;
+            camera.y += (targetCamera.y - camera.y) * 0.08;
+            
+            // Update HUD coordinates
+            document.getElementById('cam-coords').innerText = `${Math.floor(camera.x)}, ${Math.floor(camera.y)}`;
+
+            ctx.save();
+            // Apply camera transform. We subtract camera because if camera moves right, world moves left.
+            ctx.translate(-camera.x, -camera.y);
+
+            // 1. Draw all connections (Petals) first so they are under the orbs
+            flatNodes.forEach(node => {
+                if (node.type === 'folder' && node.expanded && node.children) {
+                    node.children.forEach(child => {
+                        drawPetal(node, child, breath);
+                    });
+                }
+            });
+
+            // 2. Draw all nodes (Orbs and Labels) on top
+            flatNodes.forEach(node => {
+                drawNode(node, breath);
+            });
+
+            ctx.restore();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

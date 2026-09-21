@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Radial Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --void-deep: #00001a;
+            --void-light: #001133;
+            --glow-white: #ffffff;
+            --glow-cyan: #aaddff;
+            --hud-line: rgba(170, 221, 255, 0.15);
+            --hud-hover: rgba(170, 221, 255, 0.4);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 60% 50%, var(--void-light) 0%, var(--void-deep) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--glow-white);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+        }
+
+        .ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; padding: 3rem; box-sizing: border-box;
+        }
+
+        /* Left Side: Directory HUD */
+        .hud-left {
+            pointer-events: auto;
+            display: flex; flex-direction: column;
+            width: 320px;
+            border-right: 1px solid var(--hud-line);
+            padding-right: 2rem;
+        }
+
+        .sys-header {
+            font-family: 'Jura', sans-serif;
+            font-size: 2rem; font-weight: 300; letter-spacing: 0.2em;
+            color: var(--glow-white);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            margin-bottom: 5px; line-height: 1;
+        }
+
+        .sys-sub {
+            font-size: 0.65rem; letter-spacing: 4px; color: var(--glow-cyan);
+            text-transform: uppercase; margin-bottom: 3rem; opacity: 0.7;
+        }
+
+        .folder-tree {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .tree-item {
+            font-size: 0.85rem; letter-spacing: 1px; color: rgba(170, 221, 255, 0.6);
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 10px;
+            padding: 6px 0;
+        }
+
+        .tree-item::before {
+            content: ''; display: block; width: 12px; height: 1px;
+            background: var(--hud-line); transition: width 0.3s;
+        }
+
+        .tree-item:hover { color: var(--glow-white); }
+        .tree-item:hover::before { width: 20px; background: var(--glow-cyan); }
+        
+        .tree-item.active {
+            color: var(--glow-cyan); font-weight: 600;
+            text-shadow: 0 0 10px rgba(170, 221, 255, 0.3);
+        }
+        .tree-item.active::before { width: 25px; background: var(--glow-cyan); }
+
+        /* Floating Node Labels inside the Canvas */
+        #node-labels {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        .node-label {
+            position: absolute; transform: translate(-50%, -50%);
+            font-family: 'Jura', sans-serif; font-size: 0.75rem; letter-spacing: 2px;
+            color: var(--glow-white); text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            pointer-events: auto; cursor: pointer;
+            transition: color 0.3s, text-shadow 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+
+        .node-label .meta {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.55rem;
+            color: var(--glow-cyan); letter-spacing: 1px; opacity: 0.7;
+        }
+
+        .node-label:hover {
+            color: var(--glow-cyan);
+            text-shadow: 0 0 15px var(--glow-cyan);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="radial-canvas"></canvas>
+
+    <div id="node-labels"></div>
+
+    <div class="ui-layer">
+        <div class="hud-left">
+            <div>
+                <div class="sys-header">NEXUS_FS</div>
+                <div class="sys-sub">Structured Data Hierarchy</div>
+            </div>
+            
+            <!-- We will populate this via JS based on the file system -->
+            <div class="folder-tree" id="sidebar-tree"></div>
+
+            <div style="margin-top: auto;">
+                <div style="font-size: 0.65rem; color: var(--hud-line); letter-spacing: 2px; border-top: 1px solid var(--hud-line); padding-top: 15px;">
+                    STORAGE: 42% ALLOCATED<br>
+                    ROOT: /varxel/core/
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileSystem = {
+            id: "root", name: "VarXel_Core", type: "folder",
+            children: [
+                { id: "sys", name: "System32", type: "folder", children: [
+                    { id: "k1", name: "kernel.sys", type: "file", size: "12MB" },
+                    { id: "k2", name: "boot.ini", type: "file", size: "4KB" },
+                    { id: "k3", name: "drivers", type: "folder", children: [] }
+                ]},
+                { id: "usr", name: "Users", type: "folder", children: [
+                    { id: "u1", name: "Kira_Chen", type: "folder", children: [
+                        { id: "d1", name: "Projects", type: "folder", children: [] },
+                        { id: "d2", name: "Archives", type: "folder", children: [] }
+                    ]},
+                    { id: "u2", name: "Guest", type: "folder", children: [] }
+                ]},
+                { id: "cfg", name: "Config", type: "folder", children: [
+                    { id: "c1", name: "ui_theme.yaml", type: "file", size: "128KB" },
+                    { id: "c2", name: "network.conf", type: "file", size: "16KB" }
+                ]},
+                { id: "log", name: "Logs", type: "folder", children: [
+                    { id: "l1", name: "error.log", type: "file", size: "2MB" },
+                    { id: "l2", name: "access.log", type: "file", size: "14MB" }
+                ]},
+                { id: "bin", name: "Binaries", type: "folder", children: [] }
+            ]
+        };
+
+        const canvas = document.getElementById('radial-canvas');
+        const ctx = canvas.getContext('2d');
+        const labelsContainer = document.getElementById('node-labels');
+        const sidebarTree = document.getElementById('sidebar-tree');
+        let w, h;
+
+        let currentFolder = fileSystem;
+        let htmlLabels = [];
+        let time = 0;
+        // Animation value for smooth transitions between folders
+        let transitionProgress = 1; 
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let mouse = { x: w/2, y: h/2 };
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+
+        function navigateTo(folder) {
+            if(folder.type !== 'folder') return;
+            currentFolder = folder;
+            transitionProgress = 0; // Trigger expansion animation
+            renderSidebar();
+            createLabels();
+        }
+
+        function renderSidebar() {
+            sidebarTree.innerHTML = '';
+            
+            // Render root
+            let rootEl = document.createElement('div');
+            rootEl.className = `tree-item ${currentFolder.id === fileSystem.id ? 'active' : ''}`;
+            rootEl.innerText = "/ " + fileSystem.name;
+            rootEl.onclick = () => navigateTo(fileSystem);
+            sidebarTree.appendChild(rootEl);
+
+            // Render current children if we are at root, or immediate context
+            let contextFolder = currentFolder.id === fileSystem.id ? fileSystem : currentFolder;
+            
+            contextFolder.children.forEach(child => {
+                if (child.type === 'folder') {
+                    let el = document.createElement('div');
+                    el.className = 'tree-item';
+                    el.style.paddingLeft = '20px';
+                    el.innerText = child.name;
+                    el.onclick = () => navigateTo(child);
+                    sidebarTree.appendChild(el);
+                }
+            });
+        }
+
+        function createLabels() {
+            labelsContainer.innerHTML = '';
+            htmlLabels = [];
+
+            // Label for the central core
+            const coreLabel = document.createElement('div');
+            coreLabel.className = 'node-label';
+            coreLabel.innerHTML = `<span>${currentFolder.name}</span><span class="meta">[CURRENT DIR]</span>`;
+            // If not root, clicking center goes up one level (simplified for mockup)
+            if (currentFolder.id !== fileSystem.id) {
+                coreLabel.onclick = () => navigateTo(fileSystem); 
+            }
+            labelsContainer.appendChild(coreLabel);
+            htmlLabels.push({ el: coreLabel, isCore: true });
+
+            // Labels for children
+            currentFolder.children.forEach((child, i) => {
+                const el = document.createElement('div');
+                el.className = 'node-label';
+                el.innerHTML = `<span>${child.name}</span><span class="meta">${child.type === 'folder' ? '[DIR]' : child.size}</span>`;
+                
+                if (child.type === 'folder') {
+                    el.onclick = () => navigateTo(child);
+                }
+                
+                labelsContainer.appendChild(el);
+                htmlLabels.push({ el: el, isCore: false, index: i });
+            });
+        }
+
+        // Initialize UI
+        renderSidebar();
+        createLabels();
+
+        function animate() {
+            // Smooth clear for slight trailing effect
+            ctx.fillStyle = 'rgba(0, 0, 26, 0.4)';
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.005;
+            if (transitionProgress < 1) transitionProgress += 0.03;
+
+            // Offset center to the right to accommodate the left HUD
+            const cx = w * 0.6;
+            const cy = h / 2;
+
+            // Base radius breathes slightly
+            let baseRadius = (220 + Math.sin(time * 2) * 15) * easeOutCubic(transitionProgress);
+
+            ctx.save();
+            ctx.translate(cx, cy);
+            
+            // Slow, deliberate rotation
+            let targetRotation = time * 0.5;
+            ctx.rotate(targetRotation);
+
+            // 1. Draw Central Core (Current Folder)
+            ctx.shadowBlur = 30 * transitionProgress;
+            ctx.shadowColor = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(0, 0, 18 * transitionProgress, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+
+            // Core aesthetic rings
+            ctx.shadowBlur = 10;
+            ctx.strokeStyle = 'rgba(170, 221, 255, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.arc(0, 0, 40 * transitionProgress, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([4, 12]);
+            ctx.beginPath(); ctx.arc(0, 0, 60 * transitionProgress, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 2. Draw Children (Files/Subfolders)
+            const numChildren = currentFolder.children.length;
+            
+            for (let i = 0; i < numChildren; i++) {
+                let child = currentFolder.children[i];
+                let angle = (i * Math.PI * 2) / numChildren;
+                
+                ctx.save();
+                ctx.rotate(angle);
+
+                // Sweeping petal connection
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                // Quadratic curve creates the radial loop shape
+                ctx.bezierCurveTo(baseRadius * 0.4, baseRadius * 0.8, baseRadius * -0.4, baseRadius * 0.8, 0, baseRadius);
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.25)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Draw the Orb at the end
+                if (child.type === 'folder') {
+                    // Folder visually looks like a hollow ring with a dot (contains depth)
+                    ctx.beginPath();
+                    ctx.arc(0, baseRadius, 14, 0, Math.PI*2);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.arc(0, baseRadius, 4, 0, Math.PI*2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+                    ctx.fill();
+                    
+                    // Outer structural ring
+                    ctx.beginPath();
+                    ctx.arc(0, baseRadius + 22, 6, 0, Math.PI*2);
+                    ctx.strokeStyle = 'rgba(170, 221, 255, 0.4)';
+                    ctx.stroke();
+                } else {
+                    // File visually looks like a solid bright orb (endpoint)
+                    ctx.beginPath();
+                    ctx.arc(0, baseRadius, 10, 0, Math.PI*2);
+                    ctx.fillStyle = '#aaddff';
+                    ctx.fill();
+                }
+
+                let globalAngle = angle + targetRotation;
+                let absX = cx + Math.cos(globalAngle) * (baseRadius + 45); // Offset label outward
+                let absY = cy + Math.sin(globalAngle) * (baseRadius + 45);
+                
+                // Find matching HTML label and update position
+                let labelObj = htmlLabels.find(l => !l.isCore && l.index === i);
+                if(labelObj && transitionProgress > 0.5) { // Hide labels during early transition
+                    labelObj.el.style.left = `${absX}px`;
+                    labelObj.el.style.top = `${absY}px`;
+                    labelObj.el.style.opacity = (transitionProgress - 0.5) * 2;
+                }
+
+                ctx.restore();
+            }
+            
+            ctx.restore();
+
+            // Update core label position
+            let coreLabelObj = htmlLabels.find(l => l.isCore);
+            if(coreLabelObj) {
+                coreLabelObj.el.style.left = `${cx}px`;
+                coreLabelObj.el.style.top = `${cy - 90 * transitionProgress}px`; // Above core
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Helper easing function
+        function easeOutCubic(x) {
+            return 1 - Math.pow(1 - x, 3);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

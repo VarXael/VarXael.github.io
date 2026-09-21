@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIATOMS // Micro-Geometry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dia-bg: #030a0d;
+            --dia-line: rgba(180, 230, 255, 0.4);
+            --dia-glow: #b4e6ff;
+            --font-head: 'Syncopate', sans-serif;
+            --font-body: 'Work Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dia-bg);
+            color: #fff;
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Ambient light from the deep */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 100% 50%, rgba(180, 230, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* The Diatom / Radiolaria Geometric Creature */
+        .creature-container {
+            position: fixed;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            pointer-events: none;
+            animation: float-creature 10s infinite alternate ease-in-out;
+        }
+
+        .ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid var(--dia-line);
+            border-radius: 50%;
+            box-shadow: inset 0 0 20px rgba(180, 230, 255, 0.1);
+            animation: spin 30s infinite linear;
+        }
+
+        .r1 { width: 400px; height: 400px; animation-duration: 40s; }
+        .r2 { width: 300px; height: 300px; animation-direction: reverse; border-style: dashed; }
+        .r3 { width: 200px; height: 200px; border-width: 2px; border-color: rgba(180, 230, 255, 0.6); }
+
+        /* Radiating Spikes */
+        .spike {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 450px; height: 1px;
+            background: linear-gradient(90deg, transparent 40%, var(--dia-line) 50%, transparent 60%);
+            transform-origin: center;
+        }
+
+        .s1 { transform: translate(-50%, -50%) rotate(0deg); }
+        .s2 { transform: translate(-50%, -50%) rotate(30deg); }
+        .s3 { transform: translate(-50%, -50%) rotate(60deg); }
+        .s4 { transform: translate(-50%, -50%) rotate(90deg); }
+        .s5 { transform: translate(-50%, -50%) rotate(120deg); }
+        .s6 { transform: translate(-50%, -50%) rotate(150deg); }
+
+        .core {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px; height: 50px;
+            background: var(--dia-glow);
+            border-radius: 50%;
+            filter: blur(10px);
+            animation: pulse 4s infinite alternate;
+        }
+
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes pulse { 0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } }
+        @keyframes float-creature { 0% { transform: translateY(-45%); } 100% { transform: translateY(-55%); } }
+
+        /* UI Content */
+        .content {
+            padding: 50px 10%;
+            max-width: 800px;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            margin-bottom: 80px;
+        }
+
+        .title {
+            font-family: var(--font-head);
+            font-size: 3rem;
+            color: var(--dia-glow);
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            letter-spacing: 5px;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
+
+        /* Items */
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .item {
+            border-left: 1px solid var(--dia-line);
+            padding-left: 30px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .item::before {
+            content: '';
+            position: absolute;
+            left: -4px; top: 0;
+            width: 7px; height: 7px;
+            background: var(--dia-glow);
+            border-radius: 50%;
+            transition: 0.5s;
+        }
+
+        .item:hover {
+            border-left-color: var(--dia-glow);
+        }
+
+        .item:hover::before {
+            transform: scale(2);
+            box-shadow: 0 0 10px var(--dia-glow);
+        }
+
+        .item-title {
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .item:hover .item-title {
+            color: var(--dia-glow);
+            letter-spacing: 2px;
+        }
+
+        .item-desc {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.6);
+            max-width: 500px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="creature-container">
+        <div class="spike s1"></div>
+        <div class="spike s2"></div>
+        <div class="spike s3"></div>
+        <div class="spike s4"></div>
+        <div class="spike s5"></div>
+        <div class="spike s6"></div>
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="ring r3"></div>
+        <div class="core"></div>
+    </div>
+
+    <div class="content">
+        <header>
+            <div class="title">RADIOLARIA</div>
+            <div class="subtitle">Micro-Geometric Skeletons</div>
+        </header>
+
+        <section class="list">
+            
+            <div class="item">
+                <h2 class="item-title">Crystalline Exoskeletons</h2>
+                <p class="item-desc">Focused on the mathematical beauty of microscopic life. Designed procedural generation systems that build complex, symmetrical crystalline shells for entities based on their consumption history.</p>
+            </div>
+
+            <div class="item">
+                <h2 class="item-title">Radial Movement</h2>
+                <p class="item-desc">Unlike segmented swimmers, these geometric organisms utilize rotational momentum. By absorbing nutrients, they spin their outer rings, generating microscopic currents to pull in prey.</p>
+            </div>
+
+            <div class="item">
+                <h2 class="item-title">Bioluminescent Cores</h2>
+                <p class="item-desc">Integrated deep-sea lighting mechanics. The entity's core acts as a localized light source, casting complex geometric shadows onto the ocean floor based on the intricate patterns of its outer shell.</p>
+            </div>
+
+        </section>
+    </div>
+
+</body>
+</html>

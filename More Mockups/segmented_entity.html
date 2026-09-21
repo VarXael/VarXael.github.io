@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Segmented</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #000310;
+            background-image: radial-gradient(circle at center, #001033 0%, #000310 100%);
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            cursor: none; /* Hide cursor to let the organism act as the pointer */
+        }
+
+        canvas { position: fixed; top: 0; left: 0; z-index: 0; }
+
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; flex-direction: column; justify-content: center;
+            padding-left: 5vw;
+        }
+
+        h1 {
+            font-size: 4rem; font-weight: 200; letter-spacing: 8px;
+            color: #ffffff; margin: 0; text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        .desc {
+            max-width: 400px; font-size: 0.9rem; line-height: 1.8;
+            color: #88aadd; margin-top: 1rem; font-weight: 200;
+        }
+
+        .guide-text {
+            position: absolute; bottom: 40px; left: 5vw;
+            font-size: 0.7rem; letter-spacing: 4px; color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="segment-canvas"></canvas>
+    
+    <div class="overlay">
+        <div>
+            <h1>L I N E A G E</h1>
+            <div class="desc">
+                The entity follows kinetic input, trailing a segmented chain of data nodes. 
+                Move the cursor to guide the organism through the abyssal plane.
+            </div>
+        </div>
+        <div class="guide-text">Tracking Active // Input Required</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('segment-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let mouse = { x: w/2, y: h/2 };
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+
+        // The Organism Head
+        let head = { x: w/2, y: h/2, vx: 0, vy: 0 };
+        // The history array to store where the head has been
+        const history = [];
+        const historyMax = 150; 
+        
+        let time = 0;
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 3, 16, 0.6)';
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.1;
+
+            let dx = mouse.x - head.x;
+            let dy = mouse.y - head.y;
+            head.vx += dx * 0.002;
+            head.vy += dy * 0.002;
+            
+            // Add slight organic wandering
+            head.vx += Math.sin(time*0.5) * 0.5;
+            head.vy += Math.cos(time*0.4) * 0.5;
+
+            // Friction
+            head.vx *= 0.95;
+            head.vy *= 0.95;
+
+            head.x += head.vx;
+            head.y += head.vy;
+
+            // Record history
+            history.unshift({x: head.x, y: head.y});
+            if(history.length > historyMax) history.pop();
+
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+            
+            // Draw segments spacing them out along the history array
+            let numSegments = 15;
+            for(let i = 0; i < numSegments; i++) {
+                // Get index in history array (spaced out)
+                let histIndex = i * 8; 
+                if(histIndex >= history.length) break;
+
+                let pos = history[histIndex];
+                
+                // Size decreases down the tail, with a breathing pulse
+                let baseSize = (numSegments - i) * 1.5;
+                let breath = Math.sin(time + i) * (baseSize * 0.2);
+                let currentSize = baseSize + breath;
+
+                let alpha = 1 - (i / numSegments); // Fades out towards tail
+
+                // Draw Outer Ring
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, currentSize + 4, 0, Math.PI*2);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.5})`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Draw Inner Glowing Orb
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, currentSize, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.fill();
+                
+                // Draw connecting faint lines (optional, but adds to the fl0w look)
+                if (i > 0) {
+                    let prevIndex = (i-1) * 8;
+                    let prevPos = history[prevIndex];
+                    ctx.beginPath();
+                    ctx.moveTo(prevPos.x, prevPos.y);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.strokeStyle = `rgba(170, 221, 255, ${alpha * 0.2})`;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            }
+
+            // Draw Head Cresent/Mouth (like the cover art)
+            if(history.length > 2) {
+                let angle = Math.atan2(head.y - history[2].y, head.x - history[2].x);
+                ctx.save();
+                ctx.translate(head.x, head.y);
+                ctx.rotate(angle);
+                
+                ctx.beginPath();
+                ctx.arc(15, 0, 10, -Math.PI*0.4, Math.PI*0.4);
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                ctx.restore();
+            }
+
+            ctx.shadowBlur = 0;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

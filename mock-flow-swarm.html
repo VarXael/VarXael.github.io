@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOCK · Flow · Swarm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  /* ============================================================
+     CREATIVE 2 — "FLOW · SWARM"
+     A chaotic experiment in emergent interaction.
+     - You are NOT one creature. You are a SHOAL. The cursor is
+       hundreds of tiny bioluminescent organisms flocking with
+       boids behaviour (separation, alignment, cohesion) + a
+       gentle attraction to the pointer.
+     - The swarm IS the cursor. There is no other cursor.
+     - When the swarm passes over a content node, the node
+       fluoresces (lights up) and feeds the swarm: a few particles
+       peel off and orbit the node, marking it as "tasted." The
+       longer you linger, the more it brightens.
+     - Nodes that have been tasted glow persistently; untasted ones
+       stay dark and almost invisible. So the field is a dark sea
+       that you literally illuminate by swimming through it with
+       your shoal. You discover content by disturbance, not by
+       clicking nav.
+     - Clicking a tasted node blooms its detail.
+     - On mousedown, the swarm CONVERGES into a tight bait-ball and
+       darts toward the pointer (a "lunge" — the flOw speed-boost
+       creature). On release it disperses again.
+     Interesting elements to harvest:
+       * the cursor as a living many-body system, not a point
+       * discovery-by-disturbance (you reveal the dark by touching it)
+       * the lunge/bait-ball as a navigational gesture
+     Throwaway concept code, not a portfolio.
+     ============================================================ */
+  html,body{height:100%;overflow:hidden;cursor:none;user-select:none}
+  body{background:var(--abyss)}
+
+  canvas#sea{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block}
+  canvas#sw{position:fixed;inset:0;z-index:50;width:100%;height:100%;display:block;pointer-events:none}
+
+  .field{position:fixed;inset:0;z-index:20}
+  .node{position:absolute;transform:translate(-50%,-50%);background:none;border:none;cursor:none;
+    text-align:center;transition:filter .6s var(--ease)}
+  .node .orb{border-radius:50%;border:1px solid var(--lum-faint);
+    background:radial-gradient(circle,rgba(180,230,255,.05),rgba(3,9,13,.9));
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    transition:box-shadow .8s var(--ease),border-color .8s var(--ease),transform .6s var(--ease);
+    filter:brightness(.3)}
+  .node .orb img{width:74%;height:74%;object-fit:cover;border-radius:50%;opacity:0;filter:grayscale(.6);transition:opacity .8s,filter .8s}
+  .node .cap{font-family:var(--head);font-size:.44rem;letter-spacing:1.5px;color:var(--rc,var(--lum));
+    text-transform:uppercase;margin-top:12px;opacity:0;transition:opacity .8s}
+  .node .ttl{font-family:var(--body);font-weight:600;font-size:.95rem;color:var(--ink);margin-top:4px;opacity:0;transition:opacity .8s}
+
+  /* tasted = the swarm has passed over it; it fluoresces and reveals */
+  .node.tasted .orb{filter:brightness(1.1);border-color:color-mix(in srgb,var(--rc) 60%,transparent);
+    box-shadow:0 0 30px color-mix(in srgb,var(--rc) 35%,transparent)}
+  .node.tasted .orb img{opacity:.8}
+  .node.tasted .cap{opacity:.85}
+  .node.tasted .ttl{opacity:.9}
+  .node.hot .orb{box-shadow:0 0 48px color-mix(in srgb,var(--rc) 60%,transparent);transform:scale(1.06)}
+  .node.hot .orb img{opacity:1;filter:none}
+  .node.seed .orb{width:210px;height:210px;border-color:var(--lum)}
+  .node.seed .seedname{font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:-1px;
+    color:var(--lum-bright);font-size:1.5rem;line-height:1.1;text-align:center;text-shadow:0 0 26px rgba(180,230,255,.4)}
+  .node.seed .seedrole{font-family:var(--head);font-size:.46rem;letter-spacing:3px;color:var(--lum);margin-top:8px;opacity:.8}
+  .node.spec .orb{width:118px;height:118px}
+  .node.trait .orb{width:78px;height:78px;border-color:var(--rc)}
+  .node.lineage .orb{width:84px;height:84px;border-color:#7dffd0}
+
+  /* faint labels even before tasting, so the field isn't totally empty */
+  .node .ghost{font-family:var(--head);font-size:.4rem;letter-spacing:2px;color:var(--lum-faint);
+    text-transform:uppercase;margin-top:8px;opacity:.5}
+
+  .whisper{position:fixed;bottom:20px;left:24px;z-index:40;font-family:var(--head);
+    font-size:.48rem;letter-spacing:3px;color:var(--lum-soft);opacity:.5;pointer-events:none}
+  .whisper b{color:var(--lum)}
+  .hint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:40;font-family:var(--head);
+    font-size:.46rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;opacity:.6;
+    transition:1s;pointer-events:none}
+  .hint.hide{opacity:0}
+
+  /* diegetic detail */
+  .detail{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;opacity:0;
+    pointer-events:none;transition:opacity .6s var(--ease)}
+  .detail.open{opacity:1;pointer-events:auto}
+  .detail .scrim{position:absolute;inset:0;background:rgba(2,6,9,.7);backdrop-filter:blur(7px)}
+  .detail .panel{--rc:var(--lum);position:relative;width:min(660px,90vw);max-height:86vh;overflow-y:auto;
+    background:linear-gradient(160deg,rgba(8,26,34,.92),rgba(3,9,13,.96));
+    border:1px solid color-mix(in srgb,var(--rc) 40%,var(--lum-faint));border-radius:20px;
+    box-shadow:0 0 100px color-mix(in srgb,var(--rc) 16%,transparent);transform:scale(.9);transition:transform .6s var(--ease)}
+  .detail.open .panel{transform:scale(1)}
+  .detail .pmedia{height:210px;background:#000;overflow:hidden;border-radius:20px 20px 0 0}
+  .detail .pmedia img{width:100%;height:100%;object-fit:cover;filter:grayscale(.15)}
+  .detail .pinner{padding:26px 30px 32px}
+  .detail .pmeta{font-family:var(--head);font-size:.5rem;letter-spacing:3px;color:var(--rc);text-transform:uppercase;margin-bottom:12px;opacity:.9}
+  .detail .ptitle{font-family:var(--head);font-size:1.6rem;text-transform:uppercase;letter-spacing:-.5px;color:var(--lum-bright);margin-bottom:16px;text-shadow:0 0 26px rgba(180,230,255,.3)}
+  .detail .pblurb{font-size:1.05rem;line-height:1.7;margin-bottom:16px}
+  .detail .pstory{font-size:.95rem;line-height:1.8;color:var(--dim);border-left:1px solid color-mix(in srgb,var(--rc) 35%,transparent);padding-left:16px;margin-bottom:20px}
+  .detail .pclose{position:absolute;top:14px;right:16px;background:rgba(3,9,13,.6);border:1px solid var(--lum-faint);color:var(--dim);font-family:var(--head);font-size:.46rem;letter-spacing:2px;padding:8px 13px;border-radius:16px;transition:.3s;cursor:none}
+  .detail .pclose:hover{color:var(--lum);border-color:var(--lum)}
+  .detail .btn{cursor:none}
+
+  @media(pointer:coarse){ html,body{cursor:auto} .node,.btn,.pclose{cursor:pointer} }
+  @media(prefers-reduced-motion:reduce){ .node{transition:opacity .2s linear,filter .2s linear} }
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas>
+<div class="depth-fog" style="opacity:.16"></div>
+<div class="vignette"></div>
+
+<div class="mock-tag">★ Flow · Swarm</div>
+<a class="mock-back" href="./mock.html">↑ All mockups</a>
+
+<div class="field" id="field">
+  <!-- seed (organism) -->
+  <button class="node seed" data-id="seed" style="left:50%;top:42%">
+    <div class="orb">
+      <div>
+        <div class="seedname">Giuseppe<br>Alfieri</div>
+        <div class="seedrole">Game &amp; Technical Designer</div>
+      </div>
+    </div>
+    <div class="ghost">the core</div>
+  </button>
+  <!-- trait + spec + lineage nodes injected by JS -->
+</div>
+
+<canvas id="sw"></canvas>
+<div class="whisper">SHOAL <b id="shoalNum">220</b> · TASTED <b id="tastedNum">00</b></div>
+<div class="hint" id="hint">swim the shoal through the dark to reveal · hold to lunge · click a glowing node</div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+
+  const field = document.getElementById('field');
+  const counts = traitCounts();
+  const roles = Object.keys(RC);
+
+  // place trait nodes around the seed
+  roles.forEach((r,i)=>{
+    const ang = -Math.PI/2 + i/roles.length*Math.PI*2;
+    const x = 50 + Math.cos(ang)*16, y = 42 + Math.sin(ang)*16;
+    const el = document.createElement('button');
+    el.className = 'node trait';
+    el.dataset.role = r;
+    el.dataset.id = 'trait-'+r;
+    el.style.left = x+'%'; el.style.top = y+'%';
+    el.style.setProperty('--rc', RC[r]);
+    el.innerHTML = `<div class="orb"></div><div class="ghost">${r}</div><div class="cap">${r}</div><div class="ttl">${String(counts[r]||0).padStart(2,'0')} specimens</div>`;
+    field.appendChild(el);
+  });
+
+  // place spec nodes in a wide ring
+  DATA.forEach((p,i)=>{
+    const ang = i/DATA.length*Math.PI*2 + 0.3;
+    const x = 50 + Math.cos(ang)*32, y = 42 + Math.sin(ang)*30;
+    const rc = roleColor(p.role);
+    const el = document.createElement('button');
+    el.className = 'node spec';
+    el.dataset.id = p.id; el.dataset.role = p.role;
+    el.style.left = x+'%'; el.style.top = y+'%';
+    el.style.setProperty('--rc', rc);
+    el.innerHTML = `<div class="orb"><img src="${p.img}" alt="${p.title}"></div><div class="ghost">${p.year}</div><div class="cap">${p.cat} · ${p.year}</div><div class="ttl">${p.title}</div>`;
+    field.appendChild(el);
+    el.addEventListener('click',()=>{ if(el.classList.contains('tasted')) openDetail(p.id); });
+  });
+
+  // lineage node
+  (function(){
+    const el = document.createElement('button');
+    el.className = 'node lineage';
+    el.dataset.id = 'lineage';
+    el.style.left = '50%'; el.style.top = '88%';
+    el.style.setProperty('--rc', '#7dffd0');
+    el.innerHTML = `<div class="orb"></div><div class="ghost">lineage</div><div class="cap">Origins</div><div class="ttl">Lineage</div>`;
+    field.appendChild(el);
+    el.addEventListener('click',()=>{ if(el.classList.contains('tasted')) openLineage(); });
+  })();
+
+  const allNodes = [...document.querySelectorAll('.node')];
+
+  /* ---------- boids swarm ---------- */
+  const cv = document.getElementById('sw');
+  const g = cv.getContext('2d');
+  let W,H, mx=innerWidth/2, my=innerHeight/2, t=0;
+  let lunge = false;
+  const reduceMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function resize(){ W=cv.width=innerWidth; H=cv.height=innerHeight; }
+  addEventListener('resize',resize); resize();
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  addEventListener('touchmove',e=>{if(e.touches[0]){mx=e.touches[0].clientX;my=e.touches[0].clientY;}},{passive:true});
+  addEventListener('mousedown',()=>lunge=true);
+  addEventListener('mouseup',()=>lunge=false);
+  addEventListener('touchstart',()=>lunge=true,{passive:true});
+  addEventListener('touchend',()=>lunge=false);
+
+  const N = 220;
+  const boids = [];
+  for(let i=0;i<N;i++){
+    boids.push({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*2, vy:(Math.random()-.5)*2,
+      hue: 180+Math.random()*40, sat: 70+Math.random()*30 });
+  }
+
+  // nodes in screen coords (recomputed each frame for accuracy)
+  function nodeCenters(){
+    return allNodes.map(n=>{
+      const r = n.getBoundingClientRect();
+      return { el:n, x:r.left+r.width/2, y:r.top+r.height/2, r:Math.max(r.width,r.height)/2 };
+    });
+  }
+
+  const tastedSet = new Set();
+  const tastedNumEl = document.getElementById('tastedNum');
+
+  function step(){
+    t++;
+    g.clearRect(0,0,W,H);
+    g.globalCompositeOperation='lighter';
+
+    const nodes = nodeCenters();
+    // attraction point = pointer (tighter when lunging)
+    const attractStr = lunge ? 0.012 : 0.0035;
+
+    for(let i=0;i<boids.length;i++){
+      const b = boids[i];
+      let ax=0, ay=0, cx=0, cy=0, avx=0, avy=0, nb=0, sx=0, sy=0;
+
+      // boids: separation (close neighbours), alignment, cohesion
+      for(let j=0;j<boids.length;j++){
+        if(i===j) continue;
+        const o = boids[j];
+        const dx = b.x-o.x, dy = b.y-o.y;
+        const d2 = dx*dx+dy*dy;
+        if(d2 < 60*60){
+          const d = Math.sqrt(d2)||0.01;
+          // separation (very close)
+          if(d2 < 18*18){ sx += dx/d; sy += dy/d; }
+          cx += o.x; cy += o.y; avx += o.vx; avy += o.vy; nb++;
+        }
+      }
+      if(nb>0){
+        cx/=nb; cy/=nb;
+        ax += (cx-b.x)*0.0009; ay += (cy-b.y)*0.0009;   // cohesion
+        avx/=nb; avy/=nb;
+        ax += (avx-b.vx)*0.045; ay += (avy-b.vy)*0.045;   // alignment
+      }
+      ax += sx*0.05; ay += sy*0.05;                       // separation
+
+      // attract to pointer (stronger + tighter when lunging)
+      const dxm = mx-b.x, dym = my-b.y;
+      ax += dxm*attractStr; ay += dym*attractStr;
+
+      // orbit content nodes (a little), and mark tasted when very close
+      for(const n of nodes){
+        const dx = n.x-b.x, dy = n.y-b.y;
+        const d = Math.sqrt(dx*dx+dy*dy)||0.01;
+        if(d < n.r + 18){
+          // tangent swirl around the node
+          ax += (-dy/d)*0.05; ay += (dx/d)*0.05;
+          // mark tasted
+          if(!n.el.classList.contains('tasted')){
+            n.el.classList.add('tasted');
+            tastedSet.add(n.el.dataset.id);
+            tastedNumEl.textContent = String(tastedSet.size).padStart(2,'0');
+          }
+          // "hot" if very close
+          if(d < n.r) n.el.classList.add('hot');
+        }
+      }
+
+      b.vx += ax; b.vy += ay;
+      // friction
+      b.vx *= 0.96; b.vy *= 0.96;
+      // clamp speed
+      const sp = Math.sqrt(b.vx*b.vx+b.vy*b.vy);
+      const maxSp = lunge ? 6 : 3.2;
+      if(sp > maxSp){ b.vx = b.vx/sp*maxSp; b.vy = b.vy/sp*maxSp; }
+      b.x += b.vx; b.y += b.vy;
+      // wrap
+      if(b.x<-20) b.x=W+20; else if(b.x>W+20) b.x=-20;
+      if(b.y<-20) b.y=H+20; else if(b.y>H+20) b.y=-20;
+    }
+
+    // clear "hot" each frame so only currently-fed nodes glow hot
+    nodes.forEach(n=>{ if(n.el.classList.contains('hot')){
+      // check if any boid is still close; if not, remove hot
+      let close=false;
+      for(const b of boids){ const dx=n.x-b.x, dy=n.y-b.y; if(dx*dx+dy*dy < (n.r+8)*(n.r+8)){close=true;break;} }
+      if(!close) n.el.classList.remove('hot');
+    }});
+
+    // draw trail-ish glow
+    for(const b of boids){
+      const sp = Math.sqrt(b.vx*b.vx+b.vy*b.vy);
+      const a = 0.10 + Math.min(0.4, sp*0.08);
+      g.fillStyle = `rgba(180,230,255,${a})`;
+      g.beginPath(); g.arc(b.x, b.y, 1.6, 0, 6.2832); g.fill();
+      // occasional brighter head
+      if((b.x*b.y|0)%7===0){
+        g.fillStyle = `rgba(223,244,255,${a*1.4})`;
+        g.beginPath(); g.arc(b.x, b.y, 0.9, 0, 6.2832); g.fill();
+      }
+    }
+
+    // pointer beacon
+    const beacon = lunge ? 0.4 : 0.12;
+    const grd = g.createRadialGradient(mx,my,0,mx,my, lunge?90:50);
+    grd.addColorStop(0, `rgba(180,230,255,${beacon})`);
+    grd.addColorStop(1, 'rgba(180,230,255,0)');
+    g.fillStyle = grd; g.beginPath(); g.arc(mx,my, lunge?90:50, 0, 6.2832); g.fill();
+
+    g.globalCompositeOperation = 'source-over';
+    if(reduceMotion){ setTimeout(step, 80); }
+    else document.hidden ? setTimeout(step,220) : requestAnimationFrame(step);
+  }
+  step();
+
+  // hide hint after interaction
+  setTimeout(()=>document.getElementById('hint').classList.add('hide'), 9000);
+
+  /* ---------- lineage detail ---------- */
+  function openLineage(){
+    const html = `<div class="pinner"><div class="pmeta" style="--rc:#7dffd0">◎ LINEAGE · ORIGINS</div><div class="ptitle">Where it started</div>${LINEAGE.map(l=>`<div class="tl-item"><div class="tl-when">[ ${l.when} ]</div><div><div class="tl-what">${l.what}</div><div class="tl-where">${l.where}</div></div></div>`).join('')}</div>`;
+    let d=document.querySelector('.detail.custom'); if(!d){ d=document.createElement('div'); d.className='detail custom'; document.body.appendChild(d); d.addEventListener('click',e=>{ if(e.target===d||e.target.classList.contains('scrim')||e.target.classList.contains('pclose')) d.classList.remove('open'); }); }
+    d.innerHTML=`<div class="scrim"></div><div class="panel" style="--rc:#7dffd0"><button class="pclose">RELEASE ✕</button>${html}</div>`;
+    requestAnimationFrame(()=>d.classList.add('open'));
+  }
+</script>
+</body>
+</html>

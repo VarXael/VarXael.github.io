@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Orb Constellation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #01040f;
+            font-family: 'Jura', sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        canvas { position: fixed; top: 0; left: 0; z-index: 0; }
+
+        .ui-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Central minimal text */
+        .center-hub {
+            text-align: center;
+            background: radial-gradient(circle, rgba(1,4,15,0.8) 0%, transparent 70%);
+            padding: 100px; border-radius: 50%;
+        }
+
+        h1 {
+            font-size: 2rem; font-weight: 300; letter-spacing: 15px;
+            margin: 0 0 10px 0; color: #ffffff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        
+        .sub {
+            font-size: 0.8rem; letter-spacing: 5px; color: #66aaff;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="constellation-canvas"></canvas>
+    
+    <div class="ui-container">
+        <div class="center-hub">
+            <h1>N E X U S</h1>
+            <div class="sub">Orbital Data Array</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('constellation-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class OrbNode {
+            constructor() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                // Very slow, majestic drifting
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 8 + 4;
+                this.hasOuterRing = Math.random() > 0.5;
+            }
+
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                
+                // Wrap around edges gracefully
+                if(this.x < -50) this.x = w + 50;
+                if(this.x > w + 50) this.x = -50;
+                if(this.y < -50) this.y = h + 50;
+                if(this.y > h + 50) this.y = -50;
+            }
+
+            draw() {
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#ffffff';
+                
+                // Solid Inner Orb
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+
+                // Distinct Outer Ring (fl0w aesthetic)
+                if (this.hasOuterRing) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius + 8, 0, Math.PI*2);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                }
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        const nodes = Array.from({length: 25}, () => new OrbNode());
+        let time = 0;
+
+        function animate() {
+            // Very dark, high opacity clear for a clean, sharp look (no messy trails)
+            ctx.fillStyle = '#01040f';
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.01;
+
+            // Draw ambient background ripples
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+            ctx.lineWidth = 1;
+            for(let i=1; i<=5; i++) {
+                ctx.beginPath();
+                ctx.arc(w/2, h/2, i * 150 + (Math.sin(time)*20), 0, Math.PI*2);
+                ctx.stroke();
+            }
+
+            for(let i = 0; i < nodes.length; i++) {
+                nodes[i].update();
+                
+                for(let j = i + 1; j < nodes.length; j++) {
+                    let dx = nodes[i].x - nodes[j].x;
+                    let dy = nodes[i].y - nodes[j].y;
+                    let dist = Math.hypot(dx, dy);
+
+                    // If close enough, draw an elegant looping line, not a straight line
+                    if (dist < 250) {
+                        let opacity = 1 - (dist / 250);
+                        ctx.strokeStyle = `rgba(170, 221, 255, ${opacity * 0.5})`;
+                        ctx.lineWidth = 1.5;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        
+                        // Create a sweeping control point based on time and positions
+                        let cpX = (nodes[i].x + nodes[j].x)/2 + Math.sin(time + i)*100;
+                        let cpY = (nodes[i].y + nodes[j].y)/2 + Math.cos(time + j)*100;
+                        
+                        ctx.quadraticCurveTo(cpX, cpY, nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                        
+                        // Draw a tiny hollow ring on the curve to mimic fl0w details
+                        let midX = (nodes[i].x + nodes[j].x)/2;
+                        let midY = (nodes[i].y + nodes[j].y)/2;
+                        
+                        ctx.beginPath();
+                        ctx.arc(midX, midY, 3, 0, Math.PI*2);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                        ctx.stroke();
+                    }
+                }
+                
+                // Draw node on top of lines
+                nodes[i].draw();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

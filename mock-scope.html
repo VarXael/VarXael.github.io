@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREATIVE · The Microscope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./mock-shared.css">
+<style>
+  html,body{height:100%;overflow:hidden}
+  .lab{position:fixed;inset:0;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:30px;padding:60px 56px}
+  /* left: readout */
+  .readout{justify-self:end;max-width:330px;text-align:right}
+  .r-idx{font-family:var(--head);font-size:.6rem;letter-spacing:4px;color:var(--lum);text-transform:uppercase}
+  .r-name{font-family:var(--head);font-size:1.7rem;text-transform:uppercase;letter-spacing:-.5px;line-height:1.1;color:var(--lum-bright);margin:14px 0;text-shadow:0 0 26px rgba(180,230,255,.3)}
+  .r-fields{display:flex;flex-direction:column;gap:10px;align-items:flex-end;margin:18px 0;border-top:1px solid var(--lum-faint);border-bottom:1px solid var(--lum-faint);padding:16px 0}
+  .r-fields div{font-family:var(--head);font-size:.5rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+  .r-fields b{color:var(--ink);font-weight:400;font-family:var(--body);font-size:.84rem;margin-left:8px;letter-spacing:0}
+  .r-blurb{font-size:.92rem;line-height:1.65;color:var(--dim)}
+  .r-observe{margin-top:18px}
+  /* center: the lens */
+  .scope{position:relative;width:min(60vh,560px);height:min(60vh,560px)}
+  .lens{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:1px solid var(--lum-soft);
+    box-shadow:0 0 0 10px rgba(3,9,13,.6),0 0 0 11px var(--lum-faint),0 0 80px rgba(180,230,255,.12),inset 0 0 80px rgba(2,6,9,.9)}
+  .lens .sample{position:absolute;inset:0;background-size:cover;background-position:center;filter:grayscale(.5) brightness(.7) contrast(1.1);transition:opacity .5s,filter .5s}
+  .lens .stain{position:absolute;inset:0;background:radial-gradient(circle,transparent 30%,rgba(3,9,13,.7) 75%),radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--rc,#b4e6ff) 25%,transparent),transparent 60%);mix-blend-mode:screen}
+  .lens.refocus .sample{opacity:.2;filter:blur(10px) grayscale(.5)}
+  .lens .creature{position:absolute;inset:14%;animation:spin 60s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .reticle-x{position:absolute;inset:0;pointer-events:none}
+  .reticle-x::before,.reticle-x::after{content:"";position:absolute;background:var(--lum-faint)}
+  .reticle-x::before{left:50%;top:8%;bottom:8%;width:1px}.reticle-x::after{top:50%;left:8%;right:8%;height:1px}
+  .ticks{position:absolute;inset:-2px;border-radius:50%}
+  .scope .caption{position:absolute;left:0;right:0;bottom:9%;text-align:center;font-family:var(--head);font-size:.56rem;letter-spacing:3px;color:var(--lum);text-transform:uppercase;text-shadow:0 0 12px rgba(180,230,255,.6)}
+  .scope .lens.clickable{cursor:pointer}
+  /* right: disciplines + dial */
+  .controls{justify-self:start;max-width:240px;display:flex;flex-direction:column;gap:14px}
+  .controls .lbl{font-family:var(--head);font-size:.52rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+  .disc{display:flex;flex-direction:column;gap:5px}
+  .disc button{--rc:var(--lum);display:flex;align-items:center;gap:10px;background:none;border:none;border-left:1px solid color-mix(in srgb,var(--rc) 35%,transparent);
+    color:var(--dim);font-family:var(--body);font-size:.84rem;padding:8px 0 8px 13px;transition:.3s;text-align:left}
+  .disc button .d{width:7px;height:7px;border-radius:50%;background:var(--rc);box-shadow:0 0 8px var(--rc);opacity:.5}
+  .disc button:hover{color:var(--ink)} .disc button.on{color:var(--rc)} .disc button.on .d{opacity:1}
+  /* dial */
+  .dial{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:16px}
+  .dial button{width:40px;height:40px;border-radius:50%;border:1px solid var(--lum-faint);background:rgba(3,9,13,.6);color:var(--lum);font-size:1rem;transition:.3s}
+  .dial button:hover{border-color:var(--lum);box-shadow:0 0 16px rgba(180,230,255,.3)}
+  .dial .dots{display:flex;gap:8px}
+  .dial .dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--lum-soft);transition:.3s}
+  .dial .dot.on{background:var(--lum);box-shadow:0 0 10px var(--lum)}
+  .topbrand{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:10;font-family:var(--head);font-size:.56rem;letter-spacing:4px;color:var(--dim);text-transform:uppercase}
+  .topbrand b{color:var(--lum)}
+  @media(max-width:980px){ .lab{grid-template-columns:1fr;justify-items:center;text-align:center;overflow-y:auto} .readout{text-align:center} .r-fields{align-items:center} .controls{align-items:center} }
+</style>
+</head>
+<body>
+<canvas id="sea"></canvas><div class="depth-fog" style="opacity:.32"></div><div class="vignette"></div>
+<div class="mock-tag">◎ Creative · The Microscope</div><a class="mock-back" href="./mock.html">↑ All mockups</a>
+<div class="topbrand">G.ALFIERI <b>//</b> SPECIMEN LAB · OBSERVATION LOG</div>
+
+<div class="lab">
+  <div class="readout">
+    <div class="r-idx" id="r-idx">SPECIMEN 01 / 06</div>
+    <h1 class="r-name" id="r-name">—</h1>
+    <div class="r-fields"><div>YEAR<b id="r-year">—</b></div><div>CATEGORY<b id="r-cat">—</b></div><div>DISCIPLINE<b id="r-role">—</b></div></div>
+    <p class="r-blurb" id="r-blurb">—</p>
+    <button class="btn r-observe" id="observe">◎ Observe in full</button>
+  </div>
+
+  <div class="scope">
+    <div class="lens clickable" id="lens">
+      <div class="sample" id="sample"></div>
+      <div class="stain" id="stain"></div>
+      <div class="creature" id="creature"></div>
+      <div class="reticle-x"></div>
+    </div>
+    <div class="caption" id="caption">—</div>
+  </div>
+
+  <div class="controls">
+    <div class="lbl">◎ Filter by discipline</div>
+    <div class="disc" id="disc"></div>
+  </div>
+</div>
+
+<div class="dial">
+  <button id="prev">‹</button>
+  <div class="dots" id="dots"></div>
+  <button id="next">›</button>
+</div>
+
+<script src="./mock-data.js"></script>
+<script>
+  mockSea();
+  let pool=[...DATA], idx=0, filter=null;
+  const lens=document.getElementById('lens');
+  function setPool(){ pool = filter ? DATA.filter(p=>p.role===filter) : [...DATA]; if(idx>=pool.length)idx=0; }
+  function render(){
+    const p=pool[idx]; if(!p)return; const rc=roleColor(p.role);
+    lens.classList.add('refocus');
+    document.getElementById('stain').style.setProperty('--rc',rc);
+    document.getElementById('creature').innerHTML=glyphSVG(rc).replace('class="glyph"','style="width:100%;height:100%;opacity:.5"');
+    setTimeout(()=>{
+      document.getElementById('sample').style.backgroundImage=`url('${p.img}')`;
+      lens.classList.remove('refocus');
+    },240);
+    document.getElementById('r-idx').textContent=`SPECIMEN ${String(idx+1).padStart(2,'0')} / ${String(pool.length).padStart(2,'0')}`;
+    document.getElementById('r-name').textContent=p.title;
+    document.getElementById('r-year').textContent=p.year;
+    document.getElementById('r-cat').textContent=p.cat;
+    document.getElementById('r-role').textContent=p.role;
+    document.getElementById('r-blurb').textContent=p.blurb;
+    document.getElementById('caption').textContent=p.title;
+    document.getElementById('dots').innerHTML=pool.map((_,i)=>`<span class="dot ${i===idx?'on':''}" data-i="${i}"></span>`).join('');
+    document.querySelectorAll('#dots .dot').forEach(d=>d.addEventListener('click',()=>{idx=+d.dataset.i;render();}));
+  }
+  function cycle(d){ idx=(idx+d+pool.length)%pool.length; render(); }
+  document.getElementById('prev').addEventListener('click',()=>cycle(-1));
+  document.getElementById('next').addEventListener('click',()=>cycle(1));
+  lens.addEventListener('click',()=>openDetail(pool[idx].id));
+  document.getElementById('observe').addEventListener('click',()=>openDetail(pool[idx].id));
+  addEventListener('keydown',e=>{ if(e.key==='ArrowRight')cycle(1); else if(e.key==='ArrowLeft')cycle(-1); });
+  addEventListener('wheel',e=>{ if(Math.abs(e.deltaY)>10) cycle(e.deltaY>0?1:-1); },{passive:true});
+  // discipline filter
+  document.getElementById('disc').innerHTML=['ALL',...Object.keys(RC)].map(r=>`<button data-role="${r}" style="--rc:${r==='ALL'?'#b4e6ff':RC[r]}" class="${r==='ALL'?'on':''}"><span class="d"></span>${r}</button>`).join('');
+  document.querySelectorAll('#disc button').forEach(b=>b.addEventListener('click',()=>{
+    filter = b.dataset.role==='ALL'?null:b.dataset.role; idx=0; setPool(); render();
+    document.querySelectorAll('#disc button').forEach(x=>x.classList.toggle('on',x===b));
+  }));
+  setPool(); render();
+</script>
+</body>
+</html>

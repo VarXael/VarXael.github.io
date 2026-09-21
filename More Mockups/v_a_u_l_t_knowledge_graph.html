@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.A.U.L.T. | Obsidian Core</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #05020a;
+            --bg-grid: #11051c;
+            --text-dim: #7a6b8c;
+            --text-bright: #e2d9f3;
+            --magenta-glow: #b24bf3;
+            --magenta-dim: rgba(178, 75, 243, 0.2);
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-tech: 'Rajdhani', sans-serif;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-deep);
+            color: var(--text-bright);
+            font-family: var(--font-tech);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+            cursor: crosshair;
+        }
+
+        .hud-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; justify-content: space-between;
+            padding: 30px; box-sizing: border-box;
+            background: radial-gradient(circle at center, transparent 40%, rgba(5, 2, 10, 0.8) 100%);
+        }
+
+        .panel {
+            pointer-events: auto;
+            width: 300px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .header-title {
+            font-family: var(--font-mono);
+            font-size: 1.5rem; letter-spacing: 5px;
+            color: #fff; margin-bottom: 5px;
+        }
+
+        .sub-header {
+            font-size: 0.65rem; letter-spacing: 2px;
+            color: var(--text-dim); text-transform: uppercase;
+        }
+
+        .module {
+            border-top: 1px solid rgba(178, 75, 243, 0.3);
+            padding-top: 10px;
+        }
+
+        .module-title {
+            font-size: 0.7rem; letter-spacing: 1.5px;
+            color: var(--text-dim); margin-bottom: 10px;
+            display: flex; justify-content: space-between;
+        }
+
+        .stat-row {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem; font-weight: 700; line-height: 1;
+        }
+
+        .mini-graph {
+            width: 100%; height: 20px;
+            border-bottom: 1px solid var(--magenta-dim);
+            position: relative; margin-bottom: 15px;
+        }
+        .mini-graph svg { width: 100%; height: 100%; overflow: visible; }
+        .mini-graph path { fill: none; stroke: var(--magenta-glow); stroke-width: 1.5; }
+
+        .list-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem; color: var(--text-bright);
+            margin-bottom: 8px; display: flex; gap: 10px;
+        }
+        .list-item::before { content: '>'; color: var(--magenta-glow); }
+
+        .bottom-center {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            text-align: center; pointer-events: auto;
+        }
+
+        .big-number {
+            font-size: 4rem; font-weight: 700; font-family: var(--font-mono);
+            letter-spacing: -2px; line-height: 1; text-shadow: 0 0 20px var(--magenta-dim);
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px; z-index: 99; pointer-events: none; opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <canvas id="vault-canvas"></canvas>
+
+    <div class="hud-overlay">
+        <!-- Left Panel -->
+        <div class="panel">
+            <div>
+                <div class="header-title">V.A.U.L.T.</div>
+                <div class="sub-header">VOICE-ACTIVATED UNIFIED LOGIC TERMINAL</div>
+            </div>
+
+            <div class="module" style="margin-top: 20px;">
+                <div class="module-title"><span>SYSTEM METRICS</span><span>NODE:CORE</span></div>
+                
+                <div class="stat-row"><span class="sub-header">M SUBSCRIBERS</span><span class="sub-header text-green-400">▲ 0.8% /mo</span></div>
+                <div class="stat-value">135K</div>
+                <div class="mini-graph">
+                    <svg preserveAspectRatio="none" viewBox="0 0 100 20"><path d="M0,15 Q10,15 20,10 T40,12 T60,5 T80,8 T100,2" /></svg>
+                </div>
+
+                <div class="stat-row"><span class="sub-header">M INSTAGRAM</span><span class="sub-header text-red-400">▼ -0.2% /mo</span></div>
+                <div class="stat-value">202K</div>
+                <div class="mini-graph">
+                    <svg preserveAspectRatio="none" viewBox="0 0 100 20"><path d="M0,5 Q20,10 40,8 T60,15 T80,10 T100,18" /></svg>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-title">OBJECTIVES <span>[TODO]</span></div>
+                <div class="list-item" style="color: #fff">Cut and ship the Jarvis HUD vessel video</div>
+                <div class="list-item text-gray-500">Record the voice-control demo for the channel</div>
+                <div class="list-item text-gray-500">Lock the upload - title, thumbnail, description</div>
+            </div>
+        </div>
+
+        <!-- Center Bottom -->
+        <div class="bottom-center">
+            <div class="sub-header" style="margin-bottom: 5px;">PRIMARY DIRECTORY - READ/WRITE</div>
+            <div class="big-number">135,000<span style="font-size: 1rem; color: var(--text-dim)">.NODES</span></div>
+            <div style="width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--magenta-glow), transparent); margin-top: 10px;"></div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="panel" style="text-align: right; align-items: flex-end;">
+            <div style="font-family: var(--font-mono); font-size: 2.5rem; line-height: 1;" id="clock">16:22:43</div>
+            <div class="sub-header" id="date">FRI - JUN 26</div>
+
+            <div class="module" style="margin-top: 30px; width: 100%;">
+                <div class="module-title" style="flex-direction: row-reverse;"><span>CURRENT TASK</span><span>[ID: 874]</span></div>
+                <div class="list-item" style="flex-direction: row-reverse;">> METRICS PULL</div>
+                <div class="list-item" style="flex-direction: row-reverse; color: var(--magenta-glow)">> INDEX DB/SY</div>
+                <div class="list-item" style="flex-direction: row-reverse;">> TREND SCAN</div>
+                <div class="list-item" style="flex-direction: row-reverse;">> PLAN TODAY</div>
+            </div>
+
+            <div class="module" style="width: 100%; text-align: left;">
+                <div class="module-title">SCHEDULE <span>[NEXT]</span></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr; gap: 10px; font-size: 0.75rem; margin-bottom: 10px; font-family: var(--font-mono);">
+                    <div class="text-gray-500">14:00</div>
+                    <div class="text-gray-500">Edit pass + B-roll, sequence the callout reveals</div>
+                    
+                    <div style="color: var(--magenta-glow)">16:00</div>
+                    <div style="color: var(--text-bright)">Lock the upload: title, thumbnail, description</div>
+                    
+                    <div class="text-gray-500">18:30</div>
+                    <div class="text-gray-500">EOD review + micro-doc</div>
+                </div>
+                <p style="font-size: 0.7rem; color: var(--text-dim); line-height: 1.4;">Focus: Execution, not engineering. The Jarvis HUD build is functional, so today is one thing: record the visual, cut it, and lock the upload.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('vault-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Clock update
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+        }, 1000);
+
+        let mouse = { x: w/2, y: h/2 };
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+
+        class Node {
+            constructor() {
+                // Spherical distribution for the obsidian graph look
+                const radius = Math.random() * 250 + 50; // Inner and outer bounds
+                const theta = Math.random() * 2 * Math.PI;
+                const phi = Math.acos(Math.random() * 2 - 1);
+                
+                // Original 3D coordinates
+                this.baseX = radius * Math.sin(phi) * Math.cos(theta);
+                this.baseY = radius * Math.sin(phi) * Math.sin(theta);
+                this.baseZ = radius * Math.cos(phi);
+                
+                // Active coordinates
+                this.x = this.baseX;
+                this.y = this.baseY;
+                this.z = this.baseZ;
+
+                // Physics/Wobble properties
+                this.size = Math.random() * 1.5 + 0.5;
+                this.randomOffset = Math.random() * Math.PI * 2; // Phase shift for wobble
+                this.speedMultiplier = Math.random() * 0.5 + 0.5;
+                
+                // Highlight chance
+                this.isCore = Math.random() > 0.95;
+                if(this.isCore) this.size *= 2.5;
+            }
+
+            update(time, rotX, rotY) {
+                // 1. Apply the "Wobbly Bobbly" organic distortion
+                // We use sine waves based on time and the node's original position to create a fluid, breathing effect
+                let wobbleFactor = 15; // Amplitude of the wobble
+                let wx = this.baseX + Math.sin(time * this.speedMultiplier + this.baseY * 0.01 + this.randomOffset) * wobbleFactor;
+                let wy = this.baseY + Math.cos(time * this.speedMultiplier + this.baseX * 0.01 + this.randomOffset) * wobbleFactor;
+                let wz = this.baseZ + Math.sin(time * this.speedMultiplier + this.baseZ * 0.01 + this.randomOffset) * wobbleFactor;
+
+                // 2. 3D Rotation (Y and X axis)
+                // Rotate around Y
+                let x1 = wx * Math.cos(rotY) - wz * Math.sin(rotY);
+                let z1 = wz * Math.cos(rotY) + wx * Math.sin(rotY);
+                
+                // Rotate around X (slight tilt)
+                let y2 = wy * Math.cos(rotX) - z1 * Math.sin(rotX);
+                let z2 = z1 * Math.cos(rotX) + wy * Math.sin(rotX);
+
+                this.x = x1;
+                this.y = y2;
+                this.z = z2;
+            }
+        }
+
+        const NODE_COUNT = 300; // Dense network
+        const nodes = Array.from({length: NODE_COUNT}, () => new Node());
+        
+        let time = 0;
+        const focalLength = 600; // 3D projection camera depth
+
+        function drawGrid(rotY) {
+            // Draw a subtle perspective grid at the bottom to ground the sphere
+            ctx.strokeStyle = 'rgba(178, 75, 243, 0.05)';
+            ctx.lineWidth = 1;
+            
+            const gridY = 350; // Push down
+            const size = 1000;
+            const step = 50;
+            
+            ctx.beginPath();
+            for(let i = -size; i <= size; i += step) {
+                // We apply a fake perspective to the grid lines
+                let z = i;
+                // Horizontal lines
+                ctx.moveTo(-size, gridY + (z*0.2));
+                ctx.lineTo(size, gridY + (z*0.2));
+            }
+            ctx.stroke();
+        }
+
+        function animate() {
+            // Deep purple void background
+            ctx.fillStyle = '#05020a';
+            ctx.fillRect(0, 0, w, h);
+            
+            time += 0.01;
+
+            // Global rotation driven by time and slightly influenced by mouse
+            let mouseInfluenceX = (mouse.x - w/2) * 0.0005;
+            let mouseInfluenceY = (mouse.y - h/2) * 0.0005;
+            
+            let rotY = time * 0.2 + mouseInfluenceX;
+            let rotX = 0.2 + mouseInfluenceY; // Slight downward tilt
+
+            ctx.save();
+            ctx.translate(w/2, h/2 - 20); // Center of screen
+
+            // drawGrid(rotY);
+
+            // Update all nodes
+            nodes.forEach(n => n.update(time, rotX, rotY));
+
+            // Sort by Z index for proper 3D rendering (draw back to front)
+            nodes.sort((a, b) => b.z - a.z);
+
+            // Draw Connections (The "Obsidian" Graph View logic)
+            ctx.lineWidth = 0.5;
+            
+            for(let i = 0; i < nodes.length; i++) {
+                let n1 = nodes[i];
+                // Skip nodes too far behind camera
+                if (n1.z < -focalLength) continue;
+
+                // Project 3D to 2D
+                let scale1 = focalLength / (focalLength + n1.z);
+                let px1 = n1.x * scale1;
+                let py1 = n1.y * scale1;
+
+                // Draw lines to nearby nodes
+                for(let j = i + 1; j < nodes.length; j++) {
+                    let n2 = nodes[j];
+                    if (n2.z < -focalLength) continue;
+
+                    let dx = n1.x - n2.x;
+                    let dy = n1.y - n2.y;
+                    let dz = n1.z - n2.z;
+                    let distSq = dx*dx + dy*dy + dz*dz;
+
+                    // Connect if close enough in 3D space
+                    if(distSq < 4500) { 
+                        let scale2 = focalLength / (focalLength + n2.z);
+                        let px2 = n2.x * scale2;
+                        let py2 = n2.y * scale2;
+
+                        // Opacity based on distance and depth
+                        let depthOpacity = Math.max(0.05, 1 - (n1.z + 200) / 400); // Fade out the back
+                        let distOpacity = 1 - (distSq / 4500);
+                        let finalOpacity = depthOpacity * distOpacity * 0.4;
+
+                        ctx.strokeStyle = `rgba(178, 75, 243, ${finalOpacity})`;
+                        ctx.beginPath();
+                        ctx.moveTo(px1, py1);
+                        ctx.lineTo(px2, py2);
+                        ctx.stroke();
+                    }
+                }
+
+                // Draw the Node itself
+                let baseOpacity = Math.max(0.1, 1 - (n1.z + 200) / 400);
+                
+                ctx.beginPath();
+                ctx.arc(px1, py1, n1.size * scale1, 0, Math.PI * 2);
+                
+                if (n1.isCore) {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${baseOpacity})`;
+                    ctx.shadowBlur = 15 * scale1;
+                    ctx.shadowColor = '#d942ff';
+                } else {
+                    ctx.fillStyle = `rgba(200, 150, 255, ${baseOpacity * 0.8})`;
+                    ctx.shadowBlur = 5 * scale1;
+                    ctx.shadowColor = '#b24bf3';
+                }
+                
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset
+            }
+
+            ctx.restore();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

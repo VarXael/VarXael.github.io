@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Fractal Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --void-deep: #00001a;
+            --void-light: #001133;
+            --glow-white: #ffffff;
+            --glow-cyan: #aaddff;
+            --hud-line: rgba(170, 221, 255, 0.15);
+            --hud-hover: rgba(170, 221, 255, 0.4);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 60% 50%, var(--void-light) 0%, var(--void-deep) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--glow-white);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+            cursor: crosshair;
+        }
+
+        .ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; padding: 3rem; box-sizing: border-box;
+        }
+
+        /* Left Side: Directory HUD */
+        .hud-left {
+            pointer-events: auto;
+            display: flex; flex-direction: column;
+            width: 340px;
+            border-right: 1px solid var(--hud-line);
+            padding-right: 2rem;
+            background: linear-gradient(90deg, rgba(0,0,26,0.8) 0%, transparent 100%);
+            /* Blur backdrop to ensure text is readable over canvas */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .sys-header {
+            font-family: 'Jura', sans-serif;
+            font-size: 2rem; font-weight: 300; letter-spacing: 0.2em;
+            color: var(--glow-white);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            margin-bottom: 5px; line-height: 1;
+        }
+
+        .sys-sub {
+            font-size: 0.65rem; letter-spacing: 4px; color: var(--glow-cyan);
+            text-transform: uppercase; margin-bottom: 2rem; opacity: 0.7;
+        }
+
+        /* Collapsible Tree Styling */
+        .folder-tree {
+            display: flex; flex-direction: column; gap: 4px;
+            overflow-y: auto; overflow-x: hidden;
+            scrollbar-width: thin; scrollbar-color: var(--hud-hover) transparent;
+        }
+        
+        .folder-tree::-webkit-scrollbar { width: 4px; }
+        .folder-tree::-webkit-scrollbar-thumb { background: var(--hud-hover); border-radius: 4px; }
+
+        .tree-item-container {
+            display: flex; flex-direction: column;
+        }
+
+        .tree-item {
+            font-size: 0.8rem; letter-spacing: 1px; color: rgba(170, 221, 255, 0.7);
+            cursor: pointer; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 0; border-radius: 4px;
+        }
+
+        .tree-item:hover { color: var(--glow-white); background: rgba(170, 221, 255, 0.05); }
+        
+        .tree-item.active {
+            color: var(--glow-white); font-weight: 600;
+            text-shadow: 0 0 10px rgba(170, 221, 255, 0.5);
+        }
+
+        /* Connecting lines for the tree view */
+        .tree-icon {
+            font-size: 0.6rem; width: 12px; text-align: center;
+            color: var(--glow-cyan); opacity: 0.8;
+        }
+        
+        .tree-icon.file { font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <canvas id="radial-canvas"></canvas>
+
+    <div class="ui-layer">
+        <div class="hud-left">
+            <div>
+                <div class="sys-header">NEXUS_FS</div>
+                <div class="sys-sub">Fractal Topography</div>
+            </div>
+            
+            <div class="folder-tree" id="sidebar-tree"></div>
+
+            <div style="margin-top: auto;">
+                <div style="font-size: 0.65rem; color: var(--hud-line); letter-spacing: 2px; border-top: 1px solid var(--hud-line); padding-top: 15px;">
+                    CAMERA: [<span id="cam-coords">0.0, 0.0</span>]<br>
+                    NODES RENDERED: <span id="node-count">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock File System with massive recursive structure
+        const fileSystem = {
+            id: "root", name: "VarXel_Core", type: "folder", expanded: true, depth: 0,
+            children: [
+                { id: "sys", name: "System32", type: "folder", expanded: false,
+                    children: [
+                        { id: "k1", name: "kernel.sys", type: "file", size: "12MB" },
+                        { id: "k2", name: "boot.ini", type: "file", size: "4KB" },
+                        { id: "k3", name: "drivers", type: "folder", expanded: false, children: [
+                            { id: "d_net", name: "net.drv", type: "file", size: "1MB" },
+                            { id: "d_gpu", name: "gpu.drv", type: "file", size: "8MB" },
+                            { id: "d_aud", name: "audio.drv", type: "file", size: "2MB" },
+                            { id: "d_usb", name: "usb_core.drv", type: "file", size: "512KB" }
+                        ]},
+                        { id: "k4", name: "modules", type: "folder", expanded: false, children: [
+                            { id: "m_ai", name: "neural_net.mod", type: "file", size: "45MB" },
+                            { id: "m_ph", name: "physics_eng.mod", type: "file", size: "18MB" }
+                        ]}
+                    ]
+                },
+                { id: "usr", name: "Users", type: "folder", expanded: false,
+                    children: [
+                        { id: "u1", name: "Kira_Chen", type: "folder", expanded: false, children: [
+                            { id: "d1", name: "Projects", type: "folder", expanded: false, children: [
+                                { id: "p1", name: "Aethel_Dynamics", type: "folder", expanded: false, children: [
+                                    { id: "ad1", name: "fluid_sim.cpp", type: "file", size: "14KB" },
+                                    { id: "ad2", name: "render_pipe.h", type: "file", size: "8KB" },
+                                    { id: "ad3", name: "build.sh", type: "file", size: "2KB" }
+                                ]},
+                                { id: "p2", name: "Radiolaria_UI", type: "folder", expanded: false, children: [
+                                    { id: "ru1", name: "index.html", type: "file", size: "12KB" },
+                                    { id: "ru2", name: "styles.css", type: "file", size: "25KB" },
+                                    { id: "ru3", name: "app.js", type: "file", size: "64KB" },
+                                    { id: "ru4", name: "assets", type: "folder", expanded: false, children: [
+                                        { id: "rua1", name: "logo.svg", type: "file", size: "4KB" },
+                                        { id: "rua2", name: "bg_void.png", type: "file", size: "2.1MB" }
+                                    ]}
+                                ]},
+                                { id: "p3", name: "Vault_OS", type: "folder", expanded: false, children: [
+                                    { id: "vo1", name: "core_loop.rs", type: "file", size: "45KB" },
+                                    { id: "vo2", name: "memory_mgr.rs", type: "file", size: "32KB" }
+                                ]}
+                            ]},
+                            { id: "d2", name: "Archives", type: "folder", expanded: false, children: [
+                                { id: "a1", name: "2024_Backups.zip", type: "file", size: "4.2GB" },
+                                { id: "a2", name: "Old_Designs.tar.gz", type: "file", size: "1.8GB" }
+                            ]},
+                            { id: "d3", name: "Media", type: "folder", expanded: false, children: [
+                                { id: "md1", name: "concept_art.png", type: "file", size: "14MB" },
+                                { id: "md2", name: "ambient_track.wav", type: "file", size: "42MB" },
+                                { id: "md3", name: "ui_sounds", type: "folder", expanded: false, children: [
+                                    { id: "snd1", name: "click.ogg", type: "file", size: "12KB" },
+                                    { id: "snd2", name: "whoosh.ogg", type: "file", size: "45KB" },
+                                    { id: "snd3", name: "error.ogg", type: "file", size: "18KB" }
+                                ]}
+                            ]}
+                        ]},
+                        { id: "u2", name: "Guest", type: "folder", expanded: false, children: [
+                            { id: "g1", name: "readme.txt", type: "file", size: "1KB" }
+                        ]},
+                        { id: "u3", name: "Shared", type: "folder", expanded: false, children: [
+                            { id: "sh1", name: "team_keys.pem", type: "file", size: "4KB" },
+                            { id: "sh2", name: "manifesto.md", type: "file", size: "12KB" }
+                        ]}
+                    ]
+                },
+                { id: "cfg", name: "Config", type: "folder", expanded: false,
+                    children: [
+                        { id: "c1", name: "ui_theme.yaml", type: "file", size: "128KB" },
+                        { id: "c2", name: "network.conf", type: "file", size: "16KB" },
+                        { id: "c3", name: "keybinds.json", type: "file", size: "8KB" },
+                        { id: "c4", name: "monitors.xml", type: "file", size: "4KB" },
+                        { id: "c5", name: "daemons", type: "folder", expanded: false, children: [
+                            { id: "da1", name: "cron.conf", type: "file", size: "2KB" },
+                            { id: "da2", name: "ssh.config", type: "file", size: "4KB" }
+                        ]}
+                    ]
+                },
+                { id: "log", name: "Logs", type: "folder", expanded: false,
+                    children: [
+                        { id: "l1", name: "error.log", type: "file", size: "2MB" },
+                        { id: "l2", name: "access.log", type: "file", size: "14MB" },
+                        { id: "l3", name: "sys_dump.bin", type: "file", size: "4GB" },
+                        { id: "l4", name: "archive_2025", type: "folder", expanded: false, children: [
+                            { id: "la1", name: "jan.log", type: "file", size: "45MB" },
+                            { id: "la2", name: "feb.log", type: "file", size: "38MB" },
+                            { id: "la3", name: "mar.log", type: "file", size: "52MB" }
+                        ]}
+                    ]
+                },
+                { id: "bin", name: "Binaries", type: "folder", expanded: false, children: [
+                    { id: "b1", name: "bash", type: "file", size: "1.2MB" },
+                    { id: "b2", name: "ls", type: "file", size: "140KB" },
+                    { id: "b3", name: "grep", type: "file", size: "210KB" },
+                    { id: "b4", name: "top", type: "file", size: "115KB" },
+                    { id: "b5", name: "htop", type: "file", size: "340KB" },
+                    { id: "b6", name: "nvim", type: "file", size: "4.5MB" }
+                ]},
+                { id: "tmp", name: "Temp", type: "folder", expanded: false, children: [
+                    { id: "t1", name: "cache_001.tmp", type: "file", size: "450MB" },
+                    { id: "t2", name: "cache_002.tmp", type: "file", size: "120MB" }
+                ]}
+            ]
+        };
+
+        // --- Core State & Canvas Setup ---
+        const canvas = document.getElementById('radial-canvas');
+        const ctx = canvas.getContext('2d');
+        const sidebarTree = document.getElementById('sidebar-tree');
+        let w, h;
+
+        // Virtual Camera for panning across the fractal graph
+        let camera = { x: 0, y: 0 };
+        let targetCamera = { x: 0, y: 0 };
+        let activeNode = fileSystem; // The node currently focused
+        let flatNodes = []; // Flat array for easy hit detection and physics
+        let time = 0;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        
+        // Initialize mouse with safe window fallback
+        let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; 
+            mouse.y = e.clientY;
+        });
+
+        function toggleFolder(node) {
+            if (node.type !== 'folder') return;
+            node.expanded = !node.expanded;
+            activeNode = node;
+            
+            updateGraphLayout();
+            renderSidebar();
+        }
+
+        // Recursive rendering for the HTML sidebar
+        function createTreeHTML(node, depth) {
+            const container = document.createElement('div');
+            container.className = 'tree-item-container';
+
+            const item = document.createElement('div');
+            item.className = `tree-item ${activeNode === node ? 'active' : ''}`;
+            item.style.paddingLeft = `${depth * 15}px`;
+
+            // Icons
+            const icon = document.createElement('span');
+            if (node.type === 'folder') {
+                icon.className = 'tree-icon';
+                icon.innerText = node.expanded ? '▼' : '▶';
+            } else {
+                icon.className = 'tree-icon file';
+                icon.innerText = '●';
+            }
+            
+            const text = document.createElement('span');
+            text.innerText = node.name;
+
+            item.appendChild(icon);
+            item.appendChild(text);
+            
+            item.onclick = (e) => {
+                e.stopPropagation();
+                if(node.type === 'folder') toggleFolder(node);
+                else {
+                    activeNode = node;
+                    renderSidebar();
+                }
+            };
+            
+            container.appendChild(item);
+
+            if (node.type === 'folder' && node.expanded && node.children) {
+                node.children.forEach(child => {
+                    container.appendChild(createTreeHTML(child, depth + 1));
+                });
+            }
+
+            return container;
+        }
+
+        function renderSidebar() {
+            sidebarTree.innerHTML = '';
+            sidebarTree.appendChild(createTreeHTML(fileSystem, 0));
+        }
+
+        // Calculate TARGET spatial positions. Physics engine will pull nodes here.
+        // We use a hierarchical angular system to prevent branches from overlapping.
+        function calculateNodePositions(node, parent, depth, startAngle, endAngle) {
+            node.depth = depth;
+            
+            // Calculate radius based on depth (shorter branches further out)
+            const baseRadius = 220 * Math.pow(0.75, depth);
+            const midAngle = (startAngle + endAngle) / 2;
+            
+            // Calculate ideal position
+            node.targetX = parent ? parent.x + Math.cos(midAngle) * baseRadius : 0;
+            node.targetY = parent ? parent.y + Math.sin(midAngle) * baseRadius : 0;
+            
+            // Initial spawn
+            if (node.x === undefined) {
+                node.x = parent ? parent.x : 0;
+                node.y = parent ? parent.y : 0;
+                node.vx = 0; node.vy = 0;
+            }
+            
+            flatNodes.push(node);
+
+            if (node.type === 'folder' && node.expanded && node.children && node.children.length > 0) {
+                const count = node.children.length;
+                const arcSize = (endAngle - startAngle) / count;
+
+                node.children.forEach((child, i) => {
+                    // Divide parent's arc into sub-slices for children
+                    const childStartAngle = startAngle + (i * arcSize);
+                    const childEndAngle = childStartAngle + arcSize;
+                    calculateNodePositions(child, node, depth + 1, childStartAngle, childEndAngle);
+                });
+            }
+        }
+
+        function updateGraphLayout() {
+            flatNodes = [];
+            // Root spreads 360 degrees
+            calculateNodePositions(fileSystem, null, 0, 0, Math.PI * 2);
+            document.getElementById('node-count').innerText = flatNodes.length;
+        }
+
+        // Initialize structure
+        resize();
+        updateGraphLayout();
+        renderSidebar();
+
+        // Canvas click detection utilizing physical coordinates
+        canvas.addEventListener('mousedown', (e) => {
+            const worldX = e.clientX + camera.x;
+            const worldY = e.clientY + camera.y;
+
+            let closest = null;
+            let minDist = 30;
+
+            flatNodes.forEach(node => {
+                let dist = Math.hypot(worldX - node.x, worldY - node.y);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = node;
+                }
+            });
+
+            if (closest) {
+                if(closest.type === 'folder') toggleFolder(closest);
+                else {
+                    activeNode = closest;
+                    renderSidebar();
+                }
+            }
+        });
+
+        function drawPetal(parent, child, breath) {
+            ctx.save();
+            ctx.translate(parent.x, parent.y);
+            
+            // Dynamically calculate angle and distance based on real-time physical positions
+            let dx = child.x - parent.x;
+            let dy = child.y - parent.y;
+            let dist = Math.hypot(dx, dy);
+            let angle = Math.atan2(dy, dx);
+            
+            // Rotate to face the child
+            ctx.rotate(angle - Math.PI/2);
+            
+            // Draw sweeping loop (Elastic Tentacle)
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            // The signature fl0w sweeping bezier curve, dynamically adapting to distance
+            ctx.bezierCurveTo(dist * 0.4, dist * 0.8, dist * -0.4, dist * 0.8, 0, dist);
+            
+            ctx.strokeStyle = 'rgba(170, 221, 255, 0.25)';
+            if (child === activeNode || parent === activeNode) {
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.6)';
+                ctx.lineWidth = 2;
+            } else {
+                ctx.lineWidth = 1;
+            }
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+
+        function drawNode(node, breath) {
+            ctx.save();
+            ctx.translate(node.x, node.y);
+
+            let isHovered = Math.hypot((mouse.x + camera.x) - node.x, (mouse.y + camera.y) - node.y) < 20;
+            let isActive = node === activeNode;
+
+            // FAKE GLOW (Fast) instead of shadowBlur (Heavy Performance Cost)
+            if (node.id === 'root') {
+                if (isActive) {
+                    ctx.beginPath(); ctx.arc(0, 0, 35 + breath*2, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; ctx.fill();
+                    ctx.beginPath(); ctx.arc(0, 0, 25 + breath*2, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'; ctx.fill();
+                }
+
+                ctx.beginPath(); ctx.arc(0, 0, 18 + breath*2, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff'; ctx.fill();
+
+                ctx.strokeStyle = 'rgba(170, 221, 255, 0.4)';
+                ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.arc(0, 0, 40 + breath*5, 0, Math.PI*2); ctx.stroke();
+                ctx.setLineDash([4, 12]);
+                ctx.beginPath(); ctx.arc(0, 0, 60 + breath*8, 0, Math.PI*2); ctx.stroke();
+                
+            } else if (node.type === 'folder') {
+                if (isActive || isHovered) {
+                    ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; ctx.fill();
+                }
+
+                ctx.beginPath();
+                ctx.arc(0, 0, 12, 0, Math.PI*2);
+                ctx.strokeStyle = isActive || isHovered ? '#ffffff' : 'rgba(255, 255, 255, 0.6)';
+                ctx.lineWidth = isActive ? 2 : 1;
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.arc(0, 0, 3, 0, Math.PI*2);
+                ctx.fillStyle = node.expanded ? '#aaddff' : '#ffffff';
+                ctx.fill();
+
+                if(node.expanded) {
+                    ctx.setLineDash([2, 6]);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 22 + breath*2, 0, Math.PI*2);
+                    ctx.strokeStyle = 'rgba(170, 221, 255, 0.3)';
+                    ctx.stroke();
+                }
+            } else {
+                if (isActive || isHovered) {
+                    ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(170, 221, 255, 0.2)'; ctx.fill();
+                }
+
+                ctx.beginPath();
+                ctx.arc(0, 0, 8, 0, Math.PI*2);
+                ctx.fillStyle = isActive || isHovered ? '#ffffff' : '#aaddff';
+                ctx.fill();
+            }
+
+            ctx.restore();
+            
+            // Draw Label
+            ctx.save();
+            ctx.translate(node.x, node.y);
+            
+            ctx.font = isActive ? "600 12px 'Jura'" : "300 10px 'Jura'";
+            ctx.fillStyle = isActive ? "#ffffff" : "rgba(170, 221, 255, 0.8)";
+            ctx.textAlign = "center";
+            
+            let labelOffset = node.id === 'root' ? 85 : 25;
+            ctx.fillText(node.name.toUpperCase(), 0, labelOffset);
+            
+            if (isActive || isHovered) {
+                ctx.font = "300 8px 'Space Grotesk'";
+                ctx.fillStyle = "rgba(170, 221, 255, 0.5)";
+                let meta = node.type === 'folder' ? '[DIR]' : `[FILE: ${node.size || '0KB'}]`;
+                ctx.fillText(meta, 0, labelOffset + 12);
+            }
+            ctx.restore();
+        }
+
+        function animate() {
+            // Smooth clear for trail effect
+            ctx.fillStyle = 'rgba(0, 0, 26, 0.4)';
+            ctx.fillRect(0, 0, w, h);
+
+            time += 0.02;
+            let breath = Math.sin(time) * 1.5;
+
+            // --- FLUID DYNAMICS & PHYSICS ENGINE ---
+            flatNodes.forEach(node => {
+                // 1. Structural Tension (Pull nodes to their calculated arc position)
+                // We use a stronger pull here to keep branches distinct
+                node.vx += (node.targetX - node.x) * 0.05;
+                node.vy += (node.targetY - node.y) * 0.05;
+
+                // 2. Collision Avoidance (Local repulsion - very soft)
+                // Only repel if nodes are extremely close (prevents text overlap)
+                flatNodes.forEach(other => {
+                    if (node !== other && node.depth === other.depth) {
+                        let dx = node.x - other.x;
+                        let dy = node.y - other.y;
+                        let dist = Math.hypot(dx, dy);
+                        if (dist < 100) {
+                            let force = (100 - dist) * 0.01;
+                            node.vx += (dx / dist) * force;
+                            node.vy += (dy / dist) * force;
+                        }
+                    }
+                });
+
+                // 3. Amniotic Fluid Sway (Gentle)
+                node.vx += Math.sin(time * 0.5 + node.depth) * 0.05;
+                node.vy += Math.cos(time * 0.4 + node.id.length) * 0.05;
+
+                // 4. Fluid Viscosity (High drag for stability)
+                node.vx *= 0.7;
+                node.vy *= 0.7;
+
+                node.x += node.vx;
+                node.y += node.vy;
+            });
+
+            // --- CAMERA TRACKING ---
+            if (activeNode && activeNode.x !== undefined) {
+                const sidebarWidth = 340;
+                const availableWidth = w - sidebarWidth;
+                targetCamera.x = activeNode.x - (sidebarWidth + availableWidth / 2);
+                targetCamera.y = activeNode.y - (h / 2);
+            }
+
+            camera.x += (targetCamera.x - camera.x) * 0.05;
+            camera.y += (targetCamera.y - camera.y) * 0.05;
+            
+            document.getElementById('cam-coords').innerText = `${Math.floor(camera.x)}, ${Math.floor(camera.y)}`;
+
+            ctx.save();
+            ctx.translate(-camera.x, -camera.y);
+
+            // Draw Petals (Connections)
+            flatNodes.forEach(node => {
+                if (node.type === 'folder' && node.expanded && node.children) {
+                    node.children.forEach(child => {
+                        drawPetal(node, child, breath);
+                    });
+                }
+            });
+
+            // Draw Nodes
+            flatNodes.forEach(node => {
+                drawNode(node, breath);
+            });
+
+            ctx.restore();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

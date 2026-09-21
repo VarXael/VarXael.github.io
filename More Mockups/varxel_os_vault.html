@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VarXel_OS | Knowledge Vault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --void-deep: #000012;
+            --void-light: #000a20;
+            --glow-white: #ffffff;
+            --glow-cyan: #aaddff;
+            --hud-line: rgba(170, 221, 255, 0.15);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, var(--void-light) 0%, var(--void-deep) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--glow-white);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0; z-index: 0;
+        }
+
+        /* The UI Layer: Floating above the canvas, no solid boxes */
+        .ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none;
+            display: flex; justify-content: space-between;
+            padding: 3rem 4rem; box-sizing: border-box;
+        }
+
+        /* Left Side: Directory HUD */
+        .hud-left {
+            pointer-events: auto;
+            display: flex; flex-direction: column;
+            width: 300px;
+        }
+
+        .hud-header {
+            font-family: 'Jura', sans-serif;
+            font-size: 1.5rem; font-weight: 300; letter-spacing: 0.3em;
+            color: var(--glow-white); margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+
+        .hud-sub {
+            font-size: 0.65rem; letter-spacing: 4px; color: var(--glow-cyan);
+            text-transform: uppercase; margin-bottom: 3rem; opacity: 0.7;
+        }
+
+        .index-list {
+            display: flex; flex-direction: column; gap: 15px;
+            border-left: 1px solid var(--hud-line); padding-left: 20px;
+        }
+
+        .index-item {
+            font-size: 0.8rem; letter-spacing: 2px; color: rgba(170, 221, 255, 0.5);
+            text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .index-item::before {
+            content: ''; position: absolute; left: -24px; top: 50%; transform: translateY(-50%);
+            width: 7px; height: 1px; background: var(--hud-line); transition: all 0.3s;
+        }
+
+        .index-item:hover { color: var(--glow-white); transform: translateX(5px); }
+        .index-item.active { color: var(--glow-white); font-weight: 500; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .index-item.active::before { width: 15px; left: -32px; background: var(--glow-cyan); box-shadow: 0 0 5px var(--glow-cyan); }
+
+        /* Right Side: Active Note Content */
+        .hud-right {
+            pointer-events: auto;
+            width: 450px;
+            display: flex; flex-direction: column; justify-content: center;
+            border-right: 1px solid var(--hud-line); padding-right: 30px; text-align: right;
+        }
+
+        .note-title {
+            font-family: 'Jura', sans-serif;
+            font-size: 2.5rem; font-weight: 300; letter-spacing: 2px;
+            margin-bottom: 10px; line-height: 1.1;
+        }
+
+        .note-tags {
+            display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 2rem;
+        }
+
+        .tag {
+            font-size: 0.65rem; letter-spacing: 2px; color: var(--glow-cyan);
+            border: 1px solid rgba(170, 221, 255, 0.3); padding: 4px 10px;
+            border-radius: 20px; text-transform: uppercase;
+        }
+
+        .note-body {
+            font-size: 0.9rem; line-height: 1.8; color: #aaddff; font-weight: 300;
+            opacity: 0.8; margin-bottom: 1.5rem;
+        }
+
+        /* Bottom Status Bar */
+        .status-bar {
+            position: absolute; bottom: 3rem; left: 4rem; right: 4rem;
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid var(--hud-line); padding-top: 15px;
+            font-family: 'Jura', sans-serif; font-size: 0.7rem; letter-spacing: 3px;
+            color: rgba(170, 221, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="vault-canvas"></canvas>
+
+    <div class="ui-layer">
+        <div class="hud-left">
+            <div>
+                <div class="hud-header">VARXEL_OS</div>
+                <div class="hud-sub">Nexus Knowledge Vault</div>
+            </div>
+            
+            <div class="index-list">
+                <div class="index-item">01. Void Architecture</div>
+                <div class="index-item">02. Radiolaria Skeletons</div>
+                <div class="index-item active">03. Abyssal Constellations</div>
+                <div class="index-item">04. Fluid Dynamics</div>
+                <div class="index-item">05. Neural Sweeps</div>
+            </div>
+        </div>
+
+        <div class="hud-right">
+            <div class="note-title">Abyssal<br>Constellations</div>
+            <div class="note-tags">
+                <span class="tag">#ui-design</span>
+                <span class="tag">#fl0w</span>
+            </div>
+            <div class="note-body">
+                Unlike rigid grid systems or standard node networks, an abyssal constellation relies on free-floating anchor points suspended in a high-viscosity void.
+            </div>
+            <div class="note-body">
+                Connections are not rendered as strict linear paths, but rather as sweeping quadratic bezier curves. This injects organic tension into the data lattice, mimicking the delicate, filamentous structures of deep-sea micro-organisms.
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div>SYS.CORE // STABLE</div>
+            <div style="color: var(--glow-cyan);">NODE ID: 0x8A4F</div>
+            <div>NET: LINKED</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('vault-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Mouse tracking for subtle parallax and interaction
+        let mouse = { x: w/2, y: h/2 };
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+
+        // The Abyssal Node Class
+        class VaultNode {
+            constructor(isActive = false) {
+                this.isActive = isActive;
+                
+                // The active node stays roughly in the center-left to balance the text on the right
+                if (this.isActive) {
+                    this.x = w * 0.45;
+                    this.y = h * 0.5;
+                    this.vx = (Math.random() - 0.5) * 0.1;
+                    this.vy = (Math.random() - 0.5) * 0.1;
+                    this.radius = 12;
+                } else {
+                    // Other nodes drift freely around the screen
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.radius = Math.random() * 3 + 3;
+                }
+                this.hasRing = this.isActive || Math.random() > 0.7;
+            }
+
+            update() {
+                this.x += this.vx; 
+                this.y += this.vy;
+                
+                // Soft boundaries to keep nodes drifting gracefully within view
+                if(this.x < -50) this.x = w + 50;
+                if(this.x > w + 50) this.x = -50;
+                if(this.y < -50) this.y = h + 50;
+                if(this.y > h + 50) this.y = -50;
+
+                // Active node anchoring (gently pulls it back to its central spot)
+                if (this.isActive) {
+                    let targetX = w * 0.45;
+                    let targetY = h * 0.5;
+                    // Mouse parallax for the active node
+                    targetX += (mouse.x - w/2) * 0.05;
+                    targetY += (mouse.y - h/2) * 0.05;
+
+                    this.vx += (targetX - this.x) * 0.001;
+                    this.vy += (targetY - this.y) * 0.001;
+                    
+                    // Friction to prevent infinite acceleration
+                    this.vx *= 0.98;
+                    this.vy *= 0.98;
+                }
+            }
+
+            draw() {
+                ctx.shadowBlur = this.isActive ? 20 : 10;
+                ctx.shadowColor = '#ffffff';
+                
+                // Solid Inner Orb
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+                ctx.fillStyle = this.isActive ? '#ffffff' : '#aaddff';
+                ctx.fill();
+
+                // Distinct Outer Ring (fl0w/Radiolaria aesthetic)
+                if (this.hasRing) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius + (this.isActive ? 10 : 6), 0, Math.PI*2);
+                    ctx.strokeStyle = this.isActive ? 'rgba(255, 255, 255, 0.6)' : 'rgba(170, 221, 255, 0.3)';
+                    ctx.lineWidth = this.isActive ? 1.5 : 1;
+                    ctx.stroke();
+                    
+                    // Secondary outer dashed ring for the active node
+                    if (this.isActive) {
+                        ctx.setLineDash([4, 6]);
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.radius + 20 + Math.sin(time*2)*2, 0, Math.PI*2);
+                        ctx.strokeStyle = 'rgba(170, 221, 255, 0.2)';
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                    }
+                }
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // Initialize nodes: 1 active, 35 background/ambient
+        const nodes = [new VaultNode(true)];
+        for(let i = 0; i < 35; i++) {
+            nodes.push(new VaultNode(false));
+        }
+
+        let time = 0;
+
+        function animate() {
+            // Very dark, almost pure clear for crisp lines without messy trails
+            ctx.clearRect(0, 0, w, h);
+            
+            time += 0.01;
+
+            // Draw ambient background ripples centered on the active node
+            let activeNode = nodes[0];
+            ctx.strokeStyle = 'rgba(170, 221, 255, 0.02)';
+            ctx.lineWidth = 1;
+            for(let i = 1; i <= 4; i++) {
+                ctx.beginPath();
+                ctx.arc(activeNode.x, activeNode.y, i * 150 + (Math.sin(time)*10), 0, Math.PI*2);
+                ctx.stroke();
+            }
+
+            // Update all nodes
+            nodes.forEach(n => n.update());
+
+            // Draw Connections (Sweeping Bezier Curves)
+            for(let i = 0; i < nodes.length; i++) {
+                for(let j = i + 1; j < nodes.length; j++) {
+                    let dx = nodes[i].x - nodes[j].x;
+                    let dy = nodes[i].y - nodes[j].y;
+                    let dist = Math.hypot(dx, dy);
+
+                    // Allow longer connections if one node is the active node
+                    let maxDist = (nodes[i].isActive || nodes[j].isActive) ? 400 : 200;
+
+                    if (dist < maxDist) {
+                        let opacity = 1 - (dist / maxDist);
+                        let isConnectedToActive = nodes[i].isActive || nodes[j].isActive;
+                        
+                        ctx.strokeStyle = isConnectedToActive 
+                            ? `rgba(255, 255, 255, ${opacity * 0.4})` 
+                            : `rgba(170, 221, 255, ${opacity * 0.15})`;
+                        ctx.lineWidth = isConnectedToActive ? 1.2 : 0.8;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        
+                        // Create the sweeping control point offset by time
+                        let cpX = (nodes[i].x + nodes[j].x)/2 + Math.sin(time + i)*80;
+                        let cpY = (nodes[i].y + nodes[j].y)/2 + Math.cos(time + j)*80;
+                        
+                        ctx.quadraticCurveTo(cpX, cpY, nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                        
+                        // Tiny hollow rings on the curves (Signature aesthetic detail)
+                        if (isConnectedToActive || i % 4 === 0) {
+                            // Find the midpoint along the quadratic curve
+                            let t = 0.5;
+                            let midX = (1-t)*(1-t)*nodes[i].x + 2*(1-t)*t*cpX + t*t*nodes[j].x;
+                            let midY = (1-t)*(1-t)*nodes[i].y + 2*(1-t)*t*cpY + t*t*nodes[j].y;
+                            
+                            ctx.beginPath();
+                            ctx.arc(midX, midY, isConnectedToActive ? 3 : 2, 0, Math.PI*2);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.8})`;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                // Draw node on top of lines
+                nodes[i].draw();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
