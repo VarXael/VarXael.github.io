@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup: flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MOCKUP :: flow
+   Light, single-hue water that darkens as you dive. One layer per
+   project category. The creature is you; red food takes you down,
+   blue food takes you up (as in fl0w). Scroll and keys work too.
+   ============================================================ */
+:root{--ink:#14302f;--soft:rgba(20,48,47,.62);--line:rgba(20,48,47,.22);--tint:#c4e3d6}
+body.deep{--ink:#effaf9;--soft:rgba(239,250,249,.68);--line:rgba(239,250,249,.26)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#c4e3d6}
+body{font-family:Quicksand,sans-serif;color:var(--ink);transition:color 1.2s;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+/* ---- layers: the active one is in focus, the rest pass by blurred ---- */
+.layer{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;filter:blur(14px);transform:scale(.86);
+  transition:opacity 1s,filter 1.1s,transform 1.4s cubic-bezier(.22,1,.36,1)}
+.layer.past{transform:scale(1.18)}
+.layer.on{opacity:1;filter:none;transform:none}
+.layer.on *{pointer-events:auto}
+
+.hero{text-align:center;max-width:720px;padding:0 24px}
+.kicker{font-size:.8rem;letter-spacing:.32em;color:var(--soft);margin-bottom:18px}
+.hero h1{font-weight:300;font-size:clamp(2.6rem,7.5vw,5.6rem);letter-spacing:.01em;line-height:1}
+.credits{font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.7;margin:26px auto 0;max-width:560px}
+.credits b{font-weight:600}
+.links{display:flex;gap:10px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.links a{border:1px solid var(--line);border-radius:999px;padding:9px 20px;font-size:.85rem;font-weight:500;transition:.3s;background:rgba(255,255,255,.18)}
+.links a:hover{background:rgba(255,255,255,.55);border-color:transparent}
+.hint{margin-top:46px;font-size:.78rem;color:var(--soft);letter-spacing:.06em}
+.hint i{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;margin:0 3px}
+.hint .r{background:#e2604a;box-shadow:0 0 8px #e2604a}.hint .b{background:#58aef6;box-shadow:0 0 8px #58aef6}
+
+.lh{position:absolute;top:9vh;left:0;right:0;text-align:center}
+.lh small{display:block;font-size:.75rem;letter-spacing:.3em;color:var(--soft)}
+.lh h2{font-weight:300;font-size:clamp(1.8rem,3.4vw,2.6rem);margin-top:6px}
+
+.cells{position:relative;width:min(1100px,90vw);height:62vh;margin-top:8vh}
+.cell{--s:132px;position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:12px;
+  background:none;border:0;color:inherit;font:inherit;cursor:pointer;text-align:center;width:200px}
+.cell.big{--s:176px}
+.memb{width:var(--s);height:var(--s);border-radius:50%;overflow:hidden;position:relative;background:var(--tint);
+  box-shadow:0 0 0 1px rgba(255,255,255,.55),0 0 0 8px rgba(255,255,255,.07),0 22px 50px rgba(0,30,40,.16);
+  animation:bob 8s ease-in-out infinite;animation-delay:var(--d);transition:box-shadow .5s}
+.memb img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:luminosity;opacity:.92;transition:filter .7s,opacity .7s,transform 1s}
+.memb::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.42),transparent 40%),radial-gradient(circle,transparent 58%,rgba(8,40,52,.32))}
+.cell:hover .memb,.cell:focus-visible .memb{box-shadow:0 0 0 1px #fff,0 0 0 14px rgba(255,255,255,.13),0 0 60px rgba(255,255,255,.4)}
+.cell:hover img,.cell:focus-visible img{filter:none;mix-blend-mode:normal;opacity:1;transform:scale(1.06)}
+.cell b{font-weight:600;font-size:.98rem;line-height:1.25}
+.cell small{font-size:.76rem;color:var(--soft);margin-top:-6px}
+.cell:focus-visible{outline:none}
+@keyframes bob{0%,100%{transform:translateY(-7px)}50%{transform:translateY(7px)}}
+
+/* ---- chrome ---- */
+.brand{position:fixed;top:26px;left:30px;font-size:.85rem;font-weight:500;letter-spacing:.08em;z-index:5;opacity:0;transition:opacity .8s;cursor:pointer;background:none;border:0;color:inherit;font-family:inherit}
+body:not(.at-surface) .brand{opacity:.85}
+.top-links{position:fixed;top:26px;right:30px;display:flex;gap:22px;font-size:.85rem;font-weight:500;z-index:5}
+.top-links a{opacity:.75;transition:.3s}.top-links a:hover{opacity:1}
+.gauge{position:fixed;right:30px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;z-index:5}
+.gauge::before{content:"";position:absolute;right:4px;top:4px;bottom:4px;width:1px;background:var(--line)}
+.gauge button{display:flex;align-items:center;justify-content:flex-end;gap:12px;background:none;border:0;color:inherit;font:inherit;cursor:pointer;position:relative}
+.gauge .dot{width:9px;height:9px;border-radius:50%;border:1px solid var(--soft);background:transparent;transition:.4s}
+.gauge .lbl{font-size:.75rem;letter-spacing:.12em;opacity:0;transform:translateX(6px);transition:.4s}
+.gauge button.on .dot{background:var(--ink);border-color:var(--ink);transform:scale(1.25)}
+.gauge button.on .lbl,.gauge button:hover .lbl{opacity:.85;transform:none}
+
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);padding:30px 34px 40px;z-index:20;overflow:auto;
+  background:rgba(255,255,255,.16);backdrop-filter:blur(26px) saturate(1.15);-webkit-backdrop-filter:blur(26px) saturate(1.15);
+  border-left:1px solid var(--line);transform:translateX(105%);transition:transform .8s cubic-bezier(.22,1,.36,1)}
+.panel.open{transform:none}
+.panel .x{background:none;border:1px solid var(--line);border-radius:999px;color:inherit;font:inherit;font-size:.8rem;padding:6px 16px;cursor:pointer}
+.panel .pimg{margin:26px 0 22px;border-radius:18px;overflow:hidden;aspect-ratio:16/10;background:rgba(0,0,0,.1)}
+.panel .pimg img{width:100%;height:100%;object-fit:cover}
+.panel .pmeta{font-size:.75rem;letter-spacing:.2em;color:var(--soft)}
+.panel h3{font-weight:400;font-size:2rem;line-height:1.1;margin:8px 0 6px}
+.panel .prole{font-weight:600;font-size:.92rem}
+.panel .pctx{font-size:.85rem;color:var(--soft);margin-top:2px}
+.panel .pshort{font-size:1.02rem;line-height:1.75;margin-top:20px}
+
+@media(max-width:760px){
+  .gauge{right:14px}.gauge .lbl{display:none}
+  .top-links{right:18px;top:18px;gap:14px}.brand{left:18px;top:18px}
+  .lh{top:70px}
+  .cells{display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-start;gap:26px 10px;height:auto;max-height:70vh;overflow:auto;margin-top:110px;padding:10px 28px 30px 10px}
+  .cell,.cell.big{--s:98px;position:static;transform:none;width:130px}
+  .cell b{font-size:.85rem}
+}
+@media(prefers-reduced-motion:reduce){.memb{animation:none}.layer{transition:opacity .4s}}
+</style>
+</head>
+<body class="at-surface">
+<canvas id="sea"></canvas>
+
+<button class="brand" id="brand">giuseppe alfieri</button>
+<nav class="top-links"><a href="mailto:giuseppeluigi.alfieri@gmail.com">email</a><a href="../cv.html" target="_blank" rel="noopener">cv</a><a href="https://github.com/VarXael" target="_blank" rel="noopener">github</a></nav>
+<nav class="gauge" id="gauge" aria-label="Depth"></nav>
+
+<section class="layer on" data-i="0">
+  <div class="hero">
+    <p class="kicker">technical game designer</p>
+    <h1>giuseppe alfieri</h1>
+    <p class="credits">I shipped <b>High on Life</b> and <b>Police Simulator</b> on Nintendo Switch at Untold Games, and I build the systems I design.</p>
+    <nav class="links"><a href="mailto:giuseppeluigi.alfieri@gmail.com">email me</a><a href="../cv.html" target="_blank" rel="noopener">cv</a><a href="https://github.com/VarXael" target="_blank" rel="noopener">github</a></nav>
+    <p class="hint">swim with your cursor. eat the <i class="r"></i> red to dive, the <i class="b"></i> blue to rise. scrolling works too.</p>
+  </div>
+</section>
+<div id="layers"></div>
+
+<aside class="panel" id="panel" aria-hidden="true">
+  <button class="x" id="px">close</button>
+  <div class="pimg"><img id="pimg" alt=""></div>
+  <p class="pmeta" id="pmeta"></p>
+  <h3 id="ptitle"></h3>
+  <p class="prole" id="prole"></p>
+  <p class="pctx" id="pctx"></p>
+  <p class="pshort" id="pshort"></p>
+</aside>
+
+<script>
+const PROJECTS = [{"id": "ProjectCadence", "title": "Project Cadence", "cat": "personal work", "tier": "hero", "year": 2025, "role": "Sole Systems Architect", "ctx": "Personal · 1 month, in progress", "img": "./assets/images/ProjectCadence.png", "short": "A C++ Unreal Engine plugin that turns music into gameplay. It parses a beatmap, maps each timestamp to an action, and fires those actions in-game on the beat. Built as a reusable framework, not a single game."}, {"id": "ProjectSasha", "title": "Project Sasha", "cat": "personal work", "tier": "hero", "year": 2025, "role": "Sole Creator / Designer & Programmer", "ctx": "Personal · In development", "img": "./assets/images/ProjectSasha.svg", "short": "A top-down exploration game where scanning is the entire game. Knowledge is the resource, memory is the currency, and every mechanic asks the same question: what is worth remembering?"}, {"id": "ProjectCircle", "title": "Project Circle", "cat": "personal work", "tier": "hero", "year": 2025, "role": "Sole Creator / Technical Game Designer", "ctx": "Prototype / design experiment", "img": "./assets/images/ProjectCircle.svg", "short": "A rhythm bullet-hell FPS built on the Cadence plugin. You run inside a hollow sphere while a giant boss fires at you in time with the music. One song per planet, one boss per sphere, community-authored. It proved Cadence could drive combat, and showed where the framework still needed work."}, {"id": "HighOnLife", "title": "High on Life", "cat": "professional work", "tier": "hero", "year": 2025, "role": "Game Programmer & Technical Designer", "ctx": "Untold Games (for Squanch Games)", "img": "./assets/images/HighOnLife.png", "short": "Nintendo Switch port of High on Life. Over eight months I became the team's go-to reference for how the game actually worked: deep C++ and Blueprint debugging, internal tooling from scratch, and critical subsystems rewritten for Switch stability."}, {"id": "PoliceSimulator", "title": "Police Simulator: Patrol Officers", "cat": "professional work", "tier": "supporting", "year": 2024, "role": "Game Programmer & Technical Designer", "ctx": "Untold Games (for Aesir Interactive)", "img": "./assets/images/PoliceSimulator.png", "short": "Nintendo Switch port. I took on deep-level bugs and built the debug tooling the team needed to test the game."}, {"id": "Battleship", "title": "UEFN: Battleship", "cat": "professional work", "tier": "listed", "year": 2023, "role": "Lead Creator & Verse Developer", "ctx": "Untold Games · Fortnite", "img": "./assets/images/Battleship.jpeg", "short": "A fast strategy game taken from concept to launch on Fortnite. I designed the rules and built the entire custom battleship system in Verse."}, {"id": "PulseParty", "title": "PulseParty", "cat": "professional work", "tier": "listed", "year": 2023, "role": "Lead Systems Programmer", "ctx": "Untold Games · Fortnite", "img": "./assets/images/PulsePartyThumbnail.png", "short": "A chaotic party game. Eight distinct minigames (races, deathmatches, king of the hill) strung together in one framework, all built in Verse."}, {"id": "Alien", "title": "Alien (Prototype)", "cat": "personal work", "tier": "supporting", "year": 2022, "role": "Sole Creator", "ctx": "Personal prototype", "img": "./assets/images/work-5.jpg", "short": "A reverse-horror prototype and a love letter to Aliens vs. Predator 2, built around the feeling of being a stealthy, powerful Facehugger. Movement and possession are the whole experiment."}, {"id": "MonkHomebrew", "title": "Monk Homebrew (D&D 5e)", "cat": "personal work", "tier": "listed", "year": 2023, "role": "Game Designer", "ctx": "Personal · Tabletop", "img": "./assets/images/Monk.png", "short": "A ground-up rebuild of the D&D Monk around a new core mechanic, the Vessels of Ki: spectral objects that hold memories, emotions, and ideas, used to attack, defend, and pay for abilities. The redesign was tight enough that the existing subclasses slotted in without major reworks."}, {"id": "Cycle", "title": "Cycle", "cat": "university work", "tier": "hero", "year": 2021, "role": "Director, Sole Programmer, Designer", "ctx": "Falmouth University · Team of 3", "img": "./assets/images/Cycle.png", "short": "Best 3rd-Year Videogame at Falmouth 2021, and chosen to represent the university at the G7 Summit in Cornwall. A surrealist puzzle-adventure built by two artists and me. I had never used Unreal before this. I spent August learning it, then we made the game."}, {"id": "CardsWeaver", "title": "Card's Weaver", "cat": "university work", "tier": "supporting", "year": 2023, "role": "Lead Game Designer", "ctx": "University · Team of 4", "img": "./assets/images/Card's Weaver.png", "short": "A card game built at university in Unreal Engine. I led a small design team and owned the core rules, the central resource mechanic, and the gameplay loop."}, {"id": "SoulDriven", "title": "Soul Driven", "cat": "university work", "tier": "listed", "year": 2023, "role": "Systems Programmer", "ctx": "University of Verona · Mobile game class", "img": "./assets/images/work-6.jpg", "short": "An action game where I owned the character architecture: a runtime class-switching system built on the Strategy pattern, documented well enough that any teammate could add a new class without touching my code."}, {"id": "ProjectCenturion", "title": "Project Centurion", "cat": "university work", "tier": "listed", "year": 2020, "role": "Game Designer & Developer", "ctx": "University project", "img": "./assets/images/work-4.jpg", "short": "An early university game with a historical theme. I co-designed the core loop and level structure and built player movement and interaction in Unity."}, {"id": "UnrealEngineCourse", "title": "Unreal Engine Course", "cat": "professional work", "tier": "listed", "year": 2022, "role": "Unreal Engine Tutor", "ctx": "Creativity Unleashed · Udemy", "img": "./assets/images/work-1.jpg", "short": "A 16-hour Unreal Engine course, published on Udemy. It introduces Blueprints and the common programming patterns behind them, from the ground up."}, {"id": "CRTexe", "title": "CRT.exe", "cat": "game jams", "tier": "supporting", "year": 2026, "role": "Project Lead & SFX Designer", "ctx": "Brackeys Game Jam 2026.1 · Team of 8", "img": "./assets/images/CRTexe.svg", "short": "Led a team of eight through a game jam by designing the game around how the team could actually function. Each area owned by one person, one mechanic, one hidden code. No dependencies, no bottlenecks."}];
+const LAYERS = [
+  { name: 'surface',      cat: null,                c: [196, 227, 214], deep: false },
+  { name: 'professional', cat: 'professional work', c: [106, 166, 166], deep: false },
+  { name: 'personal',     cat: 'personal work',     c: [ 61, 125, 142], deep: true  },
+  { name: 'university',   cat: 'university work',   c: [ 36,  84, 108], deep: true  },
+  { name: 'game jams',    cat: 'game jams',         c: [ 20,  47,  68], deep: true  }
+];
+/* loose organic slots (% of the cells box); first slot is the biggest organism */
+const SLOTS = [[50, 40], [17, 26], [83, 30], [26, 82], [74, 84], [50, 100]];
+const TIER = { hero: 0, supporting: 1, listed: 2 };
+const $ = id => document.getElementById(id);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- build layers + gauge ---------- */
+LAYERS.forEach((L, i) => {
+  $('gauge').insertAdjacentHTML('beforeend',
+    `<button data-i="${i}" class="${i ? '' : 'on'}"><span class="lbl">${L.name}</span><span class="dot"></span></button>`);
+  if (!L.cat) return;
+  const items = PROJECTS.filter(p => p.cat === L.cat)
+    .sort((a, b) => (TIER[a.tier] - TIER[b.tier]) || (b.year - a.year)).slice(0, SLOTS.length);
+  const cells = items.map((p, k) => `
+    <button class="cell ${k === 0 ? 'big' : ''}" data-id="${p.id}" style="left:${SLOTS[k][0]}%;top:${SLOTS[k][1]}%;--d:${-k * 1.7}s">
+      <span class="memb"><img src="${p.img.replace('./', '../')}" alt="" loading="lazy"></span>
+      <b>${p.title}</b><small>${p.year} · ${p.role}</small>
+    </button>`).join('');
+  $('layers').insertAdjacentHTML('beforeend', `
+    <section class="layer" data-i="${i}">
+      <header class="lh"><small>layer ${i}</small><h2>${L.name}</h2></header>
+      <div class="cells">${cells}</div>
+    </section>`);
+});
+const layerEls = [...document.querySelectorAll('.layer')];
+const gaugeBtns = [...document.querySelectorAll('#gauge button')];
+
+/* ---------- detail panel ---------- */
+function openPanel(id) {
+  const p = PROJECTS.find(x => x.id === id);
+  $('pimg').src = p.img.replace('./', '../');
+  $('pmeta').textContent = `${p.year} · ${LAYERS[cur].name}`;
+  $('ptitle').textContent = p.title;
+  $('prole').textContent = p.role;
+  $('pctx').textContent = p.ctx || '';
+  $('pshort').textContent = p.short;
+  $('panel').classList.add('open');
+  $('panel').setAttribute('aria-hidden', 'false');
+}
+const closePanel = () => { $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); };
+document.addEventListener('click', e => {
+  const c = e.target.closest('.cell'); if (c) openPanel(c.dataset.id);
+});
+$('px').addEventListener('click', closePanel);
+
+/* ---------- depth state ---------- */
+let cur = 0, lastSwitch = -1e9, surge = 0;
+function go(i) {
+  if (i < 0 || i >= LAYERS.length || i === cur) return;
+  const now = performance.now();
+  if (now - lastSwitch < 900) return;
+  lastSwitch = now;
+  surge = (i > cur ? 1 : -1) * 22;
+  cur = i;
+  layerEls.forEach(el => {
+    const k = +el.dataset.i;
+    el.classList.toggle('on', k === cur);
+    el.classList.toggle('past', k < cur);
+  });
+  gaugeBtns.forEach(b => b.classList.toggle('on', +b.dataset.i === cur));
+  document.body.classList.toggle('deep', LAYERS[cur].deep);
+  document.body.classList.toggle('at-surface', cur === 0);
+  closePanel();
+  ripples.push({ x: W / 2, y: H / 2, r: 20, life: 1, big: true });
+}
+gaugeBtns.forEach(b => b.addEventListener('click', () => go(+b.dataset.i)));
+$('brand').addEventListener('click', () => go(0));
+
+let wheelAcc = 0;
+addEventListener('wheel', e => {
+  if (e.target.closest('.panel') || e.target.closest('.cells')?.scrollHeight > e.target.closest('.cells')?.clientHeight) return;
+  wheelAcc += e.deltaY;
+  if (Math.abs(wheelAcc) > 60) { go(cur + Math.sign(wheelAcc)); wheelAcc = 0; }
+}, { passive: true });
+addEventListener('keydown', e => {
+  if (['ArrowDown', 'PageDown', ' '].includes(e.key)) go(cur + 1);
+  if (['ArrowUp', 'PageUp'].includes(e.key)) go(cur - 1);
+  if (e.key === 'Escape') closePanel();
+});
+let touchY = null;
+addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+addEventListener('touchend', e => {
+  if (touchY === null || e.target.closest('.cells') || e.target.closest('.panel')) return;
+  const dy = touchY - e.changedTouches[0].clientY;
+  if (Math.abs(dy) > 60) go(cur + Math.sign(dy));
+  touchY = null;
+});
+
+/* ============================================================
+   THE SEA (canvas)
+   ============================================================ */
+const cv = $('sea'), g = cv.getContext('2d');
+const off = document.createElement('canvas'), og = off.getContext('2d');  // low-res = free blur
+let W, H, dpr, t = 0;
+function resize() {
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  off.width = Math.ceil(W / 14); off.height = Math.ceil(H / 14);
+}
+addEventListener('resize', resize); resize();
+
+const mouse = { x: W / 2, y: H * .62, t: -1e9 };
+addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.t = performance.now(); });
+
+const col = [...LAYERS[0].c];
+const mix = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
+const rgba = (c, a) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+
+/* plankton + food */
+const motes = Array.from({ length: reduce ? 60 : 150 }, () => mote(false));
+const food = Array.from({ length: 9 }, () => mote(true));
+function mote(isFood) {
+  return { x: Math.random() * W, y: Math.random() * H, z: .25 + Math.random() * .75,
+    vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .2, ph: Math.random() * 6, food: isFood };
+}
+const ripples = [];
+
+/* blurred neighbours on the layers above and below */
+const ghosts = Array.from({ length: 4 }, (_, i) => ({ segs: Array.from({ length: 12 }, () => ({ x: W / 2, y: H / 2 })), a: i * 1.7, s: .6 + i * .15, below: i % 2 === 0 }));
+
+/* you */
+const C = { n: 16, max: 34, head: 0, speed: 0, segs: Array.from({ length: 40 }, (_, i) => ({ x: W / 2, y: H * .7 + i * 8 })) };
+
+/* the two kinds of food that move you between layers */
+const orbs = [
+  { dir: 1,  rx: .86, ry: .78, c: [226, 96, 74],  label: 'dive' },
+  { dir: -1, rx: .14, ry: .22, c: [88, 174, 246], label: 'rise' }
+];
+const orbPos = o => ({ x: o.rx * W + Math.sin(t * .011 + o.dir) * 14, y: o.ry * H + Math.cos(t * .009 + o.dir) * 12 });
+const orbLive = o => (o.dir > 0 ? cur < LAYERS.length - 1 : cur > 0);
+cv.addEventListener('click', e => {
+  orbs.forEach(o => { const p = orbPos(o); if (orbLive(o) && Math.hypot(e.clientX - p.x, e.clientY - p.y) < 34) go(cur + o.dir); });
+});
+
+function step() {
+  t++;
+  const target = LAYERS[cur].c;
+  for (let i = 0; i < 3; i++) col[i] += (target[i] - col[i]) * .035;
+  surge *= .94;
+  document.documentElement.style.setProperty('--tint', rgba(col, 1));
+
+  /* ---- water ---- */
+  const top = mix(col, [255, 255, 255], .22), bot = mix(col, [0, 12, 20], .3);
+  const grad = g.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, rgba(top, 1)); grad.addColorStop(1, rgba(bot, 1));
+  g.fillStyle = grad; g.fillRect(0, 0, W, H);
+
+  /* light shafts, fading with depth */
+  const shaft = .085 * (1 - cur / LAYERS.length);
+  for (let k = 0; k < 5; k++) {
+    const x = W * (.12 + k * .2) + Math.sin(t * .004 + k * 1.3) * 60;
+    const lg = g.createLinearGradient(0, 0, 0, H * .9);
+    lg.addColorStop(0, `rgba(255,255,255,${shaft})`); lg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = lg; g.beginPath();
+    g.moveTo(x - 30, 0); g.lineTo(x + 40, 0); g.lineTo(x + 180 + k * 20, H * .9); g.lineTo(x - 120, H * .9); g.fill();
+  }
+
+  /* ---- ghosts, drawn tiny then stretched so they read as out-of-focus ---- */
+  og.clearRect(0, 0, off.width, off.height);
+  const sx = off.width / W;
+  ghosts.forEach(gh => {
+    gh.a += .0025 * gh.s;
+    const h = gh.segs[0];
+    h.x = W / 2 + Math.cos(gh.a * 1.3) * W * .42;
+    h.y = H / 2 + Math.sin(gh.a * 1.9) * H * .38 - surge * (gh.below ? 4 : 8);
+    for (let i = 1; i < gh.segs.length; i++) {
+      const a = gh.segs[i - 1], b = gh.segs[i], d = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+      b.x = a.x + (b.x - a.x) / d * 26; b.y = a.y + (b.y - a.y) / d * 26;
+    }
+    og.fillStyle = gh.below ? rgba(mix(col, [0, 10, 18], .4), .38) : rgba(mix(col, [255, 255, 255], .5), .32);
+    gh.segs.forEach((s, i) => {
+      og.beginPath(); og.arc(s.x * sx, s.y * sx, (gh.below ? 2.6 : 1.8) * (1 - i / 16), 0, 6.283); og.fill();
+    });
+  });
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.drawImage(off, 0, 0, W, H);
+
+  /* ---- plankton ---- */
+  [...motes, ...food].forEach(m => {
+    m.x += m.vx + Math.sin(t * .01 + m.ph) * .12; m.y += m.vy - surge * m.z * .9;
+    if (m.x < -10) m.x = W + 10; if (m.x > W + 10) m.x = -10;
+    if (m.y < -20) m.y = H + 20; if (m.y > H + 20) m.y = -20;
+    if (m.food) {
+      const p = .5 + .5 * Math.sin(t * .05 + m.ph);
+      g.fillStyle = `rgba(255,255,255,${.12 + p * .1})`; g.beginPath(); g.arc(m.x, m.y, 8 + p * 3, 0, 6.283); g.fill();
+      g.fillStyle = 'rgba(255,255,255,.95)'; g.beginPath(); g.arc(m.x, m.y, 3.2, 0, 6.283); g.fill();
+    } else {
+      g.fillStyle = `rgba(255,255,255,${.12 + m.z * .35})`; g.beginPath(); g.arc(m.x, m.y, m.z * 1.9, 0, 6.283); g.fill();
+    }
+  });
+
+  /* ---- depth orbs ---- */
+  orbs.forEach(o => {
+    if (!orbLive(o)) return;
+    const p = orbPos(o), pul = .5 + .5 * Math.sin(t * .045 + o.dir);
+    g.fillStyle = rgba(o.c, .14 + pul * .1); g.beginPath(); g.arc(p.x, p.y, 22 + pul * 8, 0, 6.283); g.fill();
+    g.strokeStyle = rgba(o.c, .55); g.lineWidth = 1; g.beginPath(); g.arc(p.x, p.y, 15, 0, 6.283); g.stroke();
+    g.fillStyle = rgba(o.c, .95); g.beginPath(); g.arc(p.x, p.y, 7.5, 0, 6.283); g.fill();
+    g.fillStyle = LAYERS[cur].deep ? 'rgba(239,250,249,.7)' : 'rgba(20,48,47,.6)';
+    g.font = '500 11px Quicksand'; g.textAlign = 'center'; g.fillText(o.label, p.x, p.y + 44);
+  });
+
+  /* ---- the creature ---- */
+  const hd = C.segs[0], now = performance.now();
+  let tx = mouse.x, ty = mouse.y;
+  if (now - mouse.t > 3000) { tx = W / 2 + Math.cos(t * .006) * W * .3; ty = H * .55 + Math.sin(t * .011) * H * .25; }
+  const want = Math.atan2(ty - hd.y, tx - hd.x);
+  const da = ((want - C.head + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+  C.head += da * .085;
+  C.speed += (Math.min(5.4, Math.hypot(tx - hd.x, ty - hd.y) * .05) - C.speed) * .1;
+  hd.x += Math.cos(C.head) * C.speed; hd.y += Math.sin(C.head) * C.speed;
+  for (let i = 1; i < C.n; i++) {
+    const a = C.segs[i - 1], b = C.segs[i], d = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    b.x = a.x + (b.x - a.x) / d * 8; b.y = a.y + (b.y - a.y) / d * 8;
+  }
+  /* eat */
+  food.forEach(f => {
+    if (Math.hypot(f.x - hd.x, f.y - hd.y) < 18) {
+      ripples.push({ x: f.x, y: f.y, r: 4, life: 1 });
+      if (C.n < C.max) { const tail = C.segs[C.n - 1]; C.segs[C.n] = { x: tail.x, y: tail.y }; C.n++; }
+      Object.assign(f, mote(true), { y: Math.random() < .5 ? -15 : H + 15 });
+    }
+  });
+  orbs.forEach(o => { const p = orbPos(o); if (orbLive(o) && Math.hypot(p.x - hd.x, p.y - hd.y) < 22) go(cur + o.dir); });
+
+  for (let i = C.n - 1; i >= 0; i--) {
+    const s = C.segs[i], k = 1 - i / C.n, r = 1.6 + 4.6 * Math.pow(k, .7);
+    const nb = C.segs[Math.max(0, i - 1)], ang = Math.atan2(nb.y - s.y, nb.x - s.x) || C.head;
+    g.fillStyle = `rgba(255,255,255,${.05 * k})`; g.beginPath(); g.arc(s.x, s.y, r * 3.2, 0, 6.283); g.fill();
+    if (i % 3 === 1) {
+      const w = Math.sin(t * .14 + i * .7) * (.35 + C.speed * .09), len = 5 + 7 * k;
+      g.strokeStyle = `rgba(255,255,255,${.25 + .45 * k})`; g.lineWidth = 1.1;
+      [1, -1].forEach(sd => {
+        const a2 = ang + sd * (Math.PI / 2 + w);
+        g.beginPath(); g.moveTo(s.x, s.y); g.lineTo(s.x + Math.cos(a2) * len, s.y + Math.sin(a2) * len); g.stroke();
+      });
+    }
+    g.fillStyle = `rgba(255,255,255,${.35 + .55 * k})`; g.beginPath(); g.arc(s.x, s.y, r, 0, 6.283); g.fill();
+  }
+  g.fillStyle = 'rgba(255,255,255,.97)'; g.beginPath(); g.arc(hd.x, hd.y, 7.5, 0, 6.283); g.fill();
+  g.fillStyle = rgba(mix(col, [0, 20, 30], .35), .85);
+  g.beginPath(); g.arc(hd.x + Math.cos(C.head) * 3.4, hd.y + Math.sin(C.head) * 3.4, 2.6, 0, 6.283); g.fill();
+  g.strokeStyle = 'rgba(255,255,255,.7)'; g.lineWidth = 1;
+  [1, -1].forEach(sd => {
+    const a = C.head + sd * .5, fl = Math.sin(t * .2) * .15 * sd;
+    g.beginPath(); g.moveTo(hd.x + Math.cos(a) * 7, hd.y + Math.sin(a) * 7);
+    g.quadraticCurveTo(hd.x + Math.cos(a + fl) * 14, hd.y + Math.sin(a + fl) * 14, hd.x + Math.cos(C.head + sd * .3) * 18, hd.y + Math.sin(C.head + sd * .3) * 18);
+    g.stroke();
+  });
+
+  /* ---- ripples ---- */
+  for (let i = ripples.length - 1; i >= 0; i--) {
+    const rp = ripples[i]; rp.r += rp.big ? 14 : 1.6; rp.life -= rp.big ? .016 : .03;
+    if (rp.life <= 0) { ripples.splice(i, 1); continue; }
+    g.strokeStyle = `rgba(255,255,255,${rp.life * (rp.big ? .35 : .6)})`; g.lineWidth = rp.big ? 2 : 1;
+    g.beginPath(); g.arc(rp.x, rp.y, rp.r, 0, 6.283); g.stroke();
+  }
+
+  /* ---- vignette ---- */
+  const vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .35, W / 2, H / 2, Math.max(W, H) * .75);
+  vg.addColorStop(0, 'rgba(0,10,18,0)'); vg.addColorStop(1, `rgba(0,10,18,${.18 + cur * .05})`);
+  g.fillStyle = vg; g.fillRect(0, 0, W, H);
+
+  requestAnimationFrame(step);
+}
+step();
+</script>
+</body>
+</html>
