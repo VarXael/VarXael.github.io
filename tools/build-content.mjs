@@ -70,6 +70,20 @@ function inline(s) {
 }
 function blocks(md) {
   return md.split(/\n{2,}/).map(b => b.trim()).filter(Boolean).map(b => {
+    const h = b.match(/^(#{3,4})[ \t]+(.+)$/m);
+    if (h && b.indexOf(h[0]) === 0) {                                       // ### subheading (+ any text right under it)
+      const rest = b.slice(h[0].length).trim();
+      return `<h${h[1].length + 1} class="sub">${inline(h[2])}</h${h[1].length + 1}>` + (rest ? blocks(rest) : '');
+    }
+    if (/^\|.*\|$/m.test(b) && b.split('\n').every(l => /^\s*\|/.test(l))) {   // | markdown | table |
+      const rows = b.split('\n').filter(l => !/^\s*\|[\s:|-]+\|\s*$/.test(l))
+        .map(l => l.trim().replace(/^\||\|$/g, '').split('|').map(c => inline(c.trim())));
+      const [head, ...body] = rows;
+      return `<div class="md-table"><table><thead><tr>${head.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>` +
+        body.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>';
+    }
+    if (/^> /.test(b)) return `<blockquote>${inline(b.replace(/^> ?/gm, '').replace(/\n/g, ' '))}</blockquote>`;
+    if (/^\d+\. /.test(b)) return '<ol>' + b.split('\n').map(l => `<li>${inline(l.replace(/^\d+\. /, ''))}</li>`).join('') + '</ol>';
     if (/^[-*] /.test(b)) return '<ul>' + b.split('\n').map(l => `<li>${inline(l.replace(/^[-*] /, ''))}</li>`).join('') + '</ul>';
     return `<p>${inline(b.replace(/\n/g, ' '))}</p>`;
   }).join('');

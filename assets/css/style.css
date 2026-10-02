@@ -454,3 +454,14 @@ body.state-discipline .disc-emitter span{animation:emitPulse 2.6s ease-in-out in
   *{transition-duration:.001s !important}
   .pane{transition:none}
 }
+
+/* ---- rich case-study content from the vault (subheadings, tables, quotes, lists) ---- */
+.role-box .sub,.prev-story .sub{font-family:var(--mono);font-size:.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink);margin:22px 0 10px}
+.role-box ul,.role-box ol,.prev-story ul,.prev-story ol{margin:0 0 12px 18px}
+.role-box li,.prev-story li{margin-bottom:6px}
+.role-box blockquote,.prev-story blockquote{border-left:2px solid var(--amber);padding:4px 0 4px 16px;margin:0 0 14px;color:var(--ink);font-style:italic}
+.role-box code,.prev-story code{font-family:var(--mono);font-size:.82em;background:rgba(232,230,224,.06);padding:1px 5px}
+.md-table{overflow-x:auto;margin:6px 0 16px}
+.md-table table{border-collapse:collapse;font-family:var(--sans);font-size:.88rem;min-width:100%}
+.md-table th{font-family:var(--mono);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--dim);text-align:left;font-weight:400;border-bottom:1px solid var(--faint);padding:8px 14px 8px 0}
+.md-table td{border-bottom:1px solid rgba(232,230,224,.06);padding:8px 14px 8px 0;vertical-align:top}
