@@ -330,10 +330,10 @@ const projectDetails = {
 
 /* ---------- CATEGORY GROUPS ---------- */
 const CATS = [
-  { key: "PROFESSIONAL", label: "PROFESSIONAL", match: "professional work" },
-  { key: "PERSONAL",     label: "PERSONAL",     match: "personal work" },
-  { key: "UNIVERSITY",   label: "UNIVERSITY",   match: "university work" },
-  { key: "JAM",          label: "GAME JAM",     match: "game jams" }
+  { key: "PROFESSIONAL", label: "Professional", match: "professional work" },
+  { key: "PERSONAL",     label: "Personal",     match: "personal work" },
+  { key: "UNIVERSITY",   label: "University",   match: "university work" },
+  { key: "JAM",          label: "Game Jam",     match: "game jams" }
 ];
 const TIER_ORDER = { hero: 0, supporting: 1, listed: 2 };
 
@@ -382,9 +382,16 @@ function setState(state) {
   warpSpike();
   if (state !== 'discipline') { const w = $('disc-wires'); if (w) w.innerHTML = ''; }
 }
+/* stacked mobile shows every pane at once, so the nav scrolls to a section instead */
+const MOBILE_TARGETS = { overview: null, archive: '.pane-terminal', records: '.pane-records' };
 navBtns.forEach(btn => btn.addEventListener('click', () => {
   if (btn.dataset.state === 'discipline') openDiscipline(activeDiscipline || 'Game Designer');
   else setState(btn.dataset.state);
+  if (window.matchMedia('(max-width:860px)').matches && btn.dataset.state in MOBILE_TARGETS) {
+    const sel = MOBILE_TARGETS[btn.dataset.state];
+    const bar = document.querySelector('.topbar').offsetHeight;
+    window.scrollTo({ top: sel ? document.querySelector(sel).getBoundingClientRect().top + scrollY - bar - 12 : 0 });
+  }
 }));
 
 /* ---------- RENDER PROJECT LIST (terminal pane) ---------- */
@@ -400,7 +407,7 @@ function renderList() {
     divi.className = 'list-divider';
     divi.id = 'cat-' + cat.key;
     divi.dataset.cat = cat.key;
-    divi.textContent = `// ${cat.label}`;
+    divi.textContent = cat.label;
     listContainer.appendChild(divi);
 
     items.forEach(p => {
@@ -408,16 +415,20 @@ function renderList() {
       item.type = 'button';
       item.className = 'list-item';
       item.dataset.id = p.id;
-      const idxLabel = `MOD_${String(ORDERED_IDS.indexOf(p.id) + 1).padStart(2, '0')}`;
       item.innerHTML = `
         <div class="li-thumb"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
         <div class="li-text">
-          <div class="li-meta">${idxLabel} · ${p.year || ''}</div>
+          <div class="li-meta">${p.year || ''} · ${p.role || ''}</div>
           <div class="li-title">${p.title}</div>
         </div>`;
       item.addEventListener('click', () => {
         setPreview(p.id);
         if (currentState !== 'archive') setState('archive');
+        // stacked mobile: the details live far below the list, so jump there (clearing the sticky topbar)
+        if (window.matchMedia('(max-width:860px)').matches) {
+          const bar = document.querySelector('.topbar').offsetHeight;
+          window.scrollTo({ top: $('preview-pane').getBoundingClientRect().top + scrollY - bar - 12 });
+        }
       });
       listContainer.appendChild(item);
     });
@@ -434,8 +445,8 @@ function getYouTubeId(url) {
 }
 
 const LINK_FALLBACK = {
-  game: 'OPEN', github: 'GITHUB', gitlab: 'GITLAB', doc: 'DOCUMENT', school: 'COURSE',
-  trophy: 'AWARD', request: 'CONTACT', link: 'LINK'
+  game: 'Open', github: 'GitHub', gitlab: 'GitLab', doc: 'Document', school: 'Course',
+  trophy: 'Award', request: 'Contact', link: 'Link'
 };
 
 /* ---------- PREVIEW PANE ---------- */
@@ -468,7 +479,6 @@ function setPreview(id) {
     media.innerHTML = `
       <div class="media-stage has-video" id="media-stage">
         <video id="prev-video" src="${p.videos[0].file}" poster="${p.image}" controls muted loop playsinline preload="metadata" controlsList="nodownload noremoteplayback"></video>
-        <svg class="reticle-lock" viewBox="0 0 60 60"><circle cx="30" cy="30" r="16"/><path d="M30 4v10M30 46v10M4 30h10M46 30h10"/></svg>
         <button class="media-expand" id="media-expand" title="Expand / collapse">&#x2922;</button>
       </div>
       <div class="vid-playlist">${list}</div>`;
@@ -477,20 +487,18 @@ function setPreview(id) {
       <a class="media-stage yt" href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener">
         <img src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg" alt="${p.title}"
              onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'">
-        <svg class="reticle-lock" viewBox="0 0 60 60"><circle cx="30" cy="30" r="16"/><path d="M30 4v10M30 46v10M4 30h10M46 30h10"/></svg>
-        <span class="yt-play">&#9658; WATCH VIDEO_LOG</span>
+        <span class="yt-play">&#9658; Watch video</span>
       </a>`;
   } else {
     media.innerHTML = `
       <div class="media-stage">
         <img src="${p.image}" alt="${p.title}">
-        <svg class="reticle-lock" viewBox="0 0 60 60"><circle cx="30" cy="30" r="16"/><path d="M30 4v10M30 46v10M4 30h10M46 30h10"/></svg>
       </div>`;
   }
   wireMedia();
 
   // Header + fields
-  $('prev-cmd').textContent = `> INSPECT MODULE :: ${p.title.toUpperCase()}`;
+  $('prev-cmd').textContent = p.context || '';
   $('prev-title').textContent = p.title;
   $('prev-cat').textContent = (CATS.find(c => c.match === p.category) || {}).label || p.category;
   $('prev-yr').textContent = p.year || '·';
@@ -499,9 +507,7 @@ function setPreview(id) {
 
   // Synopsis + context
   $('prev-syn').textContent = p.short || '';
-  const ctx = $('prev-context');
-  ctx.textContent = p.context || '';
-  ctx.style.display = p.context ? '' : 'none';
+  $('prev-context').style.display = 'none';
 
   // Tools
   $('prev-tools').innerHTML = (p.tools && p.tools.length)
@@ -509,8 +515,8 @@ function setPreview(id) {
 
   // Story tab availability
   const hasStory = !!(p.story && p.story.trim());
-  $('prev-tabs').innerHTML = `<button class="prev-tab on" data-tab="overview">OVERVIEW</button>` +
-    (hasStory ? `<button class="prev-tab" data-tab="story">THE STORY</button>` : '');
+  $('prev-tabs').innerHTML = `<button class="prev-tab on" data-tab="overview">Overview</button>` +
+    (hasStory ? `<button class="prev-tab" data-tab="story">The story</button>` : '');
 
   // Contributions (all disciplines)
   $('prev-contrib').innerHTML = buildContribHTML(p);
@@ -526,7 +532,7 @@ function setPreview(id) {
 
   // Links
   $('prev-links').innerHTML = (p.links || []).map(l => {
-    const label = (l.label || LINK_FALLBACK[l.icon] || 'OPEN').toUpperCase();
+    const label = l.label || LINK_FALLBACK[l.icon] || 'Open';
     if (l.url === 'request') return `<a class="btn-action" href="mailto:giuseppeluigi.alfieri@gmail.com">${label}</a>`;
     return `<a class="btn-action" href="${l.url}" target="_blank" rel="noopener">${label}</a>`;
   }).join('');
@@ -639,7 +645,7 @@ function renderDiscipline(role) {
   $('disc-desc').textContent = def.description;
 
   const list = projectsForRole(role);
-  $('disc-count').textContent = `${String(list.length).padStart(2, '0')} MODULE${list.length === 1 ? '' : 'S'} ROUTED`;
+  $('disc-count').textContent = `${list.length} project${list.length === 1 ? '' : 's'}`;
 
   discProjects.innerHTML = list.map((p, i) => {
     const contrib = (p.roleContributions && p.roleContributions[role]) || '';
@@ -660,7 +666,7 @@ function renderDiscipline(role) {
         <div class="dp-body">${contrib || '<p class="dp-empty">Implementation details available on request.</p>'}</div>
         <div class="dp-foot">
           <div class="dp-tools">${tools}</div>
-          <button class="dp-open" data-id="${p.id}">INSPECT FULL MODULE &#x2192;</button>
+          <button class="dp-open" data-id="${p.id}">Open project &#x2192;</button>
         </div>
       </div>`;
   }).join('');
@@ -782,14 +788,10 @@ addEventListener('resize', resize); resize();
 addEventListener('mousemove', e => {
   mx = e.clientX / W; my = e.clientY / H;
   if (reduceMotion) return;
-  const r = $('ret');
-  if (r) { r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px'; }
 });
 
 function warpSpike() {
   warp = 1.2;
-  const tl = $('tlink');
-  if (tl) { tl.textContent = 'SYNC'; setTimeout(() => tl.textContent = 'STABLE', 900); }
 }
 function spawnPulse() { pulses.push({ r: R * 0.18, life: 1 }); }
 
