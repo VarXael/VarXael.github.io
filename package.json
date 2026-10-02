@@ -1,0 +1,11 @@
+{
+  "name": "varxael-portfolio",
+  "private": true,
+  "description": "Portfolio site. Content lives in the Obsidian vault; see content.config.json.",
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/build-content.mjs --watch --serve",
+    "build": "node tools/build-content.mjs",
+    "publish": "node tools/publish.mjs"
+  }
+}

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./assets/css/style.css?v=8">
+<link rel="stylesheet" href="./assets/css/style.css?v=9">
 </head>
 <body class="state-overview">
 <canvas id="bg"></canvas>
@@ -71,6 +71,7 @@
   <!-- PANE 1: OVERVIEW -->
   <div class="pane pane-overview">
     <div class="overview-info">
+      <!-- content:hero -->
       <div class="hero-id">
         <img class="portrait" src="./assets/images/about.png" alt="Giuseppe Alfieri" width="72" height="72">
         <div>
@@ -87,11 +88,8 @@
         <span id="copymsg">Copied</span>
       </div>
       <p class="epigraph">"I design games where the systems tell the story."</p>
-      <p class="bio">
-        I design mechanics by tracing every interdependency until the whole system holds together,
-        and then I build them myself in Unreal Engine and C++. I have led teams from concept to release,
-        ported shipped titles to Nintendo Switch 1 and 2, and won Best 3rd-Year Videogame at Falmouth.
-      </p>
+      <p class="bio">I design mechanics by tracing every interdependency until the whole system holds together, and then I build them myself in Unreal Engine and C++. I have led teams from concept to release, ported shipped titles to Nintendo Switch 1 and 2, and won Best 3rd-Year Videogame at Falmouth.</p>
+      <!-- /content:hero -->
 
       <div class="box-stack">
         <div class="box box--disc">
@@ -174,6 +172,7 @@
   <!-- PANE 4: RECORDS (résumé) -->
   <div class="pane pane-records">
     <div class="records-layout">
+<!-- content:experience -->
       <div class="log-block">
         <h3 class="log-header">Experience</h3>
 
@@ -181,12 +180,7 @@
           <div class="log-meta">2023 to present<span>Milan, IT / Remote</span></div>
           <div class="log-body">
             <div class="log-title">Technical Game Designer &amp; Programmer // Untold Games</div>
-            <div class="log-desc">
-              Ported shipped titles to Nintendo Switch (High on Life, Police Simulator) as a core
-              programmer, doing deep C++ and Blueprint debugging and building custom debug tooling.
-              Lead systems programmer in Verse on multiple released UEFN titles. Some online tutoring
-              on the side.
-            </div>
+            <div class="log-desc">Ported shipped titles to Nintendo Switch (High on Life, Police Simulator) as a core programmer, doing deep C++ and Blueprint debugging and building custom debug tooling. Lead systems programmer in Verse on multiple released UEFN titles. Some online tutoring on the side.</div>
           </div>
         </div>
 
@@ -242,11 +236,13 @@
           </div>
         </div>
       </div>
+    <!-- /content:experience -->
     </div>
   </div>
 
 </div>
 
-<script src="./assets/js/script.js?v=8"></script>
+<script src="./assets/js/content.js?v=9"></script>
+<script src="./assets/js/script.js?v=9"></script>
 </body>
 </html>
