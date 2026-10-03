@@ -85,7 +85,7 @@ td:first-child{font-family:var(--mono);font-size:12px;color:var(--ice);white-spa
 
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" data-v="v2" aria-selected="true">v2 · Master Design Document</button>
-    <button class="tab" role="tab" data-v="v1" aria-selected="false">v1 · April Design Document</button>
+    <button class="tab" role="tab" data-v="v1" aria-selected="false">v1 · Design Document</button>
   </div>
 
   <div class="stage" id="stage">
@@ -116,7 +116,7 @@ td:first-child{font-family:var(--mono);font-size:12px;color:var(--ice);white-spa
       <span class="mono">Same rule, two economies</span>
       <h3>What changes</h3>
       <table class="compare">
-        <tr><th></th><th>v1 · April</th><th>v2 · Master</th></tr>
+        <tr><th></th><th>v1 · Design Doc</th><th>v2 · Master Doc</th></tr>
         <tr><td>Looking</td><td class="v">Ghost scan: reserves the object's full weight in volatile memory.</td><td class="v">Soft scan: free, and it fades a few seconds after you look away.</td></tr>
         <tr><td>Committing</td><td class="v">Full scan, one object at a time, written to the area chip.</td><td class="v">One flash charge saves everything still lit within range, at once.</td></tr>
         <tr><td>The void</td><td class="v">A probability: walk on an unscanned bridge and you fall.</td><td class="v">Solid: you can only walk on floor you have saved. There is no falling.</td></tr>
@@ -150,7 +150,7 @@ const V = {
     ]
   },
   v1: {
-    tag: 'v1 · April Design Document',
+    tag: 'v1 · Design Document',
     title: 'Knowing costs memory',
     text: 'Ghost-scan shapes in the dark, then commit them to make them real. Cross a bridge that only holds once committed, move a weapon into the OS, and swap map chips without running out of memory.',
     src: '../sasha-v1/index.html',
