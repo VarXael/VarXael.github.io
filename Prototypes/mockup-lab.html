@@ -93,6 +93,11 @@ section.s{padding:12vh 0 4vh}
 .room .frame{width:min(1100px,100%);display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:start}
 .room .stage{position:relative;aspect-ratio:4/3;border:1px solid var(--faint);background:#050607}
 .room canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.room .stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#050607}
+.room .modes{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.room .modes button,.room .modes a{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:9px 12px;border:1px solid var(--faint);color:var(--dim);transition:.2s}
+.room .modes button:hover,.room .modes a:hover{border-color:var(--ice);color:var(--ice)}
+.room .modes button[aria-pressed="true"]{border-color:var(--ice);color:var(--void);background:var(--ice)}
 .room h3{font-family:var(--serif);font-weight:300;font-size:2.6rem;line-height:1;margin:10px 0 14px}
 .room .law{font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.35}
 .room .how{margin-top:18px;font-size:.92rem;line-height:1.7;color:rgba(231,230,225,.8)}
@@ -204,7 +209,14 @@ footer a.mail:hover{color:var(--ice);border-color:var(--ice)}
 <div class="room" id="room">
   <button class="close" id="room-close">Close ✕</button>
   <div class="frame">
-    <div class="stage"><canvas id="room-cv" tabindex="0"></canvas></div>
+    <div>
+      <div class="stage" id="room-stage"><canvas id="room-cv" tabindex="0"></canvas></div>
+      <div class="modes">
+        <button id="mode-sketch" aria-pressed="true">Sketch · instant</button>
+        <button id="mode-godot" aria-pressed="false">Godot build · ~40 MB</button>
+        <a href="../play/downloads/The_Lab_windows.zip" download>The Lab for Windows</a>
+      </div>
+    </div>
     <div>
       <span class="mono" id="room-tag"></span>
       <h3 id="room-title"></h3>
@@ -554,9 +566,27 @@ function openRoom(spec) {
   document.getElementById('room-how').innerHTML = spec.how;
   document.getElementById('room-src').textContent = spec.src;
   document.getElementById('room-quote').textContent = `"${spec.quote}"`;
-  const [w, h] = fit(room.cv); room.w = w; room.h = h; room.state = spec.make(w, h); room.input.mx = w / 2; room.input.my = h / 2; room.cv.focus();
+  const [w, h] = fit(room.cv); room.w = w; room.h = h; room.state = spec.make(w, h); room.input.mx = w / 2; room.input.my = h / 2;
+  setMode('sketch'); room.cv.focus();
 }
-const closeRoom = () => { room.el.classList.remove('open'); room.spec = null; };
+/* every first-wave specimen also exists as a room in the Godot Lab (play/lab), opened at ?room=ID */
+function setMode(m) {
+  const stage = document.getElementById('room-stage'), old = stage.querySelector('iframe');
+  if (old) old.remove();
+  document.getElementById('mode-sketch').setAttribute('aria-pressed', m === 'sketch');
+  document.getElementById('mode-godot').setAttribute('aria-pressed', m === 'godot');
+  room.cv.style.visibility = m === 'sketch' ? 'visible' : 'hidden';
+  document.getElementById('room-how').innerHTML = m === 'sketch' ? room.spec.how
+    : 'The Godot room has its own controls, shown at the bottom of the game. Click the game once to give it the keyboard. Keys 1 to 8 move between the eight rooms.';
+  if (m === 'godot') {
+    const f = document.createElement('iframe');
+    f.src = `../play/lab/index.html?room=${room.spec.id}&embed=1`; f.title = 'The Lab, room ' + room.spec.id; f.allow = 'autoplay; fullscreen';
+    stage.appendChild(f); f.addEventListener('load', () => { try { f.focus(); } catch (e) {} });
+  }
+}
+document.getElementById('mode-sketch').addEventListener('click', () => setMode('sketch'));
+document.getElementById('mode-godot').addEventListener('click', () => setMode('godot'));
+const closeRoom = () => { const f = document.querySelector('#room-stage iframe'); if (f) f.remove(); room.el.classList.remove('open'); room.spec = null; };
 document.getElementById('room-close').addEventListener('click', closeRoom);
 room.el.addEventListener('click', e => { if (e.target === room.el) closeRoom(); });
 room.cv.addEventListener('pointermove', e => { const r = room.cv.getBoundingClientRect(); room.input.mx = e.clientX - r.left; room.input.my = e.clientY - r.top; });
