@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Sasha: two rule sets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#08090a; --panel:#0e1012; --ink:#e7e6e1; --dim:rgba(231,230,225,.58); --faint:rgba(231,230,225,.12);
+  --grey:#6b6e72; --ice:#9fd8ff; --amber:#f0a640;
+  --serif:'Cormorant Garamond',serif; --mono:'IBM Plex Mono',monospace; --sans:Inter,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--void)}
+body{background:var(--void);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 40px;background:rgba(8,9,10,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--faint)}
+.brand{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.brand b{color:var(--ice);font-weight:500}
+.top a.back{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.top a.back:hover{color:var(--ice)}
+main{max-width:1180px;margin:0 auto;padding:0 40px 120px}
+.hero{padding:72px 0 40px;display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:end}
+.hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(2.6rem,5.5vw,4.6rem);line-height:.95;margin:14px 0 18px}
+.law{font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--ice);line-height:1.25}
+.lede{font-size:1.02rem;line-height:1.7;color:rgba(231,230,225,.86)}
+.lede b{font-weight:500;color:var(--ink)}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--faint);margin-top:24px}
+.tab{padding:14px 22px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border-bottom:2px solid transparent;margin-bottom:-1px;transition:.2s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ice);border-bottom-color:var(--ice)}
+.stage{position:relative;margin-top:24px;border:1px solid var(--faint);background:#050607;aspect-ratio:16/9;overflow:hidden}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 55%,rgba(159,216,255,.08),transparent 60%)}
+.cover h2{font-family:var(--serif);font-weight:300;font-size:2.2rem}
+.cover p{max-width:520px;color:var(--dim);line-height:1.6;font-size:.95rem}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:12px 18px;border:1px solid var(--faint);transition:.25s;display:inline-block}
+.btn:hover{border-color:var(--ice);color:var(--ice)}
+.btn.solid{background:var(--ice);border-color:var(--ice);color:var(--void);font-weight:500}
+.btn.solid:hover{background:var(--ink);border-color:var(--ink);color:var(--void)}
+.under{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:12px}
+.under a{color:var(--dim)} .under a:hover{color:var(--ice)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:56px}
+h3{font-family:var(--serif);font-weight:300;font-size:1.9rem;margin:10px 0 16px}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--faint);vertical-align:top;line-height:1.5}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:400}
+td:first-child{font-family:var(--mono);font-size:12px;color:var(--ice);white-space:nowrap}
+.compare td:first-child{color:var(--ink);font-family:var(--sans);font-size:.92rem;white-space:normal}
+.compare td.v{color:rgba(231,230,225,.86)}
+.note{margin-top:56px;padding:22px 24px;border:1px solid var(--faint);background:var(--panel);line-height:1.7;color:rgba(231,230,225,.86);font-size:.95rem}
+.note b{color:var(--amber);font-weight:500}
+.mobile-only{display:none}
+@media (max-width:820px){
+  .top{padding:14px 16px}
+  main{padding:0 16px 80px}
+  .hero{grid-template-columns:1fr;gap:20px;padding-top:44px}
+  .cols{grid-template-columns:1fr;gap:36px}
+  .stage{aspect-ratio:4/3}
+  .mobile-only{display:block}
+  td:first-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="../../Prototypes/mockup-lab.html">Giuseppe Luigi Alfieri <b>/ Lab</b></a>
+  <a class="back" href="../../Prototypes/mockup-lab.html">Back to the Lab</a>
+</header>
+<main>
+  <section class="hero">
+    <div>
+      <span class="mono">Case study · Perception · Godot 4.7</span>
+      <h1>Project Sasha</h1>
+      <p class="law">"The world does not exist until you scan it into memory."</p>
+    </div>
+    <p class="lede">An android in a dark megastructure, where <b>everything she knows costs memory</b>. I wrote two design documents for the same rule. These are both of them built as playable slices, so the difference between them can be felt, not just read.</p>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-v="v2" aria-selected="true">v2 · Master Design Document</button>
+    <button class="tab" role="tab" data-v="v1" aria-selected="false">v1 · April Design Document</button>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="cover" id="cover">
+      <span class="mono" id="cover-tag"></span>
+      <h2 id="cover-title"></h2>
+      <p id="cover-text"></p>
+      <div class="row">
+        <button class="btn solid" id="play">Play in the browser</button>
+        <a class="btn" id="dl" href="#" download>Windows build · 38 MB</a>
+      </div>
+      <span class="mono">About 40 MB to load · keyboard and mouse · desktop browser</span>
+    </div>
+  </div>
+  <div class="under">
+    <span class="mono">Click the game once to give it the keyboard. F1 shows the rules.</span>
+    <a class="mono" id="newtab" href="#" target="_blank" rel="noopener">Open full screen ↗</a>
+  </div>
+  <p class="note mobile-only">These slices need a keyboard and a mouse. On a phone, the comparison below still tells the story; the builds are best played on a computer.</p>
+
+  <section class="cols">
+    <div>
+      <span class="mono">Controls</span>
+      <h3 id="ctrl-title">v2 controls</h3>
+      <table id="controls"></table>
+    </div>
+    <div>
+      <span class="mono">Same rule, two economies</span>
+      <h3>What changes</h3>
+      <table class="compare">
+        <tr><th></th><th>v1 · April</th><th>v2 · Master</th></tr>
+        <tr><td>Looking</td><td class="v">Ghost scan: reserves the object's full weight in volatile memory.</td><td class="v">Soft scan: free, and it fades a few seconds after you look away.</td></tr>
+        <tr><td>Committing</td><td class="v">Full scan, one object at a time, written to the area chip.</td><td class="v">One flash charge saves everything still lit within range, at once.</td></tr>
+        <tr><td>The void</td><td class="v">A probability: walk on an unscanned bridge and you fall.</td><td class="v">Solid: you can only walk on floor you have saved. There is no falling.</td></tr>
+        <tr><td>What it costs</td><td class="v">Memory, all the time.</td><td class="v">Flash charges. Containers gamble them: a locker gives cells back, a bin costs 5 MB for nothing.</td></tr>
+        <tr><td>Chips</td><td class="v">Swapped at a terminal; one rides inside an enemy.</td><td class="v">Carried in Sasha's spine. They overlap the same space and can be merged.</td></tr>
+        <tr><td>Enemies</td><td class="v">Touch a warden and you die.</td><td class="v">Wardens scan you back, and are immune until you spend a flash to render them.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <p class="note"><b>What the two builds show.</b> v1 makes every glance expensive, so the player scans less and reads more. v2 makes looking free and puts the price on the decision to keep, which turns each flash into a bet on what is lit. Same law, a different economy, and a very different pace.</p>
+</main>
+
+<script>
+const V = {
+  v2: {
+    tag: 'v2 · Master Design Document',
+    title: 'The void is solid',
+    text: 'Soft-scan the dark for free, then flash to save what is lit. You only walk on what you have saved. Load chips from Sasha\'s spine, merge them at the terminal, and reach the memory lattice.',
+    src: '../sasha-v2/index.html',
+    dl: '../downloads/Project_Sasha_v2_windows.zip',
+    controls: [
+      ['WASD', 'Move. Sasha turns toward the cursor with servo lag.'],
+      ['Hold LMB', 'Soft scan. Free; lit dots fade after a few seconds.'],
+      ['RMB', 'Flash. Saves everything locked and in range. One charge.'],
+      ['F', 'Fire the Displacement Emitter.'],
+      ['Q', 'Open the spine: the chips in Sasha\'s back.'],
+      ['E', 'Terminal, pick up a chip, integrate the lattice.'],
+      ['T', 'Tag a saved object.'],
+      ['F1 · F2 · F3 · F5', 'Help · render mode · passive field · restart.']
+    ]
+  },
+  v1: {
+    tag: 'v1 · April Design Document',
+    title: 'Knowing costs memory',
+    text: 'Ghost-scan shapes in the dark, then commit them to make them real. Cross a bridge that only holds once committed, move a weapon into the OS, and swap map chips without running out of memory.',
+    src: '../sasha-v1/index.html',
+    dl: '../downloads/Project_Sasha_v1_windows.zip',
+    controls: [
+      ['WASD', 'Move. Up on the keyboard is up on the screen.'],
+      ['Hold RMB', 'Aim: extends perception into a forward cone.'],
+      ['RMB + rest cursor', 'Ghost scan.'],
+      ['RMB + hold LMB', 'Full scan: commit a ghost.'],
+      ['LMB', 'Fire, once a weapon runs in the OS.'],
+      ['X', 'Delete the hovered ghost.'],
+      ['T · E', 'Tag · use a terminal or pick up a chip.'],
+      ['F1 · F2 · F5', 'Rules · render mode · restart.']
+    ]
+  }
+};
+let cur = 'v2';
+const $ = id => document.getElementById(id);
+function show(v) {
+  cur = v;
+  const d = V[v];
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.v === v));
+  const old = $('stage').querySelector('iframe'); if (old) old.remove();
+  $('cover').style.display = '';
+  $('cover-tag').textContent = d.tag; $('cover-title').textContent = d.title; $('cover-text').textContent = d.text;
+  $('dl').href = d.dl; $('newtab').href = d.src;
+  $('ctrl-title').textContent = v + ' controls';
+  $('controls').innerHTML = '<tr><th>Input</th><th>Action</th></tr>' + d.controls.map(c => `<tr><td>${c[0]}</td><td>${c[1]}</td></tr>`).join('');
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => show(t.dataset.v)));
+$('play').addEventListener('click', () => {
+  const f = document.createElement('iframe');
+  f.src = V[cur].src; f.title = 'Project Sasha ' + cur; f.allow = 'fullscreen; autoplay';
+  $('stage').appendChild(f); $('cover').style.display = 'none';
+  f.addEventListener('load', () => { try { f.focus(); } catch (e) {} });
+});
+show('v2');
+</script>
+</body>
+</html>
