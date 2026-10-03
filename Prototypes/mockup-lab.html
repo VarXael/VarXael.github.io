@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup: The Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MOCKUP :: The Lab
+   A field station. Every mechanic is a living specimen: a card
+   that runs a small working version of it, catalogued with its
+   law and the year it was first written down. The reel at the
+   top is a montage of the same specimens.
+   Colour language is Sasha's: grey (seen), ice (scanned), amber (committed).
+   ============================================================ */
+:root{
+  --void:#08090a; --panel:#0e1012; --ink:#e7e6e1; --dim:rgba(231,230,225,.58); --faint:rgba(231,230,225,.12);
+  --grey:#6b6e72; --ice:#9fd8ff; --amber:#f0a640; --red:#e0533f;
+  --serif:'Cormorant Garamond',serif; --mono:'IBM Plex Mono',monospace; --sans:Inter,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--void);scroll-behavior:smooth}
+body{color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* top */
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:16px 40px;background:rgba(8,9,10,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--faint)}
+.brand{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.brand b{color:var(--ice);font-weight:500}
+.top nav{display:flex;gap:26px}
+.top nav a{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);transition:.2s}
+.top nav a:hover{color:var(--ice)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1.25fr;gap:48px;align-items:center;padding:70px 0 40px}
+.hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(2.6rem,5.5vw,5rem);line-height:.95;margin:14px 0 20px}
+.lede{font-size:1.06rem;line-height:1.65;color:rgba(231,230,225,.86);max-width:520px}
+.lede b{font-weight:500;color:var(--ink)}
+.acts{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:12px 18px;border:1px solid var(--faint);transition:.25s}
+.btn:hover{border-color:var(--ice);color:var(--ice)}
+.btn.solid{background:var(--ice);border-color:var(--ice);color:var(--void);font-weight:500}
+.btn.solid:hover{background:var(--ink);border-color:var(--ink);color:var(--void)}
+.stats{display:flex;gap:30px;margin-top:34px}
+.stats div b{display:block;font-family:var(--serif);font-size:2.2rem;font-weight:300;color:var(--ink);line-height:1}
+.stats div span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+/* the reel */
+.reel{position:relative;border:1px solid var(--faint);background:#050607;aspect-ratio:16/10;overflow:hidden}
+.reel canvas{position:absolute;inset:0;width:100%;height:100%}
+.reel .hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;padding:14px 16px;pointer-events:none}
+.reel .card{position:absolute;left:18px;bottom:18px;right:18px;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none}
+.reel .card h3{font-family:var(--serif);font-weight:300;font-size:2rem;line-height:1}
+.reel .card p{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:rgba(231,230,225,.8);margin-top:6px;max-width:460px}
+.reel .bar{position:absolute;left:0;bottom:0;height:2px;background:var(--amber)}
+.reel .rec{color:var(--red)}
+
+/* sections */
+section.s{padding:12vh 0 4vh}
+.sh{display:grid;grid-template-columns:220px 1fr;gap:30px;align-items:baseline;border-top:1px solid var(--faint);padding-top:22px;margin-bottom:40px}
+.sh h2{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,3.6vw,3.1rem);line-height:1.05}
+.sh p{grid-column:2;color:var(--dim);max-width:640px;line-height:1.7;margin-top:10px}
+
+/* filters */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.filters button{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--faint);color:var(--dim);transition:.2s}
+.filters button.on,.filters button:hover{border-color:var(--ice);color:var(--ice)}
+
+/* specimens */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.spec{background:var(--panel);border:1px solid var(--faint);display:flex;flex-direction:column;transition:border-color .3s,transform .3s;text-align:left}
+.spec:hover{border-color:rgba(159,216,255,.5);transform:translateY(-3px)}
+.spec .view{position:relative;aspect-ratio:4/3;background:#050607;overflow:hidden}
+.spec canvas{position:absolute;inset:0;width:100%;height:100%}
+.spec .tag{position:absolute;left:10px;top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ice)}
+.spec .yr{position:absolute;right:10px;top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim)}
+.spec .body{padding:14px 16px 16px}
+.spec h4{font-family:var(--serif);font-weight:400;font-size:1.4rem;line-height:1.1}
+.spec p{font-size:.84rem;line-height:1.55;color:rgba(231,230,225,.72);margin-top:6px}
+.spec .play{margin-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+.spec.locked{opacity:.55}
+.spec.locked .play{color:var(--grey)}
+
+/* the room (expanded specimen) */
+.room{position:fixed;inset:0;z-index:50;background:rgba(5,6,7,.98);display:none;align-items:center;justify-content:center;padding:30px}
+.room.open{display:flex}
+.room .frame{width:min(1100px,100%);display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:start}
+.room .stage{position:relative;aspect-ratio:4/3;border:1px solid var(--faint);background:#050607}
+.room canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.room h3{font-family:var(--serif);font-weight:300;font-size:2.6rem;line-height:1;margin:10px 0 14px}
+.room .law{font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.35}
+.room .how{margin-top:18px;font-size:.92rem;line-height:1.7;color:rgba(231,230,225,.8)}
+.room .how kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--faint);padding:2px 6px}
+.room .src{margin-top:22px;border-left:1px solid var(--amber);padding-left:14px}
+.room .src q{display:block;font-family:var(--serif);font-style:italic;font-size:1.1rem;line-height:1.4;color:rgba(231,230,225,.86);quotes:none;margin-top:6px}
+.room .close{position:absolute;top:22px;right:28px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.room .close:hover{color:var(--ice)}
+
+/* studies */
+.studies{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.study{border:1px solid var(--faint);padding:24px;background:var(--panel);min-height:250px;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .3s}
+.study:hover{border-color:rgba(240,166,64,.5)}
+.study h4{font-family:var(--serif);font-weight:300;font-size:2rem;line-height:1}
+.study q{font-family:var(--serif);font-style:italic;font-size:1.2rem;line-height:1.35;quotes:none;display:block;margin-top:14px;color:rgba(231,230,225,.86)}
+.study .meta{display:flex;justify-content:space-between;margin-top:22px}
+
+/* shipped strip */
+.shipped{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.ship{border-top:1px solid var(--faint);padding-top:14px}
+.ship h4{font-family:var(--serif);font-weight:400;font-size:1.35rem}
+.ship p{font-size:.82rem;color:var(--dim);margin-top:4px;line-height:1.5}
+
+/* archive */
+.archive{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--faint)}
+.archive div{padding:20px;border-right:1px solid var(--faint)}
+.archive div:last-child{border-right:0}
+.archive b{display:block;font-family:var(--serif);font-size:2rem;font-weight:300;line-height:1}
+.archive span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+footer{padding:16vh 0 10vh;text-align:center}
+footer blockquote{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.6rem,3.6vw,3rem);line-height:1.2}
+footer a.mail{display:inline-block;margin-top:36px;font-family:var(--serif);font-size:clamp(1.3rem,2.4vw,2rem);border-bottom:1px solid var(--faint)}
+footer a.mail:hover{color:var(--ice);border-color:var(--ice)}
+
+@media(max-width:1000px){
+  .hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.studies,.shipped{grid-template-columns:1fr 1fr}
+  .archive{grid-template-columns:repeat(3,1fr)}.room .frame{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .wrap,.top{padding-left:18px;padding-right:18px}.top nav{display:none}
+  .grid,.studies,.shipped{grid-template-columns:1fr}.sh{grid-template-columns:1fr}.sh p{grid-column:1}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">G. Alfieri <b>/ The Lab</b></div>
+  <nav><a href="#lab">Specimens</a><a href="#studies">Case studies</a><a href="#shipped">Shipped</a><a href="../cv.html" target="_blank" rel="noopener">CV</a><a href="#contact">Contact</a></nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <p class="mono">Technical systems designer / Untold Games</p>
+      <h1>Giuseppe Alfieri</h1>
+      <p class="lede">I have been writing down game mechanics since 2018. This is where they live: <b>each one built as a small playable specimen</b>, catalogued with the rule it tests and the year I first wrote it. By day I ship console ports: <b>High on Life</b> and <b>Police Simulator</b> on Nintendo Switch.</p>
+      <div class="acts"><a class="btn solid" href="#lab">Open the Lab</a><a class="btn" href="mailto:giuseppeluigi.alfieri@gmail.com">Email</a><a class="btn" href="../cv.html" target="_blank" rel="noopener">CV</a></div>
+      <div class="stats"><div><b id="st-n">0</b><span>Mechanics catalogued</span></div><div><b id="st-p">0</b><span>Playable now</span></div><div><b>2018</b><span>Oldest note</span></div></div>
+    </div>
+    <div class="reel" id="reel"><canvas></canvas>
+      <div class="hud"><span class="mono"><span class="rec">●</span> Reel</span><span class="mono" id="reel-tc">00:00</span></div>
+      <div class="card"><div><span class="mono" id="reel-tag"></span><h3 id="reel-title"></h3><p id="reel-law"></p></div><span class="mono" id="reel-yr"></span></div>
+      <div class="bar" id="reel-bar"></div>
+    </div>
+  </section>
+
+  <section class="s" id="lab">
+    <header class="sh"><span class="mono">01 / Specimens</span><h2>Every specimen is a rule you can play</h2><p>Hover to watch one run by itself. Click to open its room and play it. Greyed-out specimens are catalogued but not built yet.</p></header>
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="s" id="studies">
+    <header class="sh"><span class="mono">02 / Case studies</span><h2>Three worlds, written in depth</h2><p>The specimens are single rules. These are whole games built around one.</p></header>
+    <div class="studies">
+      <a class="study" href="#"><div><span class="mono">Perception</span><h4>Project Sasha</h4><q>"The world does not exist until you scan it into memory."</q></div><div class="meta"><span class="mono">Unreal / C++</span><span class="mono">2025 to now</span></div></a>
+      <a class="study" href="#"><div><span class="mono">Rhythm</span><h4>Project Pulse</h4><q>"The world keeps the beat. The player does not have to."</q></div><div class="meta"><span class="mono">Unreal / C++</span><span class="mono">2026</span></div></a>
+      <a class="study" href="#"><div><span class="mono">Infection</span><h4>Gestation</h4><q>"You are not the alien. You are the infection."</q></div><div class="meta"><span class="mono">Unreal / design doc</span><span class="mono">2024 to 2025</span></div></a>
+    </div>
+  </section>
+
+  <section class="s" id="shipped">
+    <header class="sh"><span class="mono">03 / Shipped</span><h2>Professional work</h2></header>
+    <div class="shipped">
+      <div class="ship"><h4>High on Life</h4><p>Nintendo Switch port. Programmer and technical designer. Tools, debugging, system documentation.</p></div>
+      <div class="ship"><h4>Police Simulator</h4><p>Nintendo Switch port. Input, stability, an ImGui debug menu built from scratch.</p></div>
+      <div class="ship"><h4>UEFN: Battleship</h4><p>Lead creator and Verse developer, concept to launch on Fortnite.</p></div>
+      <div class="ship"><h4>PulseParty</h4><p>Lead systems programmer. Eight minigames, one state machine.</p></div>
+    </div>
+  </section>
+
+  <section class="s">
+    <header class="sh"><span class="mono">04 / The archive</span><h2>Where the specimens come from</h2><p>Every note I have written since 2018, kept untouched. The specimens link back to the entry that first described them.</p></header>
+    <div class="archive">
+      <div><b>161</b><span>Desktop notes</span></div><div><b>558</b><span>Todoist entries</span></div><div><b>4,113</b><span>Notion files</span></div>
+      <div><b>9</b><span>Sticky notes</span></div><div><b>1</b><span>Substack post</span></div><div><b>2018</b><span>First entry</span></div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact"><div class="wrap">
+  <blockquote>"You are only a messenger of the game itself."</blockquote>
+  <p class="mono" style="margin-top:14px">Notebook, 2019</p>
+  <a class="mail" href="mailto:giuseppeluigi.alfieri@gmail.com">giuseppeluigi.alfieri@gmail.com</a>
+</div></footer>
+
+<div class="room" id="room">
+  <button class="close" id="room-close">Close ✕</button>
+  <div class="frame">
+    <div class="stage"><canvas id="room-cv" tabindex="0"></canvas></div>
+    <div>
+      <span class="mono" id="room-tag"></span>
+      <h3 id="room-title"></h3>
+      <p class="law" id="room-law"></p>
+      <p class="how" id="room-how"></p>
+      <div class="src"><span class="mono" id="room-src"></span><q id="room-quote"></q></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Shared helpers
+   ============================================================ */
+const ICE = '159,216,255', AMB = '240,166,64', GRY = '107,110,114', INK = '231,230,225', RED = '224,83,63';
+const rgba = (c, a) => `rgba(${c},${a})`;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const rnd = (a, b) => a + Math.random() * (b - a);
+function text(g, s, x, y, size, col, align = 'left') { g.font = `500 ${size}px IBM Plex Mono`; g.fillStyle = col; g.textAlign = align; g.fillText(s, x, y); }
+
+/* ============================================================
+   SPECIMENS. Each has: make(w,h) -> state, step(state, dt, input) and draw(g, state, w, h).
+   input = { auto, mx, my, down, pressed, keys } ; in auto mode the specimen plays itself.
+   ============================================================ */
+const SPECIMENS = [
+{ id: 'A2', fam: 'Perception', title: 'The lamp builds the world', year: 2022,
+  law: 'Ground that is not lit does not exist. Fuel left behind keeps it built.',
+  how: 'Move the mouse: the lamp follows. Hold the button to pour fuel, which keeps the ground built after the lamp moves on. The walker only survives on ground that exists.',
+  src: 'Sky Island GDD, 2022', quote: 'If the level structure is not revealed to the player by any means, that area will be considered as non-existent.',
+  make(w, h) { const cols = 24, rows = 18; return { cols, rows, fuel: new Float32Array(cols * rows), lx: w / 2, ly: h / 2, wx: w / 2, wy: h / 2, t: 0, falls: 0 }; },
+  step(s, dt, inp, w, h) {
+    s.t += dt;
+    const tx = inp.auto ? w / 2 + Math.cos(s.t * .6) * w * .3 : inp.mx, ty = inp.auto ? h / 2 + Math.sin(s.t * .9) * h * .28 : inp.my;
+    s.lx = lerp(s.lx, tx, .08); s.ly = lerp(s.ly, ty, .08);
+    const cw = w / s.cols, ch = h / s.rows;
+    const pour = inp.auto ? Math.sin(s.t * 1.3) > .2 : inp.down;
+    for (let i = 0; i < s.fuel.length; i++) s.fuel[i] = Math.max(0, s.fuel[i] - dt * .12);
+    if (pour) { const c = Math.floor(s.lx / cw), r = Math.floor(s.ly / ch); if (c >= 0 && c < s.cols && r >= 0 && r < s.rows) s.fuel[r * s.cols + c] = 1; }
+    // the walker heads toward the lamp; if its tile does not exist, it falls and restarts at the lamp
+    s.wx = lerp(s.wx, s.lx + 30, .02); s.wy = lerp(s.wy, s.ly + 20, .02);
+    if (!this.exists(s, s.wx, s.wy, w, h)) { s.falls++; s.wx = s.lx; s.wy = s.ly; }
+  },
+  exists(s, x, y, w, h) {
+    const cw = w / s.cols, ch = h / s.rows, c = Math.floor(x / cw), r = Math.floor(y / ch);
+    if (c < 0 || c >= s.cols || r < 0 || r >= s.rows) return false;
+    return Math.hypot(x - s.lx, y - s.ly) < Math.min(w, h) * .22 || s.fuel[r * s.cols + c] > 0;
+  },
+  draw(g, s, w, h) {
+    const cw = w / s.cols, ch = h / s.rows, R = Math.min(w, h) * .22;
+    for (let r = 0; r < s.rows; r++) for (let c = 0; c < s.cols; c++) {
+      const x = c * cw, y = r * ch, d = Math.hypot(x + cw / 2 - s.lx, y + ch / 2 - s.ly), f = s.fuel[r * s.cols + c];
+      if (d < R) { g.fillStyle = rgba(ICE, .1 + .5 * (1 - d / R)); g.fillRect(x + 1, y + 1, cw - 2, ch - 2); }
+      else if (f > 0) { g.fillStyle = rgba(AMB, .15 + f * .45); g.fillRect(x + 1, y + 1, cw - 2, ch - 2); }
+      else { g.fillStyle = rgba(GRY, .05); g.fillRect(x + cw / 2, y + ch / 2, 1, 1); }
+    }
+    g.fillStyle = rgba(INK, 1); g.beginPath(); g.arc(s.lx, s.ly, 5, 0, 7); g.fill();
+    g.strokeStyle = rgba(ICE, .4); g.beginPath(); g.arc(s.lx, s.ly, R, 0, 7); g.stroke();
+    g.fillStyle = rgba(INK, .9); g.fillRect(s.wx - 3, s.wy - 8, 6, 8);
+    text(g, `falls ${s.falls}`, 10, h - 10, 10, rgba(INK, .5));
+  } },
+
+{ id: 'B2', fam: 'Rhythm', title: 'The Grey World', year: 2025,
+  law: 'Fall out of the beat and the colour drains away. Four actions on the beat bring it back.',
+  how: 'Press <kbd>Space</kbd> or click on the beat (when the ring meets the circle). Miss twice and the world goes grey; hit four in a row to return.',
+  src: 'Project Circle, Todoist, 2025', quote: 'Whenever you are way out of beat, the screen will go more and more grey and the song rhythm would fade away slowly, and you would only be able to hear the rhythm beat.',
+  make() { return { t: 0, bpm: 100, colour: 1, misses: 0, streak: 0, grey: false, flash: 0, hits: [], lastBeat: -1 }; },
+  step(s, dt, inp) {
+    s.t += dt; const beat = 60 / s.bpm, ph = (s.t % beat) / beat, n = Math.floor(s.t / beat);
+    let act = inp.pressed;
+    if (inp.auto) { act = false; if (n !== s.lastBeat) { s.lastBeat = n; const pattern = (n % 16); act = !(pattern === 5 || pattern === 6 || pattern === 7); s.autoMiss = !act; } }
+    const onBeat = ph < .14 || ph > .86;
+    if (act) {
+      if (onBeat) { s.streak++; s.flash = 1; s.hits.push({ t: 0, ok: true }); if (s.grey && s.streak >= 4) { s.grey = false; s.misses = 0; } }
+      else { s.streak = 0; s.misses++; s.hits.push({ t: 0, ok: false }); }
+    }
+    if (inp.auto && s.autoMiss && ph > .5 && ph < .55) { s.misses++; s.streak = 0; s.autoMiss = false; }
+    if (s.misses >= 2) s.grey = true;
+    s.colour = lerp(s.colour, s.grey ? 0 : 1, .05); s.flash *= .9;
+    s.hits.forEach(h => h.t += dt); s.hits = s.hits.filter(h => h.t < .6);
+  },
+  draw(g, s, w, h) {
+    const beat = 60 / s.bpm, ph = (s.t % beat) / beat, c = s.colour, cx = w / 2, cy = h / 2, R = Math.min(w, h) * .2;
+    const mix = (a, b) => a.split(',').map((v, i) => Math.round(lerp(+b.split(',')[i], +v, c))).join(',');
+    // the song: bars that flatten when grey
+    for (let i = 0; i < 40; i++) {
+      const amp = (Math.sin(s.t * 3 + i * .7) * .5 + .5) * (Math.cos(i * 1.3 + s.t) * .5 + .5) * h * .25 * (.1 + c * .9);
+      g.fillStyle = rgba(mix(AMB, '120,120,120'), .35); g.fillRect(i * w / 40, h - amp, w / 40 - 2, amp);
+    }
+    g.strokeStyle = rgba(mix(ICE, '160,160,160'), .9); g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.stroke();
+    const rr = R * (1 + (1 - ph) * 1.4); g.strokeStyle = rgba(INK, .25 + (1 - ph) * .3); g.lineWidth = 1; g.beginPath(); g.arc(cx, cy, rr, 0, 7); g.stroke();
+    g.fillStyle = rgba(mix(ICE, '200,200,200'), .15 + s.flash * .5); g.beginPath(); g.arc(cx, cy, R * .9, 0, 7); g.fill();
+    s.hits.forEach(hh => { g.strokeStyle = rgba(hh.ok ? mix(AMB, '200,200,200') : RED, 1 - hh.t / .6); g.beginPath(); g.arc(cx, cy, R + hh.t * 80, 0, 7); g.stroke(); });
+    text(g, s.grey ? `GREY WORLD  ${Math.min(s.streak, 4)}/4` : `streak ${s.streak}`, cx, cy + 4, 12, rgba(INK, .8), 'center');
+    g.lineWidth = 1;
+  } },
+
+{ id: 'B3', fam: 'Rhythm', title: 'Snake on the beat', year: 2022,
+  law: 'You can only turn when the song does.',
+  how: 'Arrow keys or WASD queue a turn; the snake only takes it on the next beat.',
+  src: 'Desktop note, 2022', quote: 'Just make snake but with rhythm to it, like its a song and you can turn only when the song goes.',
+  make() { return { t: 0, bpm: 110, n: 14, body: [[7, 7], [6, 7], [5, 7]], dir: [1, 0], q: null, food: [10, 4], last: -1, pulse: 0, score: 0 }; },
+  step(s, dt, inp) {
+    s.t += dt; s.pulse *= .85; const beat = 60 / s.bpm, b = Math.floor(s.t / beat);
+    const k = inp.keys;
+    if (!inp.auto) { if (k.ArrowUp || k.w) s.q = [0, -1]; if (k.ArrowDown || k.s) s.q = [0, 1]; if (k.ArrowLeft || k.a) s.q = [-1, 0]; if (k.ArrowRight || k.d) s.q = [1, 0]; }
+    if (b === s.last) return; s.last = b; s.pulse = 1;
+    const [hx, hy] = s.body[0];
+    if (inp.auto) { const dx = Math.sign(s.food[0] - hx), dy = Math.sign(s.food[1] - hy); s.q = dx && !(s.dir[0] === -dx) ? [dx, 0] : dy ? [0, dy] : s.dir; }
+    if (s.q && !(s.q[0] === -s.dir[0] && s.q[1] === -s.dir[1])) s.dir = s.q; s.q = null;
+    const nh = [(hx + s.dir[0] + s.n) % s.n, (hy + s.dir[1] + s.n) % s.n];
+    if (s.body.some(p => p[0] === nh[0] && p[1] === nh[1])) { s.body = [[7, 7], [6, 7], [5, 7]]; s.dir = [1, 0]; s.score = 0; return; }
+    s.body.unshift(nh);
+    if (nh[0] === s.food[0] && nh[1] === s.food[1]) { s.score++; do { s.food = [Math.floor(Math.random() * s.n), Math.floor(Math.random() * s.n)]; } while (s.body.some(p => p[0] === s.food[0] && p[1] === s.food[1])); }
+    else s.body.pop();
+  },
+  draw(g, s, w, h) {
+    const sz = Math.min(w, h) * .86 / s.n, ox = (w - sz * s.n) / 2, oy = (h - sz * s.n) / 2;
+    g.strokeStyle = rgba(ICE, .08 + s.pulse * .25); g.strokeRect(ox, oy, sz * s.n, sz * s.n);
+    for (let i = 0; i < s.n; i++) for (let j = 0; j < s.n; j++) { g.fillStyle = rgba(GRY, .08 + s.pulse * .06); g.fillRect(ox + i * sz + sz / 2, oy + j * sz + sz / 2, 1, 1); }
+    g.fillStyle = rgba(AMB, .9); g.fillRect(ox + s.food[0] * sz + 3, oy + s.food[1] * sz + 3, sz - 6, sz - 6);
+    s.body.forEach((p, i) => { g.fillStyle = rgba(i ? ICE : INK, i ? .75 - i / s.body.length * .4 : 1); g.fillRect(ox + p[0] * sz + 1, oy + p[1] * sz + 1, sz - 2, sz - 2); });
+    text(g, `length ${s.body.length}`, w - 12, h - 10, 10, rgba(INK, .5), 'right');
+  } },
+
+{ id: 'C1', fam: 'Death', title: 'Damage per window', year: 2026,
+  law: 'Enemies only die to enough damage inside one short window. Synchronise your sources.',
+  how: 'Click to fire. A thrown grenade (press <kbd>G</kbd>) detonates after one second. Only damage that lands inside the same 0.35 s window adds up; 100 kills.',
+  src: 'Brutal FPS, Notion, 2026', quote: 'They only die if they take a specific amount of damage within a singular, brief window of time.',
+  make() { return { t: 0, hits: [], grenades: [], dead: 0, deadT: 0, script: 0 }; },
+  step(s, dt, inp) {
+    s.t += dt; s.deadT = Math.max(0, s.deadT - dt);
+    const add = (dmg, kind) => s.hits.push({ t: s.t, dmg, kind });
+    if (inp.auto) {
+      s.script += dt; const c = s.script % 6;
+      if (Math.abs(c - .5) < dt || Math.abs(c - 1.3) < dt || Math.abs(c - 2.1) < dt) add(35, 'shot');   // staggered: survives
+      if (Math.abs(c - 3.2) < dt) s.grenades.push({ t: 1 });
+      if (Math.abs(c - 4.15) < dt || Math.abs(c - 4.25) < dt) add(35, 'shot');                         // synced with the grenade: dies
+    } else {
+      if (inp.pressed) add(35, 'shot');
+      if (inp.keys.g && !s.gHeld) { s.grenades.push({ t: 1 }); } s.gHeld = !!inp.keys.g;
+    }
+    s.grenades.forEach(gr => { gr.t -= dt; if (gr.t <= 0 && !gr.done) { gr.done = true; add(45, 'grenade'); } });
+    s.grenades = s.grenades.filter(g => !g.done || g.t > -.4);
+    s.hits = s.hits.filter(hh => s.t - hh.t < .35);
+    const sum = s.hits.reduce((a, b) => a + b.dmg, 0);
+    if (sum >= 100 && !s.deadT) { s.dead++; s.deadT = 1.2; s.hits = []; }
+  },
+  draw(g, s, w, h) {
+    const sum = s.hits.reduce((a, b) => a + b.dmg, 0), cx = w / 2, cy = h * .45;
+    g.fillStyle = s.deadT ? rgba(AMB, s.deadT) : rgba(INK, .85);
+    if (s.deadT) { for (let i = 0; i < 14; i++) { const a = i / 14 * 6.28, r = (1.2 - s.deadT) * 90; g.fillRect(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 4, 4); } }
+    else { g.fillRect(cx - 14, cy - 34, 28, 52); g.beginPath(); g.arc(cx, cy - 44, 10, 0, 7); g.fill(); }
+    s.grenades.forEach(gr => { if (!gr.done) { g.strokeStyle = rgba(AMB, .9); g.beginPath(); g.arc(cx, cy, 30 + gr.t * 40, 0, 7); g.stroke(); } });
+    const bw = w * .6, bx = (w - bw) / 2, by = h * .78;
+    g.strokeStyle = rgba(INK, .3); g.strokeRect(bx, by, bw, 12);
+    g.fillStyle = rgba(sum >= 100 ? AMB : ICE, .8); g.fillRect(bx, by, bw * Math.min(1, sum / 100), 12);
+    text(g, `damage in window ${sum}/100`, cx, by + 30, 11, rgba(INK, .7), 'center');
+    text(g, `kills ${s.dead}`, 10, h - 10, 10, rgba(INK, .5));
+  } },
+
+{ id: 'C3', fam: 'Death', title: 'Parry death', year: 2023,
+  law: 'If you see death coming, you can parry it and leave a corpse behind instead.',
+  how: 'A lethal strike charges up. Click in the instant it lands and you parry death: your old body drops with your gear, and you go on. Too early or too late and you die.',
+  src: 'Desktop note, 2023', quote: 'If you know you are about to be killed, you can "parry death", and doing so leaves a corpse of you that keeps all your stuff.',
+  make() { return { t: 0, charge: 0, state: 'wait', corpses: 0, deaths: 0, msg: '', msgT: 0, next: 1.5 }; },
+  step(s, dt, inp) {
+    s.t += dt; s.msgT = Math.max(0, s.msgT - dt);
+    if (s.state === 'wait') { s.next -= dt; if (s.next <= 0) { s.state = 'charge'; s.charge = 0; s.speed = rnd(.7, 1.3); } }
+    if (s.state === 'charge') {
+      s.charge += dt * s.speed;
+      const window = s.charge > .92 && s.charge < 1.05;
+      const act = inp.auto ? (s.charge > .95 && Math.random() < .5) : inp.pressed;
+      if (act) { if (window) { s.corpses++; s.msg = 'death parried'; } else { s.deaths++; s.msg = 'too early'; } s.msgT = 1; s.state = 'wait'; s.next = 1.2; }
+      else if (s.charge > 1.05) { s.deaths++; s.msg = 'you died'; s.msgT = 1; s.state = 'wait'; s.next = 1.2; }
+    }
+  },
+  draw(g, s, w, h) {
+    const px = w * .35, py = h * .62, ex = w * .72;
+    for (let i = 0; i < Math.min(s.corpses, 8); i++) { g.fillStyle = rgba(GRY, .6); g.fillRect(px - 60 - i * 14, py + 6, 22, 6); g.fillStyle = rgba(AMB, .7); g.fillRect(px - 52 - i * 14, py + 2, 4, 4); }
+    g.fillStyle = rgba(INK, .9); g.fillRect(px - 8, py - 34, 16, 34);
+    g.fillStyle = rgba(RED, .85); g.fillRect(ex - 12, py - 46, 24, 46);
+    if (s.state === 'charge') {
+      const k = Math.min(1, s.charge), bx = lerp(ex - 14, px + 10, Math.pow(k, 4));
+      g.strokeStyle = rgba(RED, .4 + k * .6); g.lineWidth = 3; g.beginPath(); g.moveTo(ex - 12, py - 24); g.lineTo(bx, py - 24); g.stroke(); g.lineWidth = 1;
+      g.strokeStyle = rgba(ICE, k > .92 ? .9 : .2); g.beginPath(); g.arc(px, py - 18, 26, 0, 7); g.stroke();
+    }
+    if (s.msgT) text(g, s.msg.toUpperCase(), w / 2, h * .25, 14, rgba(s.msg === 'death parried' ? AMB : RED, s.msgT), 'center');
+    text(g, `corpses ${s.corpses}   deaths ${s.deaths}`, 10, h - 10, 10, rgba(INK, .5));
+  } },
+
+{ id: 'D4', fam: 'Bodies', title: 'Eat the world', year: 2019,
+  law: 'Eat what is smaller than you to grow. Everything you eat tells you something.',
+  how: 'Move the mouse to steer. Only smaller things can be eaten; each one leaves a line of lore.',
+  src: 'Black Hole Project, 2019', quote: 'Every single element eaten by the hole will have some lore on it.',
+  make(w, h) {
+    const lore = ['a teddy bear: "it reminds me of the one my mother bought me"', 'a key: "a door somewhere is waiting"', 'a dog collar: "I really want to find a dog"', 'a lamp: "it is dark in here"', 'a letter: "nobody wrote back"', 'a shoe: "someone walked far"'];
+    const things = Array.from({ length: 40 }, () => ({ x: rnd(0, w), y: rnd(0, h), r: rnd(2, 16), lore: lore[Math.floor(Math.random() * lore.length)] }));
+    return { x: w / 2, y: h / 2, r: 7, things, said: '', saidT: 0, t: 0 };
+  },
+  step(s, dt, inp, w, h) {
+    s.t += dt; s.saidT = Math.max(0, s.saidT - dt);
+    let tx = inp.mx, ty = inp.my;
+    if (inp.auto) { const prey = s.things.filter(o => o.r < s.r).sort((a, b) => Math.hypot(a.x - s.x, a.y - s.y) - Math.hypot(b.x - s.x, b.y - s.y))[0]; tx = prey ? prey.x : w / 2; ty = prey ? prey.y : h / 2; }
+    const d = Math.hypot(tx - s.x, ty - s.y) || 1, sp = 70 * dt;
+    s.x += (tx - s.x) / d * Math.min(sp, d); s.y += (ty - s.y) / d * Math.min(sp, d);
+    s.things = s.things.filter(o => { if (o.r < s.r && Math.hypot(o.x - s.x, o.y - s.y) < s.r) { s.r = Math.sqrt(s.r * s.r + o.r * o.r * .5); if (o.r > 6) { s.said = o.lore; s.saidT = 2.5; } return false; } return true; });
+    if (s.r > Math.min(w, h) * .3 || s.things.length < 5) Object.assign(s, this.make(w, h));
+  },
+  draw(g, s, w, h) {
+    s.things.forEach(o => { g.strokeStyle = rgba(o.r < s.r ? ICE : GRY, o.r < s.r ? .7 : .35); g.beginPath(); g.arc(o.x, o.y, o.r, 0, 7); g.stroke(); });
+    g.fillStyle = '#000'; g.beginPath(); g.arc(s.x, s.y, s.r, 0, 7); g.fill();
+    g.strokeStyle = rgba(AMB, .8); g.beginPath(); g.arc(s.x, s.y, s.r + 2 + Math.sin(s.t * 6) * 1.5, 0, 7); g.stroke();
+    if (s.saidT) { g.font = 'italic 15px Cormorant Garamond'; g.fillStyle = rgba(INK, Math.min(1, s.saidT)); g.textAlign = 'center'; g.fillText(s.said, w / 2, h - 18); }
+  } },
+
+{ id: 'E1', fam: 'Space', title: 'Fall through the floor', year: 2018,
+  law: 'Hit the ground hard enough and you come out the other side, upside down, in another world.',
+  how: 'Press <kbd>Space</kbd> to jump; hold it to jump higher. Land fast enough and you pass through into the world below.',
+  src: 'Notebook n9, 2018; Todoist, 2023', quote: 'If you hit the ground fast, strong enough, you enter it and change dimension, going upside down into a new dimension.',
+  make() { return { y: 0, vy: 0, flip: 0, world: 0, t: 0, x: 0, hold: 0, msgT: 0 }; },
+  step(s, dt, inp, w, h) {
+    s.t += dt; s.msgT = Math.max(0, s.msgT - dt); s.x = (s.x + dt * 60) % w; s.flip = lerp(s.flip, s.world, .08);
+    const grounded = s.y >= 0;
+    let jump = inp.auto ? grounded && Math.random() < .02 : grounded && inp.keys[' '];
+    if (jump) { s.vy = -(inp.auto ? rnd(260, 520) : 420); }
+    if (!inp.auto && inp.keys[' '] && s.vy < 0) s.vy -= 300 * dt;
+    s.vy += 900 * dt; s.y += s.vy * dt;
+    if (s.y >= 0) { if (s.vy > 640) { s.world = 1 - s.world; s.msgT = 1.5; s.y = 0; s.vy = -s.vy * .3; } else { s.y = 0; s.vy = 0; } }
+  },
+  draw(g, s, w, h) {
+    g.save(); const k = s.flip; g.translate(w / 2, h / 2); g.scale(1, Math.cos(k * Math.PI) || .01); g.translate(-w / 2, -h / 2);
+    const gy = h * .62, col = s.world ? AMB : ICE;
+    g.fillStyle = rgba(col, .12); g.fillRect(0, gy, w, h - gy);
+    g.strokeStyle = rgba(col, .7); g.beginPath(); g.moveTo(0, gy); g.lineTo(w, gy); g.stroke();
+    for (let i = 0; i < 12; i++) { g.fillStyle = rgba(col, .25); const bx = (i * 97 + s.t * 20) % w; g.fillRect(bx, gy - 20 - (i % 3) * 18, 10, 20 + (i % 3) * 18); }
+    const speed = Math.abs(s.vy) / 640;
+    g.fillStyle = rgba(INK, .95); g.fillRect(w * .4 - 7, gy + s.y - 26, 14, 26);
+    g.fillStyle = rgba(speed > 1 ? AMB : ICE, .8); g.fillRect(w * .4 - 7, gy + 10, 14 * Math.min(1, speed), 3);
+    g.restore();
+    text(g, s.world ? 'WORLD BELOW' : 'WORLD ABOVE', 10, h - 10, 10, rgba(INK, .6));
+    if (s.msgT) text(g, 'THROUGH', w / 2, h * .2, 14, rgba(AMB, s.msgT), 'center');
+  } },
+
+{ id: 'E3', fam: 'Space', title: 'Rewind the body', year: 2024,
+  law: 'Strike, then snap your body back to where you started, and strike again from there.',
+  how: 'Click to dash-strike toward the mouse. Right-click (or <kbd>R</kbd>) to rewind to where the combo started. Chain strikes from the same origin.',
+  src: 'Todoist Notes, 2024', quote: 'You make an attack, then you can revert yourself back to your starting position and then combo the guy with a different attack.',
+  make(w, h) { return { x: w * .3, y: h * .6, ox: w * .3, oy: h * .6, ex: w * .65, ey: h * .4, hp: 6, ghosts: [], t: 0, auto: 0, dash: null }; },
+  step(s, dt, inp, w, h) {
+    s.t += dt; s.auto += dt;
+    const strike = (tx, ty) => { s.dash = { fx: s.x, fy: s.y, tx, ty, k: 0 }; };
+    const rewind = () => { s.ghosts.push({ x: s.x, y: s.y, a: 1 }); s.x = s.ox; s.y = s.oy; };
+    if (inp.auto) { const c = s.auto % 2.4; if (c < dt) strike(s.ex + rnd(-20, 20), s.ey + rnd(-20, 20)); if (Math.abs(c - .7) < dt) rewind(); if (Math.abs(c - 1.1) < dt) strike(s.ex + rnd(-20, 20), s.ey + 30); if (Math.abs(c - 1.8) < dt) rewind(); }
+    else { if (inp.pressed) strike(inp.mx, inp.my); if (inp.right || inp.keys.r) rewind(); }
+    if (s.dash) { s.dash.k = Math.min(1, s.dash.k + dt * 5); s.x = lerp(s.dash.fx, s.dash.tx, s.dash.k); s.y = lerp(s.dash.fy, s.dash.ty, s.dash.k);
+      if (s.dash.k >= 1) { if (Math.hypot(s.x - s.ex, s.y - s.ey) < 40) s.hp--; s.dash = null; } }
+    if (s.hp <= 0) { s.hp = 6; s.ex = rnd(w * .45, w * .8); s.ey = rnd(h * .25, h * .7); }
+    s.ghosts.forEach(gh => gh.a -= dt * .8); s.ghosts = s.ghosts.filter(gh => gh.a > 0);
+  },
+  draw(g, s, w, h) {
+    g.strokeStyle = rgba(ICE, .35); g.setLineDash([3, 5]); g.beginPath(); g.arc(s.ox, s.oy, 14, 0, 7); g.stroke(); g.setLineDash([]);
+    s.ghosts.forEach(gh => { g.fillStyle = rgba(ICE, gh.a * .5); g.fillRect(gh.x - 6, gh.y - 14, 12, 14); g.strokeStyle = rgba(ICE, gh.a * .3); g.beginPath(); g.moveTo(gh.x, gh.y - 7); g.lineTo(s.ox, s.oy - 7); g.stroke(); });
+    g.fillStyle = rgba(RED, .85); g.beginPath(); g.arc(s.ex, s.ey, 18, 0, 7); g.fill();
+    for (let i = 0; i < 6; i++) { g.fillStyle = rgba(i < s.hp ? AMB : GRY, .8); g.fillRect(s.ex - 18 + i * 6.5, s.ey - 30, 5, 3); }
+    g.fillStyle = rgba(INK, 1); g.fillRect(s.x - 6, s.y - 14, 12, 14);
+  } },
+];
+
+/* catalogued but not built yet: shown greyed in the grid */
+const CATALOGUED = [
+  ['A1', 'Perception', 'Ghost scan, full scan', 2026, 'Looking costs memory; committing makes the world real.'],
+  ['A3', 'Perception', 'If you see them, they see you', 2022, 'Outline an enemy and it notices you.'],
+  ['B1', 'Rhythm', 'The floor is the metronome', 2026, 'On-beat actions refund your cooldowns.'],
+  ['C2', 'Death', 'Death stealing', 2026, 'How you kill decides what you can take.'],
+  ['C4', 'Death', 'The AI clone save', 2025, 'Every attempt replays at once at the end.'],
+  ['D2', 'Bodies', 'Size decides the path', 2025, 'Vents, doors, or through the wall.'],
+  ['D3', 'Bodies', 'Possession launch', 2024, 'Tentacle onto an enemy and become it.'],
+  ['D5', 'Bodies', 'The mark', 2024, 'Headshots mark; three hits pop and spread.'],
+  ['E2', 'Space', 'The tether', 2018, 'Tied to a tower; reeling in turns your light off.'],
+  ['E4', 'Space', 'The link gun', 2023, 'Shoot two things to tie them together.'],
+  ['G1', 'Combat', 'The patient knight', 2023, 'Parry in place to build one killing blow.'],
+  ['H1', 'Systems', 'Connection', 2025, 'Enough people must press Win in a row.'],
+];
+
+/* ============================================================
+   Runtime: one canvas per specimen card, the reel, and the room.
+   ============================================================ */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const views = [];   // {spec, cv, g, state, hover, auto}
+function fit(cv) { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.max(1, r.width * d); cv.height = Math.max(1, r.height * d); cv.getContext('2d').setTransform(d, 0, 0, d, 0, 0); return [r.width, r.height]; }
+
+const grid = document.getElementById('grid');
+const fams = ['All', ...new Set([...SPECIMENS.map(s => s.fam), ...CATALOGUED.map(c => c[1])])];
+document.getElementById('filters').innerHTML = fams.map((f, i) => `<button class="${i ? '' : 'on'}" data-f="${f}">${f}</button>`).join('');
+grid.innerHTML = SPECIMENS.map(s => `
+  <button class="spec" data-id="${s.id}" data-f="${s.fam}"><div class="view"><canvas></canvas><span class="tag">${s.id}</span><span class="yr">${s.year}</span></div>
+  <div class="body"><h4>${s.title}</h4><p>${s.law}</p><div class="play">Open room →</div></div></button>`).join('') +
+  CATALOGUED.map(c => `
+  <div class="spec locked" data-f="${c[1]}"><div class="view"><span class="tag">${c[0]}</span><span class="yr">${c[3]}</span></div>
+  <div class="body"><h4>${c[2]}</h4><p>${c[4]}</p><div class="play">Catalogued, not built yet</div></div></div>`).join('');
+document.getElementById('st-n').textContent = '62';
+document.getElementById('st-p').textContent = SPECIMENS.length;
+
+document.getElementById('filters').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('#filters button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.spec').forEach(c => c.style.display = (b.dataset.f === 'All' || c.dataset.f === b.dataset.f) ? '' : 'none');
+});
+
+document.querySelectorAll('.spec[data-id]').forEach(card => {
+  const spec = SPECIMENS.find(s => s.id === card.dataset.id), cv = card.querySelector('canvas');
+  const [w, h] = fit(cv);
+  const v = { spec, cv, g: cv.getContext('2d'), state: spec.make(w, h), w, h, hover: false, visible: false };
+  card.addEventListener('mouseenter', () => v.hover = true);
+  card.addEventListener('mouseleave', () => v.hover = false);
+  card.addEventListener('click', () => openRoom(spec));
+  views.push(v);
+});
+const io = new IntersectionObserver(es => es.forEach(e => { const v = views.find(x => x.cv === e.target); if (v) v.visible = e.isIntersecting; }));
+views.forEach(v => io.observe(v.cv));
+
+const AUTO = { auto: true, mx: 0, my: 0, down: false, pressed: false, right: false, keys: {} };
+
+/* the reel: a montage of the specimens, 6 s each */
+const reel = { cv: document.querySelector('#reel canvas'), i: 0, t: 0, state: null };
+reel.g = reel.cv.getContext('2d');
+function reelLoad() {
+  const [w, h] = fit(reel.cv); reel.w = w; reel.h = h; const s = SPECIMENS[reel.i];
+  reel.state = s.make(w, h); reel.t = 0;
+  document.getElementById('reel-tag').textContent = `${s.id} / ${s.fam}`;
+  document.getElementById('reel-title').textContent = s.title;
+  document.getElementById('reel-law').textContent = s.law;
+  document.getElementById('reel-yr').textContent = `first written ${s.year}`;
+}
+reelLoad();
+
+/* the room: the same specimen, now controlled by the visitor */
+const room = { el: document.getElementById('room'), cv: document.getElementById('room-cv'), spec: null, state: null,
+  input: { auto: false, mx: 0, my: 0, down: false, pressed: false, right: false, keys: {} } };
+room.g = room.cv.getContext('2d');
+function openRoom(spec) {
+  room.spec = spec; room.el.classList.add('open');
+  document.getElementById('room-tag').textContent = `${spec.id} / ${spec.fam} / first written ${spec.year}`;
+  document.getElementById('room-title').textContent = spec.title;
+  document.getElementById('room-law').textContent = spec.law;
+  document.getElementById('room-how').innerHTML = spec.how;
+  document.getElementById('room-src').textContent = spec.src;
+  document.getElementById('room-quote').textContent = `"${spec.quote}"`;
+  const [w, h] = fit(room.cv); room.w = w; room.h = h; room.state = spec.make(w, h); room.input.mx = w / 2; room.input.my = h / 2; room.cv.focus();
+}
+const closeRoom = () => { room.el.classList.remove('open'); room.spec = null; };
+document.getElementById('room-close').addEventListener('click', closeRoom);
+room.el.addEventListener('click', e => { if (e.target === room.el) closeRoom(); });
+room.cv.addEventListener('pointermove', e => { const r = room.cv.getBoundingClientRect(); room.input.mx = e.clientX - r.left; room.input.my = e.clientY - r.top; });
+room.cv.addEventListener('pointerdown', e => { if (e.button === 2) room.input.right = true; else { room.input.down = true; room.input.pressed = true; } });
+room.cv.addEventListener('contextmenu', e => e.preventDefault());
+addEventListener('pointerup', () => room.input.down = false);
+addEventListener('keydown', e => {
+  if (!room.spec) return;
+  if (e.key === 'Escape') return closeRoom();
+  if (e.key === ' ') { e.preventDefault(); if (!room.input.keys[' ']) room.input.pressed = room.spec.id === 'B2' || room.input.pressed; }
+  if (e.key.startsWith('Arrow')) e.preventDefault();
+  room.input.keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = true;
+});
+addEventListener('keyup', e => { room.input.keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = false; });
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  /* cards: hovered ones run; visible ones tick slowly so they always look alive */
+  views.forEach(v => {
+    if (!v.visible || room.spec) return;
+    const k = v.hover ? 1 : (reduce ? 0 : .35);
+    if (k) v.spec.step(v.state, dt * k, AUTO, v.w, v.h);
+    v.g.clearRect(0, 0, v.w, v.h); v.spec.draw(v.g, v.state, v.w, v.h);
+  });
+  /* reel */
+  if (!room.spec) {
+    reel.t += dt; const s = SPECIMENS[reel.i];
+    s.step(reel.state, dt, AUTO, reel.w, reel.h);
+    reel.g.clearRect(0, 0, reel.w, reel.h); s.draw(reel.g, reel.state, reel.w, reel.h);
+    document.getElementById('reel-bar').style.width = (reel.t / 6 * 100) + '%';
+    const total = reel.i * 6 + reel.t; document.getElementById('reel-tc').textContent = `00:${String(Math.floor(total)).padStart(2, '0')}`;
+    if (reel.t > 6) { reel.i = (reel.i + 1) % SPECIMENS.length; reelLoad(); }
+  }
+  /* room */
+  if (room.spec && room.state) {
+    room.spec.step(room.state, dt, room.input, room.w, room.h);
+    room.g.clearRect(0, 0, room.w, room.h); room.spec.draw(room.g, room.state, room.w, room.h);
+    room.input.pressed = false; room.input.right = false;
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+addEventListener('resize', () => { views.forEach(v => { [v.w, v.h] = fit(v.cv); }); reelLoad(); });
+</script>
+</body>
+</html>
