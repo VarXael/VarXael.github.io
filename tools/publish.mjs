@@ -11,7 +11,7 @@ const run = cmd => execSync(cmd, { cwd: ROOT, stdio: 'inherit' });
 const out = cmd => execSync(cmd, { cwd: ROOT }).toString().trim();
 
 run('node tools/build-content.mjs');
-run('git add assets/js/content.js index.html assets/images');
+run('git add assets/js/content.js assets/js/varxel.js portfolio.html assets/images play');   // varxel.private.js is git-ignored: it never ships
 if (!out('git diff --cached --name-only')) { console.log('Nothing changed in the vault since the last publish.'); process.exit(0); }
 const msg = process.argv[2] || `CONTENT: update from vault (${new Date().toISOString().slice(0, 16).replace('T', ' ')})`;
 execSync(`git commit -m ${JSON.stringify(msg)}`, { cwd: ROOT, stdio: 'inherit' });
