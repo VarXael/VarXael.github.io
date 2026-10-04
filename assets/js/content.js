@@ -26,6 +26,7 @@ window.PORTFOLIO = {
   "HighOnLife": {
    "id": "HighOnLife",
    "card": "High on Life",
+   "playNotes": "",
    "title": "High on Life",
    "category": "professional work",
    "published": true,
@@ -67,6 +68,7 @@ window.PORTFOLIO = {
   "ProjectSasha": {
    "id": "ProjectSasha",
    "card": "Project Sasha",
+   "playNotes": "<p>Two playable Godot slices of the same rule, each built to one of the two design documents, so the difference can be felt, not just read.</p><div class=\"md-table\"><table><thead><tr><th></th><th>v1 · Design Document</th><th>v2 · Master Design Document</th></tr></thead><tbody><tr><td>Looking</td><td>Ghost scan: reserves the object's full weight in volatile memory.</td><td>Soft scan: free, and it fades a few seconds after you look away.</td></tr><tr><td>Committing</td><td>Full scan, one object at a time, written to the area chip.</td><td>One flash charge saves everything still lit within range, at once.</td></tr><tr><td>The void</td><td>A probability: walk on an unscanned bridge and you fall.</td><td>Solid: you can only walk on floor you have saved.</td></tr><tr><td>Chips</td><td>Swapped at a terminal; one rides inside an enemy.</td><td>Carried in Sasha's spine; they overlap and can be merged.</td></tr><tr><td>Enemies</td><td>Touch a warden and you die.</td><td>Wardens scan you back and are immune until rendered with a flash.</td></tr></tbody></table></div><p><b>v2 controls:</b> WASD move · hold left mouse to soft-scan · right mouse to flash · F fire · Q spine · E interact · T tag · F1 help.</p><p><b>v1 controls:</b> WASD move · hold right mouse to aim · rest the cursor on a shape to ghost-scan · hold left mouse to commit · X delete a ghost · E terminal · F1 rules.</p>",
    "title": "Project Sasha",
    "category": "personal work",
    "published": true,
@@ -134,6 +136,7 @@ window.PORTFOLIO = {
   "ProjectCircle": {
    "id": "ProjectCircle",
    "card": "Project Circle",
+   "playNotes": "",
    "title": "Project Circle",
    "category": "personal work",
    "published": true,
@@ -168,6 +171,7 @@ window.PORTFOLIO = {
   "ProjectCadence": {
    "id": "ProjectCadence",
    "card": "Project Cadence",
+   "playNotes": "",
    "title": "Project Cadence",
    "category": "personal work",
    "published": true,
@@ -207,6 +211,7 @@ window.PORTFOLIO = {
   "Cycle": {
    "id": "Cycle",
    "card": "Cycle",
+   "playNotes": "",
    "title": "Cycle",
    "category": "university work",
    "published": true,
@@ -255,6 +260,7 @@ window.PORTFOLIO = {
   "PoliceSimulator": {
    "id": "PoliceSimulator",
    "card": "Police Simulator Patrol Officers",
+   "playNotes": "",
    "title": "Police Simulator: Patrol Officers",
    "category": "professional work",
    "published": true,
@@ -291,6 +297,7 @@ window.PORTFOLIO = {
   "Alien": {
    "id": "Alien",
    "card": "Alien (Prototype)",
+   "playNotes": "",
    "title": "Alien (Prototype)",
    "category": "personal work",
    "published": true,
@@ -329,6 +336,7 @@ window.PORTFOLIO = {
   "CRTexe": {
    "id": "CRTexe",
    "card": "CRT.exe",
+   "playNotes": "",
    "title": "CRT.exe",
    "category": "game jams",
    "published": true,
@@ -367,6 +375,7 @@ window.PORTFOLIO = {
   "CardsWeaver": {
    "id": "CardsWeaver",
    "card": "Card's Weaver",
+   "playNotes": "",
    "title": "Card's Weaver",
    "category": "university work",
    "published": true,
@@ -405,6 +414,7 @@ window.PORTFOLIO = {
   "MonkHomebrew": {
    "id": "MonkHomebrew",
    "card": "Monk Homebrew (D&D 5e)",
+   "playNotes": "",
    "title": "Monk Homebrew (D&D 5e)",
    "category": "personal work",
    "published": true,
@@ -441,6 +451,7 @@ window.PORTFOLIO = {
   "ProjectCenturion": {
    "id": "ProjectCenturion",
    "card": "Project Centurion",
+   "playNotes": "",
    "title": "Project Centurion",
    "category": "university work",
    "published": true,
@@ -479,6 +490,7 @@ window.PORTFOLIO = {
   "PulseParty": {
    "id": "PulseParty",
    "card": "PulseParty",
+   "playNotes": "",
    "title": "PulseParty",
    "category": "professional work",
    "published": true,
@@ -520,6 +532,7 @@ window.PORTFOLIO = {
   "SoulDriven": {
    "id": "SoulDriven",
    "card": "Soul Driven",
+   "playNotes": "",
    "title": "Soul Driven",
    "category": "university work",
    "published": true,
@@ -562,6 +575,7 @@ window.PORTFOLIO = {
   "Battleship": {
    "id": "Battleship",
    "card": "UEFN Battleship",
+   "playNotes": "",
    "title": "UEFN: Battleship",
    "category": "professional work",
    "published": true,
@@ -603,6 +617,7 @@ window.PORTFOLIO = {
   "UnrealEngineCourse": {
    "id": "UnrealEngineCourse",
    "card": "Unreal Engine Course",
+   "playNotes": "",
    "title": "Unreal Engine Course",
    "category": "professional work",
    "published": true,

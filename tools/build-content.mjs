@@ -16,7 +16,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { entries as varxelEntries } from './varxel/lib.mjs';
+import { entries as varxelEntries } from './varxel/lib.mjs';   // builds live on Project VarXel entries
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'content.config.json'), 'utf8'));
@@ -116,16 +116,15 @@ function project(file) {
   Object.keys(sections).filter(s => s !== 'The story' && s !== 'Play' && !disciplines.includes(s))
     .forEach(s => problems.push(`section "## ${s}" is not in disciplines, so it is not shown`));
   if (problems.length) console.warn(`  ! ${path.basename(file)}: ${problems.join('; ')}`);
-  const play = playInfo(id, p, intro, sections);
+  const play = null;                                   // set from the project's Project VarXel entry in build()
   return {
-    id, card: path.basename(file, '.md'), title: p.title, category: CATEGORY[p.category] || p.category, published: p.published === true, play, mechanics: p.mechanics || [],
+    id, card: path.basename(file, '.md'), playNotes: sections.Play ? blocks(sections.Play) : '', title: p.title, category: CATEGORY[p.category] || p.category, published: p.published === true, play, mechanics: p.mechanics || [],
     tier: p.tier || 'listed', year: p.year, role: p.role, context: p.context, engine: p.engine,
     image: p.image ? `./assets/images/${p.image}` : '', video: p.video || null,
     videos: (p.videos || []).map(v => { const [label, f] = pair(v); return { label, file: `./assets/videos/${f}` }; }),
     tools: (p.tools || []).map(name => ({ name })),
     roles: disciplines, roleContributions: contrib,
-    links: [...(p.links || []).map(l => { const [label, url] = pair(l); return { label, url }; }),
-      ...(play ? [{ label: 'Play in the browser', url: `./play/${id}/` }] : [])],
+    links: (p.links || []).map(l => { const [label, url] = pair(l); return { label, url }; }),
     short: plain(intro),
     story: sections['The story'] ? blocks(sections['The story']) : ''
   };
@@ -163,12 +162,13 @@ function catalogue() {
   return out;
 }
 
-function writePlayPage(card, ctx) {
+/* online pages go to play/<id>/; private ones to play/_private/<id>/ (git-ignored, local view only) */
+function writePlayPage(card, ctx, priv = false) {
   const tpl = fs.readFileSync(path.join(ROOT, 'tools/workshop/templates/play.html'), 'utf8');
   const data = { title: card.title, context: ctx, short: card.play.short, notes: card.play.notes, builds: card.play.builds, downloads: card.play.downloads };
-  const dir = path.join(ROOT, 'play', card.id);
+  const dir = priv ? path.join(ROOT, 'play', '_private', card.id) : path.join(ROOT, 'play', card.id);
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'index.html'), tpl.replace('{{TITLE}}', esc(card.title))
+  fs.writeFileSync(path.join(dir, 'index.html'), tpl.replace('{{TITLE}}', esc(card.title)).replace(/\{\{ROOT\}\}/g, priv ? '../../../' : '../../')
     .replace('{{DATA}}', () => JSON.stringify(data).replace(/</g, '\\u003c')));
 }
 
@@ -188,18 +188,27 @@ function build() {
   const labDir = path.join(SRC, 'Lab');
   const lab = fs.existsSync(labDir) ? fs.readdirSync(labDir).filter(f => f.endsWith('.md')).map(f => specimen(path.join(labDir, f))).filter(s => s.published) : [];
   let pages = 0;
-  for (const p of Object.values(projects)) if (p.play) { writePlayPage(p, [p.context, p.engine].filter(Boolean).join(' · ')); pages++; }
   for (const s of lab) if (s.play) { writePlayPage(s, [s.mechanic, s.project, s.year].filter(Boolean).join(' · ')); s.url = `./play/${s.id}/`; pages++; }
 
   /* ---- Project VarXel: every entry. Public ones ship; all of them go to a git-ignored file for the local view ---- */
   const cards = Object.fromEntries(all.map(p => [p.card, p]));
   const ents = varxelEntries();
+  /* every entry with builds gets a play page: online if the entry is public or its card is in the portfolio */
+  for (const e of ents) {
+    if (!e.builds.length) continue;
+    e.online = e.public || (!!e.card && listed.has(e.card));
+    e.playInfo = { id: e.id, builds: e.builds, downloads: e.downloads, notes: e.play ? blocks(e.play) : (cards[e.card]?.playNotes || ''), short: plain(e.desc.split(/\n{2,}/)[0] || e.quote || '') };
+    writePlayPage({ id: e.id, title: e.title, play: e.playInfo }, [e.kind, e.family, e.started].filter(Boolean).join(' · '), !e.online);
+    pages++;
+    const c = cards[e.card];
+    if (c && c.published && e.online) { c.play = e.playInfo; c.links.push({ label: 'Play in the browser', url: `./play/${e.id}/` }); }
+  }
   const shape = (e, keep) => {
     const c = cards[e.card];
     return { title: e.title, kind: e.kind, status: e.status, started: e.started, family: e.family,
       from: e.from.filter(keep), became: e.became.filter(keep), desc: e.desc, quote: e.quote, timeline: e.timeline,
       sources: e.sources.length, repo: e.repo, public: e.public, portfolio: !!(c && c.published),
-      play: c && c.play ? `./play/${c.id}/` : '' };
+      play: e.builds.length ? (e.online ? `./play/${e.id}/` : `./play/_private/${e.id}/`) : '' };
   };
   const pub = new Set(ents.filter(e => e.public).map(e => e.title));
   const vx = (list, keep) => `/* GENERATED by tools/build-content.mjs from Project VarXel. Do not edit; edit the entries. */

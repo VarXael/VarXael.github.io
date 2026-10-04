@@ -8,8 +8,8 @@ This code is one part of a project. The design lives in the Obsidian vault, not 
 
 | What | Where |
 | --- | --- |
-| Portfolio card (what the site shows) | `Projects_Vault/Portfolio/{{CARD}}` |
-| Workspace: handout, devlog, design notes | `Projects_Vault/Portfolio/{{TITLE}}/` |
+| Project VarXel entry (what it is, its builds) | `Projects_Vault/Project VarXel/Entries/{{TITLE}}.md` |
+| Workspace: handout, devlog, design notes | `Projects_Vault/Project VarXel/Workspaces/{{TITLE}}/` |
 | Original notes (never edited) | `The Union/` (see the card's `sources`) |
 
 ## Running
@@ -24,4 +24,4 @@ From the portfolio repo (`VarXael.github.io`):
 npm run publish-build -- "{{TITLE}}"
 ```
 
-It exports the web and Windows builds, puts the web build on the site, uploads the Windows zip to GitHub Releases and records both on the card. Builds go to `export/`, which git ignores.
+It exports the web and Windows builds and records them on the entry. While the project is private, both stay on this computer; once it is public (or in the portfolio), the web build goes on the site and the Windows zip to GitHub Releases. Builds go to `export/`, which git ignores.
