@@ -8,7 +8,9 @@
 //   assets/js/content.js        projects + disciplines (window.PORTFOLIO)
 //   index.html                  hero + experience, between <!-- content:x --> markers
 //   assets/images/<file>        any image the notes reference that lives in the vault's Assets/ folder
+//   play/<id>/index.html        the play page of every published card that has builds (see tools/workshop)
 // Notes with `published: false` never leave the vault.
+// Cards: Projects/*.md (projects) and Lab/*.md (mechanic specimens). Mechanics Catalogue.md feeds the Lab's backlog.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -109,20 +111,63 @@ function project(file) {
   const problems = [];
   if (!p.title) problems.push('no title');
   if (!CATEGORY[p.category]) problems.push(`category "${p.category}" (use ${Object.keys(CATEGORY).join(' / ')})`);
-  Object.keys(sections).filter(s => s !== 'The story' && !disciplines.includes(s))
+  Object.keys(sections).filter(s => s !== 'The story' && s !== 'Play' && !disciplines.includes(s))
     .forEach(s => problems.push(`section "## ${s}" is not in disciplines, so it is not shown`));
   if (problems.length) console.warn(`  ! ${path.basename(file)}: ${problems.join('; ')}`);
+  const play = playInfo(id, p, intro, sections);
   return {
-    id, title: p.title, category: CATEGORY[p.category] || p.category, published: p.published === true,
+    id, title: p.title, category: CATEGORY[p.category] || p.category, published: p.published === true, play, mechanics: p.mechanics || [],
     tier: p.tier || 'listed', year: p.year, role: p.role, context: p.context, engine: p.engine,
     image: p.image ? `./assets/images/${p.image}` : '', video: p.video || null,
     videos: (p.videos || []).map(v => { const [label, f] = pair(v); return { label, file: `./assets/videos/${f}` }; }),
     tools: (p.tools || []).map(name => ({ name })),
     roles: disciplines, roleContributions: contrib,
-    links: (p.links || []).map(l => { const [label, url] = pair(l); return { label, url }; }),
+    links: [...(p.links || []).map(l => { const [label, url] = pair(l); return { label, url }; }),
+      ...(play ? [{ label: 'Play in the browser', url: `./play/${id}/` }] : [])],
     short: plain(intro),
     story: sections['The story'] ? blocks(sections['The story']) : ''
   };
+}
+
+/* builds / downloads are written by tools/workshop/publish-build.mjs */
+function playInfo(id, p, intro, sections) {
+  const builds = (p.builds || []).map(b => { const [label, slug] = pair(b); return { label, slug }; });
+  if (!builds.length) return null;
+  return { id, builds, downloads: (p.downloads || []).map(d => { const [label, url] = pair(d); return { label, url }; }),
+    notes: sections.Play ? blocks(sections.Play) : '', short: plain(intro) };
+}
+
+/* Lab/*.md: one mechanic, built inside the game it belongs to */
+function specimen(file) {
+  const { props: p, intro, sections } = parseNote(fs.readFileSync(file, 'utf8'));
+  const id = p.id || path.basename(file, '.md').replace(/[^\w]/g, '');
+  const parent = String(p.project || '').replace(/^\[\[|\]\]$/g, '').split('|')[0];
+  return { id, title: p.title, mechanic: p.mechanic || '', project: parent, law: p.law || '', year: p.year,
+    published: p.published === true, short: plain(intro), play: playInfo(id, p, intro, sections), url: '' };
+}
+
+/* the catalogue tables: | ID | Mechanic | The rule | First written | ... | under "## X. Family: ..." */
+function catalogue() {
+  const f = path.join(SRC, 'Mechanics Catalogue.md');
+  if (!fs.existsSync(f)) return [];
+  const out = [];
+  let family = '';
+  for (const line of fs.readFileSync(f, 'utf8').replace(/\r\n/g, '\n').split('\n')) {
+    const h = line.match(/^##\s+[A-Z]\.\s+(.+)$/);
+    if (h) { family = h[1].split(':')[0].trim(); continue; }
+    const r = line.match(/^\|\s*([A-Z]\d+)\s*\|([^|]*)\|([^|]*)\|([^|]*)\|/);
+    if (r) out.push({ id: r[1], name: r[2].trim(), rule: r[3].trim(), first: r[4].trim(), family });
+  }
+  return out;
+}
+
+function writePlayPage(card, ctx) {
+  const tpl = fs.readFileSync(path.join(ROOT, 'tools/workshop/templates/play.html'), 'utf8');
+  const data = { title: card.title, context: ctx, short: card.play.short, notes: card.play.notes, builds: card.play.builds, downloads: card.play.downloads };
+  const dir = path.join(ROOT, 'play', card.id);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), tpl.replace('{{TITLE}}', esc(card.title))
+    .replace('{{DATA}}', () => JSON.stringify(data).replace(/</g, '\\u003c')));
 }
 
 function build() {
@@ -132,6 +177,11 @@ function build() {
   if (!fs.existsSync(dir)) throw new Error(`No Projects folder in ${SRC}`);
   const all = fs.readdirSync(dir).filter(f => f.endsWith('.md')).map(f => project(path.join(dir, f)));
   const projects = Object.fromEntries(all.filter(p => p.published).map(p => [p.id, p]));
+  const labDir = path.join(SRC, 'Lab');
+  const lab = fs.existsSync(labDir) ? fs.readdirSync(labDir).filter(f => f.endsWith('.md')).map(f => specimen(path.join(labDir, f))).filter(s => s.published) : [];
+  let pages = 0;
+  for (const p of Object.values(projects)) if (p.play) { writePlayPage(p, [p.context, p.engine].filter(Boolean).join(' · ')); pages++; }
+  for (const s of lab) if (s.play) { writePlayPage(s, [s.mechanic, s.project, s.year].filter(Boolean).join(' · ')); s.url = `./play/${s.id}/`; pages++; }
 
   const disc = read('Disciplines.md');
   const disciplines = Object.fromEntries(Object.entries(disc ? disc.sections : {}).map(([k, v]) => [k, { title: k, description: plain(v) }]));
@@ -142,7 +192,7 @@ function build() {
 
   fs.writeFileSync(path.join(ROOT, 'assets/js/content.js'),
     '/* GENERATED by tools/build-content.mjs from the Obsidian vault. Do not edit; edit the notes. */\n' +
-    `window.PORTFOLIO = ${JSON.stringify({ profile: { email: profile.email, github: profile.github }, disciplines, projects }, null, 1)};\n`);
+    `window.PORTFOLIO = ${JSON.stringify({ profile: { email: profile.email, github: profile.github }, disciplines, projects, lab, catalogue: catalogue() }, null, 1)};\n`);
 
   /* ---- index.html: hero + experience ---- */
   const htmlFile = path.join(ROOT, 'index.html');
@@ -201,7 +251,7 @@ function build() {
     if (fs.existsSync(from) && (!fs.existsSync(to) || fs.statSync(from).mtimeMs > fs.statSync(to).mtimeMs)) { fs.copyFileSync(from, to); copied++; }
     else if (!fs.existsSync(to)) console.warn(`  ! missing image "${img}": put it in ${path.join(SRC, 'Assets')}`);
   }
-  console.log(`built ${Object.keys(projects).length} projects (${all.length - Object.keys(projects).length} unpublished kept private), ${copied} image(s) copied, ${Date.now() - t0}ms`);
+  console.log(`built ${Object.keys(projects).length} projects (${all.length - Object.keys(projects).length} unpublished kept private), ${lab.length} lab specimen(s), ${pages} play page(s), ${copied} image(s) copied, ${Date.now() - t0}ms`);
 }
 const plainLines = md => (md || '').replace(/\s*\n\s*/g, ' ').trim();
 function inject(html, name, content) {

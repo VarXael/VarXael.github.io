@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "node tools/build-content.mjs --watch --serve",
     "build": "node tools/build-content.mjs",
-    "publish": "node tools/publish.mjs"
+    "publish": "node tools/publish.mjs",
+    "new-project": "node tools/workshop/new-project.mjs",
+    "publish-build": "node tools/workshop/publish-build.mjs"
   }
 }

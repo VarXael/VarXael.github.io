@@ -28,6 +28,8 @@ window.PORTFOLIO = {
    "title": "Alien (Prototype)",
    "category": "personal work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "supporting",
    "year": 2022,
    "role": "Sole Creator",
@@ -63,6 +65,8 @@ window.PORTFOLIO = {
    "title": "Card's Weaver",
    "category": "university work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "supporting",
    "year": 2023,
    "role": "Lead Game Designer",
@@ -98,6 +102,8 @@ window.PORTFOLIO = {
    "title": "CRT.exe",
    "category": "game jams",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "supporting",
    "year": 2026,
    "role": "Project Lead & SFX Designer",
@@ -133,6 +139,8 @@ window.PORTFOLIO = {
    "title": "Cycle",
    "category": "university work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "hero",
    "year": 2021,
    "role": "Director, Sole Programmer, Designer",
@@ -178,6 +186,8 @@ window.PORTFOLIO = {
    "title": "High on Life",
    "category": "professional work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "hero",
    "year": 2025,
    "role": "Game Programmer & Technical Designer",
@@ -216,6 +226,8 @@ window.PORTFOLIO = {
    "title": "Monk Homebrew (D&D 5e)",
    "category": "personal work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "listed",
    "year": 2023,
    "role": "Game Designer",
@@ -249,6 +261,8 @@ window.PORTFOLIO = {
    "title": "Police Simulator: Patrol Officers",
    "category": "professional work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "supporting",
    "year": 2024,
    "role": "Game Programmer & Technical Designer",
@@ -282,6 +296,8 @@ window.PORTFOLIO = {
    "title": "Project Cadence",
    "category": "personal work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "hero",
    "year": 2025,
    "role": "Sole Systems Architect",
@@ -318,6 +334,8 @@ window.PORTFOLIO = {
    "title": "Project Centurion",
    "category": "university work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "listed",
    "year": 2020,
    "role": "Game Designer & Developer",
@@ -353,6 +371,8 @@ window.PORTFOLIO = {
    "title": "Project Circle",
    "category": "personal work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "hero",
    "year": 2025,
    "role": "Sole Creator / Technical Game Designer",
@@ -384,6 +404,25 @@ window.PORTFOLIO = {
    "title": "Project Sasha",
    "category": "personal work",
    "published": true,
+   "play": {
+    "id": "ProjectSasha",
+    "builds": [
+     {
+      "label": "v2 · Master Design Document",
+      "slug": "v2"
+     },
+     {
+      "label": "v1 · Design Document",
+      "slug": "v1"
+     }
+    ],
+    "downloads": [],
+    "notes": "<p>Two playable Godot slices of the same rule, each built to one of the two design documents, so the difference can be felt, not just read.</p><div class=\"md-table\"><table><thead><tr><th></th><th>v1 · Design Document</th><th>v2 · Master Design Document</th></tr></thead><tbody><tr><td>Looking</td><td>Ghost scan: reserves the object's full weight in volatile memory.</td><td>Soft scan: free, and it fades a few seconds after you look away.</td></tr><tr><td>Committing</td><td>Full scan, one object at a time, written to the area chip.</td><td>One flash charge saves everything still lit within range, at once.</td></tr><tr><td>The void</td><td>A probability: walk on an unscanned bridge and you fall.</td><td>Solid: you can only walk on floor you have saved.</td></tr><tr><td>Chips</td><td>Swapped at a terminal; one rides inside an enemy.</td><td>Carried in Sasha's spine; they overlap and can be merged.</td></tr><tr><td>Enemies</td><td>Touch a warden and you die.</td><td>Wardens scan you back and are immune until rendered with a flash.</td></tr></tbody></table></div><p><b>v2 controls:</b> WASD move · hold left mouse to soft-scan · right mouse to flash · F fire · Q spine · E interact · T tag · F1 help.</p><p><b>v1 controls:</b> WASD move · hold right mouse to aim · rest the cursor on a shape to ghost-scan · hold left mouse to commit · X delete a ghost · E terminal · F1 rules.</p>",
+    "short": "A top-down exploration game where scanning is the entire game. Knowledge is the resource, memory is the currency, and every mechanic asks the same question: what is worth remembering?"
+   },
+   "mechanics": [
+    "A1"
+   ],
    "tier": "hero",
    "year": 2025,
    "role": "Sole Creator / Designer & Programmer",
@@ -417,7 +456,12 @@ window.PORTFOLIO = {
     "Game Designer": "<p><b>Systemic narrative:</b> a cohesive economy where knowledge is the resource. A month of iteration unified exploration, combat, and progression under one 'Megabyte' budget, where every mechanical decision is a memory decision.</p><p><b>Player choice and tension:</b> a risk-and-reward loop close to managing torches in Minecraft. The Ghost Scan is volatile and free, for pushing into the dark. The Full Scan is permanent and costly, for solidifying the world. A constant trade between knowing more and keeping the capacity to act.</p><p><b>World design:</b> 'Digital Gnosticism'. The world is unformatted Biometal until you scan it into physical existence.</p>",
     "Technical Game Designer": "<p><b>Scanning algorithms:</b> the core scan runs on <span class='magic-link' data-src='./assets/videos/Sasha SonarVersion 0.3.mp4'>BFS waves</span> constrained by radius. An organic flood-fill, not a cheap instant reveal.</p><p><b>Procedural visual language:</b> a procedural mesh system generates a dot-cloud from each object's bounding box and data weight. Material tints (grey, then ice blue, then amber) tell the player the exact game state with no UI at all.</p><p><b>Memory architecture:</b> the <span class='magic-link' data-src='./assets/videos/Sasha Memory system 0.1.mp4'>Megabyte framework</span>. Volatile allocation, hard budgets, and an overflow guard that flashes red and blocks scans when you hit the limit.</p>"
    },
-   "links": [],
+   "links": [
+    {
+     "label": "Play in the browser",
+     "url": "./play/ProjectSasha/"
+    }
+   ],
    "short": "A top-down exploration game where scanning is the entire game. Knowledge is the resource, memory is the currency, and every mechanic asks the same question: what is worth remembering?",
    "story": "<p>Sasha is the game I keep coming back to. The whole thing is built on one mechanic, scanning, and one rule: the world doesn't exist until you scan it into memory.</p><p>You pilot an android through a brutalist megastructure. There's no inventory in the normal sense. Everything you carry, know, or use is data, and data takes up a finite memory budget I call the Megabyte economy. Scanning something cheap and volatile (a Ghost Scan) lets you push further into the dark for free, but it doesn't last. Scanning something permanently (a Full Scan) solidifies it into the world but costs real memory you can't spend elsewhere. So every act of looking is also an act of budgeting.</p><p>The visual language is procedural. Scanned objects resolve as a dot-cloud generated from their bounding box and data weight, and a single material tint tells you the exact state of a thing without any UI: grey, then ice blue, then amber. The look comes straight from BLAME! and NieR: Automata. Sparse, functional, data-first.</p><p>It took a month of heavy iteration to get exploration, combat, and progression to all sit under that one budget cleanly. That's the part I'm proud of. Not the individual mechanics, but the fact that they are all the same mechanic seen from different angles.</p>"
   },
@@ -426,6 +470,8 @@ window.PORTFOLIO = {
    "title": "PulseParty",
    "category": "professional work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "listed",
    "year": 2023,
    "role": "Lead Systems Programmer",
@@ -464,6 +510,8 @@ window.PORTFOLIO = {
    "title": "Soul Driven",
    "category": "university work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "listed",
    "year": 2023,
    "role": "Systems Programmer",
@@ -503,6 +551,8 @@ window.PORTFOLIO = {
    "title": "UEFN: Battleship",
    "category": "professional work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "listed",
    "year": 2023,
    "role": "Lead Creator & Verse Developer",
@@ -541,6 +591,8 @@ window.PORTFOLIO = {
    "title": "Unreal Engine Course",
    "category": "professional work",
    "published": true,
+   "play": null,
+   "mechanics": [],
    "tier": "listed",
    "year": 2022,
    "role": "Unreal Engine Tutor",
@@ -570,5 +622,435 @@ window.PORTFOLIO = {
    "short": "A 16-hour Unreal Engine course, published on Udemy. It introduces Blueprints and the common programming patterns behind them, from the ground up.",
    "story": ""
   }
- }
+ },
+ "lab": [],
+ "catalogue": [
+  {
+   "id": "A1",
+   "name": "Ghost scan / full scan",
+   "rule": "Looking costs memory; committing makes the world real",
+   "first": "Sasha design doc, 2026",
+   "family": "Perception"
+  },
+  {
+   "id": "A2",
+   "name": "The lamp builds the world",
+   "rule": "Unrevealed ground does not exist; fuel trails keep it built",
+   "first": "Sky Island GDD, 2022",
+   "family": "Perception"
+  },
+  {
+   "id": "A3",
+   "name": "If you see them, they see you",
+   "rule": "Pointing outlines things; an enemy you outline notices you",
+   "first": "Desktop note, 2022",
+   "family": "Perception"
+  },
+  {
+   "id": "A4",
+   "name": "Light-only and dark-only lore",
+   "rule": "Some writing is readable only in light, some only in darkness",
+   "first": "Gecko project, 2019",
+   "family": "Perception"
+  },
+  {
+   "id": "A5",
+   "name": "Sonar pulse",
+   "rule": "A pulse reveals enemies and items for a moment",
+   "first": "Alien prototype, 2024",
+   "family": "Perception"
+  },
+  {
+   "id": "A6",
+   "name": "Vantage points",
+   "rule": "Point at an enemy: every window that sees it lights up and becomes a teleport",
+   "first": "Todoist Notes, 2024",
+   "family": "Perception"
+  },
+  {
+   "id": "A7",
+   "name": "Rational sight",
+   "rule": "While calm you see bullet trajectories; panic and the world goes dark",
+   "first": "Notebook n9, 2018",
+   "family": "Perception"
+  },
+  {
+   "id": "A8",
+   "name": "Presence heartbeat",
+   "rule": "A pulse that quickens as a hostile presence gets close",
+   "first": "Desktop note, 2022",
+   "family": "Perception"
+  },
+  {
+   "id": "B1",
+   "name": "The floor is the metronome",
+   "rule": "The floor pulses; on-beat actions refund cooldowns",
+   "first": "Pulse devlogs, 2026",
+   "family": "Rhythm"
+  },
+  {
+   "id": "B2",
+   "name": "The Grey World",
+   "rule": "Out of beat: colour drains, only the beat remains; four on-beat actions bring you back",
+   "first": "Project Circle Todoist, 2025",
+   "family": "Rhythm"
+  },
+  {
+   "id": "B3",
+   "name": "Snake on the beat",
+   "rule": "You can only turn when the song does",
+   "first": "Desktop note, 2022; Todoist, 2026",
+   "family": "Rhythm"
+  },
+  {
+   "id": "B4",
+   "name": "Heads light on the beat",
+   "rule": "Only headshots count, only when the head flashes; body hits prime the head",
+   "first": "Todoist Notes, 2024",
+   "family": "Rhythm"
+  },
+  {
+   "id": "B5",
+   "name": "Vocoded combat",
+   "rule": "Every hit sound plays the next note of the song; keep the song alive",
+   "first": "Notion Videogame Ideas",
+   "family": "Rhythm"
+  },
+  {
+   "id": "B6",
+   "name": "Weapon sets the tempo",
+   "rule": "A pistol plays 4/4, a bazooka halves the beat",
+   "first": "Project Circle Todoist, 2025",
+   "family": "Rhythm"
+  },
+  {
+   "id": "B7",
+   "name": "Rhythm Spark",
+   "rule": "A moving light shows where the next notes will spawn",
+   "first": "Project Circle Todoist, 2025",
+   "family": "Rhythm"
+  },
+  {
+   "id": "B8",
+   "name": "Adaptive beat snapping",
+   "rule": "Jump air time snaps to the nearest half beat of any tempo",
+   "first": "Pulse devlogs, 2026",
+   "family": "Rhythm"
+  },
+  {
+   "id": "C1",
+   "name": "Damage per window",
+   "rule": "Enemies only die from enough damage inside one short window; sync your sources",
+   "first": "Brutal FPS, 2026",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C2",
+   "name": "Death stealing",
+   "rule": "A kill opens a quick menu; how you killed decides what you can take",
+   "first": "Brutal FPS, 2026",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C3",
+   "name": "Parry death",
+   "rule": "Time it right and you drop a corpse with your gear instead of dying",
+   "first": "Desktop note, 2023",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C4",
+   "name": "The AI clone save",
+   "rule": "Leave a clone of yourself as a save point; at the end, watch every attempt replay at once",
+   "first": "AI FPS (Notion)",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C5",
+   "name": "Immortal, but slow",
+   "rule": "A lethal hit costs time, not life; the level closes in on the slow",
+   "first": "Brutal FPS, 2026",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C6",
+   "name": "Bleed out",
+   "rule": "When hit, you have a few seconds to kill or make a move, or you die",
+   "first": "Todoist Notes, 2024",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C7",
+   "name": "Ghost capacity",
+   "rule": "Missed ghosts possess you; carry too many and you are lost; purifying passes them on",
+   "first": "Ghost-Ninja, 2023",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C8",
+   "name": "Counter death",
+   "rule": "Save right before dying to explode back",
+   "first": "Alien/Ultrakill Todoist, 2023",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C9",
+   "name": "Paid checkpoints",
+   "rule": "Checkpoints cost resources; every death costs them again",
+   "first": "Desktop note, 2022",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C10",
+   "name": "Death messages",
+   "rule": "Each death is narrated by whatever is moving you between bodies",
+   "first": "Notion Videogame Ideas",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C11",
+   "name": "Only while they attack",
+   "rule": "Enemies are invulnerable except while attacking you",
+   "first": "Notebook rules, 2019",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "C12",
+   "name": "Nothing instantaneous",
+   "rule": "Bullets are slow enough to reflect",
+   "first": "Notebook rules, 2019",
+   "family": "Death is a mechanic, not a fail state"
+  },
+  {
+   "id": "D1",
+   "name": "You are the infection",
+   "rule": "Food grows the nest; the nest decides how strong your next body is",
+   "first": "Gestation, 2025",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "D2",
+   "name": "Size decides the path",
+   "rule": "Small bodies use vents, medium use doors, big ones break walls",
+   "first": "Gestation, 2025",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "D3",
+   "name": "Possession launch",
+   "rule": "Tentacle onto an enemy and launch into its body",
+   "first": "Alien prototype, 2024",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "D4",
+   "name": "Eat the world",
+   "rule": "Eat smaller things to grow; every eaten object tells part of the story",
+   "first": "Black Hole Project, 2019",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "D5",
+   "name": "The mark",
+   "rule": "Headshots mark; marks leave trails; three hits pop and spread the mark",
+   "first": "Reaver-Like FPS / Pulse, 2024",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "D6",
+   "name": "Damage fills the glass",
+   "rule": "Damage fills the enemy from the feet up; when it reaches the head, pop it",
+   "first": "Todoist, 2025",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "D7",
+   "name": "Steal their legs",
+   "rule": "Launch into a wounded enemy and take its movement ability",
+   "first": "Alien/Ultrakill Todoist, 2023",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "D8",
+   "name": "Sleep in a corpse",
+   "rule": "Hollow out a corpse to sleep safely; sleep in the wrong place and you are taken",
+   "first": "Todoist Notes, 2023",
+   "family": "Bodies, infection, possession"
+  },
+  {
+   "id": "E1",
+   "name": "Fall through the floor",
+   "rule": "Hit the ground fast enough and you come out upside down in another world",
+   "first": "Notebook n9, 2018; Todoist, 2023",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "E2",
+   "name": "The tether",
+   "rule": "You are tied to a tower by a cable; you cannot walk back, reeling in turns your light off",
+   "first": "Notebook, 2018; Untold GDD, 2022",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "E3",
+   "name": "Rewind the body",
+   "rule": "Attack, snap back to where you started, attack again from there",
+   "first": "Todoist Notes, 2024",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "E4",
+   "name": "The link gun",
+   "rule": "Shoot two things to tie them together, or tie them to your gun",
+   "first": "Todoist Notes, 2023",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "E5",
+   "name": "Inside the sphere",
+   "rule": "Gravity points outward inside a hollow planet",
+   "first": "Project Circle, 2025",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "E6",
+   "name": "Two eyes, two worlds",
+   "rule": "Day and night are a giant's two eyes; a blink switches them",
+   "first": "Tunic-inspired (Notion)",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "E7",
+   "name": "Flame range",
+   "rule": "Fluid flame turns to paper when carried too far from its pillar, and hardens when brought back",
+   "first": "PillarWorld, 2023",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "E8",
+   "name": "The stretching shotgun",
+   "rule": "A shotgun that extends",
+   "first": "Alien/Ultrakill Todoist, 2023",
+   "family": "Space, time and tethers"
+  },
+  {
+   "id": "F1",
+   "name": "Magnetized blade",
+   "rule": "Strike a magnet to charge the sword; bounce off magnetic platforms",
+   "first": "Nickel Ninja, 2022",
+   "family": "Magnetism and matter"
+  },
+  {
+   "id": "F2",
+   "name": "Pole enemies",
+   "rule": "Opposite poles kill each other when swapped",
+   "first": "Nickel Ninja, 2022",
+   "family": "Magnetism and matter"
+  },
+  {
+   "id": "F3",
+   "name": "The magnetic hammer",
+   "rule": "One glove attracts, the other releases a charged blow",
+   "first": "Magnetic Something, 2025",
+   "family": "Magnetism and matter"
+  },
+  {
+   "id": "G1",
+   "name": "The patient knight",
+   "rule": "You cannot dodge, only parry in place; parries build power for one killing blow",
+   "first": "Todoist Notes, 2023",
+   "family": "Combat feel"
+  },
+  {
+   "id": "G2",
+   "name": "Sequence kills",
+   "rule": "Some enemies die only to a hit order: left leg, right arm, head",
+   "first": "Notion Videogame Ideas",
+   "family": "Combat feel"
+  },
+  {
+   "id": "G3",
+   "name": "Swipe actions",
+   "rule": "Hold the mouse and swipe a direction to dash or jump",
+   "first": "Todoist Notes, 2025",
+   "family": "Combat feel"
+  },
+  {
+   "id": "G4",
+   "name": "Speed is ammo",
+   "rule": "You only fire while moving; faster movement, faster fire",
+   "first": "Todoist Notes, 2024",
+   "family": "Combat feel"
+  },
+  {
+   "id": "G5",
+   "name": "They move when you move",
+   "rule": "A 2D game where enemies only act while you act",
+   "first": "Sticky Note, 2021",
+   "family": "Combat feel"
+  },
+  {
+   "id": "G6",
+   "name": "Ring dash",
+   "rule": "Aim your character at a ring in the air and dash through it; misalign and you miss",
+   "first": "Sticky Note, 2021",
+   "family": "Combat feel"
+  },
+  {
+   "id": "G7",
+   "name": "Sound-only hack and slash",
+   "rule": "A hack and slash with no visuals, only sound",
+   "first": "Sticky Note, 2020",
+   "family": "Combat feel"
+  },
+  {
+   "id": "H1",
+   "name": "Connection",
+   "rule": "Enough people must press Win in a row; one Lose resets everyone",
+   "first": "Todoist Notes, 2025",
+   "family": "Systems, meta and the web itself"
+  },
+  {
+   "id": "H2",
+   "name": "Creepy Karma",
+   "rule": "The feedback faces in the corner start talking to you",
+   "first": "Notion Videogame Ideas",
+   "family": "Systems, meta and the web itself"
+  },
+  {
+   "id": "H3",
+   "name": "Numbers in the video",
+   "rule": "A secret sentence assembled by jumping a video with the number keys",
+   "first": "Desktop note, 2022",
+   "family": "Systems, meta and the web itself"
+  },
+  {
+   "id": "H4",
+   "name": "Ki vessels",
+   "rule": "Ki is a physical object that holds memories; fill, bond, sacrifice",
+   "first": "Monk homebrew, 2023",
+   "family": "Systems, meta and the web itself"
+  },
+  {
+   "id": "H5",
+   "name": "Breath economy",
+   "rule": "Breath powers attacks, movement and life; gases change your body",
+   "first": "Desktop note, 2022",
+   "family": "Systems, meta and the web itself"
+  },
+  {
+   "id": "H6",
+   "name": "A creature everyone trains",
+   "rule": "Every player's behaviour trains the same creatures in everyone's world",
+   "first": "Todoist Notes, 2025",
+   "family": "Systems, meta and the web itself"
+  },
+  {
+   "id": "H7",
+   "name": "Sound puzzles with giants",
+   "rule": "Giant diorama monsters move when you satisfy what their sounds ask for",
+   "first": "Beast-Tamer, 2023",
+   "family": "Systems, meta and the web itself"
+  }
+ ]
 };

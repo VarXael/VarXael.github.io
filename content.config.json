@@ -1,3 +1,8 @@
 {
-  "source": "D:/Program Files/Obsidian/Vaults/Obsidian_MainVault/Projects_Vault/Portfolio"
+  "source": "D:/Program Files/Obsidian/Vaults/Obsidian_MainVault/Projects_Vault/Portfolio",
+  "projectsRoot": "D:/Game Development Projects",
+  "godot": "C:/Users/User/Desktop/Godot_v4.7.2-stable_win64.exe",
+  "gh": "C:/Program Files/GitHub CLI/gh.exe",
+  "githubUser": "VarXael",
+  "siteRepo": "VarXael/VarXael.github.io"
 }
