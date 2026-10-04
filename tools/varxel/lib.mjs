@@ -1,22 +1,27 @@
-// Shared helpers for Project VarXel (the catalogue of everything): reading and finding entries.
+// Shared helpers for VarXel (the catalogue of everything): reading and finding entries.
+// An entry is a project card (VarXel/Projects/<Title>/<Title>.md, it has a GitHub repository) or a
+// Catalogue entry (VarXel/Catalogue/<Title>.md: ideas, mods, stories, work).
 import fs from 'node:fs';
 import path from 'node:path';
 import { CONFIG } from '../workshop/lib.mjs';
 
-export const ROOT_VAULT = path.resolve(CONFIG.source, '../..');                // .../Obsidian_MainVault
-export const VARXEL = path.join(ROOT_VAULT, 'Projects_Vault/Project VarXel');
-export const ENTRIES = path.join(VARXEL, 'Entries');
-export const WORKSPACES = path.join(VARXEL, 'Workspaces');
-export const PORTFOLIO_LIST = path.join(VARXEL, 'Portfolio.md');
-export const UNION = path.join(ROOT_VAULT, 'The Union');
-export const rel = f => path.relative(ROOT_VAULT, f).replace(/\\/g, '/');
+export const VARXEL = CONFIG.vault || path.resolve(CONFIG.source, '..');      // .../Obsidian_MainVault/VarXel
+export const ROOT_VAULT = VARXEL;                                              // wiki-links are written from here
+export const PROJECTS = path.join(VARXEL, 'Projects');
+export const CATALOGUE = path.join(VARXEL, 'Catalogue');
+export const SITE = path.join(VARXEL, 'Site');                                 // Portfolio.md and the Candidates lists
+export const PORTFOLIO_LIST = path.join(SITE, 'Portfolio.md');
+export const UNION = VARXEL;                                                   // Giuseppe's notes: Games/, Not games/
+export const rel = f => path.relative(VARXEL, f).replace(/\\/g, '/');
 export const today = () => new Date().toISOString().slice(0, 10);
 export const idOf = title => title.replace(/[^\w]/g, '');                      // same rule as the site build
 export const fileName = title => title.replace(/[\\/:*?"<>|#^[\]]/g, '').trim();
 
 /* [[path|Alias]] -> { path, alias } */
 export const link = s => { const m = String(s).match(/^\[\[([^\]|]+)(?:\|([^\]]+))?\]\]$/); return m ? { path: m[1], alias: m[2] || path.basename(m[1]) } : { path: s, alias: s }; };
-export const entryLink = title => `[[${rel(path.join(ENTRIES, fileName(title)))}|${title}]]`;
+export const cardFile = title => path.join(PROJECTS, fileName(title), `${fileName(title)}.md`);
+export const entryFile = title => fs.existsSync(cardFile(title)) ? cardFile(title) : path.join(CATALOGUE, `${fileName(title)}.md`);
+export const entryLink = title => `[[${rel(entryFile(title)).replace(/\.md$/, '')}|${title}]]`;
 
 export function parse(file) {
   const text = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
@@ -34,7 +39,7 @@ export function parse(file) {
   }
   return { props: p, body: m ? text.slice(m[0].length) : text };
 }
-const LISTS = ['from', 'became', 'sources', 'builds', 'downloads'];
+const LISTS = ['from', 'became', 'sources', 'builds', 'downloads', 'repos', 'play', 'folders'];
 const unq = s => (/^".*"$/.test(s) ? JSON.parse(s) : s);
 const pair = s => { const i = String(s).lastIndexOf('|'); return i < 0 ? [String(s).trim(), String(s).trim()] : [s.slice(0, i).trim(), s.slice(i + 1).trim()]; };
 
@@ -47,9 +52,9 @@ export function readEntry(file) {
   const sec = name => { const i = sections.indexOf(name); return i > 0 ? sections[i + 1].trim() : ''; };
   const title = path.basename(file, '.md');
   return {
-    file, title, id: idOf(title), kind: p.kind || '', status: p.status || '', started: String(p.started || ''), updated: String(p.updated || ''),
+    file, title, id: idOf(title), kind: p.kind || '', project: file.startsWith(PROJECTS), started: String(p.started || ''), updated: String(p.updated || ''),
     family: p.family || '', from: (p.from || []).map(s => link(s).alias), became: (p.became || []).map(s => link(s).alias),
-    sources: (p.sources || []).map(s => link(s).path), repo: p.repo || '', local: p.local || '', godot_dir: p.godot_dir || '',
+    sources: (p.sources || []).map(s => link(s).path), repo: (p.repos || [])[0] || p.repo || '', local: p.local || '', godot_dir: p.godot_dir || '',
     card: p.card ? link(p.card).alias : '', public: String(p.public) === 'true',
     builds: (p.builds || []).map(b => { const [label, slug] = pair(b); return { label, slug }; }),
     downloads: (p.downloads || []).map(d => { const [label, url] = pair(d); return { label, url }; }),
@@ -61,17 +66,18 @@ export function readEntry(file) {
 }
 
 export function entries() {
-  if (!fs.existsSync(ENTRIES)) return [];
-  return fs.readdirSync(ENTRIES).filter(f => f.endsWith('.md')).map(f => readEntry(path.join(ENTRIES, f)));
+  const cards = fs.existsSync(PROJECTS) ? fs.readdirSync(PROJECTS).map(d => path.join(PROJECTS, d, `${d}.md`)).filter(f => fs.existsSync(f)) : [];
+  const cat = fs.existsSync(CATALOGUE) ? fs.readdirSync(CATALOGUE).filter(f => f.endsWith('.md')).map(f => path.join(CATALOGUE, f)) : [];
+  return [...cards, ...cat].map(readEntry);
 }
 
 export function findEntry(title) {
-  const exact = path.join(ENTRIES, `${fileName(title)}.md`);
+  const exact = entryFile(title);
   if (fs.existsSync(exact)) return readEntry(exact);
   return entries().find(e => e.title.toLowerCase() === title.toLowerCase() || e.id === idOf(title)) || null;
 }
 
-/* the portfolio = the cards linked in Project VarXel/Portfolio.md, in order */
+/* the portfolio = the cards linked in VarXel/Site/Portfolio.md, in order */
 export function portfolioList() {
   const listed = new Map();
   if (fs.existsSync(PORTFOLIO_LIST))

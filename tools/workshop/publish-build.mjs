@@ -1,11 +1,11 @@
-// Export a project's Godot build and make it playable in Project VarXel.
+// Export a project's Godot build and make it playable in VarXel.
 //
 //   npm run publish-build -- "A Race for the Sun"
 //   npm run publish-build -- "Project Sasha" --build v2 --label "v2 · Master Design Document" --dir v2-master-doc
 //
 // Where the build goes depends on the project's entry:
 //   private entry          web -> play/_private/<id>/<build>/ (git-ignored: playable on this computer only, in the local
-//                          Project VarXel view); Windows zip -> the project's own export/ folder
+//                          VarXel view); Windows zip -> the project's own export/ folder
 //   public entry, or a     web -> play/<id>/<build>/ (the site serves it); Windows zip -> a GitHub Release of the site repo
 //   project in Portfolio.md
 // The builds are recorded on the entry (builds / downloads), then the site content is rebuilt.
@@ -24,10 +24,11 @@ const a = args();
 const title = a._[0];
 if (!title) { console.log('usage: npm run publish-build -- "<Title>" [--build slug] [--label text] [--dir folder] [--no-windows] [--no-web] [--private]'); process.exit(1); }
 const e = findEntry(title);
-if (!e) throw new Error(`No Project VarXel entry for "${title}". Run new-project first, or create the entry.`);
+if (!e) throw new Error(`No VarXel project card for "${title}". Run new-project first, or start the project in the hub.`);
 const legacy = findCard(title)?.props || {};                     // cards made before 2026-10-04 kept the code location
-const local = e.local || legacy.local;
-if (!local || !local.length) throw new Error(`The entry "${e.title}" has no "local" folder. Run new-project, or fill local: on the entry.`);
+const clone = e.repo ? path.join(CONFIG.projectsRoot, e.repo.split('/').pop()) : '';          // where a clone usually is
+const local = e.local || legacy.local || (clone && fs.existsSync(path.join(clone, '.git')) ? clone : '');
+if (!local || !local.length) throw new Error(`"${e.title}" has no code folder on this PC. Clone its repository (the hub can), or fill local: on the card.`);
 const build = a.build || 'main';
 const label = a.label || (build === 'main' ? e.title : build);
 const dir = path.join(local, a.dir || e.godot_dir || legacy.godot_dir || '');

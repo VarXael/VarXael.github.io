@@ -23,7 +23,7 @@ disciplines:
 %%
 Created by new-project on {{DATE}}. This card is the project's page on the portfolio.
 - Workspace (handout, devlog, design notes): [[{{TITLE}} Handout]], [[{{TITLE}} Devlog]].
-- sources: wiki-links to the notes in The Union this project comes from.
+- sources: wiki-links to the notes in VarXel (Games/, Not games/) this project comes from.
 - mechanics: Mechanics Catalogue IDs (A2, B3...).
 - builds / downloads are written by publish-build. Do not edit them by hand.
 - Set published: true when it is ready to be seen.

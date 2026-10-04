@@ -1,6 +1,25 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "static", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "8731"], "port": 8731 }
+    {
+      "name": "static",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8731"
+      ],
+      "port": 8731
+    },
+    {
+      "name": "varxel-hub",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "D:/Vaults/Obsidian_MainVault/VarXel/_hub/hub.py",
+        "--no-browser"
+      ],
+      "port": 4777,
+      "url": "http://127.0.0.1:4777"
+    }
   ]
 }

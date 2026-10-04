@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const CONFIG = JSON.parse(fs.readFileSync(path.join(ROOT, 'content.config.json'), 'utf8'));
-export const VAULT = CONFIG.source;                       // .../Projects_Vault/Portfolio
+export const VAULT = CONFIG.source;                       // .../VarXel/Site
 export const TEMPLATES = path.join(ROOT, 'tools/workshop/templates');
 
 /* ---------- command line ---------- */
@@ -61,13 +61,13 @@ export function copyTemplate(dir, dest, vars) {
 }
 
 /* ---------- cards ---------- */
-// A card is a note in Portfolio/Projects (a project) or Portfolio/Lab (a specimen).
+// A card is a note in Site/Cards (a portfolio project) or Site/Lab (a specimen).
 export function findCard(title) {
-  for (const sub of ['Projects', 'Lab']) {                                         // an exact file name wins
+  for (const sub of ['Cards', 'Lab']) {                                            // an exact file name wins
     const file = path.join(VAULT, sub, `${title}.md`);
     if (fs.existsSync(file)) return { file, props: readProps(fs.readFileSync(file, 'utf8')), kind: sub };
   }
-  for (const sub of ['Projects', 'Lab']) {
+  for (const sub of ['Cards', 'Lab']) {
     const dir = path.join(VAULT, sub);
     if (!fs.existsSync(dir)) continue;
     for (const f of fs.readdirSync(dir)) {

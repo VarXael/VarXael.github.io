@@ -56,10 +56,8 @@ h2{font-family:var(--serif);font-weight:300;font-size:1.7rem;margin:34px 0 14px}
 .chip small{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 .chip.dim{opacity:.22}
 .st{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 6px;border:1px solid var(--faint);color:var(--dim)}
-.st.building,.st.exploring,.st.active{color:var(--ice);border-color:rgba(159,216,255,.4)}
-.st.finished{color:#7fdca0;border-color:rgba(127,220,160,.35)}
-.st.superseded{color:var(--amber);border-color:rgba(240,166,64,.35)}
-.st.parked{color:#c39bff;border-color:rgba(195,155,255,.35)}
+.st.playable{color:#7fdca0;border-color:rgba(127,220,160,.35)}
+.st.has{color:var(--ice);border-color:rgba(159,216,255,.4)}
 .year{display:grid;grid-template-columns:90px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--faint)}
 .year .y{font-family:var(--serif);font-size:1.8rem;font-weight:300;color:var(--dim)}
 .fam{border:1px solid var(--faint);background:var(--panel);padding:16px 18px;margin-bottom:12px}
@@ -113,13 +111,13 @@ function boot() {
 const D = window.VARXEL || [];
 const byTitle = Object.fromEntries(D.map(e => [e.title, e]));
 const KINDS = ['game', 'prototype', 'mod', 'tabletop', 'story', 'work', 'tool', 'course', 'idea'];
-const STATUSES = ['idea', 'exploring', 'building', 'active', 'finished', 'parked', 'superseded', ''];
+const STATUSES = ['playable', 'has code', 'idea'];             // derived by the build: has builds / has a repository / neither
 const SL = s => s || 'unset';
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const kc = k => `var(--k-${KINDS.includes(k) ? k : 'idea'})`;
 let view = 'overview', q = '', portfolio = false;
 
-const VIEWS = { overview: 'Overview', timeline: 'Timeline', families: 'Families', kinds: 'Kinds', board: 'Status board' };
+const VIEWS = { overview: 'Overview', timeline: 'Timeline', families: 'Families', kinds: 'Kinds', board: 'Where they stand' };
 document.getElementById('nav').innerHTML = Object.entries(VIEWS).map(([k, v]) => `<button data-v="${k}">${v}</button>`).join('');
 document.getElementById('legend').innerHTML = KINDS.map(k => `<span><b style="background:${kc(k)}"></b>${k}</span>`).join('');
 document.getElementById('pf-count').textContent = `${D.filter(e => e.portfolio).length} entries are in the portfolio`;
@@ -133,12 +131,12 @@ const list = () => D.filter(match);
 
 function overview() {
   const L = list(), cnt = s => L.filter(e => SL(e.status) === s).length;
-  const moving = L.filter(e => ['building', 'exploring', 'active'].includes(e.status));
+  const moving = L.filter(e => e.status === 'playable');
   const fams = families(L).filter(f => f.items.length > 2).slice(0, 4);
   if (!D.length) return `<span class="mono">Everything I have made or explored</span><h1>Being catalogued</h1><div class="empty">Every game, mod, prototype, story and tool I have made or explored is being written up here, one entry at a time. Meanwhile, the selected work is in the <a href="./portfolio.html">portfolio</a> and the playable pieces are in <a href="./lab.html">the Lab</a>.</div>`;
   return `<span class="mono">Everything I have made or explored</span><h1>${L.length} entries</h1>
-  <div class="stats">${['building', 'exploring', 'finished', 'superseded', 'parked', 'idea', 'unset'].map(s => `<div class="stat"><b>${cnt(s)}</b><span class="mono">${s}</span></div>`).join('')}</div>
-  <h2>In motion</h2><div class="chips">${moving.map(e => chip(e, e.status)).join('') || '<span class="mono">nothing</span>'}</div>
+  <div class="stats">${STATUSES.map(s => `<div class="stat"><b>${cnt(s)}</b><span class="mono">${s}</span></div>`).join('')}</div>
+  <h2>Playable</h2><div class="chips">${moving.map(e => chip(e, e.status)).join('') || '<span class="mono">nothing</span>'}</div>
   <h2>Families</h2>${fams.map(famBlock).join('')}
   <h2>By kind</h2><div class="chips">${KINDS.map(k => { const n = L.filter(e => e.kind === k).length; return n ? `<span class="chip"><span class="dot" style="background:${kc(k)}"></span>${k} <small>${n}</small></span>` : ''; }).join('')}</div>`;
 }
@@ -176,7 +174,7 @@ function kinds() {
 
 function board() {
   const L = list();
-  return `<span class="mono">Every entry by where it stands</span><h1>Status board</h1><div class="board">` + STATUSES.map(s =>
+  return `<span class="mono">Playable, has code, or an idea</span><h1>Where they stand</h1><div class="board">` + STATUSES.map(s =>
     `<div class="lane"><div class="mono" style="margin-bottom:10px">${SL(s)} · ${L.filter(e => (e.status || '') === s).length}</div><div class="chips">${L.filter(e => (e.status || '') === s).map(e => chip(e)).join('')}</div></div>`).join('') + '</div>';
 }
 

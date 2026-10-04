@@ -1,13 +1,13 @@
-// Find every idea in The Union that is not an entry yet, and list it as a candidate for Giuseppe to tick.
+// Find every idea in VarXel's notes (Games/, Not games/) that is not an entry yet, and list it as a candidate for Giuseppe to tick.
 //
 //   npm run harvest
 //
-// Writes Project VarXel/Candidates.md the first time. Later runs never touch an existing file: they write
+// Writes VarXel/Site/Candidates.md the first time. Later runs never touch an existing file: they write
 // "Candidates (new YYYY-MM-DD).md" with only the ideas not listed before. Ticked lines become entries with
 // `npm run promote`.
 import fs from 'node:fs';
 import path from 'node:path';
-import { VARXEL, UNION, ROOT_VAULT, entries, rel, today } from './lib.mjs';
+import { SITE, UNION, entries, rel, today } from './lib.mjs';
 
 const C = 140;                                   // snippet length
 const clip = s => { s = s.replace(/\s+/g, ' ').trim(); return s.length > C ? s.slice(0, C).replace(/\s+\S*$/, '') + '…' : s; };
@@ -62,22 +62,22 @@ for (const sub of ['Apps, tools and devices', 'Business ideas', 'Stories and wor
 }
 
 /* 4. ideas with no notes at all, only a title somewhere */
-const blog = path.join(ROOT_VAULT, 'Main Vault/Blog Overview');
+const blog = path.resolve(UNION, '..', 'Main Vault/Blog Overview');
 const titles = ['Game Design - Fizz Rework.md', 'Game Design - LoL Champion VarXel.md'].map(f => path.join(blog, f)).filter(fs.existsSync)
   .map(f => ({ text: `${path.basename(f, '.md')} (an empty note: only the title exists)`, src: f, year: '2024' }));
 add('Titles without notes', 'Write a sentence from memory and they become entries.', titles);
 
 /* write, never overwriting */
 // --refresh rewrites Candidates.md, but only while nothing in it has been ticked yet
-const main = path.join(VARXEL, 'Candidates.md');
+const main = path.join(SITE, 'Candidates.md');
 const refresh = process.argv.includes('--refresh') && fs.existsSync(main) && !/^- \[x\]/mi.test(fs.readFileSync(main, 'utf8'));
 const seen = new Set();
-for (const f of fs.readdirSync(VARXEL).filter(f => /^Candidates.*\.md$/.test(f) && !(refresh && f === 'Candidates.md')))
-  for (const l of fs.readFileSync(path.join(VARXEL, f), 'utf8').split('\n')) { const m = l.match(/^- \[.\] .*?"(.+)" · /); if (m) seen.add(m[1]); }
+for (const f of fs.readdirSync(SITE).filter(f => /^Candidates.*\.md$/.test(f) && !(refresh && f === 'Candidates.md')))
+  for (const l of fs.readFileSync(path.join(SITE, f), 'utf8').split('\n')) { const m = l.match(/^- \[.\] .*?"(.+)" · /); if (m) seen.add(m[1]); }
 let total = 0;
 const out = [];
 for (const g of groups) {
-  const items = g.items.filter(i => i.text && !seen.has(i.text) && (seen.add(i.text), true));
+  const items = g.items.filter(i => i.text && !seen.has(i.text.replace(/"/g, "'")) && (seen.add(i.text.replace(/"/g, "'")), true));   // lines store " as '
   if (!items.length) continue;
   total += items.length;
   out.push(`## ${g.name} (${items.length})`, '', ...(g.why ? [g.why, ''] : []),
@@ -85,9 +85,9 @@ for (const g of groups) {
 }
 if (!total) { console.log('No new candidates.'); process.exit(0); }
 const first = refresh || !fs.existsSync(main);
-const file = path.join(VARXEL, first ? 'Candidates.md' : `Candidates (new ${today()}).md`);
+const file = path.join(SITE, first ? 'Candidates.md' : `Candidates (new ${today()}).md`);
 const head = [`---`, `created: ${today()}`, `---`, `# Candidates${first ? '' : ` (new ${today()})`}`, '',
-  `Ideas found in The Union that are not entries yet: ${total}. Each line quotes the notes word for word, with a link to the source.`, '',
+  `Ideas found in your notes that are not entries yet: ${total}. Each line quotes the notes word for word, with a link to the source.`, '',
   '**To keep one:** tick it. To give it a name, type the name right after the box: `- [x] Mirror Boss "…"`. Then run `npm run promote` in the website repo; every ticked line becomes a private entry. Lines you leave unticked stay here, nothing is lost.', ''];
 fs.writeFileSync(file, [...head, ...out].join('\n'));
-console.log(`${total} candidates -> ${path.relative(ROOT_VAULT, file)}`);
+console.log(`${total} candidates -> ${rel(file)}`);

@@ -1,7 +1,7 @@
-// Start a project (or a mechanic specimen inside one) so it is wired into Project VarXel, git and GitHub.
+// Start a project (or a mechanic specimen inside one) so it is wired into VarXel, git and GitHub.
 //
 //   npm run new-project -- "A Race for the Sun" --from "Circle FPS"
-//       new Godot project: its Project VarXel entry, a workspace (handout + devlog), a local repo from the
+//       new Godot project: its VarXel project card and workspace (handout + devlog), a local repo from the
 //       template, and a private GitHub repo
 //   npm run new-project -- "Project Pulse" --repo Project_Circle --existing --branch godot-prototype
 //       a Godot prototype on its own branch of an existing repo (how Sasha's prototypes live)
@@ -12,12 +12,13 @@
 //
 // Options: --engine godot|unreal|none (default godot)  --kind game|prototype|mod|tool|...  --from "Entry A, Entry B"
 //          --local <folder>  --dir <Godot folder inside the repo>  --dry (show the plan only)
-// The entry is created if missing. If it exists, only its empty fields are filled (repo, local, godot_dir, kind, status).
+// The card (VarXel/Projects/<Title>/<Title>.md) is created if missing; a Catalogue entry with the same title moves there
+// and becomes the card. If the card exists, only its empty fields are filled (repos, local, godot_dir, kind).
 // No portfolio card is created: a card is written only when the project goes into the portfolio.
 import fs from 'node:fs';
 import path from 'node:path';
 import { CONFIG, VAULT, TEMPLATES, args, run, gh, ghReady, idOf, slugOf, repoOf, today, fill, copyTemplate, findCard, setProp } from './lib.mjs';
-import { ENTRIES, WORKSPACES, findEntry, entryLink, fileName } from '../varxel/lib.mjs';
+import { findEntry, entryLink, cardFile, fileName } from '../varxel/lib.mjs';
 
 const a = args();
 const title = a._[0];
@@ -37,18 +38,30 @@ function writeIfMissing(file, text) {
 }
 const tpl = name => fs.readFileSync(path.join(TEMPLATES, 'vault', name), 'utf8');
 
-/* the Project VarXel entry: create it, or fill only what is empty */
+/* the VarXel project card: create it, move a Catalogue entry into it, or fill only what is empty */
+const WORK = '\n## Next actions\n\n## Backlog\n\n## Open questions\n\n## How to work on it\n\n## Code\n';
 function linkEntry(vars) {
-  const e = findEntry(title);
+  const card = cardFile(title);
+  let e = findEntry(title);
   if (!e) {
     const from = fromEntries.length ? '\n' + fromEntries.map(t => `  - "${entryLink(t)}"`).join('\n') : ' []';
-    writeIfMissing(path.join(ENTRIES, `${fileName(title)}.md`), fill(tpl('entry.md'), { ...vars, FROM: from, KIND: a.kind || 'game' }));
+    writeIfMissing(card, fill(tpl('entry.md'), { ...vars, FROM: from, KIND: a.kind || 'game' }));
     return;
   }
-  const fills = { repo: vars.REPO, local: vars.LOCAL, godot_dir: vars.GODOT_DIR, kind: a.kind || '', status: 'exploring' };
-  const empty = Object.entries(fills).filter(([k, v]) => v && !e[k]);
-  plan.push(`  entry exists: ${e.title}${empty.length ? ` (filling empty: ${empty.map(([k]) => k).join(', ')})` : ' (nothing to fill)'}`);
-  if (!dry) for (const [k, v] of empty) setProp(e.file, k, v);
+  if (!e.project) {
+    step(`  move the Catalogue entry ${e.title} to Projects/${fileName(title)}/ (it becomes the card)`, () => {
+      fs.mkdirSync(path.dirname(card), { recursive: true });
+      const text = fs.readFileSync(e.file, 'utf8').replace(/\r\n/g, '\n').replace(/^status:.*\n/m, '').replace(/^repo:.*\n/m, '');
+      fs.writeFileSync(card, text.replace(/^---\n([\s\S]*?)\n---/, (m, fm) => `---\n${fm}\nrepos: []\n---`).trimEnd() + '\n' + WORK);
+      fs.rmSync(e.file);
+    });
+    if (dry) return;
+    e = findEntry(title);
+  }
+  const fills = { repos: vars.REPO, local: vars.LOCAL, godot_dir: vars.GODOT_DIR, kind: a.kind || '' };
+  const empty = Object.entries(fills).filter(([k, v]) => v && !e[k === 'repos' ? 'repo' : k]);
+  plan.push(`  card exists: ${e.title}${empty.length ? ` (filling empty: ${empty.map(([k]) => k).join(', ')})` : ' (nothing to fill)'}`);
+  if (!dry) for (const [k, v] of empty) setProp(e.file, k, k === 'repos' ? [v] : v);
 }
 
 if (a['specimen-of']) {
@@ -120,10 +133,9 @@ if (a['specimen-of']) {
   else if (ghReady()) step(`  create private GitHub repo ${full} and push`, () => gh(['repo', 'create', full, '--private', '--source', local, '--push']));
   else plan.push(`  ! GitHub CLI is not logged in. Later: gh repo create ${full} --private --source "${local}" --push`);
 
-  // 3. Project VarXel: the entry + a workspace
+  // 3. VarXel: the project card + its workspace folder
   linkEntry(vars);
-  const legacyWs = path.join(VAULT, title);                       // workspaces made before 2026-10-04 live in Portfolio/<Title>/
-  const ws = fs.existsSync(path.join(legacyWs, `${title} Handout.md`)) ? legacyWs : path.join(WORKSPACES, title);
+  const ws = path.dirname(cardFile(title));
   writeIfMissing(path.join(ws, `${title} Handout.md`), fill(tpl('handout.md'), vars));
   writeIfMissing(path.join(ws, `${title} Devlog.md`), fill(tpl('devlog.md'), vars));
 }
