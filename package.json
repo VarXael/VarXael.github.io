@@ -8,6 +8,8 @@
     "build": "node tools/build-content.mjs",
     "publish": "node tools/publish.mjs",
     "new-project": "node tools/workshop/new-project.mjs",
-    "publish-build": "node tools/workshop/publish-build.mjs"
+    "publish-build": "node tools/workshop/publish-build.mjs",
+    "harvest": "node tools/varxel/harvest.mjs",
+    "promote": "node tools/varxel/promote.mjs"
   }
 }
