@@ -67,7 +67,7 @@ if (a['specimen-of']) {
   const isRepo = fs.existsSync(path.join(local, '.git'));
   let fresh = !a.existing;                         // only a new repo or a new branch gets the template
   if (a.existing) {
-    if (!isRepo) step(`  clone ${full} -> ${local}`, () => run('git', ['clone', '-q', '--filter=blob:none', `https://github.com/${full}.git`, local]));
+    if (!isRepo) step(`  clone ${full} -> ${local}`, () => run('git', ['clone', '-q', '--filter=blob:none', ...(branch ? ['--no-checkout'] : []), `https://github.com/${full}.git`, local]));
     if (branch) step(`  branch ${branch}`, () => {
       run('git', ['fetch', '-q', 'origin'], { cwd: local });
       const remoteHas = run('git', ['ls-remote', '--heads', 'origin', branch], { cwd: local }).stdout.trim();
