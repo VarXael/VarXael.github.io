@@ -1,4 +1,5 @@
-// Rebuild from the vault, commit the generated content, and push the current branch.
+// Rebuild from the vault, commit the generated content, push the branch to origin and to the lab (VarXael/VarXel-Lab, main),
+// which GitHub Pages serves at varxael.github.io/VarXel-Lab/. The portfolio (origin/main) is not touched.
 //
 //   npm run publish                 (or: node tools/publish.mjs "optional message")
 
@@ -16,4 +17,5 @@ if (!out('git diff --cached --name-only')) { console.log('Nothing changed in the
 const msg = process.argv[2] || `CONTENT: update from vault (${new Date().toISOString().slice(0, 16).replace('T', ' ')})`;
 execSync(`git commit -m ${JSON.stringify(msg)}`, { cwd: ROOT, stdio: 'inherit' });
 run(`git push origin ${out('git branch --show-current')}`);
-console.log('Published. GitHub Pages usually updates within a minute.');
+run('git push lab HEAD:main');
+console.log('Published to https://varxael.github.io/VarXel-Lab/ . GitHub Pages usually updates within a minute.');
