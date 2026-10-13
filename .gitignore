@@ -16,3 +16,4 @@ site-dist/
 # Fog portfolio preview data (tools/build-docs.mjs): everything, including what is not published
 assets/js/docs.private.js
 assets/shots-private/
+site-portfolio/

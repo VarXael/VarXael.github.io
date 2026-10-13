@@ -10,6 +10,7 @@
     "new-project": "node tools/workshop/new-project.mjs",
     "publish-build": "node tools/workshop/publish-build.mjs",
     "harvest": "node tools/varxel/harvest.mjs",
-    "promote": "node tools/varxel/promote.mjs"
+    "promote": "node tools/varxel/promote.mjs",
+    "publish-portfolio": "node tools/publish-portfolio.mjs"
   }
 }

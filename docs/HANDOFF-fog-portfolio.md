@@ -20,6 +20,14 @@ Last updated 2026-10-13. Read this first if you are an AI picking the work up.
    - `assets/css/fog.css` (base + Fog tokens + page styles) and `assets/js/fog.js` (renders home / project / version / process; loads docs.private.js only on localhost).
    - `.gitignore`: docs.private.js, assets/shots-private/, site-dist/, Prototypes/md-shots/.
 
+## Work log (2026-10-13, day session: Giuseppe said finish, review, publish the portfolio to main, deploy the wiki to Cloudflare; he checks in the afternoon)
+- [x] Local review of the Fog pages (home, 15 project pages, Sasha versions, Process, phone width): no broken images, no overflow.
+- [x] `tools/build-site.mjs` now has two targets: `lab` (site-dist/, unchanged role) and `portfolio` (site-portfolio/: portfolio.html + index.html alias, process, cv, business cards, work/, Fog assets, images, videos, shots, public play builds; NO lab.html, NO VarXel catalogue). Checks every relative link and fails if preview data leaks.
+- [x] Public-mode test of site-portfolio: Sasha shows only v1 and v2, no wiki links, no "not published".
+- [x] `tools/publish-portfolio.mjs` + `npm run publish-portfolio`: builds, then commits site-portfolio as the whole content of `main` (one normal commit on top of main's history, so `git revert` undoes it) and pushes.
+- [ ] Publish to main, then verify https://varxael.github.io/ live.
+- [ ] Wiki review + commit + deploy to Cloudflare (never into main).
+
 ## Next steps (in order)
 1. Open it locally: start the "static" preview (python http.server 8731 in the repo root) and visit `http://localhost:8731/portfolio.html`, `/work/project-sasha/`, `/work/project-sasha/#v7`, `/process.html`. Check for console errors, broken images, layout at phone width. Fix what is broken.
 2. `tools/build-site.mjs` allowlist does NOT yet include the new files: add `process.html`, `work/` (deep), `assets/css/fog.css`, `assets/js/fog.js`, `assets/js/docs.js`, `assets/shots/` (deep). Never add docs.private.js or shots-private.
