@@ -15,6 +15,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { entries as varxelEntries, PORTFOLIO_LIST } from './varxel/lib.mjs';   // builds live on VarXel entries (project cards)
 
@@ -290,6 +291,8 @@ window.VARXEL = ${JSON.stringify(list.map(e => shape(e, keep)), null, 1)};
     else if (!fs.existsSync(to)) console.warn(`  ! missing image "${img}": put it in ${path.join(SRC, 'Assets')}`);
   }
   console.log(`built ${Object.keys(projects).length} projects (${all.length - Object.keys(projects).length} unpublished kept private), ${pub.size}/${ents.length} entries online, ${lab.length} lab specimen(s), ${pages} play page(s), ${copied} image(s) copied, ${Date.now() - t0}ms`);
+  /* project pages, versions and the Fog page shells */
+  execFileSync(process.execPath, [path.join(ROOT, 'tools/build-docs.mjs')], { stdio: 'inherit' });
 }
 const plainLines = md => (md || '').replace(/\s*\n\s*/g, ' ').trim();
 /* Profile.md and Experience.md as data, so pages other than portfolio.html can render them */
@@ -314,7 +317,7 @@ function experienceData(exp) {
 }
 function inject(html, name, content) {
   const re = new RegExp(`(<!-- content:${name} -->)[\\s\\S]*?(<!-- /content:${name} -->)`);
-  if (!re.test(html)) throw new Error(`portfolio.html is missing the <!-- content:${name} --> markers`);
+  if (!re.test(html)) return html;   // the Fog portfolio.html (tools/build-docs.mjs) reads content.js instead of markers
   return html.replace(re, (_, a, b) => a + content + b);
 }
 

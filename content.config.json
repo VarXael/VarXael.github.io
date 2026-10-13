@@ -5,5 +5,11 @@
   "gh": "C:/Program Files/GitHub CLI/gh.exe",
   "githubUser": "VarXael",
   "siteRepo": "VarXael/VarXel-Lab",
-  "vault": "D:/Vaults/Obsidian_MainVault/VarXel"
+  "vault": "D:/Vaults/Obsidian_MainVault/VarXel",
+  "shotAliases": {
+    "ProjectSasha": {
+      "v1": "proto",
+      "v2": "master"
+    }
+  }
 }

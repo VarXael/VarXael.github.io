@@ -12,3 +12,7 @@ Prototypes/md-shots/
 
 # the built public site (tools/build-site.mjs); publish pushes this folder, not the repo
 site-dist/
+
+# Fog portfolio preview data (tools/build-docs.mjs): everything, including what is not published
+assets/js/docs.private.js
+assets/shots-private/
