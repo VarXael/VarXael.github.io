@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single-Sided Business Card PNG Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Include the html2canvas library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --card-width: 8.5cm;
+            --card-height: 5.5cm;
+            --font-family: 'Poppins', sans-serif;
+            --bg-color: #1e1e1f;
+            --primary-text-color: #f1f1f1;
+            --accent-color: #00cc88;
+            --light-gray: #a9a9a9; 
+        }
+
+        /* --- Page & Button Setup --- */
+        body {
+            font-family: var(--font-family);
+            background-color: #555;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .download-button {
+            font-family: var(--font-family);
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+        .download-button:hover { transform: translateY(-2px); }
+
+        /* --- Final Card Layout --- */
+        .card {
+            width: var(--card-width);
+            height: var(--card-height);
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 15px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .photo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .identity .name {
+            font-size: 13pt;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .identity .title {
+            font-size: 8pt;
+            font-weight: 500;
+            color: var(--accent-color);
+            margin: 2px 0 0 0;
+        }
+        
+        .content-section {
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            padding-top: 8px;
+            align-items: flex-start;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* Adjusted gap */
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 8pt;
+        }
+        .contact-item .icon {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .qr-code {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+        }
+        .website-url {
+            font-size: 8pt;
+            color: var(--primary-text-color);
+        }
+        
+        .footer {
+            flex-shrink: 0;
+            text-align: center;
+            padding-top: 6px;
+            margin-top: auto;
+        }
+        .footer p {
+            font-size: 7.5pt;
+            font-weight: 500;
+            color: var(--light-gray);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <button id="download-btn" class="download-button">Download Card as PNG</button>
+
+    <!-- Single-Sided Card -->
+    <div id="single-card" class="card">
+        <div class="header-section">
+            <img src="./assets/images/about.png" alt="Photo of Giuseppe" class="photo">
+            <div class="identity">
+                <h1 class="name">Giuseppe Luigi Alfieri</h1>
+                <p class="title">Technical Game Designer</p>
+            </div>
+        </div>
+        <div class="content-section">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                    <span>+39 3927207595</span>
+                </div>
+                <div class="contact-item">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z" /></svg>
+                    <span>giuseppeluigi.alfieri@gmail.com</span>
+                </div>
+                <!-- === GITHUB LINK ADDED HERE === -->
+                <div class="contact-item">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21V19.21C6.73,19.64 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.83,16.41C14.17,16.72 14.5,17.33 14.5,18.26V21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" /></svg>
+                    <span>github.com/VarXael</span>
+                </div>
+            </div>
+            <div class="qr-section">
+                <img src="./assets/images/qr-code.png" alt="QR Code for Portfolio" class="qr-code">
+                <p class="website-url">varxael.github.io</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Happy to talk about anything Unreal Engine :)</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('download-btn').addEventListener('click', () => {
+            const cardElement = document.getElementById('single-card');
+            const options = { 
+                scale: 4, 
+                useCORS: true, 
+                backgroundColor: '#1e1e1f' 
+            };
+
+            html2canvas(cardElement, options).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'business_card_single_sided.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
+
+</body>
+</html>

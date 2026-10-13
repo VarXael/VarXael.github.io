@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giuseppe Alfieri — Prototype 7: Star Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+<style>
+/* PROTOTYPE 7: THE STAR MAP (Structured Node Network)
+   Right side: Interactive constellation canvas.
+   Left side: Dynamic, full-bleed project reveal based on hovered node.
+   Colors: Void, Bone, Sacred Gold.
+*/
+:root {
+  --void: #050506;
+  --bone: #e3ded5;
+  --dim: rgba(227, 222, 213, 0.4);
+  --gold: #d4af37;
+  --gold-dim: rgba(212, 175, 55, 0.3);
+  --display: 'Cinzel', serif;
+  --text: 'Inter', sans-serif;
+  --italic: 'Cormorant Garamond', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  background-color: var(--void); 
+  color: var(--bone); 
+  font-family: var(--text); 
+  overflow: hidden; 
+  height: 100vh;
+}
+
+/* Layout Split */
+.container {
+  display: flex; height: 100vh; width: 100vw;
+}
+
+/* Left Side: Dynamic Reveal */
+.left-pane {
+  flex: 1; position: relative; overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.reveal-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(1) brightness(0.3);
+  transition: opacity 0.8s ease, transform 1.5s ease;
+  opacity: 0; transform: scale(1.05);
+}
+.reveal-bg.active {
+  opacity: 1; transform: scale(1);
+}
+
+.left-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(5,5,6,0.9) 0%, rgba(5,5,6,0.4) 100%);
+  z-index: 1;
+}
+
+.left-content {
+  position: relative; z-index: 2; padding: 80px 60px; height: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+/* Default Hero State (when nothing hovered) */
+.hero-state {
+  position: absolute; inset: 0; padding: 80px 60px;
+  display: flex; flex-direction: column; justify-content: center;
+  transition: opacity 0.5s ease; z-index: 3; pointer-events: none;
+}
+.hero-state.hidden { opacity: 0; }
+.hero-role { font-family: var(--italic); font-size: 1.5rem; color: var(--gold); margin-bottom: 10px; }
+.hero-title { font-family: var(--display); font-size: clamp(3rem, 6vw, 6rem); line-height: 0.9; text-transform: uppercase; }
+.hero-desc { margin-top: 30px; font-size: 1.1rem; color: var(--dim); max-width: 450px; line-height: 1.6; }
+.instruction { margin-top: 60px; font-family: var(--display); font-size: 0.7rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; animation: pulse 2s infinite; }
+
+@keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+/* Project Detail State */
+.project-state {
+  position: absolute; inset: 0; padding: 80px 60px;
+  display: flex; flex-direction: column; justify-content: center;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0; transform: translateX(-20px); z-index: 3; pointer-events: none;
+}
+.project-state.active { opacity: 1; transform: translateX(0); }
+.proj-cat { font-family: var(--italic); font-size: 1.2rem; color: var(--gold); margin-bottom: 10px; }
+.proj-title { font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1; margin-bottom: 24px; text-transform: uppercase; }
+.proj-meta { font-family: var(--display); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase; margin-bottom: 30px; }
+.proj-short { font-size: 1.1rem; color: var(--bone); max-width: 500px; line-height: 1.6; }
+
+/* Right Side: The Star Map */
+.right-pane {
+  flex: 1; position: relative; background: var(--void);
+}
+canvas#starmap {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  cursor: crosshair;
+}
+
+/* Modal from Prototype 5 (User loved it) */
+.modal {
+  position: fixed; inset: 0; background: var(--void); z-index: 100;
+  display: flex; flex-direction: column; overflow-y: auto;
+  opacity: 0; pointer-events: none; transition: opacity 0.5s;
+}
+.modal.open { opacity: 1; pointer-events: auto; }
+.modal-close {
+  position: fixed; top: 40px; right: 60px; background: none; border: none;
+  color: var(--bone); font-family: var(--text); font-size: 0.8rem; letter-spacing: 0.2em;
+  text-transform: uppercase; cursor: pointer; z-index: 110;
+}
+.modal-hero { width: 100%; height: 60vh; position: relative; }
+.modal-hero img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5); }
+.modal-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--void), transparent); }
+.modal-content { padding: 60px; max-width: 1000px; margin: -100px auto 100px; position: relative; z-index: 10; }
+.modal-title { font-family: var(--display); font-size: 4rem; text-transform: uppercase; line-height: 1; margin-bottom: 20px; }
+.modal-meta { font-family: var(--italic); font-size: 1.5rem; color: var(--gold); margin-bottom: 40px; border-bottom: 1px solid var(--dim); padding-bottom: 20px; }
+.modal-text { font-size: 1.2rem; line-height: 1.8; color: var(--bone); margin-bottom: 40px; }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="left-pane">
+    <!-- Image layers for crossfading -->
+    <div id="bg-layers"></div>
+    <div class="left-overlay"></div>
+    
+    <div class="hero-state" id="hero-state">
+      <div class="hero-role">Systems Architect</div>
+      <h1 class="hero-title">Giuseppe<br>Alfieri</h1>
+      <p class="hero-desc">I design games where the systems tell the story, architecting interconnected mechanics where every piece has a reason to exist.</p>
+      <div class="instruction">Explore the Map →</div>
+    </div>
+    
+    <div class="project-state" id="project-state">
+      <div class="proj-cat" id="p-cat">Category</div>
+      <h2 class="proj-title" id="p-title">Project Title</h2>
+      <div class="proj-meta" id="p-meta">Role / Engine</div>
+      <p class="proj-short" id="p-short">Short description goes here.</p>
+      <div class="instruction" style="margin-top: 40px;">Click Node to Inspect</div>
+    </div>
+  </div>
+  
+  <div class="right-pane">
+    <canvas id="starmap"></canvas>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <button class="modal-close" onclick="closeModal()">Close ✕</button>
+  <div class="modal-hero">
+    <img id="modal-img" src="" alt="">
+    <div class="modal-hero-overlay"></div>
+  </div>
+  <div class="modal-content">
+    <h2 class="modal-title" id="modal-title">Title</h2>
+    <div class="modal-meta" id="modal-meta">Role / Engine / Year</div>
+    <div class="modal-text" id="modal-text">Description</div>
+  </div>
+</div>
+
+<script>
+const projects = [
+  {
+    title: 'High on Life', cat: 'Professional', meta: 'Programmer / Unreal / 2025',
+    img: './assets/images/HighOnLife.png',
+    short: 'Nintendo Switch port. Primary reference for the game\'s systems, debugging, and tooling.',
+    long: 'Nintendo Switch port. Over 8 months I became the team\'s primary reference for the game\'s systems — deep C++/Blueprint debugging, internal tooling from scratch, critical subsystems rewritten for Switch stability.',
+    pos: {x: 0.7, y: 0.25}, id: 0
+  },
+  {
+    title: 'Battleship', cat: 'Professional', meta: 'Lead Creator / UEFN / 2023',
+    img: './assets/images/Battleship.jpeg',
+    short: 'A fast-paced strategy game from concept to launch on Fortnite.',
+    long: 'A fast-paced strategy game from concept to launch on Fortnite. Built the entire battleship custom system in Verse — combat grid, ship placement logic, real-time feedback — and led the game design from concept to launch.',
+    pos: {x: 0.45, y: 0.15}, id: 1
+  },
+  {
+    title: 'Sasha', cat: 'Personal', meta: 'Sole Creator / Unreal / 2025',
+    img: './assets/images/ProjectSasha.svg',
+    short: 'A top-down game where scanning IS the entire game. Knowledge is the resource.',
+    long: 'A top-down game where scanning IS the entire game. You pilot an android through a brutalist megastructure that doesn\'t exist until you scan it into being. Knowledge is the resource; every mechanical decision is a memory decision.',
+    pos: {x: 0.35, y: 0.5}, id: 2
+  },
+  {
+    title: 'Cadence', cat: 'Personal', meta: 'Tech Designer / Unreal & Metasound / 2025',
+    img: './assets/images/ProjectCadence.png',
+    short: 'A C++ Unreal plugin where music drives gameplay — a reusable rhythm framework.',
+    long: 'A C++ Unreal plugin where music drives gameplay. Parse a beatmap, map timestamps to actions, fire them in-game at exactly those moments — timing data fully separated from behaviour, so one beatmap can power any genre.',
+    pos: {x: 0.5, y: 0.75}, id: 3
+  },
+  {
+    title: 'Cycle', cat: 'University', meta: 'Director / Unreal / 2021',
+    img: './assets/images/Cycle.png',
+    short: 'Best 3rd-Year at Falmouth. A surrealist puzzle-adventure.',
+    long: 'Best 3rd-Year at Falmouth, shown at the G7 Summit. A surrealist puzzle-adventure built by two artists and me. I learned Unreal in August and built every system in the engine.',
+    pos: {x: 0.75, y: 0.65}, id: 4
+  },
+  {
+    title: 'CRT.exe', cat: 'Game Jam', meta: 'Project Lead / Godot / 2026',
+    img: './assets/images/CRTexe.svg',
+    short: 'Led a team of 8 by designing the game around how the team could function.',
+    long: 'Led a team of 8 by designing the game around how the team could function. Each person owned one area — one mechanic, one hidden code, no dependencies. The structure of the game was the structure of the team.',
+    pos: {x: 0.25, y: 0.8}, id: 5
+  }
+];
+
+// Define lineage/connections (Pairs of IDs)
+const links = [
+  [0, 1], // Pro to Pro
+  [2, 3], // Personal to Personal
+  [4, 5], // Indie to Indie
+  [1, 2], // Cross link
+  [3, 4], // Cross link
+  [0, 4]  // Cross link
+];
+
+// Prepare background images for crossfading
+const bgLayers = document.getElementById('bg-layers');
+const bgMap = {};
+projects.forEach(p => {
+  const img = document.createElement('img');
+  img.src = p.img;
+  img.className = 'reveal-bg';
+  bgLayers.appendChild(img);
+  bgMap[p.id] = img;
+});
+
+// Canvas Setup
+const canvas = document.getElementById('starmap');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  W = canvas.width = rect.width;
+  H = canvas.height = rect.height;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Interaction state
+let mouse = {x: -1000, y: -1000};
+let hoveredNode = null;
+let activeNode = null; // Currently displayed on left
+let time = 0;
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = e.clientX - rect.left;
+  mouse.y = e.clientY - rect.top;
+});
+canvas.addEventListener('mouseleave', () => {
+  mouse.x = -1000; mouse.y = -1000;
+});
+canvas.addEventListener('click', () => {
+  if (hoveredNode !== null) openModal(hoveredNode);
+});
+
+const heroState = document.getElementById('hero-state');
+const projState = document.getElementById('project-state');
+
+function setReveal(id) {
+  if (activeNode === id) return;
+  activeNode = id;
+  
+  // Hide all images
+  Object.values(bgMap).forEach(img => img.classList.remove('active'));
+  
+  if (id === null) {
+    heroState.classList.remove('hidden');
+    projState.classList.remove('active');
+  } else {
+    heroState.classList.add('hidden');
+    projState.classList.add('active');
+    bgMap[id].classList.add('active');
+    
+    const p = projects[id];
+    document.getElementById('p-cat').textContent = p.cat;
+    document.getElementById('p-title').textContent = p.title;
+    document.getElementById('p-meta').textContent = p.meta;
+    document.getElementById('p-short').textContent = p.short;
+  }
+}
+
+function draw() {
+  time += 0.01;
+  ctx.clearRect(0, 0, W, H);
+  
+  // Update hover detection
+  let newHover = null;
+  projects.forEach(p => {
+    const px = p.pos.x * W;
+    const py = p.pos.y * H;
+    const dist = Math.hypot(px - mouse.x, py - mouse.y);
+    if (dist < 40) newHover = p.id;
+  });
+  
+  if (newHover !== hoveredNode) {
+    hoveredNode = newHover;
+    setReveal(hoveredNode);
+  }
+
+  // Draw Links
+  links.forEach(([a, b]) => {
+    const pA = projects[a], pB = projects[b];
+    const ax = pA.pos.x * W, ay = pA.pos.y * H;
+    const bx = pB.pos.x * W, by = pB.pos.y * H;
+    
+    let isHoveredLink = (hoveredNode === a || hoveredNode === b);
+    
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.lineTo(bx, by);
+    if (isHoveredLink) {
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)'; // Gold glow
+      ctx.lineWidth = 1.5;
+    } else {
+      ctx.strokeStyle = 'rgba(227, 222, 213, 0.08)'; // Dim bone
+      ctx.lineWidth = 1;
+    }
+    ctx.stroke();
+  });
+
+  // Draw Nodes
+  projects.forEach(p => {
+    const px = p.pos.x * W;
+    const py = p.pos.y * H + Math.sin(time + p.id)*5; // Subtle floating
+    
+    const isHovered = (hoveredNode === p.id);
+    
+    // Outer glow ring
+    ctx.beginPath();
+    ctx.arc(px, py, isHovered ? 24 : 14, 0, Math.PI*2);
+    ctx.fillStyle = isHovered ? 'rgba(212, 175, 55, 0.1)' : 'transparent';
+    ctx.fill();
+    if (isHovered) {
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Inner core
+    ctx.beginPath();
+    ctx.arc(px, py, isHovered ? 5 : 3, 0, Math.PI*2);
+    ctx.fillStyle = isHovered ? '#d4af37' : '#e3ded5';
+    ctx.fill();
+
+    // Label
+    ctx.font = '12px "Cinzel", serif';
+    ctx.fillStyle = isHovered ? '#d4af37' : 'rgba(227, 222, 213, 0.6)';
+    ctx.textAlign = 'center';
+    ctx.fillText(p.title.toUpperCase(), px, py + (isHovered ? 40 : 30));
+  });
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+// Modal Logic
+const modal = document.getElementById('modal');
+function openModal(id) {
+  const p = projects[id];
+  document.getElementById('modal-img').src = p.img;
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-meta').textContent = p.meta;
+  document.getElementById('modal-text').textContent = p.long;
+  modal.classList.add('open');
+}
+function closeModal() {
+  modal.classList.remove('open');
+}
+</script>
+</body>
+</html>

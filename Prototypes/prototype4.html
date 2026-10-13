@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giuseppe Alfieri — The Scan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* PROTOTYPE 4 — "THE SCAN". A completely different layout: no card grid.
+   The void; works as giant carved names; hovering one SCANS it into being
+   (full-bleed image floods in + a unique sacred sigil draws + data surfaces);
+   everything else stays dark. Embodies Giuseppe's ethos: the world doesn't
+   exist until you scan it into memory. Same skin: bone/void/gold, Cinzel + EB Garamond. */
+:root{--void:#070709;--bone:#e9e4d7;--dim:rgba(233,228,215,.5);--faint:rgba(233,228,215,.12);
+  --hair:rgba(233,228,215,.06);--gold:#c9a96e;--gold-soft:rgba(201,169,110,.6);
+  --display:'Cinzel',Georgia,serif;--text:'EB Garamond',Georgia,serif;}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--bone);font-family:var(--text);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* full-bleed scan reveal layer */
+.veil{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;
+  filter:grayscale(1) contrast(1.05) brightness(.5);opacity:0;transition:opacity .7s ease, transform 6s ease;transform:scale(1.04)}
+.veil.on{opacity:.6;transform:scale(1)}
+.veilshade{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 40%,transparent,rgba(7,7,9,.55) 60%,rgba(7,7,9,.92))}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(transparent 50%,rgba(0,0,0,.18) 50%);background-size:100% 3px}
+.frame{position:fixed;inset:18px;border:1px solid var(--hair);z-index:6;pointer-events:none}
+
+/* floating sigil that swaps per scanned work */
+.sigilbox{position:fixed;z-index:2;top:50%;right:7vw;transform:translateY(-50%);
+  width:34vmin;height:34vmin;opacity:0;transition:opacity .6s ease;pointer-events:none}
+.sigilbox.on{opacity:.9}
+.sigilbox svg{width:100%;height:100%;stroke:var(--gold-soft);fill:none;stroke-width:.5;
+  animation:rot 90s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:8;display:flex;justify-content:space-between;
+  align-items:center;padding:24px 44px;mix-blend-mode:difference}
+.logo{font-family:var(--display);font-weight:600;font-size:.8rem;letter-spacing:.34em;text-transform:uppercase}
+.nlinks{display:flex;gap:26px}
+.nlinks a{font-family:var(--display);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:#fff}
+@media(max-width:680px){.nlinks a.hide{display:none}}
+
+/* hero */
+.hero{position:relative;z-index:3;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 8vw}
+.kick{font-family:var(--display);font-size:.62rem;letter-spacing:.6em;color:var(--gold-soft);text-transform:uppercase;margin-bottom:24px}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(3rem,12vw,9rem);line-height:.86;letter-spacing:.02em;text-transform:uppercase}
+.hero .sub{font-style:italic;font-size:clamp(1.1rem,2.4vw,1.5rem);color:var(--dim);margin-top:28px;max-width:560px}
+.scan-cue{margin-top:60px;font-family:var(--display);font-size:.6rem;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;
+  display:flex;align-items:center;gap:14px}
+.scan-cue .ln{width:60px;height:1px;background:var(--gold-soft);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3;width:40px}50%{opacity:1;width:80px}}
+
+/* the index of works */
+.archive{position:relative;z-index:3;padding:14vh 0 16vh}
+.arc-head{padding:0 8vw;display:flex;align-items:baseline;gap:18px;margin-bottom:5vh}
+.arc-head .n{font-family:var(--display);font-size:.7rem;letter-spacing:.34em;color:var(--gold-soft)}
+.arc-head h2{font-family:var(--display);font-weight:500;font-size:1.2rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
+.work{position:relative;display:flex;align-items:center;gap:3vw;padding:2.4vh 8vw;cursor:pointer;
+  border-top:1px solid var(--hair);transition:padding .45s ease}
+.work:last-child{border-bottom:1px solid var(--hair)}
+.archive.focus .work{opacity:.32;transition:opacity .45s}
+.archive.focus .work.on{opacity:1}
+.work .idx{font-family:var(--display);font-size:.66rem;letter-spacing:.2em;color:var(--gold-soft);width:3ch;flex-shrink:0}
+.work .ttl{font-family:var(--display);font-weight:600;font-size:clamp(2rem,6.4vw,5rem);line-height:.95;
+  letter-spacing:.01em;text-transform:uppercase;color:var(--dim);transition:color .45s, transform .45s;transform-origin:left}
+.work.on .ttl{color:var(--bone);transform:translateX(1.2vw)}
+.work .info{margin-left:auto;text-align:right;flex-shrink:0;opacity:0;transform:translateX(-12px);transition:.45s}
+.work.on .info{opacity:1;transform:none}
+.work .info .cat{font-family:var(--display);font-size:.56rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase}
+.work .info .yr{font-style:italic;color:var(--dim);font-size:.95rem;margin-top:4px}
+.work .arrow{position:absolute;right:8vw;bottom:1.6vh;font-family:var(--display);font-size:.55rem;letter-spacing:.3em;
+  color:var(--gold);opacity:0;transition:.45s;text-transform:uppercase}
+.work.on .arrow{opacity:.8}
+
+/* detail (full reveal) */
+.full{position:fixed;inset:0;z-index:30;display:none;background:var(--void)}
+.full.open{display:block}
+.full .bg{position:absolute;inset:0;background-size:cover;background-position:center;
+  filter:grayscale(.65) contrast(1.05) brightness(.42)}
+.full .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,7,9,.96) 38%,rgba(7,7,9,.55))}
+.full .inner{position:relative;height:100%;overflow-y:auto;padding:13vh 8vw;max-width:840px;animation:rise .5s ease}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.full .cat{font-family:var(--display);font-size:.6rem;letter-spacing:.4em;color:var(--gold-soft);text-transform:uppercase}
+.full h3{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,7vw,5rem);letter-spacing:.02em;
+  text-transform:uppercase;line-height:.92;margin:16px 0 22px}
+.full .meta{display:flex;gap:30px;font-family:var(--display);font-size:.56rem;letter-spacing:.2em;color:var(--dim);
+  text-transform:uppercase;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:16px 0;margin-bottom:26px}
+.full .meta b{display:block;color:var(--bone);font-weight:400;font-size:.78rem;margin-top:6px}
+.full .syn{font-size:1.15rem;line-height:1.65;max-width:620px;margin-bottom:24px}
+.full .role{border-left:1px solid var(--gold-soft);padding-left:18px;margin-bottom:16px;color:var(--dim);font-size:1rem;max-width:620px}
+.full .role b{color:var(--bone);font-weight:400}
+.full .acts{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+.btn{font-family:var(--display);font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;
+  border:1px solid var(--gold-soft);color:var(--gold);padding:12px 22px;cursor:pointer;transition:.3s;background:none}
+.btn:hover{background:var(--gold);color:var(--void)}
+.btn.g{border-color:var(--faint);color:var(--dim)}.btn.g:hover{color:var(--bone);border-color:var(--bone);background:none}
+.full .close{position:absolute;top:5vh;right:8vw;z-index:5}
+
+/* contact strip */
+.contact{position:relative;z-index:3;text-align:center;padding:0 8vw 16vh}
+.contact h2{font-family:var(--display);font-weight:500;font-size:clamp(1.6rem,5vw,2.8rem);letter-spacing:.12em;text-transform:uppercase}
+.contact .mail{font-style:italic;font-size:1.25rem;color:var(--gold);margin:22px 0 30px;cursor:pointer;border-bottom:1px solid var(--gold-soft);display:inline-block}
+.contact .acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cmsg{font-family:var(--display);font-size:.55rem;letter-spacing:.26em;color:var(--gold);text-transform:uppercase;height:14px;margin-top:18px;opacity:0;transition:.3s}
+@media(max-width:680px){.work .info{display:none}.sigilbox{display:none}}
+</style>
+</head>
+<body>
+<div class="veil" id="veil"></div><div class="veilshade"></div><div class="grain"></div>
+<div class="sigilbox" id="sigilbox"></div><div class="frame"></div>
+
+<nav>
+  <div class="logo">Giuseppe Alfieri</div>
+  <div class="nlinks">
+    <a class="hide" href="https://github.com/VarXael" target="_blank">GitHub</a>
+    <a class="hide" href="./cv.html" target="_blank">CV</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="kick">Systems Architect · Game Designer</div>
+  <h1>Giuseppe<br>Alfieri</h1>
+  <p class="sub">"The world does not exist until you scan it into memory."</p>
+  <a class="scan-cue" href="#archive"><span class="ln"></span> Scan the archive</a>
+</section>
+
+<section class="archive" id="archive">
+  <div class="arc-head"><span class="n">∴</span><h2>The Archive · attend to reveal</h2></div>
+  <div id="list"></div>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Build something strange.</h2>
+  <div class="mail" id="mail" data-mail="giuseppeluigi.alfieri@gmail.com">giuseppeluigi.alfieri@gmail.com</div>
+  <div class="acts">
+    <a class="btn" href="https://github.com/VarXael" target="_blank">GitHub</a>
+    <a class="btn g" href="./cv.html" target="_blank">Curriculum</a>
+  </div>
+  <div class="cmsg" id="cmsg">— copied —</div>
+</section>
+
+<div class="full" id="full"><div class="bg" id="fbg"></div><div class="shade"></div>
+  <div class="inner" id="finner"></div><button class="btn close" onclick="shut()">✕ Close</button></div>
+
+<script>
+const P=[
+ {t:'High on Life',cat:'Professional',yr:2025,eng:'Unreal / C++',role:'Programmer & Tech Designer',img:'./assets/images/HighOnLife.png',
+  syn:"Nintendo Switch port. Over 8 months I became the team's primary reference for the game's systems — deep C++/Blueprint debugging, internal tooling from scratch, critical subsystems rewritten for Switch stability.",
+  c:[['Deep Debugging','A division-by-zero killing the entire collision matrix; Ubergraph memory leaks causing random crashes on level transitions.']],l:[['Video','https://www.youtube.com/watch?v=qk2y4clYe9o']]},
+ {t:'Cadence',cat:'Personal',yr:2025,eng:'Unreal / C++ / Metasound',role:'Sole Systems Architect',img:'./assets/images/ProjectCadence.png',
+  syn:"A C++ Unreal plugin where music drives gameplay. Parse a beatmap, map timestamps to actions, fire them in-game at exactly those moments — timing data fully separated from behaviour, so one beatmap can power any genre.",
+  c:[['Architecture','C++ timeline driven by Metasound, packaged as a self-contained Engine Plugin.'],['Performance','Lightweight UObjects instead of Actors — no spawn cost, built for pooling.']],l:[['Video','https://www.youtube.com/watch?v=GeYIX1rnFPA']]},
+ {t:'Sasha',cat:'Personal',yr:2025,eng:'Unreal / C++',role:'Sole Creator',img:'./assets/images/ProjectSasha.svg',
+  syn:"A top-down game where scanning IS the entire game. You pilot an android through a brutalist megastructure that doesn't exist until you scan it into being. Knowledge is the resource; every mechanical decision is a memory decision.",
+  c:[['Scanning','BFS flood-fill waves constrained by radius — an organic reveal, not a cheap radial pop.']],l:[]},
+ {t:'Cycle',cat:'University',yr:2021,eng:'Unreal',role:'Director & Sole Programmer',img:'./assets/images/Cycle.png',
+  syn:"Best 3rd-Year at Falmouth, shown at the G7 Summit. A surrealist puzzle-adventure built by two artists and me. I learned Unreal in August and built every system in the engine.",
+  c:[['Seamless Transitions','Players teleported between areas without ever noticing — everyone felt subtly disoriented, nobody knew why.']],l:[['itch.io','https://wrong-world-studios.itch.io/cycle']]},
+ {t:'CRT.exe',cat:'Game Jam',yr:2026,eng:'Godot',role:'Project Lead',img:'./assets/images/CRTexe.svg',
+  syn:"Led a team of 8 by designing the game around how the team could function. Each person owned one area — one mechanic, one hidden code, no dependencies. The structure of the game was the structure of the team.",
+  c:[['Team as System','Self-contained areas enabling parallel independent development with no bottlenecks.']],l:[['Play','https://gianluca-iacchini.itch.io/crt-exe']]},
+ {t:'Battleship',cat:'Professional',yr:2023,eng:'UEFN / Verse',role:'Lead Creator & Verse Dev',img:'./assets/images/Battleship.jpeg',
+  syn:"A fast-paced strategy game from concept to launch on Fortnite. Built the entire battleship custom system in Verse — combat grid, ship placement logic, real-time feedback — and led the game design.",
+  c:[['Core Gameplay','All primary systems developed in Verse on the Fortnite platform.']],l:[['Fortnite','https://www.fortnite.com/@untoldgames/1028-2740-2494']]}
+];
+const roman=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+
+// deterministic sacred sigil per project
+function sigil(i){const sides=3+(i%5),r2=42,r1=30,r3=18;let p='';
+  for(let k=0;k<sides;k++){const a=k/sides*6.2832-1.5708;p+=(k?'L':'M')+(50+Math.cos(a)*r2).toFixed(1)+' '+(50+Math.sin(a)*r2).toFixed(1);}p+='Z';
+  let spokes='';for(let k=0;k<sides*2;k++){const a=k/(sides*2)*6.2832;spokes+=`<line x1="50" y1="50" x2="${(50+Math.cos(a)*r2).toFixed(1)}" y2="${(50+Math.sin(a)*r2).toFixed(1)}" opacity=".4"/>`;}
+  return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="${r2}"/><circle cx="50" cy="50" r="${r1}" style="stroke:var(--gold)"/><circle cx="50" cy="50" r="${r3}"/><path d="${p}"/><path d="${p}" transform="rotate(${180/sides} 50 50)" opacity=".5"/>${spokes}</svg>`;}
+
+const list=document.getElementById('list'),veil=document.getElementById('veil'),
+ sb=document.getElementById('sigilbox'),archive=document.getElementById('archive');
+P.forEach((p,i)=>{
+  const w=document.createElement('div');w.className='work';
+  w.innerHTML=`<span class="idx">${roman[i]}</span><span class="ttl">${p.t}</span>
+    <span class="info"><span class="cat">${p.cat}</span><span class="yr">${p.eng} · ${p.yr}</span></span>
+    <span class="arrow">Reveal →</span>`;
+  w.addEventListener('mouseenter',()=>{
+    archive.classList.add('focus');w.classList.add('on');
+    veil.style.backgroundImage=`url("${p.img}")`;veil.classList.add('on');
+    sb.innerHTML=sigil(i);sb.classList.add('on');});
+  w.addEventListener('click',()=>open(p,i));
+  list.appendChild(w);
+});
+archive.addEventListener('mouseleave',()=>{archive.classList.remove('focus');
+  list.querySelectorAll('.work').forEach(x=>x.classList.remove('on'));
+  veil.classList.remove('on');sb.classList.remove('on');});
+
+const full=document.getElementById('full'),finner=document.getElementById('finner'),fbg=document.getElementById('fbg');
+function open(p,i){
+  fbg.style.backgroundImage=`url("${p.img}")`;
+  finner.innerHTML=`<div class="cat">${p.cat} · ${p.yr}</div><h3>${p.t}</h3>
+    <div class="meta"><div>Year<b>${p.yr}</b></div><div>Engine<b>${p.eng}</b></div><div>Role<b>${p.role}</b></div></div>
+    <p class="syn">${p.syn}</p>
+    ${p.c.map(c=>`<p class="role"><b>${c[0]}.</b> ${c[1]}</p>`).join('')}
+    ${p.l.length?`<div class="acts">${p.l.map(l=>`<a class="btn" href="${l[1]}" target="_blank">${l[0]}</a>`).join('')}</div>`:''}`;
+  full.classList.add('open');
+}
+function shut(){full.classList.remove('open');}
+
+const mail=document.getElementById('mail');
+mail.onclick=()=>{navigator.clipboard?.writeText(mail.dataset.mail);
+  const m=document.getElementById('cmsg');m.style.opacity=1;setTimeout(()=>m.style.opacity=0,1800);};
+</script>
+</body>
+</html>
