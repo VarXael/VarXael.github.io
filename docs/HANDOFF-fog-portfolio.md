@@ -25,7 +25,7 @@ Last updated 2026-10-13. Read this first if you are an AI picking the work up.
 - [x] `tools/build-site.mjs` now has two targets: `lab` (site-dist/, unchanged role) and `portfolio` (site-portfolio/: portfolio.html + index.html alias, process, cv, business cards, work/, Fog assets, images, videos, shots, public play builds; NO lab.html, NO VarXel catalogue). Checks every relative link and fails if preview data leaks.
 - [x] Public-mode test of site-portfolio: Sasha shows only v1 and v2, no wiki links, no "not published".
 - [x] `tools/publish-portfolio.mjs` + `npm run publish-portfolio`: builds, then commits site-portfolio as the whole content of `main` (one normal commit on top of main's history, so `git revert` undoes it) and pushes.
-- [ ] Publish to main, then verify https://varxael.github.io/ live.
+- [x] Published to main: commit a5a554f on VarXael/VarXael.github.io (previous main was 95de618, the old portfolio). Verified live: all pages 200, Sasha renders with v1/v2, no preview data, lab.html/Prototypes/docs.private.js 404. UNDO: revert a5a554f on main (or push 95de618 back).
 - [ ] Wiki review + commit + deploy to Cloudflare (never into main).
 
 ## Next steps (in order)
