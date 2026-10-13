@@ -6,3 +6,9 @@ play/_private/
 
 # local copy of the old site (its history is on main); kept on this PC only
 OLD PORTFOLIO/
+
+# vault screenshots used by the markdown mockups
+Prototypes/md-shots/
+
+# the built public site (tools/build-site.mjs); publish pushes this folder, not the repo
+site-dist/
