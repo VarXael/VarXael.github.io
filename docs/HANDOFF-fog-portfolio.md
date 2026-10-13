@@ -26,13 +26,23 @@ Last updated 2026-10-13. Read this first if you are an AI picking the work up.
 - [x] Public-mode test of site-portfolio: Sasha shows only v1 and v2, no wiki links, no "not published".
 - [x] `tools/publish-portfolio.mjs` + `npm run publish-portfolio`: builds, then commits site-portfolio as the whole content of `main` (one normal commit on top of main's history, so `git revert` undoes it) and pushes.
 - [x] Published to main: commit a5a554f on VarXael/VarXael.github.io (previous main was 95de618, the old portfolio). Verified live: all pages 200, Sasha renders with v1/v2, no preview data, lab.html/Prototypes/docs.private.js 404. UNDO: revert a5a554f on main (or push 95de618 back).
-- [ ] Wiki review + commit + deploy to Cloudflare (never into main).
+- [x] Wiki reviewed end to end with `wrangler dev` (login, wrong password, all page types, search, Sasha v11.2 game boots in the browser, download route answers 503 until GITHUB_TOKEN is set). Committed 16c476f, pushed to VarXael/VarXel-Wiki, deployed to Cloudflare (version 366d67e8).
+- [x] Public game build checked live: https://varxael.github.io/play/ProjectSasha/v2/ boots.
+- [x] `content-pipeline` fast-forwarded to `fog-portfolio` (same commits). Work continues on `content-pipeline`.
+- [!] ACCIDENT: a shell command with backticks ran `npm run publish-portfolio` and `npm run publish` by mistake. main was unchanged (nothing new). The LAB (VarXael/VarXel-Lab) was republished as 9b01e74: its portfolio.html is now the Fog portfolio, plus process.html and work/. Nothing private shipped (same allowlist checks). Tell Giuseppe; revert only if he wants (rebuild lab from commit b8bab3d's files and force-push).
 
-## Next steps (in order)
-1. Open it locally: start the "static" preview (python http.server 8731 in the repo root) and visit `http://localhost:8731/portfolio.html`, `/work/project-sasha/`, `/work/project-sasha/#v7`, `/process.html`. Check for console errors, broken images, layout at phone width. Fix what is broken.
-2. `tools/build-site.mjs` allowlist does NOT yet include the new files: add `process.html`, `work/` (deep), `assets/css/fog.css`, `assets/js/fog.js`, `assets/js/docs.js`, `assets/shots/` (deep). Never add docs.private.js or shots-private.
-3. Show Giuseppe; iterate on the look. Do not publish/merge this branch until he says so (it would replace the lab's portfolio.html; the main site varxael.github.io is the separate `main` branch and is untouched).
-4. Later: he decides which logs become public (add `public: true` + `summary:` in the vault log). Session logs quote conversations: never publish them whole.
+## Status: DONE for this session. What is left is his call
+- Windows downloads on the wiki: he must create a fine-grained GitHub token (Contents read-only) and run `npx wrangler secret put GITHUB_TOKEN` in VarXel-Wiki. See its HANDBOOK.
+- Optional: delete branch `content-pipeline` from the PUBLIC repo VarXael/VarXael.github.io (backed up in VarXael/Portfolio-Source). The safety filter refused to do it without his explicit OK.
+- Choose which Sasha logs become public (add `public: true` + `summary:` to the log in the vault); then `npm run publish-portfolio`. Session logs quote conversations: never publish them whole.
+- Feedback on the live look, then iterate.
+
+## Commands
+- Local preview with everything (marked "not published"): launch config "static", open http://localhost:8731/portfolio.html
+- Publish the portfolio (varxael.github.io): `npm run publish-portfolio`
+- Publish the lab (varxael.github.io/VarXel-Lab): `npm run publish`
+- Undo the portfolio publish: revert a5a554f on main.
+- Shell gotcha: never put backticks inside a double-quoted `node -e "..."` in bash; they run as commands. Use the Edit tool or a heredoc with a quoted delimiter.
 
 ## Rules to remember
 - Vault: AI only edits AI-made files; his notes are read-only. Roadmap is `D:/Vaults/Obsidian_MainVault/VarXel/Roadmap.md`.
