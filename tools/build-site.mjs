@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FOG = ['assets/css/fog.css', 'assets/js/content.js', 'assets/js/docs.js', 'assets/js/fog.js'];
-const FRAMES = ['frames.html', 'assets/css/frames.css', 'assets/css/frames-site.css', 'assets/js/frames-engine.js', 'assets/js/frames.js'];   // the Frames look, a parallel entry (docs/FRAMES-portfolio.md)
+const FRAMES = ['frames.html', 'assets/css/frames-site.css', 'assets/js/frames.js'];   // the Frames look, a parallel entry (docs/FRAMES-portfolio.md)
 const MEDIA = [
   ['assets/images', { deep: false }],              // top-level images only: Template/ and Unresized Old Images/ stay private
   ['assets/videos', { deep: false }],

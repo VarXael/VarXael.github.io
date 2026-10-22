@@ -1,46 +1,37 @@
 # Frames portfolio (parallel entry: `frames.html`)
 
-Started 2026-10-22 (chat Portfolio 00). The Frames kit (`C:/Users/User/Downloads/frames-kit`, copy in `VarXel-OS/design/frames-kit`) applied to the portfolio. Nothing of the Fog site is removed; `portfolio.html` and `work/` keep working. Giuseppe decides later whether `frames.html` becomes `index.html`.
+Started 2026-10-22 (chat Portfolio 00). `frames.html` is a port of Giuseppe's Claude Design file `Portfolio Frames v22.dc.html` (handoff folder: `C:/Users/User/Downloads/handoff-v22`, read its `HANDOFF.md`) to plain HTML, CSS and JS, with the content coming from the vault instead of the constants in the mockup. Nothing of the Fog site is removed; `portfolio.html` and `work/` keep working. Giuseppe decides later whether `frames.html` becomes `index.html`.
 
-The kit's named reference, `Portfolio Frames v22.dc.html`, is not on this PC (not in Downloads, Desktop, this repo, the VarXel-OS copy or any Claude Code chat; it lives in Claude Design, which needs a sign-in). The kit's README, CSS and JS were used as the reference.
+The first attempt of the day was built from `frames-kit` alone (a reduced extraction) and was wrong: wrong layout, missing animations. It was replaced by this port in the same session.
 
-## What the portfolio shows (from the current site and the vault)
+## What is ported, one to one
 
-Data already generated from the vault by `tools/build-content.mjs` and `tools/build-docs.mjs`:
+- Eight pages in a line: four role pages (0 to 3), Home (4), Work (5), Lab (6), About (7). Arrows and Q/E move along the line, Esc closes a project then goes Home, up/down step through projects in a document, Enter opens the selected Lab project.
+- Ten persistent windows (`L A B N W Lb Ls Ab Ar X`) with the reference's rect maps (`rects()` in `frames.js` is `renderVals()`): Home has the intro window and the selected-work window; the other pages have the name window (168px, 158 under 600px tall) and the tree under it, the rail on the right for role pages and on the left for Work, Lab and About; content windows of earlier pages collapse to the left edge, later ones to the right edge; `X` is the open document, it grows from the clicked card and shrinks back into it on "All cards".
+- Transition phases and timings: `out` (fade plus 14px slide against the travel direction), after 120ms `move` (or `grow` then `move` 40ms later), after 640ms `in`; rect morph 0.48s `cubic-bezier(.7,0,.2,1)`; content in: opacity 0.3s delayed 0.04s, transform 0.4s; same window, same kind, new key: recalibrate (10px inset, accent outline and corners, 160ms); first load: the four edges scale in from opposite corners (0.55s, 80ms stagger per window), then `drawn`; watchdog forces `in` after 1.1s. `S.speed` multiplies every timing (the reference's Snappy/Calm select).
+- Themes: paper everywhere, dark on the Lab page (`#pf.dk`); background and window fills crossfade in 0.45s; the switch card in the name window is dark on paper and light in the Lab. Scanlines on over everything.
+- The template's inline styles are kept; the palette became custom properties on `#pf`, hover styles became classes (`frames-site.css`).
 
-| Source note | Data | Shown as |
+## Where the content comes from
+
+| Reference constant | Now | Source |
 | --- | --- | --- |
-| `Site/Profile.md` | name, title, headline, quote, bio, email, GitHub, CV | identity window |
-| `Site/Portfolio.md` + `Site/Cards/*.md` | 15 projects: category, tier, year, role, context, engine, image, disciplines, per-discipline breakdown, story, links, videos | work tree, record cards, project document |
-| `Site/Disciplines.md` | 4 disciplines with a line each | lenses in the tree, about page |
-| `Site/Experience.md` | experience and education entries | about page |
-| `Projects/<Title>/logs/` (public ones) + `shots/` + builds | documented versions with images and playable builds (Sasha v1, v2) | version document, facts window |
+| `WK`, `P`, `ENG` | the 15 projects of `Site/Portfolio.md`: title, category, year, role, engine, context, image, disciplines, per-discipline breakdown (HTML), story, links, videos, documented versions | `assets/js/content.js`, `assets/js/docs.js` |
+| `RF`, `RN`, `DD` | the four disciplines and their descriptions | `Site/Disciplines.md` |
+| `LP`, `lpOrder` | the Lab: personal projects with tier `hero` (Sasha, Circle, Cadence); status read from the context line; facts (role, engine, started, disciplines); Iterations from the card's videos; Systems from the breakdown paragraphs; Notes from the story; Versions (images and Play) from the public logs | cards and logs |
+| `SM2` | Smaller things: the Mechanics Catalogue entries (family, name) | `Site/Mechanics Catalogue.md` |
+| `REC` | the Records column on About | `Site/Experience.md` |
+| intro, About | name, title, headline, bio, email, GitHub, CV, portrait | `Site/Profile.md` |
+| `SEL` | the four hero-tier projects | tier property |
 
-## Frames model
-
-Windows (persist across pages, morph between rects):
-
-| Window | Home | Work / Process / About | Project | Version |
-| --- | --- | --- | --- | --- |
-| `id` (identity) | full left column: name, title, headline, bio, buttons, switch card | small top-left: name, Home, switch card | same | same |
-| `tree` | hidden | left column: Work by category (counts), Lenses (disciplines), Pages | same, the project's category opened with its projects as leaves | same |
-| `main` | featured records (hero tier) | record cards of the chosen filter / Process feed / About document | project document with path bar `work/<category>/<slug>`, arrows to prev and next | version document `work/<slug>/<vN>`, arrows between versions |
-| `side` | hidden | hidden | facts: cover, role, disciplines, engine, year, context, links, versions | builds of the version, the other versions |
-
-Pages are rect maps in `assets/js/frames.js` (`pages`), routed by hash: `#/`, `#/work`, `#/work/<category>`, `#/lens/<discipline>`, `#/p/<id>`, `#/p/<id>/<vN>`, `#/process`, `#/about`.
-
-Phone (desk narrower than 760px): `id` becomes a short strip with the page buttons and the switch, `tree` and `side` stay hidden, their content folds into `main` (filter chips on top of the cards, facts inside the document). Everything scrolls inside the main window.
-
-Themes: paper by default, `.fr-dark` on `body` for the dark one, remembered in `localStorage` (`fr-theme`). The switch card sits in the identity window on every page and inverts its own colours (kit rule 3).
+Added to the project document on top of the reference: the Versions list with Play buttons, the videos, and the story as a toggle. The "Languages / Engines / Tools" and "Experience with" rows on About are still the reference's fixed text.
 
 ## Files
 
-- `frames.html`: the shell (loads content.js, docs.js, the engine, the app).
-- `assets/css/frames.css`: the kit's tokens and primitives, unchanged.
-- `assets/css/frames-site.css`: the portfolio's own styles on top of the kit.
-- `assets/js/frames-engine.js`: the kit's `frames.js`, unchanged.
-- `assets/js/frames.js`: the portfolio app (pages, render, routing, theme, image viewer).
-- `tools/build-site.mjs`: the five files are in both publish allowlists, so `npm run publish-portfolio` ships them next to the Fog pages.
+- `frames.html`: the shell (chrome: tabs, side arrows, crumbs, hint, the box).
+- `assets/css/frames-site.css`: fonts, palette, chrome, window primitives, card and row styles.
+- `assets/js/frames.js`: data mapping, state, `nav()`, `rects()`, the twelve window renderers, `update()` (applies rects, phases, recalibrate and re-renders a window when its content signature changes), keys.
+- `tools/build-site.mjs`: the three files are in both publish allowlists, so `npm run publish-portfolio` ships them next to the Fog pages.
 
 ## Run
 
@@ -49,4 +40,5 @@ Launch config `static` (python http.server on 8731), open http://localhost:8731/
 ## Open (his call)
 
 - Which entry is the site: `frames.html` or `portfolio.html`.
+- Phone width: like the reference, the desk has a 700px minimum and scrolls sideways on a phone. A phone layout is not designed yet.
 - Business cards and CV pages keep the old look.
