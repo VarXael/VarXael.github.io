@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FOG = ['assets/css/fog.css', 'assets/js/content.js', 'assets/js/docs.js', 'assets/js/fog.js'];
+const FRAMES = ['frames.html', 'assets/css/frames.css', 'assets/css/frames-site.css', 'assets/js/frames-engine.js', 'assets/js/frames.js'];   // the Frames look, a parallel entry (docs/FRAMES-portfolio.md)
 const MEDIA = [
   ['assets/images', { deep: false }],              // top-level images only: Template/ and Unresized Old Images/ stay private
   ['assets/videos', { deep: false }],
@@ -22,12 +23,12 @@ const MEDIA = [
 const TARGETS = {
   lab: {
     out: 'site-dist',
-    files: ['index.html', 'lab.html', 'portfolio.html', 'process.html', 'cv.html', 'assets/css/style.css', 'assets/js/script.js', 'assets/js/varxel.js', ...FOG],
+    files: ['index.html', 'lab.html', 'portfolio.html', 'process.html', 'cv.html', 'assets/css/style.css', 'assets/js/script.js', 'assets/js/varxel.js', ...FOG, ...FRAMES],
     folders: [...MEDIA, ['work', { deep: true }]],
   },
   portfolio: {
     out: 'site-portfolio',
-    files: ['portfolio.html', 'process.html', 'cv.html', 'business_card.html', 'business-card-single.html', ...FOG],
+    files: ['portfolio.html', 'process.html', 'cv.html', 'business_card.html', 'business-card-single.html', ...FOG, ...FRAMES],
     folders: [...MEDIA, ['work', { deep: true }]],
     alias: { 'index.html': 'portfolio.html' },     // varxael.github.io opens on the portfolio home
   },

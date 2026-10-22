@@ -1,0 +1,118 @@
+/* FRAMES — art direction tokens + primitives. Light "paper" theme by default; add .fr-dark to any container for the Lab theme. */
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=JetBrains+Mono:wght@400;500&family=Jost:wght@300;400;500&display=swap');
+
+:root {
+  --fr-bg: #dcd6c6;      /* desk / page */
+  --fr-panel: #e5e0d3;   /* window fill */
+  --fr-plate: #cfc8b5;   /* image wells, empty media */
+  --fr-hover: #d6cfbc;
+  --fr-ink: #2a251f;     /* primary text, active fills */
+  --fr-soft: #4a4237;    /* body copy */
+  --fr-muted: #6b6152;   /* meta, counts */
+  --fr-rule: #c4bca9;    /* inner dividers */
+  --fr-line: #9d947f;    /* window outlines + corner squares */
+  --fr-accent: oklch(0.52 0.14 40); /* rust: labels, live state */
+  --fr-scan: rgba(43,40,34,.03);
+
+  --fr-role-1: oklch(0.55 0.1 220);
+  --fr-role-2: oklch(0.6 0.13 70);
+  --fr-role-3: oklch(0.5 0.12 305);
+  --fr-role-4: oklch(0.55 0.1 165);
+
+  --fr-serif: 'Newsreader', serif;           /* titles, reading text */
+  --fr-sans: 'Jost', sans-serif;             /* UI labels, wide-tracked caps */
+  --fr-mono: 'JetBrains Mono', monospace;    /* meta, paths, counts, buttons */
+
+  --fr-gap: 12px;                /* space between windows */
+  --fr-ease: cubic-bezier(.7,0,.2,1);
+  --fr-move: .48s;               /* window rect morph */
+  --fr-fade: .15s;               /* content swap */
+  --fr-cut: 14px;                /* chamfer size */
+}
+.fr-dark {
+  --fr-bg: #0d0c0c; --fr-panel: #121110; --fr-plate: #171513; --fr-hover: #1c1a18;
+  --fr-ink: #d9d4cc; --fr-soft: #a8a29a; --fr-muted: #8a837b; --fr-rule: #2a2625; --fr-line: #4a4340;
+  --fr-accent: #c23a2b; --fr-scan: rgba(0,0,0,.18);
+}
+
+html, body { margin: 0; height: 100%; }
+body { background: var(--fr-bg); color: var(--fr-ink); font-family: var(--fr-serif); }
+a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
+
+/* Scanlines over the whole app (optional) */
+.fr-scanlines { position: fixed; inset: 0; pointer-events: none; z-index: 50;
+  background: repeating-linear-gradient(0deg, var(--fr-scan) 0 1px, transparent 1px 3px); }
+
+/* Desk: absolutely-positioned windows live in here */
+.fr-desk { position: relative; height: 100%; }
+
+/* Window: 1px outline + 7px corner squares. Position it with left/top/width/height. */
+.fr-win { position: absolute; background: var(--fr-panel);
+  outline: 1px solid var(--fr-line); outline-offset: -1px;
+  transition: left var(--fr-move) var(--fr-ease), top var(--fr-move) var(--fr-ease),
+              width var(--fr-move) var(--fr-ease), height var(--fr-move) var(--fr-ease),
+              opacity .25s, background .45s; }
+.fr-win > .fr-c { position: absolute; width: 7px; height: 7px; background: var(--fr-line); transition: background .2s; }
+.fr-win > .fr-c:nth-of-type(1) { top: -4px; left: -4px; }
+.fr-win > .fr-c:nth-of-type(2) { top: -4px; right: -4px; }
+.fr-win > .fr-c:nth-of-type(3) { bottom: -4px; left: -4px; }
+.fr-win > .fr-c:nth-of-type(4) { bottom: -4px; right: -4px; }
+.fr-win > .fr-body { position: absolute; inset: 1px; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--fr-line) transparent;
+  transition: opacity var(--fr-fade), transform var(--fr-fade); }
+.fr-win.is-swapping > .fr-body { opacity: 0; transform: translateX(14px); }
+.fr-win.is-recal { outline-color: var(--fr-accent); } .fr-win.is-recal > .fr-c { background: var(--fr-accent); }
+.fr-win.is-hidden { opacity: 0; pointer-events: none; }
+
+/* Type */
+.fr-h1 { font: 300 clamp(42px,4.4vw,62px)/.92 var(--fr-serif); letter-spacing: -.035em; margin: 0; }
+.fr-h2 { font: 300 32px/1.05 var(--fr-serif); letter-spacing: -.02em; margin: 0; }
+.fr-p  { font: 400 15px/1.55 var(--fr-serif); color: var(--fr-soft); text-wrap: pretty; margin: 0; }
+.fr-label { font: 400 11px var(--fr-sans); letter-spacing: .3em; text-transform: uppercase; color: var(--fr-accent); }
+.fr-meta  { font: 400 10px var(--fr-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--fr-muted); }
+
+/* Buttons */
+.fr-btn { font: 500 10px var(--fr-mono); letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+  padding: 8px 11px; border: 1px solid var(--fr-ink); background: transparent; color: var(--fr-ink); }
+.fr-btn:hover, .fr-btn.is-on { background: var(--fr-ink); color: var(--fr-bg); }
+.fr-btn--cut { clip-path: polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px); }
+
+/* Notion/Obsidian tree list */
+.fr-tree { display: flex; flex-direction: column; gap: 1px; font-family: var(--fr-sans); }
+.fr-tree__h { padding: 2px 8px 5px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--fr-muted); }
+.fr-tree__i { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 3px; cursor: pointer; font-size: 13px; }
+.fr-tree__i:hover { background: var(--fr-hover); }
+.fr-tree__i.is-on { background: var(--fr-ink); color: var(--fr-bg); }
+.fr-tree__i--leaf { padding-left: 24px; font-family: var(--fr-serif); font-size: 14px; }
+.fr-tree__i .fr-meta { margin-left: auto; color: inherit; opacity: .7; }
+
+/* Chamfered record card (hover: colour, brackets, lift) */
+.fr-card { position: relative; cursor: pointer; transition: transform .3s; }
+.fr-card__edge { background: var(--fr-line); padding: 1px; height: 100%; box-sizing: border-box; transition: background .3s;
+  clip-path: polygon(var(--fr-cut) 0,100% 0,100% calc(100% - var(--fr-cut)),calc(100% - var(--fr-cut)) 100%,0 100%,0 var(--fr-cut)); }
+.fr-card__in { background: var(--fr-panel); height: 100%; display: flex; flex-direction: column;
+  clip-path: polygon(calc(var(--fr-cut) - 1px) 0,100% 0,100% calc(100% - var(--fr-cut) + 1px),calc(100% - var(--fr-cut) + 1px) 100%,0 100%,0 calc(var(--fr-cut) - 1px)); }
+.fr-card__img { height: 140px; background: var(--fr-plate); overflow: hidden; border-bottom: 1px solid var(--fr-line); }
+.fr-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1) sepia(.25); transition: filter .4s, transform .6s; }
+.fr-card__body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.fr-card__title { font: 400 17px/1.05 var(--fr-sans); letter-spacing: .06em; text-transform: uppercase; }
+.fr-card::before, .fr-card::after { content: ''; position: absolute; width: 16px; height: 16px; opacity: 0; transition: all .3s; pointer-events: none; }
+.fr-card::before { top: 8px; left: 8px; border-top: 2px solid var(--fr-ink); border-left: 2px solid var(--fr-ink); }
+.fr-card::after { bottom: 8px; right: 8px; border-bottom: 2px solid var(--fr-ink); border-right: 2px solid var(--fr-ink); }
+.fr-card:hover { transform: translateY(-3px); }
+.fr-card:hover .fr-card__edge { background: var(--fr-ink); }
+.fr-card:hover .fr-card__img img { filter: none; transform: scale(1.04); }
+.fr-card:hover::before { opacity: 1; top: -3px; left: -3px; } .fr-card:hover::after { opacity: 1; bottom: -3px; right: -3px; }
+
+/* Theme switch card (Lab ⇄ Portfolio) */
+.fr-switch { display: flex; align-items: center; gap: 12px; padding: 10px 12px; cursor: pointer; background: #0d0c0c; color: #d9d4cc;
+  font: 400 12px var(--fr-sans); letter-spacing: .36em; text-transform: uppercase; transition: background .45s, color .45s;
+  clip-path: polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px); }
+.fr-switch__knob { margin-left: auto; position: relative; width: 34px; height: 16px; border: 1px solid currentColor; box-sizing: border-box; }
+.fr-switch__knob::after { content: ''; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; background: #c23a2b; transition: left .35s var(--fr-ease); }
+.fr-dark .fr-switch { background: #e5e0d3; color: #2a251f; }
+.fr-dark .fr-switch__knob::after { left: 20px; background: oklch(0.52 0.14 40); }
+
+/* Window title bar for documents */
+.fr-bar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 8px; padding: 7px 10px 7px 14px;
+  background: var(--fr-panel); border-bottom: 1px solid var(--fr-rule); font: 400 10px var(--fr-mono); letter-spacing: .05em; text-transform: uppercase; }
+.fr-bar__path { flex: 1; min-width: 0; color: var(--fr-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
