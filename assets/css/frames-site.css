@@ -1,6 +1,6 @@
 /* Portfolio Frames: a port of "Portfolio Frames v22.dc.html" (Claude Design) to plain HTML, CSS and JS.
    The template's inline styles are kept; theme colours became custom properties on #pf (.dk = the Lab). */
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=JetBrains+Mono:wght@400;500&family=Jost:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap');
 
 html, body { margin: 0; height: 100%; }
 body { background: #dcd6c6; overflow: hidden; }
@@ -21,7 +21,7 @@ a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
   --sw-bg: #e5e0d3; --sw-ink: #2a251f; --sw-accent: oklch(0.52 0.14 40); --sw-knob: 20px;
 }
 .mono { font-family: 'JetBrains Mono', monospace; }
-.jost { font-family: 'Jost', sans-serif; }
+.jost { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
 .serif { font-family: 'Newsreader', serif; }
 .hv-bg:hover { background: var(--hover) !important; }
 .hv-ink:hover { color: var(--ink) !important; }
@@ -38,7 +38,7 @@ a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
 .scan-in { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(20,18,16,.08) 0 1px, transparent 1px 4px); pointer-events: none; }
 
 /* top tabs */
-#tabs { position: absolute; top: 0; left: 32px; right: 32px; height: 44px; display: flex; align-items: center; gap: 20px; font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; white-space: nowrap; }
+#tabs { position: absolute; top: 0; left: 32px; right: 32px; height: 44px; display: flex; align-items: center; gap: 20px; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-size: 11px; letter-spacing:.12em; text-transform: uppercase; white-space: nowrap; }
 #tabs .mid { flex: 1; display: flex; justify-content: center; align-items: center; gap: 14px; height: 100%; min-width: 0; overflow: hidden; }
 #tabs .grp { display: flex; gap: 14px; height: 100%; }
 #tabs .sep { width: 1px; height: 14px; background: var(--rule); }
@@ -79,16 +79,16 @@ a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
 .fw > .body { position: absolute; inset: 1px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 
 /* shared pieces */
-.lbl { font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+.lbl { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-size: 11px; letter-spacing:.12em; text-transform: uppercase; color: var(--accent); }
 .cnt { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
 .btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; border: 1px solid var(--ink); padding: 8px 11px; cursor: pointer; }
 .btn:hover { background: var(--ink); color: var(--bg); opacity: 1; }
 .pic { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .pic.svg { object-fit: contain; padding: 14%; }
-.sw { cursor: pointer; flex: 0 0 auto; background: var(--sw-bg); color: var(--sw-ink); display: flex; align-items: center; gap: 12px; font-family: 'Jost', sans-serif; clip-path: polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px); transition: background .45s, color .45s; }
+.sw { cursor: pointer; flex: 0 0 auto; background: var(--sw-bg); color: var(--sw-ink); display: flex; align-items: center; gap: 12px; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; clip-path: polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px); transition: background .45s, color .45s; }
 .sw:hover { opacity: .9; }
 .sw .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.sw .l { font-size: 12px; letter-spacing: .36em; text-transform: uppercase; }
+.sw .l { font-size: 12px; letter-spacing:.12em; text-transform: uppercase; }
 .sw .m { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sw .k { position: relative; width: 34px; height: 16px; flex: 0 0 auto; border: 1px solid var(--sw-ink); }
 .sw .k i { position: absolute; top: 2px; left: var(--sw-knob); width: 10px; height: 10px; background: var(--sw-accent); transition: left .35s var(--E); }
@@ -100,10 +100,10 @@ a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
 .navi { cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 3px; transition: background .15s, color .15s; }
 .navi:hover { background: var(--hover); } .navi.on, .navi.on:hover { background: var(--ink); color: var(--bg); }
 .navi .ic { font-size: 10px; color: var(--muted); width: 10px; flex: 0 0 auto; } .navi.on .ic { color: var(--bg); } .navi .ic.acc { color: var(--accent); }
-.navi .lb { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Jost', sans-serif; font-size: 13px; }
+.navi .lb { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-size: 13px; }
 .navi .lb.serif { font-family: 'Newsreader', serif; font-size: 14px; } .navi .lb.b { font-weight: 500; }
 .navi .mt { font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: .7; }
-.chip { cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 3px; background: var(--hover); font-family: 'Jost', sans-serif; font-size: 12px; }
+.chip { cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 3px; background: var(--hover); font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-size: 12px; }
 .chip:hover { background: var(--rule); }
 .prop { padding: 4px 8px; border: 1px solid var(--rule); } .prop b { font-weight: 400; color: var(--muted); }
 .arr { cursor: pointer; padding: 4px 9px; border: 1px solid var(--rule); } .arr:hover { border-color: var(--ink); }
@@ -156,8 +156,8 @@ a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
 .labcard .shots { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; background: #2a2625; }
 .labcard .shot { position: relative; overflow: hidden; background: #171513; }
 .labcard .shot img { filter: grayscale(1) contrast(1.05); transition: filter .4s, transform .6s; }
-.labcard .shot span { position: absolute; left: 8px; bottom: 8px; background: #0d0c0c; padding: 4px 8px; font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; }
-.labcard .shot span small { display: block; font-size: 9px; letter-spacing: .2em; color: #c23a2b; margin-top: 2px; }
+.labcard .shot span { position: absolute; left: 8px; bottom: 8px; background: #0d0c0c; padding: 4px 8px; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-size: 11px; letter-spacing:.12em; text-transform: uppercase; }
+.labcard .shot span small { display: block; font-size: 9px; letter-spacing:.12em; color: #c23a2b; margin-top: 2px; }
 .labcard .go { align-self: flex-start; margin-top: auto; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; padding: 7px 12px; border: 1px solid #d9d4cc; clip-path: polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px); transition: background .2s, color .2s; }
 .labcard .br { position: absolute; width: 16px; height: 16px; opacity: 0; transition: all .3s; pointer-events: none; }
 .labcard .br1 { top: 8px; left: 8px; border-top: 2px solid var(--ink); border-left: 2px solid var(--ink); }
@@ -179,7 +179,7 @@ a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
 .card .sqs { display: flex; gap: 4px; margin-left: auto; }
 .yt { position: relative; aspect-ratio: 16/9; background: #000; cursor: pointer; overflow: hidden; border: 1px solid var(--rule); }
 .yt img { filter: grayscale(.6); transition: filter .4s; } .yt:hover img { filter: none; }
-.yt .play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--ink); color: var(--bg); padding: 10px 14px; font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; }
+.yt .play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--ink); color: var(--bg); padding: 10px 14px; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-size: 11px; letter-spacing:.12em; text-transform: uppercase; }
 .yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
 .gal span { position: relative; aspect-ratio: 16/10; background: var(--plate); overflow: hidden; cursor: zoom-in; }
@@ -194,3 +194,14 @@ a { color: inherit; text-decoration: none; } a:hover { opacity: .7; }
 .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .viewer .nav { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; gap: 12px; }
 .viewer .nav p { margin: 0; font: 400 14px 'Newsreader', serif; text-align: center; }
+
+/* ---------- type pass 2026-10-22 (his ask: "still clean, but way more readable"; same split as the VarXel OS Frames themes) ---------- */
+#pf { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-size: 14px; -webkit-font-smoothing: antialiased; }
+#pf h1, #pf h2, #pf .display { font-family: 'Newsreader', Georgia, serif; }
+#pf .serif, #pf .navi .lb.serif { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
+#pf .navi .lb { font-size: 13px; } #pf .navi .lb.serif { font-size: 13px; font-weight: 400; }
+#pf p, #pf .prose { line-height: 1.6; }
+.btn, .card .ex, .labcard .go, .minb, .arr, #tabs .cv, .yt .play { font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important; font-weight: 600 !important; font-size: 12px !important; letter-spacing: .06em !important; text-transform: uppercase; }
+.card .ex, .labcard .go { padding: 7px 12px; }
+.viewer .bar button, .viewer .nav button { font: 600 12px 'Inter', 'Segoe UI', Arial, sans-serif; letter-spacing: .06em; }
+.viewer .nav p { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
