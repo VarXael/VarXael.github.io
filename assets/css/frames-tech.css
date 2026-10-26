@@ -1,0 +1,19 @@
+/* Frames, tech look (test, 2026-10-27, Wiki 02): the Frames layout and reading type with the live site's identity
+   (near-black, cyan and amber, Space Mono titles, a radar behind the desk). frames.html is unchanged. */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+body:has(#pf.tech) { background: #0a0b0d; }
+#pf.tech, #pf.tech.dk {
+  --bg: #0a0b0d; --ink: #e8e6e0; --muted: #8b8f96; --soft: #b9bcc2; --rule: #1d2128; --plate: #12151a; --hover: #161a20;
+  --accent: #4fb8d4; --line: #2c3440; --panel: #0e1014; --scan: rgba(79,184,212,.025);
+  --sw-bg: #4fb8d4; --sw-ink: #0a0b0d; --sw-accent: #e0a23b; --sw-knob: 20px;
+}
+#pf.tech::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(circle at 30% 45%, transparent 0 179px, rgba(79,184,212,.07) 180px 181px, transparent 182px 299px,
+      rgba(79,184,212,.06) 300px 301px, transparent 302px 459px, rgba(79,184,212,.05) 460px 461px, transparent 462px);
+}
+#pf.tech .serif, #pf.tech .display, #pf.tech h1, #pf.tech h2 { font-family: 'Space Mono', monospace !important; text-transform: uppercase; letter-spacing: .02em; }
+#pf.tech #tabs a, #pf.tech #tabs span { font-family: 'Space Mono', monospace; }
+#pf.tech img { filter: saturate(.85) contrast(1.05); }
