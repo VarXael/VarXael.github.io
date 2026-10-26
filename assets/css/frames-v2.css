@@ -1,0 +1,21 @@
+/* frames-v2 (2026-10-27, Wiki 02): the Disciplines list and the phone layout. frames-site.css is unchanged. */
+.disc { display: flex; flex-direction: column; }
+.drow { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 18px; padding: 16px 4px; border-top: 1px solid var(--rule); }
+.drow .dimg { position: relative; aspect-ratio: 16/10; background: var(--plate); overflow: hidden; cursor: pointer; }
+.drow .dtx { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.drow .dtitle { font-size: 18px; letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; cursor: pointer; }
+.drow .dtitle:hover { color: var(--accent); }
+.drow .prose p { margin: 0; color: var(--soft); }
+.drow .ex { align-self: flex-start; cursor: pointer; margin-top: 2px; }
+.yt.top .play { font-size: 13px !important; padding: 12px 18px; }
+
+@media (max-width: 760px) {
+  #pf { min-width: 0 !important; padding: 44px 10px 24px; }
+  body { overflow: hidden; }
+  #tabs { left: 10px; right: 10px; gap: 10px; }
+  #tabs .mid, #tabs .grp { gap: 10px; }
+  #tabs > span:first-child { display: none; }
+  #foot { left: 10px; right: 10px; }
+  #foot #hint, #pf .sidearrow { display: none !important; }
+  .drow { grid-template-columns: 1fr; gap: 10px; }
+}
