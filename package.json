@@ -11,6 +11,7 @@
     "publish-build": "node tools/workshop/publish-build.mjs",
     "harvest": "node tools/varxel/harvest.mjs",
     "promote": "node tools/varxel/promote.mjs",
-    "publish-portfolio": "node tools/publish-portfolio.mjs"
+    "publish-portfolio": "node tools/publish-portfolio.mjs",
+    "library": "node tools/build-library.mjs"
   }
 }
