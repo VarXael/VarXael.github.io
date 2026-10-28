@@ -12,7 +12,7 @@
 //
 // Options: --engine godot|unreal|none (default godot)  --kind game|prototype|mod|tool|...  --from "Entry A, Entry B"
 //          --local <folder>  --dir <Godot folder inside the repo>  --dry (show the plan only)
-// The card (VarXel/Projects/<Title>/<Title>.md) is created if missing; a Catalogue entry with the same title moves there
+// The card (VarXel/Projects/<Title>/AI/<Title>.md) is created if missing; a Catalogue entry with the same title moves there
 // and becomes the card. If the card exists, only its empty fields are filled (repos, local, godot_dir, kind).
 // No portfolio card is created: a card is written only when the project goes into the portfolio.
 import fs from 'node:fs';
