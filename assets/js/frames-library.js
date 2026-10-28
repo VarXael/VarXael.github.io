@@ -41,12 +41,12 @@ function framesStart(LIB) {
     return { k: p.id, t: p.title, cat: CATK[p.category] || 'personal', y: p.year, role: p.role, roles: p.roles.map(r => RF.indexOf(r)).filter(i => i >= 0),
       img: svg && gallery.length ? gallery[0].src : p.image, cover: p.image, gallery, yt: ytId(p.video),
       short: p.short, rc, links: p.links.filter(l => l.url && !/^\.\/play\//.test(l.url)).map(l => [l.label, l.url === 'request' ? `mailto:${PR.email}?subject=${encodeURIComponent('Portfolio request')}` : l.url]),
-      eng: p.engine, ctx: p.context, tier: p.tier, story: p.story, videos: p.videos || [], versions, lib: p.lib || null };
+      eng: p.engine, ctx: p.context, tier: p.tier, story: p.story, videos: p.videos || [], versions, lib: p.lib || null, tools: (p.tools || []).map(t => t.name || t), pn: p.playNotes || '' };
   });
   const WM = {}; WK.forEach(w => { WM[w.k] = w; });
   const ENG = {}; WK.forEach(w => { ENG[w.k] = w.eng.split(' / ')[0]; });
   const status = w => { if (w.lib && /^working on$/i.test(w.lib.stage || '')) return 'In development'; const m = w.ctx.match(/in development|in progress|prototype|plugin/i); return m ? m[0][0].toUpperCase() + m[0].slice(1).toLowerCase() : w.ctx.split('·').pop().trim(); };
-  const lpOrder = WK.filter(w => w.cat === 'personal' && w.tier === 'hero').map(w => w.k);        /* the Lab: the personal projects in progress */
+  const lpOrder = WK.filter(w => (w.lib && w.lib.place ? w.lib.place === 'lab' : w.cat === 'personal' && w.tier === 'hero')).map(w => w.k);        /* the Lab: the personal projects in progress */
   const isLab = k => lpOrder.includes(k);
   const LP = {}; lpOrder.forEach(k => { const w = WM[k]; LP[k] = Object.assign({ st: status(w),
     facts: [['Role', w.role], ['Engine', w.eng], ['Started', String(w.y)], ['Disciplines', w.roles.map(r => RN[r]).join(' · ')]],
@@ -55,6 +55,7 @@ function framesStart(LIB) {
     notes: paras(w.story).map(p => ({ text: text(p) })) }, w); });
   const SM2 = (Array.isArray(W.catalogue) ? W.catalogue : Object.values(W.catalogue || {})).map(c => [c.family || 'Mechanic', c.name]);
   const REC = (W.experience || []).flatMap(g => g.items.map(i => [i.when.replace(/ to /g, ' › '), `${i.title} // ${i.org}`, text(i.desc)]));
+  const RECG = (W.experience || []).map(g => ({ g: g.group, items: g.items.map(i => [i.when.replace(/ to /g, ' › '), `${i.title} // ${i.org}`, text(i.desc), i.where || '']) }));
   const SEL = WK.filter(w => !isLab(w.k)).slice(0, 3).map(w => w.k);
   const PAGES = [{ k: 'home', name: 'Home' }, { k: 'work', name: 'Work' }, { k: 'lab', name: 'Lab' }, { k: 'about', name: 'About' }];
   const HOME = 0, WORK = 1, LAB = 2, ABOUT = 3;
@@ -109,6 +110,7 @@ function framesStart(LIB) {
     noroles: () => nav({ wrole: null }),
     proj: a => nav({ proj: a }), lproj: a => nav({ lproj: a }), open: (a, el) => openAt({ proj: a }, el), openw: (a, el) => openAt({ pi: WORK, proj: a }, el),
     openl: (a, el) => { const j = lpOrder.indexOf(a); openAt({ pi: LAB, lproj: a, lsel: j }, el); }, lsel: a => { if (S.lsel !== +a) set({ lsel: +a }); },
+    dtab: a => { const [k, t] = a.split('|'); set({ open: Object.assign({}, S.open, { [k + 'st']: t === 'st' }) }); },
     min: a => minAt(a), copy: () => copyEmail(), toggle: a => set({ open: Object.assign({}, S.open, { [a]: !S.open[a] }) }),
     sw: () => (PAGES[S.pi].k === 'lab' ? page(HOME) : page(LAB))(),
     yt: (a, el) => { el.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${esc(a)}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="Video"></iframe>`; el.removeAttribute('data-a'); },
@@ -118,6 +120,18 @@ function framesStart(LIB) {
   pf.addEventListener('mouseover', e => { const t = e.target.closest('[data-hover-lsel]'); if (t) ACT.lsel(t.dataset.hoverLsel); });
   const A = (n, a) => `data-a="${n}${a !== undefined ? ':' + esc(a) : ''}"`;
 
+
+  /* ---------- the video stage (as on the live site): one player, the project's videos as a list; links in the text switch it ---------- */
+  const vstage = w => w.videos.length ? `<div class="vstage"><video src="${src(w.videos[0].file)}" controls muted playsinline preload="none" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;"></video>${w.videos.length > 1 ? `<div class="vlist">${w.videos.map((v, j) => `<span class="vit${j ? '' : ' on'}" data-v="${src(v.file)}">${esc(v.label)}</span>`).join('')}</div>` : `<div class="vlist"><span class="vit on" data-v="${src(w.videos[0].file)}">${esc(w.videos[0].label)}</span></div>`}</div>` : '';
+  pf.addEventListener('click', e => {
+    const m = e.target.closest('.magic-link, .vit'); if (!m) return;
+    const art = m.closest('.body') || document; const st = art.querySelector('.vstage'); if (!st) return;
+    const want = m.dataset.v || encodeURI(String(m.dataset.src || '').replace(/^\.\//, './'));
+    const v = st.querySelector('video'); const name = decodeURIComponent(want.split('/').pop());
+    v.src = want; v.play().catch(() => {});
+    st.querySelectorAll('.vit').forEach(x => x.classList.toggle('on', decodeURIComponent(String(x.dataset.v).split('/').pop()) === name));
+    if (m.classList.contains('magic-link')) st.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 
   /* ---------- the Library part of a project document ---------- */
   function libDoc(w) {
@@ -215,33 +229,38 @@ function framesStart(LIB) {
       <div style="display:${S.wview === 'gallery' ? 'grid' : 'none'};grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding:4px;">${showLab ? labCard() : ''}${list.map(w => `<div class="card" data-card="${w.k}" ${A('open', w.k)}><div class="edge"><div class="in"><div class="im">${pic(w)}</div>
         <div style="flex:1;padding:14px 16px 16px;display:flex;flex-direction:column;gap:9px;"><span class="jost" style="font-size:17px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;line-height:1.05;">${esc(w.t)}</span>
         <div class="mono" style="display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);"><span style="white-space:nowrap;">${esc(CATN[w.cat].replace(' work', ''))} // ${esc(ENG[w.k] || 'System')}</span><span style="flex:1;height:1px;background:var(--rule);"></span></div>
-        <p style="margin:0;flex:1;font-size:13px;line-height:1.55;color:var(--soft);display:-webkit-box;-webkit-line-clamp:${role !== null ? 5 : 3};-webkit-box-orient:vertical;overflow:hidden;">${esc(desc(w))}</p><div style="display:flex;align-items:center;gap:8px;"><span class="ex">Examine_record</span><span class="sqs">${sqs(w.roles)}</span></div></div></div></div><span class="br br1"></span><span class="br br2"></span></div>`).join('')}</div>
+        <p style="margin:0;flex:1;font-size:13px;line-height:1.55;color:var(--soft);display:-webkit-box;-webkit-line-clamp:${role !== null ? 'none' : 3};-webkit-box-orient:vertical;overflow:hidden;">${esc(desc(w))}</p><div style="display:flex;align-items:center;gap:8px;"><span class="ex">Examine_record</span><span class="sqs">${sqs(w.roles)}</span></div></div></div></div><span class="br br1"></span><span class="br br2"></span></div>`).join('')}</div>
       <div style="display:${S.wview === 'table' ? 'flex' : 'none'};flex-direction:column;"><div class="jost" style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.5fr) minmax(0,1fr) 44px;gap:12px;padding:6px;border-bottom:1px solid var(--rule);font-size:11px;color:var(--muted);"><span>Name</span><span>Role</span><span>Category</span><span>Year</span></div>
         ${list.map(w => `<div class="trow" ${A('open', w.k)}><span style="display:flex;align-items:center;gap:10px;min-width:0;"><span style="position:relative;width:34px;height:22px;flex:0 0 auto;background:var(--plate);overflow:hidden;">${pic(w)}</span><span style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(w.t)}</span></span><span class="jost" style="font-size:13px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(w.role || '—')}</span><span class="jost" style="font-size:13px;color:var(--soft);">${esc(CATN[w.cat])}</span><span class="mono" style="font-size:10px;">${w.y || '—'}</span></div>`).join('')}
         ${showLab ? `<div class="trow" ${A('lab')}><span style="display:flex;align-items:center;gap:10px;"><span style="width:34px;height:22px;background:#121110;"></span><span style="font-size:15px;">The Lab →</span></span><span class="jost" style="font-size:13px;color:var(--soft);">${pad2(lpOrder.length)} projects · ${SM2.length} smaller things</span><span></span><span></span></div>` : ''}</div></div>`; },
 
-    doc() { const projK = WM[S.proj] ? S.proj : WK[0].k, w = WM[projK], CL2 = ctxList(S), ci = Math.max(0, CL2.indexOf(projK)), nk = CL2[(ci + 1) % CL2.length], pk2 = CL2[(ci - 1 + CL2.length) % CL2.length];
+    doc(kk) { const cur = kk || S.proj, PA = PAGES[S.pi].k === 'lab' ? 'lproj' : 'proj', projK = WM[cur] ? cur : WK[0].k, w = WM[projK], CL2 = ctxList(S), ci = Math.max(0, CL2.indexOf(projK)), nk = CL2[(ci + 1) % CL2.length], pk2 = CL2[(ci - 1 + CL2.length) % CL2.length];
       const props = [['Role', w.role || '—'], ['Category', CATN[w.cat]], ['Year', w.y ? String(w.y) : '—'], ['Engine', w.eng], ['Context', w.ctx]].concat(w.lib && /^working on$/i.test(w.lib.stage || '') ? [['Status', 'In development']] : []);
       const V2 = w.lib && w.lib.builds.length ? [] : w.versions, latest = [...V2].reverse().find(v => v.builds.length), play = latest && latest.builds[0];
       const blocks = [];
       if (V2.length) blocks.push(`<div style="display:flex;flex-direction:column;gap:8px;"><h2 style="margin:10px 0 0;font-weight:400;font-size:20px;">Versions</h2>${[...V2].reverse().map(v => `<div class="vrow"><span class="th">${v.images[0] ? `<img class="pic" src="./${v.images[0].src}" alt="" loading="lazy">` : ''}</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;"><span style="font-size:15px;">${esc(v.id)} · ${esc(v.name)}</span><span class="cnt">${v.images.length} images${v.summary ? ' · ' + esc(v.summary) : ''}</span></span>${v.builds.map(b => `<a class="btn" href="${b.play.startsWith('http') ? b.play : './' + b.play}" target="_blank" rel="noopener" style="padding:7px 10px;">Play ↗</a>`).join('')}</div>`).join('')}</div>`);
-      if (w.videos.length) blocks.push(`<div style="display:flex;flex-direction:column;gap:8px;"><h2 style="margin:10px 0 0;font-weight:400;font-size:20px;">Videos</h2>${w.videos.map(v => `<div style="border:1px solid var(--rule);"><video src="${src(v.file)}" controls muted playsinline preload="metadata" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;"></video><div class="mono" style="padding:8px 10px;font-size:10px;text-transform:uppercase;">${esc(v.label)}</div></div>`).join('')}</div>`);
-      if (w.story) { const kk = projK + 'story', op = S.open[kk]; blocks.push(`<div style="display:flex;flex-direction:column;"><span class="tog" ${A('toggle', kk)}><span style="font-size:11px;padding-top:4px;color:var(--muted);">${op ? '▾' : '▸'}</span>The story</span><div class="prose" style="display:${op ? 'block' : 'none'};padding:4px 4px 8px 26px;font-size:15px;line-height:1.65;">${w.story}</div></div>`); }
+      if (false) blocks.push(`<div style="display:flex;flex-direction:column;gap:8px;"><h2 style="margin:10px 0 0;font-weight:400;font-size:20px;">Videos</h2>${w.videos.map(v => `<div style="border:1px solid var(--rule);"><video src="${src(v.file)}" controls muted playsinline preload="none" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000;"></video><div class="mono" style="padding:8px 10px;font-size:10px;text-transform:uppercase;">${esc(v.label)}</div></div>`).join('')}</div>`);
+      if (false) { const kk = projK + 'story', op = S.open[kk]; blocks.push(`<div style="display:flex;flex-direction:column;"><span class="tog" ${A('toggle', kk)}><span style="font-size:11px;padding-top:4px;color:var(--muted);">${op ? '▾' : '▸'}</span>The story</span><div class="prose" style="display:${op ? 'block' : 'none'};padding:4px 4px 8px 26px;font-size:15px;line-height:1.65;">${w.story}</div></div>`); }
       const path = (S.wrole !== null && PAGES[S.pi].k === 'work' ? 'work/' + slug(RF[S.wrole]) : 'work/' + w.cat) + '/' + slug(w.t);
-      return bar(path, A('proj', pk2), A('proj', nk), A('min', projK)) +
+      return bar(path, A(PA, pk2), A(PA, nk), A('min', projK)) +
       `<div class="${mediaOf(w).length ? 'zoom' : ''}" ${mediaOf(w).length ? A('lb', projK + '@0') : ''} style="position:relative;aspect-ratio:21/8;max-height:280px;width:100%;background:var(--plate);overflow:hidden;">${pic(w)}<div class="scan-in"></div></div>
       <article style="max-width:760px;margin:0 auto;padding:22px clamp(18px,3vw,36px) 56px;display:flex;flex-direction:column;gap:14px;">
         <h1 style="margin:0;font-weight:300;font-size:clamp(30px,3vw,42px);line-height:1;letter-spacing:-.02em;">${esc(w.t)}</h1>
         <div class="mono" style="display:flex;flex-wrap:wrap;gap:6px;font-size:10px;letter-spacing:.03em;text-transform:uppercase;">${props.map(([k, v]) => `<span class="prop"><b>${esc(k)}</b> ${esc(v)}</span>`).join('')}</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;">${w.roles.map(r => `<span class="chip" ${A('wrole', r)}><span style="width:6px;height:6px;background:${CL[r]};"></span>${esc(RF[r])} ←</span>`).join('')}</div>
+        ${w.tools.length ? `<div class="tchips">${w.tools.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
+        ${w.story ? `<div class="dtabs"><span class="${S.open[projK + 'st'] ? '' : 'on'}" ${A('dtab', projK + '|')}>Overview</span><span class="${S.open[projK + 'st'] ? 'on' : ''}" ${A('dtab', projK + '|st')}>The story</span></div>` : ''}
+        ${S.open[projK + 'st'] && w.story ? `<div class="prose" style="font-size:16px;line-height:1.7;">${w.story}</div></article>` : `
         <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty;">${esc(w.short)}</p>
         ${play || w.links.length ? `<div class="mono" style="display:flex;flex-wrap:wrap;gap:6px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;">${play ? `<a class="btn" href="${play.play.startsWith('http') ? play.play : './' + play.play}" target="_blank" rel="noopener" style="background:var(--ink);color:var(--bg);">Play ${esc(latest.id)} ↗</a>` : ''}${w.links.map(([l, u]) => `<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">${esc(l)} ↗</a>`).join('')}</div>` : ''}
+        ${vstage(w)}
         ${yt(w.yt)}
         ${gal(w)}
-        ${Object.keys(w.rc).length ? `<div style="display:flex;flex-direction:column;padding-top:6px;"><span class="lbl">By role</span>${w.roles.filter(r => w.rc[r]).map(r => `<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:14px;padding:10px 0;border-bottom:1px solid var(--rule);"><span class="jost" style="display:flex;gap:8px;align-items:baseline;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding-top:3px;"><span style="width:7px;height:7px;background:${CL[r]};flex:0 0 auto;"></span>${esc(RF[r])}</span><div class="prose" style="font-size:15px;line-height:1.6;">${w.rc[r]}</div></div>`).join('')}</div>` : ''}
+        ${Object.keys(w.rc).length ? `<div class="rboxes">${w.roles.filter(r => w.rc[r]).map((r, i) => `<div class="rbox" style="--c:${CL[r]};"><div class="rh"><span class="n">${pad2(i + 1)}</span><span class="sq"></span><span>${esc(RF[r])}</span></div><div class="prose" style="font-size:15px;line-height:1.6;">${w.rc[r]}</div></div>`).join('')}</div>` : ''}
         ${libDoc(w)}
+        ${w.pn ? `<div style="display:flex;flex-direction:column;gap:8px;"><h2 style="margin:10px 0 0;font-weight:400;font-size:20px;">How to play</h2><div class="prose pn" style="font-size:15px;line-height:1.6;">${w.pn}</div></div>` : ''}
         ${blocks.join('')}
-        <div class="jost" style="display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);font-size:13px;"><span class="hv-acc" ${A('proj', pk2)} style="cursor:pointer;">← ${esc(WM[pk2].t)}</span><span class="hv-acc" ${A('proj', nk)} style="cursor:pointer;text-align:right;">${esc(WM[nk].t)} →</span></div></article>`; },
+        <div class="jost" style="display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);font-size:13px;"><span class="hv-acc" ${A(PA, pk2)} style="cursor:pointer;">← ${esc(WM[pk2].t)}</span><span class="hv-acc" ${A(PA, nk)} style="cursor:pointer;text-align:right;">${esc(WM[nk].t)} →</span></div></article>`}`; },
 
     lband() { return `<div style="height:100%;padding:14px 16px;display:flex;gap:28px;font-family:'Inter',sans-serif;">
       <div style="flex:0 0 300px;display:flex;flex-direction:column;gap:2px;"><div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 8px 8px;"><span class="lbl">The Lab</span><span class="cnt">${pad2(lpOrder.length)}</span></div>
@@ -256,7 +275,8 @@ function framesStart(LIB) {
       <div style="position:absolute;left:16px;right:16px;bottom:16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;"><div style="background:var(--bg);padding:12px 16px;display:flex;flex-direction:column;gap:6px;max-width:520px;"><span class="jost" style="font-size:clamp(22px,2.4vw,34px);font-weight:300;letter-spacing:.4em;text-transform:uppercase;line-height:1.1;">${esc(lo.t.replace('Project ', ''))}</span><span class="jost" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:${sc};">${esc(lo.st)}</span><span style="font-size:14px;line-height:1.5;color:var(--soft);">${esc(lo.short)}</span></div>
         <span class="jost" style="background:var(--ink);color:var(--bg);padding:10px 14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;">Open →</span></div></div>`; },
 
-    ldoc() { const k = LP[S.lproj] ? S.lproj : lpOrder[S.lsel] || lpOrder[0], oo = LP[k], i = lpOrder.indexOf(k), nk = lpOrder[(i + 1) % lpOrder.length], pk2 = lpOrder[(i - 1 + lpOrder.length) % lpOrder.length], sc = oo.st === 'In development' ? '#c23a2b' : '#8a837b';
+    ldoc() { return R.doc(LP[S.lproj] ? S.lproj : lpOrder[S.lsel] || lpOrder[0]); },
+    ldocOld() { const k = LP[S.lproj] ? S.lproj : lpOrder[S.lsel] || lpOrder[0], oo = LP[k], i = lpOrder.indexOf(k), nk = lpOrder[(i + 1) % lpOrder.length], pk2 = lpOrder[(i - 1 + lpOrder.length) % lpOrder.length], sc = oo.st === 'In development' ? '#c23a2b' : '#8a837b';
       const V2 = oo.versions;
       return bar('lab/' + slug(oo.t), A('lproj', pk2), A('lproj', nk), A('min', k)) +
       `<div style="position:relative;height:44%;min-height:240px;background:#141211;overflow:hidden;border-bottom:1px solid #3a3533;">${pic(oo, 'opacity:.45;')}
@@ -284,8 +304,8 @@ function framesStart(LIB) {
       <div style="display:flex;flex-direction:column;gap:8px;"><span class="lbl">By role</span><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">${RF.map((nm, r) => `<div class="hv-bg" ${A('wrole', r)} style="cursor:pointer;display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--rule);"><span style="display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;background:${CL[r]};"></span><span class="jost" style="flex:1;font-size:11px;letter-spacing:.14em;text-transform:uppercase;">${esc(nm)}</span><span class="cnt">${pad2(roleProj(r).length)}</span></span><span style="font-size:14px;line-height:1.5;color:var(--soft);">${esc(DD[r])}</span></div>`).join('')}</div></div>
       <div style="display:flex;flex-direction:column;gap:8px;"><span class="mono" style="font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);">Experience with</span><div style="display:flex;flex-wrap:wrap;gap:8px;">${[['https://untoldgames.com/', 'untold_games_cover.png', 'Untold Games'], ['https://www.udemy.com/user/creativity-unleashed/', 'CreativityUnleashed.png', 'Creativity Unleashed'], ['https://www.umu.se/en/', 'Umeå_University.png', 'Umeå University'], ['https://cineon.training/', 'Cineon_Training.png', 'Cineon Training']].map(([u, f, n]) => `<a href="${u}" target="_blank" rel="noopener" style="height:38px;padding:6px 9px;border:1px solid var(--rule);display:flex;align-items:center;"><img src="${src('./assets/images/' + f)}" alt="${n}" style="height:100%;"></a>`).join('')}</div></div></div>`; },
 
-    arecs() { return `<div style="padding:12px 16px 24px;display:flex;flex-direction:column;"><span style="padding-bottom:8px;"><span class="lbl">Records</span></span>
-      ${REC.map(r => `<div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--rule);"><span class="cnt" style="padding-top:3px;">${esc(r[0])}</span><div style="display:flex;flex-direction:column;gap:3px;"><span style="font-size:15px;line-height:1.25;">${esc(r[1])}</span><span style="font-size:13px;line-height:1.55;color:var(--soft);">${esc(r[2])}</span></div></div>`).join('')}</div>`; },
+    arecs() { return `<div style="padding:12px 16px 24px;display:flex;flex-direction:column;">${RECG.map(G => `<span style="padding:${G === RECG[0] ? 0 : 18}px 0 8px;"><span class="lbl">${esc(G.g)}</span></span>
+      ${G.items.map(r => `<div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--rule);"><span class="cnt" style="padding-top:3px;">${esc(r[0])}</span><div style="display:flex;flex-direction:column;gap:3px;"><span style="font-size:15px;line-height:1.25;">${esc(r[1])}</span>${r[3] ? `<span class="cnt">${esc(r[3])}</span>` : ''}<span style="font-size:13px;line-height:1.55;color:var(--soft);">${esc(r[2])}</span></div></div>`).join('')}`).join('')}</div>`; },
   };
 
   /* ---------- rects (renderVals) ---------- */
@@ -404,7 +424,7 @@ function framesStart(LIB) {
 function libraryMerge(PF, LIB) {
   const escL = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const inl = s => escL(s).replace(/!\[\[[^\]]*\]\]/g, '').replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1').replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\[([^\]]+)\]\(video:([^)]+)\)/g, '$1').replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\[([^\]]+)\]\(video:([^)]+)\)/g, (_, t, f) => `<span class='magic-link' data-src='./assets/videos/${f.trim()}'>${t}</span>`).replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/(^|[^*\w])\*([^*\n]+)\*/g, '$1<i>$2</i>');
   const md = t => String(t || '').replace(/\r\n/g, '\n').split(/\n{2,}/).map(b => b.trim()).filter(Boolean).map(b => {
     const h = /^#{3,4}[ \t]+(.+)$/.exec(b.split('\n')[0]);
@@ -412,7 +432,7 @@ function libraryMerge(PF, LIB) {
     if (/^> /.test(b)) return `<blockquote>${inl(b.replace(/^> ?/gm, '').replace(/\n/g, ' '))}</blockquote>`;
     if (/^[-*] /.test(b)) return `<ul>${b.split('\n').map(l => `<li>${inl(l.replace(/^[-*] /, ''))}</li>`).join('')}</ul>`;
     if (/^\d+\. /.test(b)) return `<ol>${b.split('\n').map(l => `<li>${inl(l.replace(/^\d+\. /, ''))}</li>`).join('')}</ol>`;
-    if (/^\|/.test(b)) return '';
+    if (/^\|/.test(b)) { const rows = b.split('\n').filter(l => !/^\s*\|[\s:|-]+\|\s*$/.test(l)).map(l => l.trim().replace(/^\||\|$/g, '').split('|').map(c => inl(c.trim()))); const [h, ...body] = rows; return `<div class="md-table"><table><thead><tr>${h.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${body.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; }
     return `<p>${inl(b.replace(/\n/g, ' '))}</p>`;
   }).join('');
   const plain = t => String(t || '').split(/\n{2,}/)[0].replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`#>]/g, '').trim();
@@ -428,13 +448,16 @@ function libraryMerge(PF, LIB) {
     projects[lp.id] = Object.assign({}, old, {
       id: lp.id, title: lp.title, category: CAT[lp.category] || old.category || 'personal work', year: lp.year || old.year || '', role: lp.role || old.role || '',
       context: lp.context || old.context || '', engine: lp.engine || old.engine || '', tier: lp.tier || old.tier || 'listed',
-      image: lp.image ? `./assets/images/${lp.image}` : (shots[0] || builds.find(b => b.shot)?.shot || old.image || ''),
+      // the cover: his first starred picture, else a build's, else the card's image (an SVG card image only when nothing else)
+      image: shots[0] || builds.find(b => b.shot)?.shot || (lp.image ? `./assets/images/${lp.image}` : '') || old.image || '',
       roles: disciplines, roleContributions: Object.keys(rc).length ? rc : (old.roleContributions || {}),
       short: plain(lp.intro) || old.short || '', story: lp.sections['The story'] ? md(lp.sections['The story']) : (old.story || ''),
       video: lp.video || old.video || null,
       videos: lp.videos.length ? lp.videos.map(v => { const [label, f] = pair(v); return { label, file: `./assets/videos/${f}` }; }) : (old.videos || []),
       links: lp.links.length ? lp.links.map(l => { const [label, url] = pair(l); return { label, url }; }) : (old.links || []),
-      lib: { stage: lp.stage, builds, shots, credits: lp.credits },
+      tools: lp.tools && lp.tools.length ? lp.tools.map(name => ({ name })) : (old.tools || []),
+      playNotes: lp.sections.Play ? md(lp.sections.Play) : (old.playNotes || ''),
+      lib: { stage: lp.stage, place: lp.place || '', builds, shots, credits: lp.credits },
     });
   }
   return Object.assign({}, PF, { projects });
