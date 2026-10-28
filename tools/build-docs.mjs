@@ -77,7 +77,9 @@ for (const p of Object.values(P.projects)) {
   const folder = [p.title, p.card].map(t => path.join(VAULT, 'Projects', t)).find(f => fs.existsSync(f));
   const versions = new Map();
   /* logs */
-  const logDir = folder && path.join(folder, 'logs');
+  // The AI folder (2026-10-28): logs and the card are in <folder>/AI/ after the move; shots stay at the top.
+  const aiOr = name => folder && [path.join(folder, 'AI', name), path.join(folder, name)].find(f => fs.existsSync(f));
+  const logDir = aiOr('logs');
   if (logDir && fs.existsSync(logDir)) {
     for (const f of fs.readdirSync(logDir).filter(f => f.endsWith('.md')).sort()) {
       const { fm, sections } = parseNote(fs.readFileSync(path.join(logDir, f), 'utf8'));
@@ -108,8 +110,9 @@ for (const p of Object.values(P.projects)) {
       caption: f.replace(/\.\w+$/, '').replace(/^\S+\s+(v\d+[a-z]?|\w+)\s*/i, '').replace(/^[\w]{1,3}\d+[_ ]/, '').replace(/_/g, ' ') || v.name }));
   }
   /* private releases from the wiki's cache: preview only, linked to the password-protected wiki */
-  const repos = folder && fs.existsSync(path.join(folder, `${path.basename(folder)}.md`))
-    ? [...fs.readFileSync(path.join(folder, `${path.basename(folder)}.md`), 'utf8').matchAll(/^\s*-\s*["']?(VarXael\/[\w.-]+)["']?\s*$/gm)].map(m => m[1]) : [];
+  const cardMd = aiOr(`${path.basename(folder || '')}.md`);
+  const repos = cardMd
+    ? [...fs.readFileSync(cardMd, 'utf8').matchAll(/^\s*-\s*["']?(VarXael\/[\w.-]+)["']?\s*$/gm)].map(m => m[1]) : [];
   for (const repo of repos) for (const r of wiki?.github?.[repo]?.releases ?? []) {
     const v = vnum(r.tag); if (!v || !versions.has(v.id)) continue;
     const win = r.assets.find(a => /windows/i.test(a.name));

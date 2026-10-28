@@ -19,7 +19,12 @@ export const fileName = title => title.replace(/[\\/:*?"<>|#^[\]]/g, '').trim();
 
 /* [[path|Alias]] -> { path, alias } */
 export const link = s => { const m = String(s).match(/^\[\[([^\]|]+)(?:\|([^\]]+))?\]\]$/); return m ? { path: m[1], alias: m[2] || path.basename(m[1]) } : { path: s, alias: s }; };
-export const cardFile = title => path.join(PROJECTS, fileName(title), `${fileName(title)}.md`);
+// The AI folder (Forget-Me-Not 04's plan, 2026-10-28): a project's card is Projects/<T>/AI/<T>.md once the folder has AI/,
+// Projects/<T>/<T>.md before the move.
+export const cardFile = title => {
+  const dir = path.join(PROJECTS, fileName(title)), name = `${fileName(title)}.md`;
+  return fs.existsSync(path.join(dir, 'AI')) ? path.join(dir, 'AI', name) : path.join(dir, name);
+};
 export const entryFile = title => fs.existsSync(cardFile(title)) ? cardFile(title) : path.join(CATALOGUE, `${fileName(title)}.md`);
 export const entryLink = title => `[[${rel(entryFile(title)).replace(/\.md$/, '')}|${title}]]`;
 
@@ -66,7 +71,7 @@ export function readEntry(file) {
 }
 
 export function entries() {
-  const cards = fs.existsSync(PROJECTS) ? fs.readdirSync(PROJECTS).map(d => path.join(PROJECTS, d, `${d}.md`)).filter(f => fs.existsSync(f)) : [];
+  const cards = fs.existsSync(PROJECTS) ? fs.readdirSync(PROJECTS).map(d => cardFile(d)).filter(f => fs.existsSync(f)) : [];
   const cat = fs.existsSync(CATALOGUE) ? fs.readdirSync(CATALOGUE).filter(f => f.endsWith('.md')).map(f => path.join(CATALOGUE, f)) : [];
   return [...cards, ...cat].map(readEntry);
 }
