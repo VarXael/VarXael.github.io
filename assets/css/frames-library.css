@@ -1,0 +1,20 @@
+/* Frames, Library version (frames-library.html): the parts frames.js does not have. How it got here (his notes and the builds on
+   one line) and a build with the note it opens with, then its credits line. */
+.lbline { display: flex; align-items: flex-start; overflow-x: auto; padding: 8px 2px 2px; scrollbar-width: thin; }
+.lbline .st { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 86px; font-size: 12px; text-align: center; }
+.lbline .st i { width: 11px; height: 11px; border: 2px solid var(--accent); background: var(--bg); border-radius: 50%; }
+.lbline .st:last-child i { background: var(--accent); }
+.lbline .st.n i { border-color: var(--ink); border-radius: 0; width: 9px; height: 9px; margin: 1px 0; transform: rotate(45deg); }
+.lbline .st span { max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lbline .st em { font: normal 10px 'JetBrains Mono', monospace; color: var(--muted); }
+.lbline hr { flex: 1 0 22px; border: 0; border-top: 1px solid var(--line); margin: 6px -34px 0; }
+.lbb { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); border: 1px solid var(--rule); background: var(--panel); }
+.lbb .th { position: relative; min-height: 130px; background: var(--plate); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.lbb .bd { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.lbb .nt { border-left: 3px solid var(--ink); background: var(--bg); padding: 6px 10px; display: flex; flex-direction: column; gap: 3px; }
+.lbb .nt .w { font: 10px 'JetBrains Mono', monospace; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.lbb .nt q { quotes: none; font: 400 16px/1.4 'Newsreader', Georgia, serif; }
+.lbb .tt { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+.lbb .tt .btn { padding: 6px 10px; font-size: 10px; }
+.lbb .cr { font: 10px 'JetBrains Mono', monospace; color: var(--muted); }
+@media (max-width: 900px) { .lbb { grid-template-columns: 1fr; } .lbb .th { aspect-ratio: 16 / 9; min-height: 0; } }

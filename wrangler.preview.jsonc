@@ -1,0 +1,13 @@
+// The portfolio preview: https://portfolio.varxel.dev (Cloudflare Workers). Deploy with `npm run preview-deploy`.
+// No secrets: login and the vault go through the OS (service binding OS).
+{
+  "name": "varxel-portfolio",
+  "account_id": "94391d069cdee23cfa046c0cb31b37b3",
+  "main": "preview/worker.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "routes": [{ "pattern": "portfolio.varxel.dev", "custom_domain": true }],
+  "preview_urls": false,
+  "services": [{ "binding": "OS", "service": "varxel-os" }],
+  "assets": { "directory": "./preview-dist", "binding": "ASSETS", "run_worker_first": true }
+}

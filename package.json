@@ -12,6 +12,7 @@
     "harvest": "node tools/varxel/harvest.mjs",
     "promote": "node tools/varxel/promote.mjs",
     "publish-portfolio": "node tools/publish-portfolio.mjs",
-    "library": "node tools/build-library.mjs"
+    "library": "node tools/build-library.mjs",
+    "preview-deploy": "node tools/build-preview.mjs && npx -y wrangler@4.151.3 deploy -c wrangler.preview.jsonc"
   }
 }

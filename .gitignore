@@ -17,3 +17,6 @@ site-dist/
 assets/js/docs.private.js
 assets/shots-private/
 site-portfolio/
+
+# the portfolio preview files (tools/build-preview.mjs), deployed to portfolio.varxel.dev
+preview-dist/
