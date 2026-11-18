@@ -20,7 +20,7 @@ window.PORTFOLIO = {
      "org": "Untold Games",
      "when": "2023 to present",
      "where": "Genova, IT",
-     "desc": "City 20: bunker levels, audio implementation, a progression screen in UMG and editor tools for the design team. Nintendo Switch versions of High on Life and Police Simulator: Patrol Officers: UI for a new platform, deep debugging, debug tooling. The team's Verse programmer on published UEFN islands. Build and packaging work on an unannounced AAA title."
+     "desc": "City 20: bunker levels, audio implementation, a progression screen in UMG and editor tools for the design team, built with AI coding tools. Nintendo Switch versions of High on Life and Police Simulator: Patrol Officers: UI for a new platform, deep debugging, debug tooling. The team's Verse programmer on published UEFN islands. Build and packaging work on an unannounced AAA title."
     },
     {
      "title": "Software Developer",
@@ -130,7 +130,7 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>UI, a progression screen:</b> implemented a tree screen for the player menu in UMG, from the team's mockups and spec. Pan and zoom, gamepad support, node widgets with explicit states that take their look from one style asset, so the screen can be re-themed without touching its logic. Designers author the tree in an in-engine graph editor built with it: drag to link, validation, a written guide.</p><p><b>Designer tools:</b> editor tools that show a designer only what they need. An item editor in place of the raw details panel for more than 500 item assets, with a template per item kind and drag-and-drop icons. A card tracker for sound requests. A sound audit that scans 900+ sounds, shows each one's chain from wave to gameplay, and can replace a sound everywhere it is used.</p><p><b>Audio implementation:</b> wired sound into the player menu, inventory, crafting and equipment through gameplay abilities and cues, with a UI mix bus.</p><p><b>Debugging:</b> traced music going silent in packaged builds to about 114 radios whose unattenuated sounds filled the voice pool, and a footstep hitch to assets loading at runtime, found with Unreal Insights.</p><p><b>Credits:</b> C++ written with AI assistance.</p>",
+    "Technical Game Designer": "<p><b>UI, a progression screen:</b> built a tree screen for the player menu in UMG, from the team's design document. Pan and zoom, node widgets with explicit states that take their look from one style asset, so the screen can be re-themed without touching its logic. With it, an in-engine graph editor for designers to author the tree: drag to link, validation, a written guide.</p><p><b>Designer tools:</b> editor tools that show a designer only what they need. An item editor in place of the raw details panel for more than 500 item assets, with a template per item kind and drag-and-drop icons. A card tracker for sound requests. A sound audit that scans 900+ sounds, shows each one's chain from wave to gameplay, and can replace a sound everywhere it is used.</p><p><b>Audio implementation:</b> wired the sound designer's sounds into the player menu, inventory, crafting and equipment through gameplay abilities and cues, with a UI mix bus.</p><p><b>Debugging:</b> traced music going silent in packaged builds to about 114 radios whose unattenuated sounds filled the voice pool, and a footstep hitch to assets loading at runtime, found with Unreal Insights.</p><p><b>Credits:</b> the screen, the tools and the C++ were built with AI coding tools.</p>",
     "Game Designer": "<p><b>Bunker levels:</b> blocked out, built and reworked bunker levels and scripted their gameplay logic.</p><p><b>Interactables:</b> built a hold-to-scan interactable end to end: the ability, the smart object, its item output, dialogue, animation and sound.</p>"
    },
    "links": [
@@ -182,7 +182,7 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>UI for a new platform:</b> did the port's UI work, about 60 changesets. Joy-Con and Pro Controller glyphs that swap live with the controller, the button prompts across the game, and settings screens adapted for console: PC-only options removed, gyro added, text that scales with the UI. Menu bugs traced to their cause: navigation that counted invisible children, a scroll box set to never scroll, a confirm press leaking into the screen behind.</p><p><b>Tool development:</b> extended the cheat manager with Switch performance stats, and built a lighting-configuration system for a technical artist. It took many iterations, working around grapple-hook collision conflicts, spawn-inside-volume edge cases, and runtime actor attachment.</p><p><b>System documentation:</b> documented how High on Life's systems interconnected (level streaming, enemy AI behavior trees, the custom input system) and made sure others could follow them too.</p><p><b>Credits:</b> C++ written with AI assistance.</p>",
+    "Technical Game Designer": "<p><b>UI for a new platform:</b> UI work for the Switch port, about 60 changesets. Joy-Con and Pro Controller glyphs that swap live with the controller, the button prompts across the game, and settings screens adapted for console: PC-only options removed, gyro added, text that scales with the UI. Menu bugs traced to their cause: navigation that counted invisible children, a scroll box set to never scroll, a confirm press leaking into the screen behind.</p><p><b>Tool development:</b> extended the cheat manager with Switch performance stats, and built a lighting-configuration system for a technical artist. It took many iterations, working around grapple-hook collision conflicts, spawn-inside-volume edge cases, and runtime actor attachment.</p><p><b>System documentation:</b> documented how High on Life's systems interconnected (level streaming, enemy AI behavior trees, the custom input system) and made sure others could follow them too.</p><p><b>Credits:</b> C++ written with AI assistance.</p>",
     "Game Programmer": "<p><b>Deep-level debugging:</b> fixed critical C++ and Blueprint bugs. A division by zero that broke the collision matrix, Ubergraph memory leaks in the Game Instance, the Bink video player reading from the wrong path, Remote Events firing on unloaded levels, and collision-frequency changes creating pass-through bugs for fast actors.</p><p><b>Switch-specific systems:</b> rewrote input identification for Joy-Con and Pro Controller detection, standardized how the settings menu handled controller switching, and traced platform-specific compiler differences.</p>"
    },
    "links": [
@@ -669,7 +669,7 @@ window.PORTFOLIO = {
    "mechanics": [],
    "tier": "listed",
    "year": 2023,
-   "role": "Lead Systems Programmer",
+   "role": "Technical Designer, Verse programmer",
    "context": "Untold Games · Fortnite",
    "engine": "UEFN / Verse",
    "image": "./assets/images/PulsePartyThumbnail.jpg",
@@ -688,7 +688,7 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Lead systems programmer:</b> built the entire party-game framework from scratch in Verse. The hub, the map-switching logic for eight minigames, and a state manager that handled each mode's rules.</p>",
+    "Technical Game Designer": "<p><b>Systems in Verse:</b> built the entire party-game framework from scratch in Verse. The hub, the map-switching logic for eight minigames, and a state manager that handled each mode's rules.</p>",
     "Game Designer": "<p><b>Game design:</b> co-designed the expansion from a single deathmatch concept into eight distinct minigame modes.</p>"
    },
    "links": [
@@ -754,7 +754,7 @@ window.PORTFOLIO = {
    "mechanics": [],
    "tier": "listed",
    "year": 2023,
-   "role": "Lead Creator & Verse Developer",
+   "role": "Designer and Verse developer (solo)",
    "context": "Untold Games · Fortnite",
    "engine": "UEFN / Verse",
    "image": "./assets/images/Battleship.jpeg",
