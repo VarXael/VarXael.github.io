@@ -160,7 +160,7 @@ window.PORTFOLIO = {
    "role": "Technical Designer",
    "context": "Untold Games (for Squanch Games)",
    "engine": "Unreal Engine / C++",
-   "image": "./assets/images/HighOnLife.png",
+   "image": "./assets/images/HighOnLife.jpg",
    "video": "https://www.youtube.com/watch?v=qk2y4clYe9o",
    "videos": [],
    "tools": [
@@ -351,7 +351,7 @@ window.PORTFOLIO = {
    "role": "Director, Sole Programmer, Designer",
    "context": "Falmouth University · Team of 3",
    "engine": "Unreal Engine",
-   "image": "./assets/images/Cycle.png",
+   "image": "./assets/images/Cycle.jpg",
    "video": "https://youtu.be/Cuwhx4b7tYo",
    "videos": [],
    "tools": [
@@ -400,7 +400,7 @@ window.PORTFOLIO = {
    "role": "Technical Designer",
    "context": "Untold Games (for Aesir Interactive)",
    "engine": "Unreal Engine / C++",
-   "image": "./assets/images/PoliceSimulator.png",
+   "image": "./assets/images/PoliceSimulator.jpg",
    "video": "https://www.youtube.com/watch?v=fL2SOhYZ6k8",
    "videos": [],
    "tools": [
@@ -561,7 +561,7 @@ window.PORTFOLIO = {
    "role": "Lead Game Designer",
    "context": "University · Team of 4",
    "engine": "Unreal Engine",
-   "image": "./assets/images/Card's Weaver.png",
+   "image": "./assets/images/Card's Weaver.jpg",
    "video": null,
    "videos": [],
    "tools": [
@@ -600,7 +600,7 @@ window.PORTFOLIO = {
    "role": "Game Designer",
    "context": "Personal · Tabletop",
    "engine": "Tabletop",
-   "image": "./assets/images/Monk.png",
+   "image": "./assets/images/Monk.jpg",
    "video": null,
    "videos": [],
    "tools": [
@@ -676,7 +676,7 @@ window.PORTFOLIO = {
    "role": "Lead Systems Programmer",
    "context": "Untold Games · Fortnite",
    "engine": "UEFN / Verse",
-   "image": "./assets/images/PulsePartyThumbnail.png",
+   "image": "./assets/images/PulsePartyThumbnail.jpg",
    "video": "https://www.youtube.com/watch?v=CzMTSNYmdYI",
    "videos": [],
    "tools": [
