@@ -377,10 +377,6 @@ window.PORTFOLIO = {
     {
      "label": "View on The Rookies",
      "url": "https://www.therookies.co/entries/13406"
-    },
-    {
-     "label": "View on GitHub",
-     "url": "https://github.com/VarXael/Cycle"
     }
    ],
    "short": "Best 3rd-Year Videogame at Falmouth 2021, and chosen to represent the university at the G7 Summit in Cornwall. A surrealist puzzle-adventure built by two artists and me. I had never used Unreal before this. I spent August learning it, then we made the game.",
