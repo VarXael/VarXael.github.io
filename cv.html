@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV — Giuseppe Luigi Alfieri</title>
+    <title>CV · Giuseppe Luigi Alfieri</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
     <style>
         :root{
-            --bg:#0a0b0d; --panel:#0e0f12; --ink:#e8e6e0;
-            --dim:rgba(232,230,224,.55); --faint:rgba(232,230,224,.14);
-            --blue:#4fb8d4; --amber:#e0a23b;
-            --mono:'Space Mono',monospace; --sans:'Inter',sans-serif; --serif:'Cormorant Garamond',serif;
-        }
+            --bg:#e5e0d3; --panel:#dcd6c6; --ink:#2a251f;
+ --dim:#4a4237; --faint:#c4bca9;
+ --blue:#a8432c; --amber:#2a251f;
+ --mono:'JetBrains Mono',monospace; --sans:'Inter',sans-serif; --serif:'Newsreader',serif;
+ }
         *{box-sizing:border-box;margin:0;padding:0}
         html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-        body{font-family:var(--sans);background:#050608;color:var(--ink);line-height:1.45;font-size:9pt}
+        body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.45;font-size:9pt}
 
         .cv-container{
             width:21cm;height:29.7cm;margin:2rem auto;background:var(--bg);
             display:grid;grid-template-columns:30% 70%;
-            border:1px solid var(--faint);box-shadow:0 0 40px rgba(0,0,0,.6);
+            border:1px solid var(--faint);box-shadow:0 0 30px rgba(43,40,34,.12);
         }
-        .sidebar-column{padding:1.2cm;background:var(--panel);border-right:1px dashed var(--faint)}
+        .sidebar-column{padding:1cm .8cm;background:var(--panel);border-right:1px dashed var(--faint)}
         .main-column{padding:1.2cm}
 
         /* labels = mono uppercase; prose = inter */
@@ -32,7 +32,7 @@
             text-transform:uppercase;letter-spacing:2px;margin-bottom:.7rem;
             border-bottom:1px dashed var(--faint);padding-bottom:4px;
         }
-        h2.sec::before{content:"// "}
+        
 
         /* sidebar */
         .profile-pic{
@@ -52,7 +52,7 @@
 
         /* main */
         .main-header{margin-bottom:1.1rem;border-bottom:1px solid var(--blue);padding-bottom:.6rem}
-        .main-header h1{font-family:var(--mono);font-size:22pt;font-weight:700;color:var(--ink);line-height:1.05;text-transform:uppercase;letter-spacing:1px}
+        .main-header h1{font-family:var(--serif);font-size:30pt;font-weight:300;color:var(--ink);line-height:1;letter-spacing:-.02em}
         .main-header h3{font-family:var(--mono);font-size:10pt;font-weight:400;color:var(--blue);letter-spacing:3px;text-transform:uppercase;margin-top:6px}
         .main-column section{margin-bottom:.9rem}
         .summary p{font-family:var(--serif);font-style:italic;font-size:11pt;color:var(--dim);line-height:1.4}
@@ -67,9 +67,10 @@
         .job-entry strong{color:var(--ink);font-weight:600}
         .job-entry .highlight{color:var(--amber);font-weight:600}
 
-        @media print{
-            body{background:#fff;font-size:8.5pt}
-            .cv-container{margin:0;box-shadow:none;width:100%;height:100%;border:none}
+        @page{size:A4;margin:0}
+ @media print{
+            html,body{background:var(--bg);font-size:8.5pt}
+            .cv-container{margin:0;box-shadow:none;width:100%;height:296mm;border:none}
             .print-button{display:none}
         }
         .print-button{
@@ -88,28 +89,30 @@
             <section>
                 <h2 class="sec">Contact</h2>
                 <ul class="contact-list">
-                    <li><span class="k">LOC:</span><span>Saviano (NA), Italy</span></li>
-                    <li><span class="k">MAIL:</span><a href="mailto:giuseppeluigi.alfieri@gmail.com">giuseppeluigi.alfieri@gmail.com</a></li>
-                    <li><span class="k">WEB:</span><a href="https://varxael.github.io" target="_blank" rel="noopener">varxael.github.io</a></li>
-                    <li><span class="k">GIT:</span><a href="https://github.com/VarXael" target="_blank" rel="noopener">github.com/VarXael</a></li>
+                    <li><span class="k">Place</span><span>Genova, Italy (EU, will relocate)</span></li>
+                    <li><span class="k">Mail</span><a href="mailto:giuseppeluigi.alfieri@gmail.com">giuseppeluigi.alfieri@gmail.com</a></li>
+                    <li><span class="k">Web</span><a href="https://varxael.github.io" target="_blank" rel="noopener">varxael.github.io</a></li>
+                    <li><span class="k">Git</span><a href="https://github.com/VarXael" target="_blank" rel="noopener">github.com/VarXael</a></li>
                 </ul>
             </section>
 
             <section>
                 <h2 class="sec">Skills</h2>
                 <ul class="skills-list">
-                    <li><strong>Languages</strong>C++, C#, Verse, Blueprints</li>
-                    <li><strong>Engines</strong>Unreal Engine (4 &amp; 5), Unity, UEFN</li>
-                    <li><strong>Expertise</strong>Systems design, gameplay prototyping, porting &amp; optimization, debugging</li>
-                    <li><strong>Tools &amp; Methods</strong>Git, Plastic SCM, Rider, Visual Studio, Agile</li>
+                    <li><strong>Engines</strong>Unreal Engine 4 &amp; 5, UEFN, Godot, Unity</li>
+                    <li><strong>Scripting</strong>Blueprints, UMG, Verse, Python (editor scripting); C++ with AI assistance</li>
+                    <li><strong>Design</strong>UI and UX for games and tools, systems design, level design, prototyping</li>
+                    <li><strong>Technical</strong>Audio implementation (MetaSounds), editor tools, debugging, console builds and packaging</li>
+                    <li><strong>Tools</strong>Plastic SCM, Git, Rider, Visual Studio, AI coding tools</li>
+                    <li><strong>Languages</strong>Italian (native), English (fluent)</li>
                 </ul>
             </section>
 
             <section>
                 <h2 class="sec">Education</h2>
                 <ul class="skills-list">
-                    <li class="education-item"><strong>MSc, Game Programming</strong><p>University of Verona, Italy (2021 – 2023)</p></li>
-                    <li class="education-item"><strong>BA (Hons) Games Dev: Design</strong><p>Falmouth University, UK (2018 – 2021)</p></li>
+                    <li class="education-item"><strong>MSc, Game Programming</strong><p>University of Verona, Italy (2021 to 2023)</p></li>
+                    <li class="education-item"><strong>BA (Hons) Games Dev: Design</strong><p>Falmouth University, UK (2018 to 2021)</p></li>
                 </ul>
             </section>
         </aside>
@@ -117,61 +120,51 @@
         <main class="main-column">
             <header class="main-header">
                 <h1>Giuseppe Luigi Alfieri</h1>
-                <h3>Game &amp; Technical Designer</h3>
+                <h3>Technical Designer</h3>
             </header>
 
             <section class="summary">
                 <h2 class="sec">Summary</h2>
-                <p>"I design games where the systems tell the story — and everything I design, I can also build."</p>
+                <p>Technical designer with 3+ years in Unreal at Untold Games. I build UI, tools and systems: a progression screen and designer tools on City 20, UI work for High on Life on Switch, and published UEFN islands. My focus is making complex systems readable.</p>
             </section>
 
             <section>
                 <h2 class="sec">Experience</h2>
                 <div class="job-entry">
-                    <div class="job-header"><h4>Untold Games — Game Programmer &amp; Designer</h4><span>2023 – Present</span></div>
+                    <div class="job-header"><h4>Untold Games, Technical Designer</h4><span>2023 to present</span></div>
                     <ul>
-                        <li><strong>High on Life (Switch port):</strong> core programmer resolving critical <span class="highlight">C++</span> gameplay bugs and ensuring console stability.</li>
-                        <li><strong>Police Simulator (Switch port):</strong> designed and built custom debug tooling from scratch to support QA and development.</li>
-                        <li><strong>UEFN projects:</strong> lead systems programmer in <span class="highlight">Verse</span>, architecting the core frameworks behind multiple released multiplayer titles.</li>
+                        <li><strong>City 20 (UE5, Steam Early Access), UI and tools:</strong> implemented a progression-tree screen for the player menu in <span class="highlight">UMG</span> (pan, zoom, gamepad, themeable node states) and built editor tools for the design team: item editor, sound audit, request tracker.</li>
+                        <li><strong>City 20, design and audio:</strong> built bunker levels and their gameplay logic; built a hold-to-scan interactable end to end; implemented in-game audio; traced music going silent in packaged builds to about 114 unattenuated radios filling the voice pool.</li>
+                        <li><strong>High on Life (Switch):</strong> main bug fixer on the port, about 300 changesets. Did its UI work for console: controller glyphs, button prompts across the game, settings screens, menu navigation and focus.</li>
+                        <li><strong>Police Simulator (Switch):</strong> built the in-game debug menu from scratch (ImGui); made the game's UI readable on a handheld screen; wrote the full game analysis document.</li>
+                        <li><strong>UEFN:</strong> the team's <span class="highlight">Verse</span> programmer on published Fortnite islands (Pulse Party, PulseMatch, Battleship); systems for Night Trip and Gamma.</li>
+                        <li><strong>Unannounced AAA title:</strong> early in the project, got the game building and packaging on PC and a console devkit, and wrote the build guide for the team.</li>
                     </ul>
                 </div>
                 <div class="job-entry">
-                    <div class="job-header"><h4>Creativity Unleashed — Unreal Engine Tutor</h4><span>2021</span></div>
-                    <ul><li>Authored and published a 16-hour Unreal Engine course on Udemy, teaching <span class="highlight">Blueprint</span> fundamentals and engine architecture.</li></ul>
-                </div>
-                <div class="job-entry">
-                    <div class="job-header"><h4>Cineon Immersive Training — Unreal Engine Tutor</h4><span>2020</span></div>
-                    <ul><li>Built the interaction table and cross-referencing logic for a VR PPE training project.</li></ul>
+                    <div class="job-header"><h4>Unreal Engine Tutor, Creativity Unleashed, Cineon</h4><span>2020 to 2021</span></div>
+                    <ul><li>Wrote a 16-hour Unreal Engine course published on Udemy; built interaction logic for a VR safety-training project.</li></ul>
                 </div>
             </section>
 
             <section>
                 <h2 class="sec">Selected Projects</h2>
                 <div class="job-entry">
-                    <div class="job-header"><h4>Cadence — Personal Systems Architecture</h4></div>
+                    <div class="job-header"><h4>Cycle, University Project</h4></div>
                     <ul>
-                        <li><strong>Designed and architected</strong> a flexible <span class="highlight">C++</span> framework that turns music into gameplay, from rhythm-action to synchronized world events.</li>
-                        <li>Engineered for high performance with lightweight <span class="highlight">UObjects</span> instead of Actors, handling thousands of concurrent events.</li>
+                        <li><strong>Led a team of three</strong> on this award-winning (<span class="highlight">G7 Summit selection</span>) game; sole programmer and designer in Unreal, from puzzle mechanics to progression.</li>
                     </ul>
                 </div>
                 <div class="job-entry">
-                    <div class="job-header"><h4>Cycle — University Project</h4></div>
+                    <div class="job-header"><h4>Project Sasha &amp; Cadence, Personal</h4></div>
                     <ul>
-                        <li><strong>Led a team of three</strong> to this award-winning (<span class="highlight">G7 Summit selection</span>) project, owning the technical design and implementation.</li>
-                        <li>As <strong>sole programmer and designer</strong>, built the entire game in <span class="highlight">Unreal Engine</span> — from puzzle mechanics to the dynamic progression system.</li>
-                    </ul>
-                </div>
-                <div class="job-entry">
-                    <div class="job-header"><h4>Card's Weaver — University Project</h4></div>
-                    <ul>
-                        <li>Led the project as <strong>Lead Designer</strong>, guiding a team of four from concept to a playable prototype.</li>
-                        <li>Designed the core systems: card abilities, the central resource mechanic, and the gameplay loop.</li>
+                        <li>A scanning-based exploration game with two playable design versions, and a framework that turns music into gameplay events.</li>
                     </ul>
                 </div>
             </section>
         </main>
     </div>
 
-    <button class="print-button" onclick="window.print()">[ PRINT TO PDF ]</button>
+    <button class="print-button" onclick="window.print()">Print to PDF</button>
 </body>
 </html>

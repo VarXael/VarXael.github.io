@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Giuseppe Alfieri | Technical Designer</title>
+<meta name="description" content="Giuseppe Luigi Alfieri, technical designer. UI, tools and systems in Unreal Engine: City 20, High on Life and Police Simulator on Nintendo Switch, released UEFN titles.">
+<link rel="icon" href="./assets/images/about.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="./assets/css/frames-site.css">
+<script>/* the paper look is the site (his call, 2026-11-18); dark and green stays as ?look=green */
+if (/[?&]look=green/.test(location.search)) document.write('<link rel="stylesheet" href="./assets/css/frames-green.css">');</script>
+</head>
+<body>
+<div id="pf">
+  <div id="scan"></div>
+  <div id="tabs"></div>
+  <div class="sidearrow" id="sideL" hidden><span class="ch">‹</span><span class="nm"></span></div>
+  <div class="sidearrow" id="sideR" hidden><span class="nm"></span><span class="ch">›</span></div>
+  <div id="foot"><div id="crumbs"></div><span id="hint"></span></div>
+  <div id="box"></div>
+</div>
+<div class="viewer" id="lb" hidden role="dialog" aria-modal="true" aria-label="Image">
+  <div class="bar"><span id="lbCount"></span><button type="button" id="lbClose">Close</button></div>
+  <figure><img id="lbImg" alt=""></figure>
+  <div class="nav"><button type="button" id="lbPrev" aria-label="Previous">&larr;</button><p id="lbCap"></p><button type="button" id="lbNext" aria-label="Next">&rarr;</button></div>
+</div>
+<noscript>This page needs JavaScript.</noscript>
+<script src="./assets/js/content.js"></script>
+<script src="./assets/js/docs.js"></script>
+<script src="./assets/js/frames.js"></script>
+</body>
+</html>

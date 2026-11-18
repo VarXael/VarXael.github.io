@@ -1,0 +1,18 @@
+/* Dark and green, the default look (his rule, 2026-10-27: "id like as a rule, the look of everything dark, i wannt it to be dark annd green.
+   Just like the old dark professional portfolio"). Palette and fonts from the Dark-Professional-Version branch. The paper look stays: ?look=paper. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap');
+
+body:has(#pf:not(.paper)) { background: hsl(0, 0%, 7%); }
+#pf:not(.paper), #pf.dk:not(.paper) {
+  --bg: hsl(0, 0%, 7%); --ink: hsl(0, 0%, 92%); --muted: hsl(0, 0%, 52%); --soft: hsl(0, 0%, 65%); --rule: hsl(0, 0%, 22%);
+  --plate: hsl(240, 2%, 13%); --hover: hsl(240, 1%, 20%); --accent: hsl(160, 100%, 40%); --line: hsl(0, 0%, 30%);
+  --panel: hsl(240, 2%, 12%); --scan: hsla(160, 100%, 40%, .025);
+  --sw-bg: hsl(160, 100%, 40%); --sw-ink: hsl(0, 0%, 7%); --sw-accent: hsl(160, 70%, 60%);
+  font-family: 'Poppins', sans-serif;
+}
+#pf:not(.paper) .jost, #pf:not(.paper) .serif, #pf:not(.paper) .display, #pf:not(.paper) h1, #pf:not(.paper) h2, #pf:not(.paper) #tabs,
+#pf:not(.paper) .btn, #pf:not(.paper) .card .ex, #pf:not(.paper) .minb, #pf:not(.paper) #tabs .cv, #pf:not(.paper) .yt .play { font-family: 'Poppins', sans-serif !important; }
+#pf:not(.paper) .mono, #pf:not(.paper) #foot { font-family: 'Fira Code', monospace !important; }
+#pf:not(.paper) .fw > .bg { background: var(--panel); }
+#pf:not(.paper) .navi.on, #pf:not(.paper) .rolerow.on { color: hsl(0, 0%, 7%); }
+#pf:not(.paper) .drow .dtitle:hover, #pf:not(.paper) .hv-acc:hover { color: hsl(160, 70%, 60%) !important; }
