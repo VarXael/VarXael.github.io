@@ -7,9 +7,9 @@ window.PORTFOLIO = {
   "github": "https://github.com/VarXael",
   "cv": "./cv-frames.html",
   "portrait": "./assets/images/about.png",
-  "headline": "Technical designer at Untold Games. UI, tools and systems in Unreal: <b>City 20</b>, the Nintendo Switch versions of <b>High on Life</b> and <b>Police Simulator: Patrol Officers</b>, and published UEFN islands.",
-  "quote": "I design games where the systems tell the story.",
-  "bio": "I design systems by tracing every dependency until the whole thing holds together, then I build them in the engine: Blueprints, UMG and Verse by hand, C++ with AI assistance. What I care about most is making complex systems readable, for players on screen and for the designers who work on them. I have shipped on Nintendo Switch, led teams from concept to release, and won Best 3rd-Year Videogame at Falmouth."
+  "headline": "Technical designer at Untold Games, Genova. I work in Unreal on UI, tools and gameplay systems: <b>City 20</b>, the Nintendo Switch versions of <b>High on Life</b> and <b>Police Simulator: Patrol Officers</b>, and published Fortnite islands in Verse.",
+  "quote": "Most of my work is making complicated systems easy to read, on screen and in the editor.",
+  "bio": "I studied games design at Falmouth, where I led Cycle, Best 3rd-Year Videogame 2021, and game programming in Verona; and I have been at Untold Games since 2023. On the Switch ports I fixed bugs (on High on Life I was the main bug fixer) and adapted the UI for a handheld screen. On City 20 I have built levels, wired in the game's sound, and made editor tools that show designers only the fields they need. I build in Blueprints, UMG and Verse myself and use AI coding tools for C++. Outside work I make small games that each test one idea; they are in the Lab."
  },
  "experience": [
   {
@@ -20,7 +20,7 @@ window.PORTFOLIO = {
      "org": "Untold Games",
      "when": "2023 to present",
      "where": "Genova, IT",
-     "desc": "City 20: bunker levels, audio implementation, a progression screen in UMG and editor tools for the design team, built with AI coding tools. Nintendo Switch versions of High on Life and Police Simulator: Patrol Officers: UI for a new platform, deep debugging, debug tooling. The team's Verse programmer on published UEFN islands. Build and packaging work on an unannounced AAA title."
+     "desc": "On City 20 I have built bunker levels, implemented the sound designer's sounds in gameplay and UI, and made a progression screen and editor tools for the design team, with AI coding tools for the C++. On the Nintendo Switch versions of High on Life and Police Simulator I did UI work for console, fixed bugs and built debug tools. I am the team's Verse programmer on our published Fortnite islands, and did build and packaging work at the start of an unannounced AAA project."
     },
     {
      "title": "Software Developer",
@@ -34,14 +34,14 @@ window.PORTFOLIO = {
      "org": "Creativity Unleashed",
      "when": "May to Oct 2021",
      "where": "",
-     "desc": "Authored a 16-hour Unreal Engine course teaching Blueprint fundamentals and engine architecture. Published on Udemy."
+     "desc": "Wrote and recorded a 16-hour Unreal Engine course for beginners, published on Udemy."
     },
     {
      "title": "Unreal Engine Tutor",
      "org": "Cineon Immersive Training",
      "when": "Apr 2020",
      "where": "",
-     "desc": "Built the interaction table for the PPE training project and the cross-referencing logic between training scenarios."
+     "desc": "Built the interaction logic for a VR safety-equipment training project."
     }
    ]
   },
@@ -75,19 +75,19 @@ window.PORTFOLIO = {
  "disciplines": {
   "Game Designer": {
    "title": "Game Designer",
-   "description": "I think in systems. I design interconnected mechanics where every piece has a reason to exist and every decision creates a consequence."
+   "description": "Projects where I designed the rules: what the player does, what it costs, and how the pieces depend on each other."
   },
   "Technical Game Designer": {
    "title": "Technical Game Designer",
-   "description": "Everything I design, I also build. When a project carries this tag, I wrote the design and implemented it in the engine myself."
+   "description": "Projects where I designed something and built it in the engine, or built the tools other designers work with."
   },
   "Leadership": {
    "title": "Leadership",
-   "description": "I bring teams together and carry a vision from concept to ship. On these projects I was the person people looked to for direction."
+   "description": "Projects where I led the team: I set the direction, split the work and got it to a finished build."
   },
   "Game Programmer": {
    "title": "Game Programmer",
-   "description": "On these projects I implemented systems inside an existing design or codebase: Blueprints and Verse by hand, C++ with AI assistance."
+   "description": "Projects where I implemented systems inside an existing design or codebase. Blueprints and Verse by hand, C++ with AI coding tools."
   }
  },
  "projects": {
@@ -130,8 +130,8 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>UI, a progression screen:</b> built a tree screen for the player menu in UMG, from the team's design document. Pan and zoom, node widgets with explicit states that take their look from one style asset, so the screen can be re-themed without touching its logic. With it, an in-engine graph editor for designers to author the tree: drag to link, validation, a written guide.</p><p><b>Designer tools:</b> editor tools that show a designer only what they need. An item editor in place of the raw details panel for more than 500 item assets, with a template per item kind and drag-and-drop icons. A card tracker for sound requests. A sound audit that scans 900+ sounds, shows each one's chain from wave to gameplay, and can replace a sound everywhere it is used.</p><p><b>Audio implementation:</b> wired the sound designer's sounds into the player menu, inventory, crafting and equipment through gameplay abilities and cues, with a UI mix bus.</p><p><b>Debugging:</b> traced music going silent in packaged builds to about 114 radios whose unattenuated sounds filled the voice pool, and a footstep hitch to assets loading at runtime, found with Unreal Insights.</p><p><b>Credits:</b> the screen, the tools and the C++ were built with AI coding tools.</p>",
-    "Game Designer": "<p><b>Bunker levels:</b> blocked out, built and reworked bunker levels and scripted their gameplay logic.</p><p><b>Interactables:</b> built a hold-to-scan interactable end to end: the ability, the smart object, its item output, dialogue, animation and sound.</p>"
+    "Technical Game Designer": "<p><b>A progression screen.</b> A tree screen for the player menu, built in UMG from the team's design document. You pan and zoom around it, and each node shows its state. Every state takes its look from one style asset, so the screen can be restyled without touching its logic. Designers build the tree in a graph editor made alongside it.</p><p><b>Tools for designers.</b> An item asset has about 80 fields in Unreal's details panel, most of which a designer never reads. I built editor tools that show only what matters: an item editor for more than 500 items, with a template for each kind of item; a tracker for sound requests; and a sound audit that lists 900+ sounds, shows where each one is used, and swaps one sound for another everywhere at once.</p><p><b>Sound.</b> I wire the sound designer's sounds into the game: menus, inventory, crafting, equipment. I also found why the music went silent only in packaged builds: about 114 radios in the level played unattenuated sounds at once and used up every voice the engine had. And I traced a footstep hitch to sounds loading at runtime, using Unreal Insights, and had them preloaded.</p><p><b>Credits:</b> the screen, the tools and their C++ were built with AI coding tools. The tree's rules come from the team's design document; the tool designs, the UX decisions and the testing are mine.</p>",
+    "Game Designer": "<p><b>Bunker levels.</b> Blocked out, built and reworked bunker levels, and scripted what happens in them.</p><p><b>An interactable.</b> A hold-to-scan object, end to end: the ability, the smart object, the item it gives, the dialogue, the animation and the sound.</p>"
    },
    "links": [
     {
@@ -143,7 +143,7 @@ window.PORTFOLIO = {
      "url": "request"
     }
    ],
-   "short": "Untold Games' post-apocalyptic survival sandbox, in Early Access on Steam. Since late 2025 I have built bunker levels, taken on the game's audio implementation, and built a progression screen and editor tools for the design team.",
+   "short": "A post-apocalyptic survival sandbox from Untold Games, in Early Access on Steam. I joined it in late 2025. I build editor tools and UI for the design team, implement the game's sounds, and have built bunker levels.",
    "story": ""
   },
   "HighOnLife": {
@@ -159,7 +159,7 @@ window.PORTFOLIO = {
    "year": 2025,
    "role": "Technical Designer",
    "context": "Untold Games (for Squanch Games)",
-   "engine": "Unreal Engine / C++",
+   "engine": "Unreal Engine",
    "image": "./assets/images/HighOnLife.jpg",
    "video": "https://www.youtube.com/watch?v=qk2y4clYe9o",
    "videos": [],
@@ -182,8 +182,8 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>UI for a new platform:</b> UI work for the Switch port, about 60 changesets. Joy-Con and Pro Controller glyphs that swap live with the controller, the button prompts across the game, and settings screens adapted for console: PC-only options removed, gyro added, text that scales with the UI. Menu bugs traced to their cause: navigation that counted invisible children, a scroll box set to never scroll, a confirm press leaking into the screen behind.</p><p><b>Tool development:</b> extended the cheat manager with Switch performance stats, and built a lighting-configuration system for a technical artist. It took many iterations, working around grapple-hook collision conflicts, spawn-inside-volume edge cases, and runtime actor attachment.</p><p><b>System documentation:</b> documented how High on Life's systems interconnected (level streaming, enemy AI behavior trees, the custom input system) and made sure others could follow them too.</p><p><b>Credits:</b> C++ written with AI assistance.</p>",
-    "Game Programmer": "<p><b>Deep-level debugging:</b> fixed critical C++ and Blueprint bugs. A division by zero that broke the collision matrix, Ubergraph memory leaks in the Game Instance, the Bink video player reading from the wrong path, Remote Events firing on unloaded levels, and collision-frequency changes creating pass-through bugs for fast actors.</p><p><b>Switch-specific systems:</b> rewrote input identification for Joy-Con and Pro Controller detection, standardized how the settings menu handled controller switching, and traced platform-specific compiler differences.</p>"
+    "Technical Game Designer": "<p><b>UI for Switch.</b> About 60 of my changesets were UI. Joy-Con and Pro Controller button icons that change when you change controller. Button prompts across the game. Settings screens adapted for console: PC-only options out, gyro in, text that scales with the UI. Some menu bugs took real digging: a menu that counted hidden items as you moved through it, a list that could not scroll because its scroll mode was set to none, a confirm press that went through to the screen behind.</p><p><b>Tools.</b> Performance stats in the cheat menu, and a tool for a technical artist that switches lighting setups by area.</p>",
+    "Game Programmer": "<p><b>Bugs.</b> A division by zero in one boss attack that broke every collision on Switch. A world kept in memory by loose references in the Game Instance, which caused random crashes. Videos that went black when an SD card was inserted, because the video player looked in the wrong folder. Events firing on levels that had not loaded yet. Fast objects passing through walls after collision checks were slowed for performance.</p><p><b>Credits:</b> C++ written with AI assistance.</p>"
    },
    "links": [
     {
@@ -191,19 +191,23 @@ window.PORTFOLIO = {
      "url": "request"
     }
    ],
-   "short": "Nintendo Switch port of High on Life. Over ten months and about 300 changesets I was the port's main bug fixer: its UI on a new platform, deep debugging, internal tooling, and systems changed for Switch stability.",
-   "story": "<p>A few months in I was genuinely having fun. The game's humor would catch me off guard constantly, and there was always something that would make me burst out laughing mid-debugging session.</p><p>The Lasagna Technique: there was a boss fight where one specific attack would break every collision in the entire game. Player, enemies, everything would fall through the floor indefinitely. To debug it I built stacked collision floors in their own sublevels, one on top of the other, to see which one the player would still land on when falling. I called it the Lasagna Technique. The actual cause was a division by zero inside the boss attack code. The Switch compiler handled that edge case differently from PC and killed the entire collision matrix. One code change fixed it. I was a very happy person for a few days.</p><p>The Bink Situation: every video in the game would go black if the player inserted an SD card. After a week of digging I found that the Unreal Engine source code for Switch had the read path and the write path pointing to the same location. It was looking for videos to read inside the write folder, finding nothing, and defaulting to black. I hardcoded the video path directly into the Bink media player CPP. Hacky, but it worked. I still have no idea how that bug had never surfaced in any other project.</p><p>The Ubergraph Crash: random crashes happening seemingly anywhere in the game. I traced it to a Blueprint event in the Game Instance that had two output execution pins connected to nothing. From earlier study of Unreal's Ubergraph, the compiled low-level version of Blueprints, I knew unused pins could create memory leaks. The Game Instance is the only object that persists across every level load in Unreal Engine. Those loose references were preventing the world from being properly destroyed during map transitions. I rewrote the event in C++, removed the pins, fixed.</p><p>The Lighting Tool: a technical artist needed to switch between different lighting setups per area for performance reasons. Simple idea: box colliders throughout the levels, each holding a lighting configuration, player entering triggers the switch. It took nine iterations to get it working correctly. The grapple hook disabled all player collisions including ours, so we had to create a separate attached actor. That actor caused a different issue where spawning inside a collider wouldn't register, so we added a forced collision check every 0.5 seconds for 60 seconds. Each fix introduced a new edge case. Nine iterations. It worked perfectly in the end.</p>"
+   "short": "The Nintendo Switch port of High on Life, for Squanch Games. Over ten months and about 300 changesets I was the port's main bug fixer, and did UI work for the Switch.",
+   "story": "<p>A few months in I was genuinely having fun. The game's humor would catch me off guard constantly, and there was always something that would make me burst out laughing mid-debugging session.</p><p>The Lasagna Technique: there was a boss fight where one specific attack would break every collision in the entire game. Player, enemies, everything would fall through the floor indefinitely. To debug it I built stacked collision floors in their own sublevels, one on top of the other, to see which one the player would still land on when falling. I called it the Lasagna Technique. The actual cause was a division by zero inside the boss attack code. The Switch build handled that edge case differently from PC and broke the entire collision matrix. One code change fixed it. I was a very happy person for a few days.</p><p>The Bink Situation: every video in the game would go black if the player inserted an SD card. After a week of digging I found the video player was looking for the videos in the wrong folder, finding nothing, and defaulting to black. I pointed it at the right one. Hacky, but it worked.</p><p>The Ubergraph Crash: random crashes happening seemingly anywhere in the game. I traced it to a Blueprint event in the Game Instance that had two output execution pins connected to nothing. From earlier study of Unreal's Ubergraph, the compiled low-level version of Blueprints, I knew unused pins could create memory leaks. The Game Instance is the only object that persists across every level load in Unreal Engine. Those loose references were preventing the world from being properly destroyed during map transitions. I rebuilt the event without the loose pins, and the crashes stopped.</p><p>The Lighting Tool: a technical artist needed to switch between different lighting setups per area for performance reasons. Simple idea: box colliders throughout the levels, each holding a lighting configuration, player entering triggers the switch. It took nine iterations to get it working correctly. The grapple hook disabled all player collisions including ours, so we had to create a separate attached actor. That actor caused a different issue where spawning inside a collider wouldn't register, so we added a forced collision check every 0.5 seconds for 60 seconds. Each fix introduced a new edge case. Nine iterations. It worked perfectly in the end.</p>"
   },
   "ProjectSasha": {
    "id": "ProjectSasha",
    "card": "Project Sasha",
-   "playNotes": "<p>Two playable Godot slices of the same rule, each built to one of the two design documents, so the difference can be felt, not just read.</p><div class=\"md-table\"><table><thead><tr><th></th><th>v1 · Design Document</th><th>v2 · Master Design Document</th></tr></thead><tbody><tr><td>Looking</td><td>Ghost scan: reserves the object's full weight in volatile memory.</td><td>Soft scan: free, and it fades a few seconds after you look away.</td></tr><tr><td>Committing</td><td>Full scan, one object at a time, written to the area chip.</td><td>One flash charge saves everything still lit within range, at once.</td></tr><tr><td>The void</td><td>A probability: walk on an unscanned bridge and you fall.</td><td>Solid: you can only walk on floor you have saved.</td></tr><tr><td>Chips</td><td>Swapped at a terminal; one rides inside an enemy.</td><td>Carried in Sasha's spine; they overlap and can be merged.</td></tr><tr><td>Enemies</td><td>Touch a warden and you die.</td><td>Wardens scan you back and are immune until rendered with a flash.</td></tr></tbody></table></div><p><b>v2 controls:</b> WASD move · hold left mouse to soft-scan · right mouse to flash · F fire · Q spine · E interact · T tag · F1 help.</p><p><b>v1 controls:</b> WASD move · hold right mouse to aim · rest the cursor on a shape to ghost-scan · hold left mouse to commit · X delete a ghost · E terminal · F1 rules.</p>",
+   "playNotes": "<p><b>v42a · The dive</b> is a recent build. Start in the hub, take a Sasha (hold right and left mouse on her), and stand on the bright square with her to dive. Scan things, open them with the light, move pieces with TAB, and send her across with E. Put the long piece in the door and the L, T, S and Z pieces in the lift; both keep what you give them between dives. Stand on the far bright square with her to go back.</p><p><b>v42a controls:</b> WASD and mouse to fly · Space, Ctrl up and down · V first person or from above · hold right mouse for the light · hold right and left mouse to scan · TAB to drag pieces · E go there, Q stay.</p><p><b>v1 and v2</b> are the two earliest builds, each made from one of the first two design documents.</p><div class=\"md-table\"><table><thead><tr><th></th><th>v1 · Design Document</th><th>v2 · Master Design Document</th></tr></thead><tbody><tr><td>Looking</td><td>Ghost scan: reserves the object's full weight in volatile memory.</td><td>Soft scan: free, and it fades a few seconds after you look away.</td></tr><tr><td>Committing</td><td>Full scan, one object at a time, written to the area chip.</td><td>One flash charge saves everything still lit within range, at once.</td></tr><tr><td>The void</td><td>A probability: walk on an unscanned bridge and you fall.</td><td>Solid: you can only walk on floor you have saved.</td></tr><tr><td>Chips</td><td>Swapped at a terminal; one rides inside an enemy.</td><td>Carried in Sasha's spine; they overlap and can be merged.</td></tr><tr><td>Enemies</td><td>Touch a warden and you die.</td><td>Wardens scan you back and are immune until rendered with a flash.</td></tr></tbody></table></div><p><b>v2 controls:</b> WASD move · hold left mouse to soft-scan · right mouse to flash · F fire · Q spine · E interact · T tag · F1 help.</p><p><b>v1 controls:</b> WASD move · hold right mouse to aim · rest the cursor on a shape to ghost-scan · hold left mouse to commit · X delete a ghost · E terminal · F1 rules.</p>",
    "title": "Project Sasha",
    "category": "personal work",
    "published": true,
    "play": {
     "id": "ProjectSasha",
     "builds": [
+     {
+      "label": "v42a · The dive",
+      "slug": "v42a"
+     },
      {
       "label": "v2 · Master Design Document",
       "slug": "v2"
@@ -214,18 +218,18 @@ window.PORTFOLIO = {
      }
     ],
     "downloads": [],
-    "notes": "<p>Two playable Godot slices of the same rule, each built to one of the two design documents, so the difference can be felt, not just read.</p><div class=\"md-table\"><table><thead><tr><th></th><th>v1 · Design Document</th><th>v2 · Master Design Document</th></tr></thead><tbody><tr><td>Looking</td><td>Ghost scan: reserves the object's full weight in volatile memory.</td><td>Soft scan: free, and it fades a few seconds after you look away.</td></tr><tr><td>Committing</td><td>Full scan, one object at a time, written to the area chip.</td><td>One flash charge saves everything still lit within range, at once.</td></tr><tr><td>The void</td><td>A probability: walk on an unscanned bridge and you fall.</td><td>Solid: you can only walk on floor you have saved.</td></tr><tr><td>Chips</td><td>Swapped at a terminal; one rides inside an enemy.</td><td>Carried in Sasha's spine; they overlap and can be merged.</td></tr><tr><td>Enemies</td><td>Touch a warden and you die.</td><td>Wardens scan you back and are immune until rendered with a flash.</td></tr></tbody></table></div><p><b>v2 controls:</b> WASD move · hold left mouse to soft-scan · right mouse to flash · F fire · Q spine · E interact · T tag · F1 help.</p><p><b>v1 controls:</b> WASD move · hold right mouse to aim · rest the cursor on a shape to ghost-scan · hold left mouse to commit · X delete a ghost · E terminal · F1 rules.</p>",
-    "short": "A top-down exploration game where scanning is the entire game. Knowledge is the resource, memory is the currency, and every mechanic asks the same question: what is worth remembering?"
+    "notes": "<p><b>v42a · The dive</b> is a recent build. Start in the hub, take a Sasha (hold right and left mouse on her), and stand on the bright square with her to dive. Scan things, open them with the light, move pieces with TAB, and send her across with E. Put the long piece in the door and the L, T, S and Z pieces in the lift; both keep what you give them between dives. Stand on the far bright square with her to go back.</p><p><b>v42a controls:</b> WASD and mouse to fly · Space, Ctrl up and down · V first person or from above · hold right mouse for the light · hold right and left mouse to scan · TAB to drag pieces · E go there, Q stay.</p><p><b>v1 and v2</b> are the two earliest builds, each made from one of the first two design documents.</p><div class=\"md-table\"><table><thead><tr><th></th><th>v1 · Design Document</th><th>v2 · Master Design Document</th></tr></thead><tbody><tr><td>Looking</td><td>Ghost scan: reserves the object's full weight in volatile memory.</td><td>Soft scan: free, and it fades a few seconds after you look away.</td></tr><tr><td>Committing</td><td>Full scan, one object at a time, written to the area chip.</td><td>One flash charge saves everything still lit within range, at once.</td></tr><tr><td>The void</td><td>A probability: walk on an unscanned bridge and you fall.</td><td>Solid: you can only walk on floor you have saved.</td></tr><tr><td>Chips</td><td>Swapped at a terminal; one rides inside an enemy.</td><td>Carried in Sasha's spine; they overlap and can be merged.</td></tr><tr><td>Enemies</td><td>Touch a warden and you die.</td><td>Wardens scan you back and are immune until rendered with a flash.</td></tr></tbody></table></div><p><b>v2 controls:</b> WASD move · hold left mouse to soft-scan · right mouse to flash · F fire · Q spine · E interact · T tag · F1 help.</p><p><b>v1 controls:</b> WASD move · hold right mouse to aim · rest the cursor on a shape to ghost-scan · hold left mouse to commit · X delete a ghost · E terminal · F1 rules.</p>",
+    "short": "My main personal project. You are a drone with a light in a dark megastructure, and Sasha is an android who can only walk on what you have made real. Nothing exists until you scan it. More than forty builds so far, most testing one idea; a recent playable one is below."
    },
    "mechanics": [
     "A1"
    ],
    "tier": "hero",
    "year": 2025,
-   "role": "Sole Creator / Designer & Programmer",
+   "role": "Solo developer",
    "context": "Personal · In development",
-   "engine": "Unreal Engine / C++",
-   "image": "./assets/images/ProjectSasha.svg",
+   "engine": "Godot (first prototypes in Unreal Engine)",
+   "image": "./assets/images/Sasha-v42a.jpg",
    "video": null,
    "videos": [
     {
@@ -239,10 +243,10 @@ window.PORTFOLIO = {
    ],
    "tools": [
     {
-     "name": "Unreal Engine"
+     "name": "Godot"
     },
     {
-     "name": "C++"
+     "name": "Unreal Engine"
     }
    ],
    "roles": [
@@ -250,8 +254,8 @@ window.PORTFOLIO = {
     "Technical Game Designer"
    ],
    "roleContributions": {
-    "Game Designer": "<p><b>Systemic narrative:</b> a cohesive economy where knowledge is the resource. A month of iteration unified exploration, combat, and progression under one 'Megabyte' budget, where every mechanical decision is a memory decision.</p><p><b>Player choice and tension:</b> a risk-and-reward loop close to managing torches in Minecraft. The Ghost Scan is volatile and free, for pushing into the dark. The Full Scan is permanent and costly, for solidifying the world. A constant trade between knowing more and keeping the capacity to act.</p><p><b>World design:</b> 'Digital Gnosticism'. The world is unformatted Biometal until you scan it into physical existence.</p>",
-    "Technical Game Designer": "<p><b>Scanning algorithms:</b> the core scan runs on <span class='magic-link' data-src='./assets/videos/Sasha SonarVersion 0.3.mp4'>BFS waves</span> constrained by radius. An organic flood-fill, not a cheap instant reveal.</p><p><b>Procedural visual language:</b> a procedural mesh system generates a dot-cloud from each object's bounding box and data weight. Material tints (grey, then ice blue, then amber) tell the player the exact game state with no UI at all.</p><p><b>Memory architecture:</b> the <span class='magic-link' data-src='./assets/videos/Sasha Memory system 0.1.mp4'>Megabyte framework</span>. Volatile allocation, hard budgets, and an overflow guard that flashes red and blocks scans when you hit the limit.</p>"
+    "Game Designer": "<p><b>The rule.</b> Nothing is real until you scan it and give it its piece. Moving, carrying and opening doors all build on that.</p><p><b>How it plays now.</b> You scan things, open them, and move the pieces that make them real. Sasha walks only on real floor, so you build her a path and order her across. Each dive is into the same map. A door and a lift there keep what you give them, so the goal fills over several dives.</p>",
+    "Technical Game Designer": "<p><b>Built to test.</b> Most builds start as a copy of an earlier one with one change, and each has an automated run that plays it and takes screenshots.</p><p><b>The first prototypes</b>, in Unreal (videos above): a scan that spreads through the level in waves, and a memory budget that every scan spends.</p><p><b>Credits:</b> built in Godot with AI coding tools, from my design. The first prototypes were in Unreal.</p>"
    },
    "links": [
     {
@@ -259,8 +263,8 @@ window.PORTFOLIO = {
      "url": "./play/ProjectSasha/"
     }
    ],
-   "short": "A top-down exploration game where scanning is the entire game. Knowledge is the resource, memory is the currency, and every mechanic asks the same question: what is worth remembering?",
-   "story": "<p>Sasha is the game I keep coming back to. The whole thing is built on one mechanic, scanning, and one rule: the world doesn't exist until you scan it into memory.</p><p>You pilot an android through a brutalist megastructure. There's no inventory in the normal sense. Everything you carry, know, or use is data, and data takes up a finite memory budget I call the Megabyte economy. Scanning something cheap and volatile (a Ghost Scan) lets you push further into the dark for free, but it doesn't last. Scanning something permanently (a Full Scan) solidifies it into the world but costs real memory you can't spend elsewhere. So every act of looking is also an act of budgeting.</p><p>The visual language is procedural. Scanned objects resolve as a dot-cloud generated from their bounding box and data weight, and a single material tint tells you the exact state of a thing without any UI: grey, then ice blue, then amber. The look comes straight from BLAME! and NieR: Automata. Sparse, functional, data-first.</p><p>It took a month of heavy iteration to get exploration, combat, and progression to all sit under that one budget cleanly. That's the part I'm proud of. Not the individual mechanics, but the fact that they are all the same mechanic seen from different angles.</p>"
+   "short": "My main personal project. You are a drone with a light in a dark megastructure, and Sasha is an android who can only walk on what you have made real. Nothing exists until you scan it. More than forty builds so far, most testing one idea; a recent playable one is below.",
+   "story": ""
   },
   "ProjectCircle": {
    "id": "ProjectCircle",
@@ -273,8 +277,8 @@ window.PORTFOLIO = {
    "mechanics": [],
    "tier": "hero",
    "year": 2025,
-   "role": "Sole Creator / Technical Game Designer",
-   "context": "Prototype / design experiment",
+   "role": "Solo developer",
+   "context": "Personal · Prototype, 2025",
    "engine": "Unreal Engine / C++",
    "image": "./assets/images/ProjectCircle.svg",
    "video": null,
@@ -291,10 +295,10 @@ window.PORTFOLIO = {
     "Technical Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Framework validation:</b> a fully working 3D bullet-hell prototype on the Cadence C++ framework, syncing complex attack patterns and projectile spawns entirely to Metasound data. It validated cross-genre capability and identified where the architecture needed extension for high-density events.</p><p><b>Spherical world design:</b> player gravity inverted to the interior surface of a hollow sphere. A readable but disorienting space that changes how bullet patterns are authored and dodged.</p>"
+    "Technical Game Designer": "<p><b>A test of Cadence.</b> Every attack is timed to the song. With many bullets on screen the timing system became the bottleneck, which showed what Cadence needed next.</p><p><b>Inside a sphere.</b> Gravity points outward, so you run on the inside surface and the arena curves up around you. You read bullet patterns differently there.</p><p><b>Credits:</b> C++ written with AI assistance.</p>"
    },
    "links": [],
-   "short": "A rhythm bullet-hell FPS built on the Cadence plugin. You run inside a hollow sphere while a giant boss fires at you in time with the music. One song per planet, one boss per sphere, community-authored. It proved Cadence could drive combat, and showed where the framework still needed work.",
+   "short": "A rhythm bullet-hell shooter built on Cadence. You run around the inside of a hollow sphere while a boss fires at you in time with the music. It showed that Cadence could drive a fight, and where it would need to change.",
    "story": "<p>The idea came directly from Cadence. I had a framework for making gameplay happen in sync with music, and I wanted to know if it could handle something chaotic: a bullet hell where the chaos itself is rhythmically authored.</p><p>The spherical gravity came from an older design obsession. The player is inside the planet, walking on the interior surface. The visual result is that the world curves upward around you in every direction, which changes how you read incoming projectile patterns and how movement feels at speed. It fits a bullet hell well, because your situational awareness has to work differently.</p><p>The design had community songs as a core pillar. Each planet corresponds to one track. The boss patterns for that planet are mapped to that song's beats. A community member who creates a beatmap is also authoring the boss fight. The system was already designed to support this, because of how Cadence separates timing data from behavior: you map timestamps to actions, and different mappers would map different actions to the same beats.</p><p>What the prototype proved: Cadence could drive complex combat choreography across multiple simultaneous enemy behaviors. What it exposed: the framework needed extension to handle the density of events a bullet hell requires, without the timing system becoming a bottleneck.</p><p>I have a new design direction for it now that I want to develop properly.</p>"
   },
   "ProjectCadence": {
@@ -308,8 +312,8 @@ window.PORTFOLIO = {
    "mechanics": [],
    "tier": "hero",
    "year": 2025,
-   "role": "Sole Systems Architect",
-   "context": "Personal · 1 month, in progress",
+   "role": "Solo developer",
+   "context": "Personal · 2025",
    "engine": "Unreal Engine / C++ / Metasound",
    "image": "./assets/images/ProjectCadence.png",
    "video": "https://www.youtube.com/watch?v=GeYIX1rnFPA",
@@ -330,11 +334,11 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Core architecture:</b> a C++ timeline driven by Metasound. A Python parser turns osu beatmap data into DataTables. The whole thing is a self-contained, reusable engine plugin.</p><p><b>Performance:</b> lightweight UObjects manage note state instead of Actors, so thousands of concurrent events carry no spawn overhead. Each instance owns its lifecycle and is built for a future object-pooling pass.</p><p><b>Designer-first:</b> two Blueprint-derivable classes do everything. One manages <i>when</i>, the other manages <i>what</i>. Designers build gameplay without writing C++.</p>",
-    "Game Designer": "<p><b>Design philosophy:</b> the system is built around one rule. Music should drive gameplay, not just accompany it. Timing data and behavior are separated entirely, so a designer can build different genres from the same beatmap without touching the framework.</p><p><b>Versatility by design:</b> the same architecture supports a rhythm FPS, a parkour game, or a twin-stick shooter. Every decision favored flexibility over specificity.</p>"
+    "Technical Game Designer": "<p><b>How it works.</b> A Python script turns an osu! beatmap into a data table. A MetaSound clock plays through it and fires each note's action on time. Notes are lightweight objects, not actors, so thousands of them cost little.</p><p><b>For designers.</b> Two Blueprint classes: one says when, the other says what. A designer makes gameplay without touching C++.</p><p><b>Credits:</b> C++ written with AI assistance.</p>",
+    "Game Designer": "<p><b>One rule.</b> Music drives the game instead of decorating it. Because timing and behaviour are kept apart, one beatmap can drive a platformer or a shooter.</p>"
    },
    "links": [],
-   "short": "A C++ Unreal Engine plugin that turns music into gameplay. It parses a beatmap, maps each timestamp to an action, and fires those actions in-game on the beat. Built as a reusable framework, not a single game.",
+   "short": "An Unreal Engine plugin that turns music into gameplay. It reads a beatmap and fires a gameplay action on each note. Made to be reused across games, not for one game.",
    "story": "<p>I was on a bus listening to osu beatmaps and had a thought: could you parse a beatmap file, extract the note timestamps, and use them to make things happen in a game at exactly those moments? Not theoretically. Literally, as a buildable system. I went home and started finding out.</p><p>That became Project Cadence. A C++ plugin that uses Metasound to drive a timeline of notes. Each timestamp gets mapped to a gameplay action: move a platform, spawn an enemy, trigger an effect. The design separates timing data from behavior completely, so the same beatmap can power a completely different game depending on what behaviors you attach to each note.</p><p>The osu integration came from using osu as a mapping tool. A Python parser extracts the note timestamps from a beatmap file and builds a data table. That data table is what the system reads. The plan is to replace it with an in-editor tool eventually, but osu proved the concept immediately, because the mapping tooling already existed and the community had thousands of beatmaps ready to use.</p><p>Performance was a constraint from the start. Thousands of events can fire per track. The solution was lightweight UObjects instead of Actors for note state management: no spawn cost, no overhead, clean lifecycle. The architecture explicitly leaves room for object pooling as the next step.</p><p>Project Circle was the first real test of whether the framework could hold up under a different genre entirely. It did, mostly. What it exposed was where the architecture needed extending.</p>"
   },
   "Cycle": {
@@ -365,9 +369,9 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Leadership": "<p><b>Project direction:</b> led a team of three from pre-production to publishing on itch.io and The Rookies. Held creative direction through disagreements, managed milestones, and kept scope to what three people could actually ship. Prepared the game for the G7 Summit demonstration in Cornwall.</p><p><b>Team formation:</b> assembled the team around each person's specific strengths. Both teammates poured enormous trust into the project and delivered exceptional work throughout.</p>",
-    "Game Designer": "<p><b>Systems design:</b> designed the hub world that changes as the player retrieves each phase of the day, and the day/night cycle tied directly to progression. Designed and iterated the puzzles across every level, playtesting each one personally.</p><p><b>Level design:</b> my first time designing levels seriously. The frog level, the coliseum puzzle, the clock level, and the final sun sequence. The clock level was designed and working in a week. The coliseum took a lot longer.</p>",
-    "Game Programmer": "<p><b>Sole programmer:</b> built every system in Unreal Engine 4 from scratch on an engine I had never used. Hub progression, seamless transitions, the collectibles system with a final cutscene, day/night cycle, respawn, and all the puzzle logic.</p><p><b>Seamless transitions:</b> players are teleported between areas without ever noticing. Nobody caught the teleport. Everybody felt subtly disoriented in a way they couldn't explain. Exactly the feeling we wanted.</p>"
+    "Leadership": "<p><b>Direction.</b> Led a team of three from the first idea to release on itch.io. I set the direction, made the calls when we disagreed, kept the scope to what three people could finish, and prepared the build shown at the G7 Summit.</p>",
+    "Game Designer": "<p><b>The hub and the levels.</b> A hub that changes each time you bring back a phase of the day, a day and night cycle tied to progress, and the puzzle levels: the frog level, the coliseum, the clock, the final sun sequence. I playtested every puzzle myself.</p>",
+    "Game Programmer": "<p><b>Every system.</b> I was the only programmer: hub progression, the collectibles and the final cutscene, day and night, respawning, the puzzle logic, and hidden teleports between areas that nobody noticed.</p>"
    },
    "links": [
     {
@@ -395,7 +399,7 @@ window.PORTFOLIO = {
    "year": 2024,
    "role": "Technical Designer",
    "context": "Untold Games (for Aesir Interactive)",
-   "engine": "Unreal Engine / C++",
+   "engine": "Unreal Engine",
    "image": "./assets/images/PoliceSimulator.jpg",
    "video": "https://www.youtube.com/watch?v=fL2SOhYZ6k8",
    "videos": [],
@@ -418,11 +422,11 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Debug menu, from scratch:</b> designed and built the port's debug and cheat menu with ImGui. Tabs by milestone, show and hide the game's own UI, resolution sliders, live controls for how many pedestrians and vehicles are on the map, an FPS chart, opened with a controller chord on the devkit.</p><p><b>Handheld readability pass:</b> resized the fonts, radial menu, tool wheel, ID card and handbook of the game's UMG widgets so they read on the Switch screen; replaced the button glyphs; removed leftover touch and Xbox UI.</p><p><b>Analysis document:</b> wrote, alone, the document that mapped the entire game for the team: gameplay flow, shift rules, every interaction menu, tools and call-outs, with the performance risks for Switch.</p>",
-    "Game Programmer": "<p><b>Performance:</b> traffic tick rate, vehicle pools and cull distances tuned for Switch; LODs for characters and vehicles; Python scripts that clean assets out of maps in bulk; presets that change the NPC population at runtime, which the original system did not allow.</p><p><b>Stabilisation:</b> level loading, input and gameplay fixes across beta, release candidate, the day-zero patch and the Gamescom demo build.</p>"
+    "Technical Game Designer": "<p><b>Debug menu.</b> Built from scratch with ImGui: a tab for each milestone, a switch that hides the game's UI, resolution sliders, live controls for how many people and cars are on the map, and an FPS chart. On the devkit it opens with a button combination.</p><p><b>Readable on a handheld.</b> Bigger text on the radial menu, the tool wheel, the ID card and the handbook. Switch button icons. Leftover touch and Xbox UI removed.</p><p><b>The analysis document.</b> I wrote it alone: how a shift plays, every interaction menu, every tool, and what would be hard to run on Switch.</p>",
+    "Game Programmer": "<p><b>Performance.</b> Tuned traffic updates, vehicle pools and draw distances for Switch, added LODs, and wrote Python scripts that strip assets out of maps in bulk.</p><p><b>Release builds.</b> Fixes through beta, the release candidate, the day-zero patch and the Gamescom demo.</p><p><b>Credits:</b> C++ written with AI assistance.</p>"
    },
    "links": [],
-   "short": "Nintendo Switch port, from alpha to the day-zero patch. I built the debug menu the team tested with, made the game's UI readable on a handheld screen, and wrote the document that explained the whole game to the team.",
+   "short": "The Nintendo Switch port of Police Simulator: Patrol Officers, for Aesir Interactive, from alpha to the day-zero patch. I built the debug menu the team tested with, made the UI readable on a handheld, and wrote the document that explained the whole game to the team.",
    "story": ""
   },
   "UnannouncedAAA": {
@@ -454,7 +458,7 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Game Programmer": "<p><b>Builds:</b> took a very large codebase from source to a playable packaged build on PC, then to a build running on a console devkit, working through toolchain, memory and licence problems on the way.</p><p><b>Documentation:</b> kept the whole path as a step-by-step shared document, so anyone on the team could repeat it.</p><p><b>Credits:</b> done with AI assistance.</p>"
+    "Game Programmer": "<p><b>Builds.</b> From source code to a playable packaged build on PC, then to a build running on a devkit, through toolchain, memory and licence problems on the way.</p><p><b>Credits:</b> done with AI assistance.</p>"
    },
    "links": [
     {
@@ -462,7 +466,7 @@ window.PORTFOLIO = {
      "url": "request"
     }
    ],
-   "short": "An unannounced AAA title, under NDA. Early in the project I got the game building, cooking and packaging on PC and on a console devkit, and wrote the build guide for the team.",
+   "short": "An unannounced AAA game, under NDA. At the start of the project I got it building and packaging on PC and on a console devkit, and wrote a step-by-step build guide for the team.",
    "story": ""
   },
   "Alien": {
@@ -492,8 +496,7 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Movement system:</b> a powerful movement kit. A standard jump, a forward-dashing double jump for aggressive repositioning, and a tentacle grapple.</p><p><b>Possession mechanic:</b> the core possession system, from concept to implementation. You target an enemy with tentacles and launch into them to take full control of their body, weapons, and abilities.</p>",
-    "Game Designer": "<p><b>Design vision:</b> conceived the whole prototype as a love letter to AVP2's Facehugger campaign. Interconnected mechanics designed to create emergent scenarios.</p>"
+    "Technical Game Designer": "<p><b>Movement.</b> A jump, a double jump that dashes forward, and a tentacle grapple.</p><p><b>Possession.</b> Aim at an enemy, launch into it, and take over its body, its weapons and its abilities.</p>"
    },
    "links": [
     {
@@ -501,7 +504,7 @@ window.PORTFOLIO = {
      "url": "https://open.substack.com/pub/giuseppeluigialfieri/p/game-prototypes-alien?r=3ko0h9&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true"
     }
    ],
-   "short": "A reverse-horror prototype and a love letter to Aliens vs. Predator 2, built around the feeling of being a stealthy, powerful Facehugger. Movement and possession are the whole experiment.",
+   "short": "A reverse-horror prototype based on the Facehugger campaign of Aliens vs. Predator 2: you are the facehugger. It tests two things, movement and possession.",
    "story": ""
   },
   "CRTexe": {
@@ -531,8 +534,8 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Leadership": "<p><b>Team structure:</b> diagnosed what would make this specific team functional and built the production around it. Each person owned one area completely: their mechanic, their level, their hidden code. No bottlenecks, no blocking, and the team reached a finished submission.</p>",
-    "Game Designer": "<p><b>Systems design:</b> the structure of the game was also the structure of the team. The TV-and-code loop made every area self-contained by design, which is exactly what made parallel, independent development possible.</p>"
+    "Leadership": "<p><b>Structure.</b> I pitched the idea, split the game into areas, and kept the team to a finished submission.</p>",
+    "Game Designer": "<p><b>The loop.</b> A TV asks for a code. You find it in the area, type it in, and move to a new area. Because every area stands alone, eight people could build at the same time.</p>"
    },
    "links": [
     {
@@ -540,7 +543,7 @@ window.PORTFOLIO = {
      "url": "https://gianluca-iacchini.itch.io/crt-exe"
     }
    ],
-   "short": "Led a team of eight through a game jam by designing the game around how the team could actually function. Each area owned by one person, one mechanic, one hidden code. No dependencies, no bottlenecks.",
+   "short": "A game jam game made by eight people. I designed it so nobody had to wait on anyone: one area, one mechanic and one hidden code per person.",
    "story": "<p>Every team has a different dynamic. This one had strong, independent personalities, which is great for creativity and harder for cohesion. The question was not how to get everyone to agree on everything, but what structure would let each person contribute without depending on anyone else to make progress.</p><p>The theme was strange places. The idea I pitched was simple: there is a TV, it asks for a code, you find the code somewhere in the current area, you input it, and now you are somewhere new. That is the whole loop.</p><p>The reason it worked for the team was structural. Anyone who wanted to could claim an area, design whatever mechanic they felt like for it, hide a code somewhere inside, and own that piece completely from start to finish. No coordination required. No one blocking anyone else. You could make progress on your area without a single conversation with the rest of the group.</p><p>The design solved the team problem. They were the same solution.</p><p>I went in planning to just make sound effects and not stress too much about it. I ended up leading the whole group to a finished submission. The game was rough. But I left knowing exactly how I would run the next one.</p>"
   },
   "CardsWeaver": {
@@ -570,8 +573,8 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Leadership": "<p><b>Lead designer:</b> guided a team of four designers from concept to a fully playable prototype, managing direction and resolving creative disagreements.</p>",
-    "Game Designer": "<p><b>Core systems design:</b> designed the card abilities, the central resource mechanic, and the overall gameplay loop.</p>"
+    "Leadership": "<p><b>Team.</b> Took four designers from the first concept to a playable prototype, and settled our design disagreements.</p>",
+    "Game Designer": "<p><b>Rules.</b> The card abilities, the resource every card spends, and the gameplay loop.</p>"
    },
    "links": [
     {
@@ -579,7 +582,7 @@ window.PORTFOLIO = {
      "url": "https://batraf.itch.io/cards-weaver"
     }
    ],
-   "short": "A card game built at university in Unreal Engine. I led a small design team and owned the core rules, the central resource mechanic, and the gameplay loop.",
+   "short": "A card game made at university in Unreal Engine. I led a team of four designers and designed the core rules: the card abilities, the central resource and the loop.",
    "story": ""
   },
   "MonkHomebrew": {
@@ -608,7 +611,7 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Game Designer": "<p><b>Core mechanic design:</b> the Vessels of Ki system from scratch. Creation, filling, bonding, and sacrifice, plus the two action categories (Ki Absorptions and Ki Strikes) that replaced the old ki-point model. The resource is finite, physical, and carries flavor: vessels hold memories and emotions that shape how they interact with enemies and allies.</p><p><b>Subclass integration:</b> rewrote eight existing subclasses to use vessels natively. The test for each: does using a vessel here feel like a natural extension of the subclass, or a tax? Every one passed, and several became more coherent than they were originally.</p>"
+    "Game Designer": "<p><b>Vessels of Ki.</b> You create them, fill them, bond them and sacrifice them. Two new action types, Ki Absorptions and Ki Strikes, replace ki points.</p><p><b>Subclasses.</b> I rewrote eight subclasses to use vessels. The test for each feature: does spending a vessel here feel natural, or like a tax?</p>"
    },
    "links": [
     {
@@ -616,7 +619,7 @@ window.PORTFOLIO = {
      "url": "https://drive.google.com/file/d/1cyUGRzfhP4CjVwDljmbiXhwORSPAUSpp/view?usp=sharing"
     }
    ],
-   "short": "A ground-up rebuild of the D&D Monk around a new core mechanic, the Vessels of Ki: spectral objects that hold memories, emotions, and ideas, used to attack, defend, and pay for abilities. The redesign was tight enough that the existing subclasses slotted in without major reworks.",
+   "short": "The D&D 5e Monk, rebuilt around one new resource: Vessels of Ki, spectral objects that hold memories and feelings and are spent to attack, defend and power abilities. Eight existing subclasses were adapted to it; none needed a full rebuild.",
    "story": "<p>The PHB Monk has a mechanical identity problem. Its features are useful but disconnected: ki points, Stunning Strike, Deflect Missiles, Unarmored Defense. There's no through-line. Subclasses then try to bolt something thematic on top of a chassis that doesn't have a clear idea of what it is.</p><p>The redesign started from a single question: what if ki was something you could hold, shape, and lose? The answer became Vessels: spectral floating objects orbiting the monk, imbued with memories, emotions, or ideas. You create them, fill them, and sacrifice them. Attacking with them, defending with them, empowering abilities with them. The resource is physical and present at the table.</p><p>The proof that the system worked came from the subclasses. Way of Shadow empties vessels to cast its spells, so thematically you are sacrificing something to disappear. Way of Mercy sacrifices a vessel to bring someone back from death, so the vessel becomes the price of resurrection. Deflect Attack now destroys a vessel to reduce incoming damage, mechanically identical to before but now it costs something you can see. Every existing subclass feature had a more natural home in the new framework than it had originally.</p><p>The base class changed enough that some subclasses needed tweaks. None needed a full rebuild. That's the test.</p>"
   },
   "ProjectCenturion": {
@@ -646,8 +649,8 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Game Designer": "<p>Co-designed the core gameplay loop and level structure.</p>",
-    "Game Programmer": "<p>Implemented player movement and interaction systems in Unity and C#.</p>"
+    "Game Designer": "<p>Co-designed the core loop and the level structure.</p>",
+    "Game Programmer": "<p>Player movement and interaction in Unity and C#.</p>"
    },
    "links": [
     {
@@ -655,7 +658,7 @@ window.PORTFOLIO = {
      "url": "https://drive.google.com/file/d/1kqrXXSPwxUrCUG9qNnqnNzSuWa9S9QJv/view?usp=sharing"
     }
    ],
-   "short": "An early university game with a historical theme. I co-designed the core loop and level structure and built player movement and interaction in Unity.",
+   "short": "An early university game in Unity with a historical theme. I co-designed the loop and the levels, and programmed the player's movement and interactions in C#.",
    "story": ""
   },
   "PulseParty": {
@@ -688,8 +691,8 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Systems in Verse:</b> built the entire party-game framework from scratch in Verse. The hub, the map-switching logic for eight minigames, and a state manager that handled each mode's rules.</p>",
-    "Game Designer": "<p><b>Game design:</b> co-designed the expansion from a single deathmatch concept into eight distinct minigame modes.</p>"
+    "Technical Game Designer": "<p><b>Systems in Verse.</b> I built the game's systems: scores, map selection, cutscenes, and the flow of each mode. I also made the deathmatch map, Jungle Top.</p>",
+    "Game Designer": "<p><b>Design.</b> Helped design all eight modes from one deathmatch idea, playtested them and published the island.</p>"
    },
    "links": [
     {
@@ -697,7 +700,7 @@ window.PORTFOLIO = {
      "url": "https://www.fortnite.com/@untoldgames/8369-2685-8749"
     }
    ],
-   "short": "A chaotic party game. Eight distinct minigames (races, deathmatches, king of the hill) strung together in one framework, all built in Verse.",
+   "short": "A Fortnite party game made in UEFN by a team of three: eight minigames, from races to deathmatches, on one island.",
    "story": ""
   },
   "SoulDriven": {
@@ -727,8 +730,8 @@ window.PORTFOLIO = {
     "Technical Game Designer"
    ],
    "roleContributions": {
-    "Game Programmer": "<p><b>Strategy pattern implementation:</b> built ISoulInterface and IWeaponInterface, the base classes, and the ScriptableObject stat system. The Player swaps interface references at runtime. Stat loading, weapon assignment, and animation override all flow through the interface without the Player knowing which Soul is active.</p>",
-    "Technical Game Designer": "<p><b>System architecture:</b> designed the class-switching system around the Strategy pattern, so Soul classes were hot-swappable at runtime with no conditional logic in the Player. Each Soul owns its stats, weapons, and animations independently.</p><p><b>Documentation:</b> produced a full class diagram and an onboarding flowchart for adding new Soul classes, so anyone could add one by following the guide.</p>"
+    "Game Programmer": "<p><b>Switching classes.</b> Each class sits behind one interface, with its own stats, weapons and animations. The player holds the current class and swaps it at runtime; the Player has no switch statement for it.</p>",
+    "Technical Game Designer": "<p><b>Documentation.</b> A class diagram and a step-by-step guide: name the script, implement the interface, create the stats asset, register it.</p>"
    },
    "links": [
     {
@@ -740,7 +743,7 @@ window.PORTFOLIO = {
      "url": "https://gitlab.com/Pietro92/soul-driven-project"
     }
    ],
-   "short": "An action game where I owned the character architecture: a runtime class-switching system built on the Strategy pattern, documented well enough that any teammate could add a new class without touching my code.",
+   "short": "A university mobile game. I built the playable classes so the player can switch between Warrior, Mage and Ranger at runtime, and documented them so teammates could add a class without touching my code.",
    "story": "<p>It was a university project for a mobile game class, a team of a few people. I was responsible for the player character systems.</p><p>The core problem: the game had multiple playable classes (Warrior, Mage, Ranger) and the player needed to be able to switch between them at runtime. The naive solution is a big switch statement somewhere. The right solution is the Strategy pattern.</p><p>I built ISoulInterface, which defines the contract every Soul class has to fulfil. Each Soul (Warrior, Mage, Ranger) derives from a Souls base class that implements LoadStats(), pulling from its own ScriptableObject stat table. The Player holds a reference to the current Soul via the interface and swaps it at runtime. Weapons run in a parallel hierarchy via IWeaponInterface, also swapped independently.</p><p>The part I am most proud of is the documentation. I drew out the full class diagram in Miro and wrote a step-by-step guide: how to name your script, which folder it goes in, which interface to implement, how to create and register the ScriptableObject, how to link it to the stat manager. Adding a class became an independent, documented process that anyone on the team could follow without touching the systems I had built.</p><p>The architecture held. Adding classes didn't break anything.</p>"
   },
   "Battleship": {
@@ -773,8 +776,8 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Core gameplay (Verse):</b> built all primary systems in Verse. The interactive combat grid, the ship-placement logic, and real-time player feedback.</p>",
-    "Game Designer": "<p><b>Game design and vision:</b> led the whole design process, from the core ruleset to launch on the Fortnite platform.</p>"
+    "Technical Game Designer": "<p><b>In Verse.</b> The combat grid, placing ships, and what players see when they hit or miss.</p>",
+    "Game Designer": "<p><b>Rules.</b> Adapted Battleship's turns and ship sizes for a Fortnite match, then published the island.</p>"
    },
    "links": [
     {
@@ -782,7 +785,7 @@ window.PORTFOLIO = {
      "url": "https://www.fortnite.com/@untoldgames/1028-2740-2494"
     }
    ],
-   "short": "A fast strategy game taken from concept to launch on Fortnite. I designed the rules and built the entire custom battleship system in Verse.",
+   "short": "Battleship as a Fortnite island, made alone in UEFN: the rules, the grid, ship placement and the feedback on every shot.",
    "story": ""
   },
   "UnrealEngineCourse": {
@@ -812,7 +815,7 @@ window.PORTFOLIO = {
     "Technical Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p>Designed and recorded course modules covering Unreal Engine fundamentals, Blueprints, and common game programming patterns, with example projects and exercises for students.</p>"
+    "Technical Game Designer": "<p>Planned and recorded the modules, and built the example projects and exercises.</p>"
    },
    "links": [
     {
@@ -820,7 +823,7 @@ window.PORTFOLIO = {
      "url": "https://www.udemy.com/course/complete-unreal-engine-megacourse-beginner-to-expert/"
     }
    ],
-   "short": "A 16-hour Unreal Engine course, published on Udemy. It introduces Blueprints and the common programming patterns behind them, from the ground up.",
+   "short": "A 16-hour Unreal Engine course for beginners, published on Udemy: Blueprints and the programming patterns behind them, with example projects.",
    "story": ""
   }
  },
