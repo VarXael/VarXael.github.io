@@ -6,5 +6,4 @@
   <rect x="200" y="120" width="400" height="210" rx="16" fill="none" stroke="#4d9fff" opacity="0.2" stroke-width="1" stroke-dasharray="8 4"/>
   <text x="400" y="200" text-anchor="middle" font-family="Poppins, sans-serif" font-size="28" font-weight="600" fill="#f1f1f1" opacity="0.9">Project: Circle</text>
   <text x="400" y="240" text-anchor="middle" font-family="Poppins, sans-serif" font-size="14" fill="#4d9fff" opacity="0.7">Rhythm Bullet Hell FPS</text>
-  <text x="400" y="280" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" fill="#666" opacity="0.5">FOOTAGE COMING SOON</text>
 </svg>

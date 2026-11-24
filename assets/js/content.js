@@ -9,7 +9,7 @@ window.PORTFOLIO = {
   "portrait": "./assets/images/about.png",
   "headline": "Technical designer at Untold Games, Genova. I work in Unreal on UI, tools and gameplay systems: <b>City 20</b>, the Nintendo Switch versions of <b>High on Life</b> and <b>Police Simulator: Patrol Officers</b>, and published Fortnite islands in Verse.",
   "quote": "Most of my work is making complicated systems easy to read, on screen and in the editor.",
-  "bio": "I studied games design at Falmouth, where I led Cycle, Best 3rd-Year Videogame 2021, and game programming in Verona; and I have been at Untold Games since 2023. On the Switch ports I fixed bugs (on High on Life I was the main bug fixer) and adapted the UI for a handheld screen. On City 20 I have built levels, wired in the game's sound, and made editor tools that show designers only the fields they need. I build in Blueprints, UMG and Verse myself and use AI coding tools for C++. Outside work I make small games that each test one idea; they are in the Lab."
+  "bio": "I studied games design at Falmouth, where I led Cycle (Best 3rd-Year Videogame 2021), then game programming in Verona. I have been at Untold Games since 2023. On the Switch ports I fixed bugs (on High on Life I was the main bug fixer) and adapted the UI for a handheld screen. On City 20 I have built levels, wired in the game's sound, and made editor tools that show designers only the fields they need. I build in Blueprints, UMG and Verse myself and use AI coding tools for C++. Outside work I make small games that each test one idea; they are in the Lab."
  },
  "experience": [
   {
@@ -314,7 +314,7 @@ window.PORTFOLIO = {
    "year": 2025,
    "role": "Solo developer",
    "context": "Personal · 2025",
-   "engine": "Unreal Engine / C++ / Metasound",
+   "engine": "Unreal Engine / C++ / MetaSounds",
    "image": "./assets/images/ProjectCadence.png",
    "video": "https://www.youtube.com/watch?v=GeYIX1rnFPA",
    "videos": [],
@@ -326,7 +326,7 @@ window.PORTFOLIO = {
      "name": "C++"
     },
     {
-     "name": "Metasound"
+     "name": "MetaSounds"
     }
    ],
    "roles": [
@@ -454,9 +454,7 @@ window.PORTFOLIO = {
    "roles": [
     "Game Programmer"
    ],
-   "roleContributions": {
-    "Game Programmer": "<p><b>Credits:</b> done with AI assistance.</p>"
-   },
+   "roleContributions": {},
    "links": [
     {
      "label": "Details on request",
@@ -541,7 +539,7 @@ window.PORTFOLIO = {
     }
    ],
    "short": "A game jam game made by eight people. I designed it so nobody had to wait on anyone: one area, one mechanic and one hidden code per person.",
-   "story": "<p>Every team has a different dynamic. This one had strong, independent personalities, which is great for creativity and harder for cohesion. The question was not how to get everyone to agree on everything, but what structure would let each person contribute without depending on anyone else to make progress.</p><p>The theme was strange places. The idea I pitched was simple: there is a TV, it asks for a code, you find the code somewhere in the current area, you input it, and now you are somewhere new. That is the whole loop.</p><p>The reason it worked for the team was structural. Anyone who wanted to could claim an area, design whatever mechanic they felt like for it, hide a code somewhere inside, and own that piece completely from start to finish. No coordination required. No one blocking anyone else. You could make progress on your area without a single conversation with the rest of the group.</p><p>The design solved the team problem. They were the same solution.</p><p>I went in planning to just make sound effects and not stress too much about it. I ended up leading the whole group to a finished submission. The game was rough. But I left knowing exactly how I would run the next one.</p>"
+   "story": "<p>Every team has a different dynamic. This one had strong, independent personalities, which is great for creativity and harder for cohesion. The question was not how to get everyone to agree on everything, but what structure would let each person contribute without depending on anyone else to make progress.</p><p>The theme was strange places. The idea I pitched was simple: there is a TV, it asks for a code, you find the code somewhere in the current area, you input it, and now you are somewhere new. That is the whole loop.</p><p>The reason it worked for the team was structural. Anyone who wanted to could claim an area, design whatever mechanic they felt like for it, hide a code somewhere inside, and own that piece completely from start to finish. No coordination required. No one blocking anyone else. You could make progress on your area without a single conversation with the rest of the group.</p><p>The design problem and the team problem had the same solution.</p><p>I went in planning to just make sound effects and not stress too much about it. I ended up leading the whole group to a finished submission. The game was rough. But I left knowing exactly how I would run the next one.</p>"
   },
   "CardsWeaver": {
    "id": "CardsWeaver",
@@ -795,7 +793,7 @@ window.PORTFOLIO = {
    "play": null,
    "mechanics": [],
    "tier": "listed",
-   "year": 2022,
+   "year": 2021,
    "role": "Unreal Engine Tutor",
    "context": "Creativity Unleashed · Udemy",
    "engine": "Unreal Engine",
@@ -808,7 +806,6 @@ window.PORTFOLIO = {
     }
    ],
    "roles": [
-    "Game Programmer",
     "Technical Game Designer"
    ],
    "roleContributions": {
