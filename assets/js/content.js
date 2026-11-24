@@ -20,7 +20,7 @@ window.PORTFOLIO = {
      "org": "Untold Games",
      "when": "2023 to present",
      "where": "Genova, IT",
-     "desc": "On City 20 I have built bunker levels, implemented the sound designer's sounds in gameplay and UI, and made a progression screen and editor tools for the design team, with AI coding tools for the C++. On the Nintendo Switch versions of High on Life and Police Simulator I did UI work for console, fixed bugs and built debug tools. I am the team's Verse programmer on our published Fortnite islands, and did build and packaging work at the start of an unannounced AAA project."
+     "desc": "On City 20 I have built bunker levels, implemented the sound designer's sounds in gameplay and UI, and made UI screens and editor tools for the design team, with AI coding tools for the C++. On the Nintendo Switch versions of High on Life and Police Simulator I did UI work for console, fixed bugs and built debug tools. I am the team's Verse programmer on our published Fortnite islands, and did build and packaging work on an unannounced project."
     },
     {
      "title": "Software Developer",
@@ -130,8 +130,8 @@ window.PORTFOLIO = {
     "Game Designer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>A progression screen.</b> A tree screen for the player menu, built in UMG from the team's design document. You pan and zoom around it, and each node shows its state. Every state takes its look from one style asset, so the screen can be restyled without touching its logic. Designers build the tree in a graph editor made alongside it.</p><p><b>Tools for designers.</b> An item asset has about 80 fields in Unreal's details panel, most of which a designer never reads. I built editor tools that show only what matters: an item editor for more than 500 items, with a template for each kind of item; a tracker for sound requests; and a sound audit that lists 900+ sounds, shows where each one is used, and swaps one sound for another everywhere at once.</p><p><b>Sound.</b> I wire the sound designer's sounds into the game: menus, inventory, crafting, equipment. I also found why the music went silent only in packaged builds: about 114 radios in the level played unattenuated sounds at once and used up every voice the engine had. And I traced a footstep hitch to sounds loading at runtime, using Unreal Insights, and had them preloaded.</p><p><b>Credits:</b> the screen, the tools and their C++ were built with AI coding tools. The tree's rules come from the team's design document; the tool designs, the UX decisions and the testing are mine.</p>",
-    "Game Designer": "<p><b>Bunker levels.</b> Blocked out, built and reworked bunker levels, and scripted what happens in them.</p><p><b>An interactable.</b> A hold-to-scan object, end to end: the ability, the smart object, the item it gives, the dialogue, the animation and the sound.</p>"
+    "Technical Game Designer": "<p><b>UI.</b> Screens for the player menu, built in UMG from the team's design documents. Their look comes from style assets, so they can be restyled without touching their logic, and designers edit their content in an editor made alongside them.</p><p><b>Tools for designers.</b> An item asset has dozens of fields in Unreal's details panel, most of which a designer never reads. I built editor tools that show only what matters: an item editor with a template for each kind of item; a tracker for sound requests; and a sound audit that lists the project's sounds, shows where each one is used, and swaps one sound for another everywhere at once.</p><p><b>Sound.</b> I wire the sound designer's sounds into the game: menus, inventory, crafting, equipment. I also found why the music went silent only in packaged builds: dozens of sound sources played at once without attenuation and used up every voice the engine had. I also traced a footstep hitch to sounds loading at runtime and had them preloaded.</p><p><b>Credits:</b> the screens, the tools and their C++ were built with AI coding tools. The rules come from the team's design documents; the tool designs, the UX decisions and the testing are mine.</p>",
+    "Game Designer": "<p><b>Bunker levels.</b> Blocked out, built and reworked bunker levels, and scripted what happens in them.</p><p><b>Interactables.</b> Built interactable objects end to end: the ability, the item they give, the dialogue, the animation and the sound.</p>"
    },
    "links": [
     {
@@ -182,8 +182,8 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>UI for Switch.</b> About 60 of my changesets were UI. Joy-Con and Pro Controller button icons that change when you change controller. Button prompts across the game. Settings screens adapted for console: PC-only options out, gyro in, text that scales with the UI. Some menu bugs took real digging: a menu that counted hidden items as you moved through it, a list that could not scroll because its scroll mode was set to none, a confirm press that went through to the screen behind.</p><p><b>Tools.</b> Performance stats in the cheat menu, and a tool for a technical artist that switches lighting setups by area.</p>",
-    "Game Programmer": "<p><b>Bugs.</b> A division by zero in one boss attack that broke every collision on Switch. A world kept in memory by loose references in the Game Instance, which caused random crashes. Videos that went black when an SD card was inserted, because the video player looked in the wrong folder. Events firing on levels that had not loaded yet. Fast objects passing through walls after collision checks were slowed for performance.</p><p><b>Credits:</b> C++ written with AI assistance.</p>"
+    "Technical Game Designer": "<p><b>UI for Switch.</b> Joy-Con and Pro Controller button icons that change when you change controller. Button prompts across the game. Settings screens adapted for console: PC-only options out, gyro in, text that scales with the UI. Some menu bugs took real digging: a menu that counted hidden items as you moved through it, a list that could not scroll because its scroll mode was set to none, a confirm press that went through to the screen behind.</p><p><b>Tools.</b> Performance stats in the cheat menu, and a tool for a technical artist that switches lighting setups by area.</p>",
+    "Game Programmer": "<p><b>Bugs.</b> A boss attack that broke every collision on Switch. Random crashes on level changes. Videos that went black when an SD card was inserted. Events firing on levels that had not loaded yet. Fast objects passing through walls.</p><p><b>Credits:</b> C++ written with AI assistance.</p>"
    },
    "links": [
     {
@@ -191,8 +191,8 @@ window.PORTFOLIO = {
      "url": "request"
     }
    ],
-   "short": "The Nintendo Switch port of High on Life, for Squanch Games. Over ten months and about 300 changesets I was the port's main bug fixer, and did UI work for the Switch.",
-   "story": "<p>A few months in I was genuinely having fun. The game's humor would catch me off guard constantly, and there was always something that would make me burst out laughing mid-debugging session.</p><p>The Lasagna Technique: there was a boss fight where one specific attack would break every collision in the entire game. Player, enemies, everything would fall through the floor indefinitely. To debug it I built stacked collision floors in their own sublevels, one on top of the other, to see which one the player would still land on when falling. I called it the Lasagna Technique. The actual cause was a division by zero inside the boss attack code. The Switch build handled that edge case differently from PC and broke the entire collision matrix. One code change fixed it. I was a very happy person for a few days.</p><p>The Bink Situation: every video in the game would go black if the player inserted an SD card. After a week of digging I found the video player was looking for the videos in the wrong folder, finding nothing, and defaulting to black. I pointed it at the right one. Hacky, but it worked.</p><p>The Ubergraph Crash: random crashes happening seemingly anywhere in the game. I traced it to a Blueprint event in the Game Instance that had two output execution pins connected to nothing. From earlier study of Unreal's Ubergraph, the compiled low-level version of Blueprints, I knew unused pins could create memory leaks. The Game Instance is the only object that persists across every level load in Unreal Engine. Those loose references were preventing the world from being properly destroyed during map transitions. I rebuilt the event without the loose pins, and the crashes stopped.</p><p>The Lighting Tool: a technical artist needed to switch between different lighting setups per area for performance reasons. Simple idea: box colliders throughout the levels, each holding a lighting configuration, player entering triggers the switch. It took nine iterations to get it working correctly. The grapple hook disabled all player collisions including ours, so we had to create a separate attached actor. That actor caused a different issue where spawning inside a collider wouldn't register, so we added a forced collision check every 0.5 seconds for 60 seconds. Each fix introduced a new edge case. Nine iterations. It worked perfectly in the end.</p>"
+   "short": "The Nintendo Switch port of High on Life, for Squanch Games. Over ten months I was the port's main bug fixer, and did UI work for the Switch.",
+   "story": "<p>A few months in I was genuinely having fun. The game's humor would catch me off guard constantly, and there was always something that would make me burst out laughing mid-debugging session.</p><p>The Lasagna Technique: there was a boss fight where one specific attack would break every collision in the entire game. Player, enemies, everything would fall through the floor indefinitely. To debug it I built stacked collision floors in their own sublevels, one on top of the other, to see which one the player would still land on when falling. I called it the Lasagna Technique. The actual cause was a single math edge case in the attack that the Switch build handled differently from PC. One code change fixed it. I was a very happy person for a few days.</p><p>The Black Videos: every video in the game would go black if the player inserted an SD card. After a week of digging I found the videos were being looked for in the wrong place. I pointed them at the right one. Hacky, but it worked.</p><p>The Random Crashes: crashes happening seemingly anywhere in the game. I traced them to one Blueprint event with outputs connected to nothing, in an object that lives across every level load. From earlier study of how Unreal compiles Blueprints, I knew loose pins like that could keep old levels in memory. I rebuilt the event without them, and the crashes stopped.</p><p>The Lighting Tool: a technical artist needed to switch between different lighting setups per area for performance reasons. Simple idea: box colliders throughout the levels, each holding a lighting configuration, player entering triggers the switch. It took nine iterations to get it working correctly. The grapple hook disabled all player collisions including ours, so we had to create a separate attached actor. That actor caused a different issue where spawning inside a collider wouldn't register, so we added a forced collision check every 0.5 seconds for 60 seconds. Each fix introduced a new edge case. Nine iterations. It worked perfectly in the end.</p>"
   },
   "ProjectSasha": {
    "id": "ProjectSasha",
@@ -422,7 +422,7 @@ window.PORTFOLIO = {
     "Game Programmer"
    ],
    "roleContributions": {
-    "Technical Game Designer": "<p><b>Debug menu.</b> Built from scratch with ImGui: a tab for each milestone, a switch that hides the game's UI, resolution sliders, live controls for how many people and cars are on the map, and an FPS chart. On the devkit it opens with a button combination.</p><p><b>Readable on a handheld.</b> Bigger text on the radial menu, the tool wheel, the ID card and the handbook. Switch button icons. Leftover touch and Xbox UI removed.</p><p><b>The analysis document.</b> I wrote it alone: how a shift plays, every interaction menu, every tool, and what would be hard to run on Switch.</p>",
+    "Technical Game Designer": "<p><b>Debug menu.</b> Built from scratch with ImGui: a tab for each milestone, a switch that hides the game's UI, resolution sliders, live controls for how many people and cars are on the map, and an FPS chart. It opens with a button combination.</p><p><b>Readable on a handheld.</b> Bigger text on the radial menu, the tool wheel, the ID card and the handbook. Switch button icons. Leftover touch and Xbox UI removed.</p><p><b>The analysis document.</b> I wrote it alone: how a shift plays, every interaction menu, every tool, and what would be hard to run on Switch.</p>",
     "Game Programmer": "<p><b>Performance.</b> Tuned traffic updates, vehicle pools and draw distances for Switch, added LODs, and wrote Python scripts that strip assets out of maps in bulk.</p><p><b>Release builds.</b> Fixes through beta, the release candidate, the day-zero patch and the Gamescom demo.</p><p><b>Credits:</b> C++ written with AI assistance.</p>"
    },
    "links": [],
@@ -433,7 +433,7 @@ window.PORTFOLIO = {
    "id": "UnannouncedAAA",
    "card": "Unannounced AAA Title",
    "playNotes": "",
-   "title": "Unannounced AAA Title",
+   "title": "Unannounced Title",
    "category": "professional work",
    "published": true,
    "play": null,
@@ -449,16 +449,13 @@ window.PORTFOLIO = {
    "tools": [
     {
      "name": "Unreal Engine"
-    },
-    {
-     "name": "Console devkits"
     }
    ],
    "roles": [
     "Game Programmer"
    ],
    "roleContributions": {
-    "Game Programmer": "<p><b>Builds.</b> From source code to a playable packaged build on PC, then to a build running on a devkit, through toolchain, memory and licence problems on the way.</p><p><b>Credits:</b> done with AI assistance.</p>"
+    "Game Programmer": "<p><b>Credits:</b> done with AI assistance.</p>"
    },
    "links": [
     {
@@ -466,7 +463,7 @@ window.PORTFOLIO = {
      "url": "request"
     }
    ],
-   "short": "An unannounced AAA game, under NDA. At the start of the project I got it building and packaging on PC and on a console devkit, and wrote a step-by-step build guide for the team.",
+   "short": "An unannounced game, under NDA. I did build and packaging work on it and wrote a build guide for the team.",
    "story": ""
   },
   "Alien": {
