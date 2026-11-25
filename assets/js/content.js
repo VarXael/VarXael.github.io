@@ -280,7 +280,7 @@ window.PORTFOLIO = {
    "role": "Solo developer",
    "context": "Personal · Prototype, 2025",
    "engine": "Unreal Engine / C++",
-   "image": "./assets/images/ProjectCircle.svg",
+   "image": "./assets/images/ProjectCircle.jpg",
    "video": null,
    "videos": [],
    "tools": [
