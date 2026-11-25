@@ -37,11 +37,11 @@ window.PORTFOLIO = {
      "desc": "Wrote and recorded a 16-hour Unreal Engine course for beginners, published on Udemy."
     },
     {
-     "title": "Unreal Engine Tutor",
+     "title": "Game Programmer",
      "org": "Cineon Immersive Training",
      "when": "Apr 2020",
      "where": "",
-     "desc": "Built the interaction logic for a VR safety-equipment training project."
+     "desc": "A COVID-19 project: built the interaction logic for a VR training simulation on protective equipment, in Unreal."
     }
    ]
   },
@@ -516,7 +516,7 @@ window.PORTFOLIO = {
    "role": "Project Lead & SFX Designer",
    "context": "Brackeys Game Jam 2026.1 · Team of 8",
    "engine": "Godot",
-   "image": "./assets/images/CRTexe.svg",
+   "image": "./assets/images/CRTexe.jpg",
    "video": null,
    "videos": [],
    "tools": [
